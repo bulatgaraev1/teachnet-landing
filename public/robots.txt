@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# TODO: после привязки домена добавить строку Sitemap, напр.:
-# Sitemap: https://teachnet.ru/sitemap.xml
+Sitemap: https://teachnet.ru/sitemap.xml
