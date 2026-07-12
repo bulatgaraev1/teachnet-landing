@@ -1,0 +1,35 @@
+/*
+ * Раскладка блока «Путь ребёнка» под 4 ступени. Импортируется после
+ * components.css и переопределяет прежние правила .route (были на 3 в ряд).
+ * Брейкпоинты: <640px — 1 колонка (из базовых правил components.css);
+ * 640–1099px — сетка 2×2 без соединительной линии; ≥1100px — 4 карточки в ряд,
+ * узлы сверху + горизонтальный пунктир.
+ */
+
+/* планшет / узкий десктоп: 2×2, узлы inline, линию скрываем, карточки равной высоты */
+@media (min-width: 640px) and (max-width: 1099px) {
+  .route {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+    padding-top: 0 !important;
+  }
+  .route__step { display: flex; flex-direction: column; align-items: stretch; height: auto; }
+  .step-node {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+  }
+  .route__card { margin-top: 14px !important; flex: 1; }
+  .route::before { display: none !important; }
+}
+
+/* десктоп: 4 карточки в ряд; узлы сверху наследуются от правила ≥900px в
+   components.css, пунктир проходит через центры 4 узлов (12.5% … 87.5%) */
+@media (min-width: 1100px) {
+  .route {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 22px;
+  }
+  .route::before { left: 12.5%; right: 12.5%; }
+}
