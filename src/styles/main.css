@@ -3,6 +3,7 @@
 @import './tokens.css';
 @import './base.css';
 @import './components.css';
+@import './route-4step.css';
 
 /* Маппинг дизайн-токенов в утилиты Tailwind (bg-brand, text-action, font-head …) */
 @theme inline {
