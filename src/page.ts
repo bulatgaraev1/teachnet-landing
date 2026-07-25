@@ -14,6 +14,7 @@ import { parents } from './sections/parents';
 import { team } from './sections/team';
 import { conversion } from './sections/conversion';
 import { price } from './sections/price';
+import { mediaMentions } from './sections/media-mentions';
 import { faq } from './sections/faq';
 import { final } from './sections/final';
 import { footer } from './sections/footer';
@@ -37,6 +38,7 @@ export function renderPage(): string {
     team(),
     conversion(),
     price(),
+    mediaMentions(),
     faq(),
     final(),
     '</main>',
