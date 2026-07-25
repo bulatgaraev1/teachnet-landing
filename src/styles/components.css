@@ -1031,3 +1031,44 @@
 .child-form__grid { display: grid; gap: 28px; align-items: start; }
 @media (min-width: 880px) { .child-form__grid { grid-template-columns: 1fr 1fr; gap: 48px; } }
 .child-form__points { margin-top: 24px; }
+
+/* ---------- «О нас пишут» (медиа-упоминания) ---------- */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+/* карточка = .card + .card-hover (нативная карточка сайта) + раскладка колонкой */
+.media-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  color: var(--text);
+}
+.media-card__source {
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+.media-card__text {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--text);
+}
+/* дата и «Читать» прижаты к низу — карточки в ряду выглядят выровненными */
+.media-card__date { font-size: 14px; color: var(--text-soft); margin-top: auto; }
+.media-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: var(--action);
+}
+.media-card__link .icon { width: 18px; height: 18px; }
+.media-card:hover .media-card__link { text-decoration: underline; text-underline-offset: 2px; }
