@@ -8,6 +8,7 @@ import { SITE } from '../lib/site';
 const NAV_GOALS: Record<string, string> = {
   '#programs': 'nav_programs',
   '#price': 'nav_price',
+  '#press': 'nav_press',
   '#faq': 'nav_faq',
 };
 

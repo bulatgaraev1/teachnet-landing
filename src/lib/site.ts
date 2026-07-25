@@ -12,6 +12,7 @@ export const SITE = {
   nav: [
     { label: 'Программы', href: '#programs' },
     { label: 'Цена', href: '#price' },
+    { label: 'О нас пишут', href: '#press' },
     { label: 'Вопросы', href: '#faq' },
   ],
   // Отдельные статические страницы (см. content/ и *.html в корне проекта)
