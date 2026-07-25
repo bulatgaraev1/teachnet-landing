@@ -179,6 +179,13 @@
   .site-header__cta { display: inline-flex; }
   .burger { display: none; }
 }
+/* узкий десктоп: 4 пункта навигации + телефон + CTA — тесним промежутки, чтобы
+   всё поместилось в одну строку (широкие экраны не затрагиваем) */
+@media (min-width: 880px) and (max-width: 1039px) {
+  .site-nav { gap: 18px; }
+  .site-header__inner { gap: 12px; }
+  .site-header__right { gap: 10px; }
+}
 
 /* ---------- Мобильное боковое меню (drawer) ---------- */
 .mobile-nav {
@@ -290,6 +297,13 @@
   line-height: 1.35;
   color: var(--text-soft);
   max-width: 22ch;
+}
+/* мобиль: логотипы партнёров сеткой 2×3 — крупные, одного визуального размера, по центру */
+@media (max-width: 559px) {
+  .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 16px; }
+  .trust-item { gap: 10px; }
+  .trust-logo { min-height: 78px; padding: 6px 8px; }
+  .trust-logo img { height: 68px; width: auto; max-width: 100%; object-fit: contain; }
 }
 
 /* ---------- Маршрут из 3 ступеней + пунктирная линия (§4, §6, §12) ---------- */

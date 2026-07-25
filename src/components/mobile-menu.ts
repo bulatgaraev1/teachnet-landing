@@ -14,7 +14,11 @@ import { SITE } from '../lib/site';
 
 export function mobileMenu(): string {
   const links = SITE.nav
-    .map((n) => `<a class="mobile-nav__link" href="${n.href}">${n.label}</a>`)
+    .map((n) => {
+      // «О нас пишут» из бургера шлёт ту же цель nav_press, что и из хедера
+      const g = n.href === '#press' ? ' data-goal="nav_press"' : '';
+      return `<a class="mobile-nav__link" href="${n.href}"${g}>${n.label}</a>`;
+    })
     .join('');
 
   return `<div class="mobile-nav" id="mobile-nav">
