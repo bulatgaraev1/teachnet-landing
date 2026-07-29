@@ -23,6 +23,13 @@ const MENTIONS = [
     url: 'https://kai.ru/news/new?id=14465643',
     goal: 'press_click_kai',
   },
+  {
+    source: 'Татар-информ',
+    text: 'Путь юного инженера: в Казани школьники создают электротехнику своими руками',
+    date: '29 июля 2026',
+    url: 'https://www.tatar-inform.ru/news/put-yunogo-inzenera-v-kazani-skolniki-sozdayut-elektrotexniku-svoimi-rukami-6035800',
+    goal: 'press_click_tatarinform',
+  },
 ];
 
 export function mediaMentions(): string {
