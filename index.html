@@ -32,21 +32,8 @@
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Schema.org — образовательная организация (JSON-LD) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "EducationalOrganization",
-        "name": "TEACHNET",
-        "url": "https://teachnet.ru",
-        "logo": "https://teachnet.ru/icon-512.png",
-        "email": "hello@teachnet.ru",
-        "telephone": "+7 993 415-14-34",
-        "areaServed": { "@type": "City", "name": "Казань" },
-        "address": { "@type": "PostalAddress", "addressLocality": "Казань", "addressCountry": "RU" },
-        "sameAs": ["https://vk.com/teachnetru", "https://t.me/teachnet_ru"]
-      }
-    </script>
+    <!-- Schema.org (LocalBusiness + FAQPage) — генерируется на сборке из SITE и FAQ -->
+    <!--jsonld-->
 
     <!-- Предзагрузка основных шрифтов (кириллица) -->
     <link rel="preload" href="/fonts/onest-cyrillic-700.woff2" as="font" type="font/woff2" crossorigin />
