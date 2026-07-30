@@ -37,6 +37,7 @@ export function footer(withScrollGoal = false): string {
 
         <div>
           <p class="footer-col__title">Контакты</p>
+          <address style="line-height:2;font-style:normal">${SITE.address.full}</address>
           <p style="line-height:2"><a href="${SITE.emailHref}">${SITE.email}</a></p>
           <p style="line-height:2"><a href="${SITE.phoneHref}">${SITE.phoneDisplay}</a></p>
           <p style="line-height:2;margin-top:8px"><a href="${SITE.social.chat}" target="_blank" rel="noopener">Чат поддержки</a></p>

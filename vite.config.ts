@@ -6,6 +6,7 @@ import { basename } from 'node:path';
 import { renderPage } from './src/page';
 import { renderLegalPage } from './src/legal';
 import { renderChildPage } from './src/child';
+import { siteJsonLd } from './src/lib/jsonld';
 
 // Контент страницы собирается из секций (чистые функции) и встраивается в index.html
 // на этапе сборки/дев-сервера — статичный HTML, без рантайм-инъекции (важно для SEO и LCP,
@@ -75,7 +76,12 @@ export default defineConfig({
           } else {
             body = renderPage();
           }
-          return resolvePhotos(html.replace('<!--app-->', body));
+          let out = html.replace('<!--app-->', body);
+          // JSON-LD (LocalBusiness + FAQPage) — только на главной, из SITE/FAQ
+          if (slug === 'index') {
+            out = out.replace('<!--jsonld-->', siteJsonLd(html));
+          }
+          return resolvePhotos(out);
         },
       },
     },
