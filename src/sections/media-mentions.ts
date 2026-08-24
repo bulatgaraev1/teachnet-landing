@@ -30,6 +30,13 @@ const MENTIONS = [
     url: 'https://www.tatar-inform.ru/news/put-yunogo-inzenera-v-kazani-skolniki-sozdayut-elektrotexniku-svoimi-rukami-6035800',
     goal: 'press_click_tatarinform',
   },
+  {
+    source: 'МинОбр РТ',
+    text: 'в Казани школьники создают электротехнику своими руками',
+    date: '29 июля 2026',
+    url: 'https://mon.tatarstan.ru/index.htm/news/2543500.htm',
+    goal: 'press_click_monrt',
+  },
 ];
 
 export function mediaMentions(): string {
