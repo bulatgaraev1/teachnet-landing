@@ -10,7 +10,7 @@ import { icon } from '../lib/icons';
 // чтобы при добавлении/перестановке статей аналитика не сбивалась.
 const MENTIONS = [
   {
-    source: 'Минмолодёжи РТ',
+    source: 'Министерство молодёжи РТ',
     text: 'В Татарстане проходят инженерные мастер-классы для школьников в рамках проекта TEACHNET',
     date: '14 июля 2026',
     url: 'https://minmol.tatarstan.ru/index.htm/news/2539647.htm',
@@ -31,7 +31,7 @@ const MENTIONS = [
     goal: 'press_click_tatarinform',
   },
   {
-    source: 'МинОбр РТ',
+    source: 'Министерство образования РТ',
     text: 'в Казани школьники создают электротехнику своими руками',
     date: '29 июля 2026',
     url: 'https://mon.tatarstan.ru/index.htm/news/2543500.htm',
