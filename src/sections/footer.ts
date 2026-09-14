@@ -1,5 +1,4 @@
 /** Подвал (§11). Тёмный фон, белый логотип, контакты, реквизиты, юр-ссылки. */
-import { icon } from '../lib/icons';
 import { SITE } from '../lib/site';
 
 export function footer(withScrollGoal = false): string {
@@ -24,9 +23,9 @@ export function footer(withScrollGoal = false): string {
           <img class="footer-logo" src="/images/logo-white.svg" width="140" height="44" loading="lazy" decoding="async" alt="${SITE.brand}" />
           <p class="footer-soft" style="max-width:34ch">Школа инженерии и робототехники для детей в Казани</p>
           <div class="footer-social">
-            <a href="${SITE.social.vk}" target="_blank" rel="noopener" aria-label="ВКонтакте">${icon('vk')}</a>
-            <a href="${SITE.social.telegram}" target="_blank" rel="noopener" aria-label="Telegram">${icon('send')}</a>
-            <a href="${SITE.social.max}" target="_blank" rel="noopener" aria-label="MAX">${icon('message-circle')}</a>
+            <a href="${SITE.social.vk}" target="_blank" rel="noopener" aria-label="ВКонтакте"><img class="footer-social__img" src="/images/icon-vk.png" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
+            <a href="${SITE.social.telegram}" target="_blank" rel="noopener" aria-label="Telegram"><img class="footer-social__img" src="/images/icon-telegram.png" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
+            <a href="${SITE.social.max}" target="_blank" rel="noopener" aria-label="MAX"><img class="footer-social__img" src="/images/icon-max.png" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
           </div>
           <p class="footer-req" style="margin-top:24px">
             ${SITE.requisites.name}<br>

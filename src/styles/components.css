@@ -665,19 +665,17 @@
   margin-bottom: 14px;
 }
 .footer-social { display: flex; gap: 12px; margin-top: 18px; }
+/* Иконки соцсетей — оригинальные логотипы VK / Telegram / MAX. У каждого своя
+   фирменная заливка и скруглённые углы, поэтому сам PNG выступает плиткой:
+   отдельная подложка не нужна, на тёмном фоне читаются за счёт своего цвета. */
 .footer-social a {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  line-height: 0;
+  border-radius: 11px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
-.footer-social a:hover { background: rgba(255, 255, 255, 0.12); color: var(--brand-soft); }
-.footer-social .icon { width: 20px; height: 20px; }
+.footer-social a:hover { transform: translateY(-2px); opacity: 0.85; }
+.footer-social__img { width: 40px; height: 40px; display: block; }
 /* блок поддержки ФСИ (§11) */
 .footer-support {
   margin-top: 44px;

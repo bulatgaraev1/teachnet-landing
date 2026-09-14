@@ -24,7 +24,7 @@ export const SITE = {
   social: {
     vk: 'https://vk.com/teachnetru',
     telegram: 'https://t.me/teachnet_ru',
-    max: 'https://t.me/teachnet_ru', // TODO: заменить на реальную ссылку МАКС (пока ведёт в Telegram)
+    max: 'https://max.ru/id165505564947_biz',
     chat: 'https://t.me/teachnet_school', // чат поддержки
   },
   requisites: {
