@@ -7,6 +7,8 @@ import { renderPage } from './src/page';
 import { renderLegalPage } from './src/legal';
 import { renderChildPage } from './src/child';
 import { siteJsonLd } from './src/lib/jsonld';
+import { renderElectronicsPage } from './src/electronics/page';
+import { electronicsHead } from './src/electronics/head';
 
 // Контент страницы собирается из секций (чистые функции) и встраивается в index.html
 // на этапе сборки/дев-сервера — статичный HTML, без рантайм-инъекции (важно для SEO и LCP,
@@ -71,6 +73,8 @@ export default defineConfig({
           let body: string;
           if (slug === 'child') {
             body = renderChildPage();
+          } else if (slug === 'electronics') {
+            body = renderElectronicsPage();
           } else if (slug !== 'index') {
             body = renderLegalPage(slug) || renderPage();
           } else {
@@ -80,6 +84,10 @@ export default defineConfig({
           // JSON-LD (LocalBusiness + FAQPage) — только на главной, из SITE/FAQ
           if (slug === 'index') {
             out = out.replace('<!--jsonld-->', siteJsonLd(html));
+          }
+          // /electronics: SEO-мета, preload hero, JSON-LD (Service, BreadcrumbList, FAQPage)
+          if (slug === 'electronics') {
+            out = out.replace('<!--el-head-->', electronicsHead());
           }
           return resolvePhotos(out);
         },
@@ -93,6 +101,7 @@ export default defineConfig({
       input: {
         main: pageInput('index'),
         child: pageInput('child'),
+        electronics: pageInput('electronics'),
         privacy: pageInput('privacy'),
         'personal-data-consent': pageInput('personal-data-consent'),
         'cookie-policy': pageInput('cookie-policy'),

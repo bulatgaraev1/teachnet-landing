@@ -22,6 +22,8 @@ const STEPS = [
     title: 'Arduino',
     text: 'Настоящая электроника и реальные компоненты: платы, микроконтроллеры, датчики. Ребёнок разрабатывает свои схемы и пишет для них программы.',
     meta: '90 минут · группа до 6 человек',
+    // ссылка на страницу курса пока скрыта; чтобы показать «Подробнее о курсе», раскомментировать:
+    // href: '/electronics',
   },
   {
     n: '4',
@@ -40,7 +42,8 @@ export function programs(): string {
         <span class="chip" style="margin-bottom:14px">${s.tag}</span>
         <h3 class="h3">${s.title}</h3>
         <p class="muted" style="margin:10px 0 16px">${s.text}</p>
-        <p class="micro">${s.meta}</p>
+        <p class="micro">${s.meta}</p>${'href' in s ? `
+        <a class="route__more" href="${s.href}">Подробнее о курсе<span aria-hidden="true"> →</span></a>` : ''}
       </article>
     </li>`,
   ).join('');

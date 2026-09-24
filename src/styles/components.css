@@ -89,6 +89,16 @@
   box-shadow: 0 16px 40px rgba(45, 99, 151, 0.16);
 }
 .card-hover:hover.card--program { border-color: var(--brand); }
+/* ссылка «Подробнее о курсе» в карточке ступени (ведёт на отдельную страницу курса) */
+.route__more {
+  display: inline-flex;
+  margin-top: 14px;
+  color: var(--action);
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .card-icon {
   width: 52px;
   height: 52px;
