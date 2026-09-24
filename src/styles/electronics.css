@@ -467,8 +467,12 @@ html:not(.el-js) .el-page [data-reveal] { opacity: 1; transform: none; }
 
 /* ---------- окно записи (<dialog>) ---------- */
 .el-modal {
+  /* preflight Tailwind обнуляет margin, возвращаем штатное центрирование <dialog> */
+  margin: auto;
   width: min(440px, calc(100% - 32px));
   max-width: none;
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
   padding: 0;
   border: 0;
   border-radius: var(--r-card);
@@ -528,3 +532,21 @@ html:has(.el-modal[open]) { overflow: hidden; }
 .el-msg__sub { font-size: 14px; font-weight: 400; color: var(--text-soft); }
 .el-msg__arrow { width: 20px; height: 20px; color: var(--text-soft); }
 
+/* ---------- второй проход, мобильная версия ---------- */
+/* текст кнопки переносится ровно («…бесплатный / пробный урок»), без висящего слова */
+.el-cta { text-wrap: balance; }
+@media (max-width: 599px) {
+  /* факты первого экрана: одна строка через точки вместо четырёх плашек столбиком */
+  .el-facts { gap: 2px 0; }
+  .el-fact { padding: 0; border: 0; background: none; font-size: 16px; color: var(--text-soft); }
+  .el-fact:not(:last-child)::after { content: '·' / ''; margin-inline: 8px; color: var(--brand); }
+  /* публикации: две колонки, компактнее */
+  .el-press-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .el-press { min-height: 104px; padding: 16px; gap: 12px; }
+  .el-press__source { font-size: 16px; }
+  .el-press__read { font-size: 15px; }
+}
+@media (max-width: 879px) {
+  /* портрет преподавателя не на весь экран: заголовок блока виден сразу */
+  .el-photo--portrait { max-width: 260px; }
+}
