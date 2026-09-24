@@ -9,6 +9,7 @@ import { EL_CONFIG } from '../content/electronics.config';
 import { SITE } from '../lib/site';
 import { footer } from '../sections/footer';
 import { cookieBanner } from '../components/cookie-banner';
+import { accordion } from '../components/accordion';
 import { elIcon } from './icons';
 import type { ElIcon } from './icons';
 import { photo } from './photo';
@@ -128,27 +129,21 @@ function trial(): string {
 
 function program(): string {
   const items = EL.program.modules
-    .map((m, i) => {
-      const n = i + 1;
-      const pic =
-        n === 1 ? photo(EL.photos.module1, { cls: 'el-photo--module' }) : n === 2 ? photo(EL.photos.module2, { cls: 'el-photo--module' }) : '';
-      return `<details class="el-module" data-module="${n}">
-          <summary class="el-module__sum">
-            <span class="el-module__num" aria-hidden="true">${String(n).padStart(2, '0')}</span>
-            <span class="el-module__name"><span class="el-module__title">${m.title}</span><span class="el-module__sep" aria-hidden="true"> · </span><span class="el-module__product">${m.product}</span></span>
-            <span class="el-module__icon" aria-hidden="true"></span>
-          </summary>
-          <div class="el-module__panel">
-            <p class="el-module__result">${EL.program.productLabel} <strong>${m.product}</strong></p>
-            ${pic}
-          </div>
-        </details>`;
-    })
+    .map(
+      (m, i) => `<li class="el-mod">
+          <span class="el-mod__num">${String(i + 1).padStart(2, '0')}</span>
+          <span class="el-mod__text"><span class="el-mod__title">${m.title}</span> — <span class="el-mod__product">${m.product}</span></span>
+        </li>`,
+    )
     .join('');
   return `<section class="section el-sec--gray" id="program" aria-labelledby="el-program-h">
     <div class="container el-narrow">
       ${sectionHead('el-program-h', EL.program.h2, EL.program.sub)}
-      <div class="el-modules" data-reveal>${items}</div>
+      <ol class="el-mods" data-reveal>${items}</ol>
+      <div class="el-mods__photos" data-reveal>
+        ${photo(EL.photos.module1, { cls: 'el-photo--module' })}
+        ${photo(EL.photos.module2, { cls: 'el-photo--module' })}
+      </div>
     </div>
   </section>`;
 }
@@ -226,7 +221,6 @@ function price(): string {
         <div class="el-price__details">
           <p class="el-price__label">${EL.price.includedLabel}</p>
           <ul class="el-list">${inc}</ul>
-          <p class="el-price__schedule"><span class="el-price__label">${EL.price.scheduleLabel}</span> ${EL_CONFIG.schedule}</p>
           ${ctaButton('price')}
         </div>
       </div>
@@ -235,21 +229,13 @@ function price(): string {
 }
 
 function faq(): string {
-  const items = EL.faq.items
-    .map(
-      (it) => `<div class="el-faq__item">
-          <h3 class="el-faq__q">${it.q}</h3>
-          <p class="el-faq__a">${it.a}</p>
-        </div>`,
-    )
-    .join('');
   return `<section class="section el-sec--white" id="faq" aria-labelledby="el-faq-h" data-scroll-goal="scroll_faq">
-    <div class="container">
+    <div class="container el-faq-wrap">
       <div class="el-head" data-reveal>
         <h2 class="h2" id="el-faq-h">${EL.faq.h2}</h2>
         <p class="lead">${EL.faq.subText} ${tel('faq', 'el-link')}</p>
       </div>
-      <div class="el-faq" data-reveal>${items}</div>
+      <div data-reveal>${accordion(EL.faq.items.map((it) => ({ q: it.q, a: it.a })))}</div>
     </div>
   </section>`;
 }

@@ -128,12 +128,5 @@ export function initAnalytics(): void {
     else if (a.hasAttribute('data-cross')) track('cross_robotics');
   });
 
-  // program_open: раскрытие модуля программы (только открытие, не закрытие)
-  document.querySelectorAll<HTMLDetailsElement>('details[data-module]').forEach((d) => {
-    d.addEventListener('toggle', () => {
-      if (d.open) track('program_open', { module: Number(d.dataset.module) });
-    });
-  });
-
   initScrollGoals();
 }
