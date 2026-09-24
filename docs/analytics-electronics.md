@@ -4,7 +4,7 @@
 Параметры счётчика не менялись: `webvisor: true`, `clickmap: true`, `trackLinks: true`,
 `accurateTrackBounce: true`, а также `referrer` и `url` текущей страницы.
 
-Все цели отправляются через одну обёртку `track(goal, params)` в `src/electronics/analytics.ts`.
+Все цели (17) отправляются через одну обёртку `track(goal, params)` в `src/electronics/analytics.ts`.
 Если Метрика не загрузилась или заблокирована, обёртка молча ничего не делает, страница работает.
 
 ## Параметры визита
@@ -28,7 +28,6 @@
 | `msg_max` | JavaScript-событие | клик «MAX» в окне записи | `from_block` |
 | `phone_click` | JavaScript-событие | любой клик по ссылке `tel:` на странице | `place`: modal / faq / contacts / header / footer |
 | `modal_close_empty` | JavaScript-событие | окно записи закрыто без выбора (крестик, Escape, клик вне окна) | `from_block` |
-| `program_open` | JavaScript-событие | раскрыт модуль программы (только раскрытие) | `module`: 1–8 |
 | `press_click` | JavaScript-событие | клик по карточке публикации в блоке «Нам доверяют» | `source`: minmol / monrt / kai / tatarinform |
 | `map_click` | JavaScript-событие | клик «Открыть в Яндекс.Картах» | нет |
 | `back_click` | JavaScript-событие | клик по кнопке «Назад» / «Все направления» | `mode`: history (вернулись назад) / directions (ссылка на блок направлений) |

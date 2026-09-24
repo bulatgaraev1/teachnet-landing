@@ -1,6 +1,6 @@
 /**
  * Клиентский JS страницы /electronics. HTML уже статичный (src/electronics/page.ts),
- * здесь только: окно записи, кнопка «Назад», аналитика, появление блоков.
+ * здесь только: окно записи, кнопка «Назад», аналитика, появление блоков, FAQ-аккордеон.
  */
 import '../styles/main.css';
 import '../styles/electronics.css';
@@ -9,6 +9,7 @@ import { initHeader } from '../lib/header';
 import { initReveal } from '../lib/reveal';
 import { captureVisit } from '../lib/visit';
 import { initCookieBanner } from '../components/cookie-banner';
+import { initAccordion } from '../components/accordion';
 import { initAnalytics } from './analytics';
 import { initModal } from './modal';
 import { initBack, initAnchors } from './back';
@@ -22,6 +23,7 @@ function init(): void {
   initAnchors();
   initHeader();
   initReveal();
+  initAccordion();
   initCookieBanner();
 }
 
