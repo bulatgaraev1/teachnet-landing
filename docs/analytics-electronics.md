@@ -4,7 +4,7 @@
 Параметры счётчика не менялись: `webvisor: true`, `clickmap: true`, `trackLinks: true`,
 `accurateTrackBounce: true`, а также `referrer` и `url` текущей страницы.
 
-Все цели (17) отправляются через одну обёртку `track(goal, params)` в `src/electronics/analytics.ts`.
+Все цели (18) отправляются через одну обёртку `track(goal, params)` в `src/electronics/analytics.ts`.
 Если Метрика не загрузилась или заблокирована, обёртка молча ничего не делает, страница работает.
 
 ## Параметры визита
@@ -23,10 +23,11 @@
 | `cta_trial` | JavaScript-событие | клик по кнопке записи в блоке пробного урока (кнопка 2) | `block: "trial"` |
 | `cta_price` | JavaScript-событие | клик по кнопке записи в блоке цены (кнопка 3) | `block: "price"` |
 | `cta_final` | JavaScript-событие | клик по кнопке записи в блоке контактов (кнопка 4) | `block: "final"` |
-| `msg_telegram` | JavaScript-событие | клик «Telegram» в окне записи | `from_block`: hero / trial / price / final |
+| `cta_menu` | JavaScript-событие | клик по кнопке записи в бургер-меню (мобильная версия) | `block: "menu"` |
+| `msg_telegram` | JavaScript-событие | клик «Telegram» в окне записи | `from_block`: hero / trial / price / final / menu |
 | `msg_vk` | JavaScript-событие | клик «VK» в окне записи | `from_block` |
 | `msg_max` | JavaScript-событие | клик «MAX» в окне записи | `from_block` |
-| `phone_click` | JavaScript-событие | любой клик по ссылке `tel:` на странице | `place`: modal / faq / contacts / header / footer |
+| `phone_click` | JavaScript-событие | любой клик по ссылке `tel:` на странице | `place`: modal / faq / contacts / header / menu / footer |
 | `modal_close_empty` | JavaScript-событие | окно записи закрыто без выбора (крестик, Escape, клик вне окна) | `from_block` |
 | `press_click` | JavaScript-событие | клик по карточке публикации в блоке «Нам доверяют» | `source`: minmol / monrt / kai / tatarinform |
 | `map_click` | JavaScript-событие | клик «Открыть в Яндекс.Картах» | нет |
@@ -39,7 +40,7 @@
 
 Пояснения:
 
-- `from_block` показывает, какая кнопка открыла окно: hero / trial / price / final.
+- `from_block` показывает, какая кнопка открыла окно: hero / trial / price / final / menu.
 - Скролл-цели срабатывают один раз за визит (вкладку). «Виден на 50%»: в окне не меньше
   половины блока, а для блоков выше экрана блок закрывает не меньше половины окна.
   Блок должен оставаться видимым 600 мс подряд (как у скролл-целей главной), чтобы
