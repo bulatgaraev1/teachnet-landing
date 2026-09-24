@@ -15,7 +15,7 @@ import type { ElIcon } from './icons';
 import { photo } from './photo';
 
 /** Кнопка записи: открывает окно; block уходит в цель cta_<block> и в from_block */
-function ctaButton(block: 'hero' | 'trial' | 'price' | 'final', extra = ''): string {
+function ctaButton(block: 'hero' | 'trial' | 'price' | 'final' | 'menu', extra = ''): string {
   const cls = ['btn', 'el-cta', extra].filter(Boolean).join(' ');
   return `<button type="button" class="${cls}" data-open-modal="${block}" aria-haspopup="dialog" aria-controls="el-modal">${CTA_LABEL}</button>`;
 }
@@ -42,9 +42,29 @@ function header(): string {
       <div class="site-header__right">
         ${tel('header', 'site-header__phone')}
         <a class="el-call" href="${SITE.phoneHref}" data-place="header" aria-label="${EL.modal.call}: ${SITE.phoneDisplay}">${elIcon('phone')}</a>
+        <button class="burger" type="button" aria-label="${EL.menu.open}" aria-expanded="false" aria-controls="mobile-nav" data-mm-open>${elIcon('menu')}</button>
       </div>
     </div>
   </header>`;
+}
+
+/** Бургер-меню: та же разметка и поведение, что у меню главной (initMobileMenu) */
+function mobileMenu(): string {
+  const links = EL.nav.map((n) => `<a class="mobile-nav__link" href="${n.href}" data-anchor>${n.label}</a>`).join('');
+  return `<div class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav__backdrop" data-mm-close></div>
+    <aside class="mobile-nav__panel" role="dialog" aria-modal="true" aria-label="${EL.menu.label}" id="mobile-nav-panel">
+      <div class="mobile-nav__head">
+        <img class="mobile-nav__logo" src="/images/logo-dark.svg" width="121" height="38" alt="${SITE.brand}" />
+        <button class="mobile-nav__close" type="button" aria-label="${EL.menu.close}" data-mm-close>${elIcon('x')}</button>
+      </div>
+      <nav class="mobile-nav__links" aria-label="Разделы страницы">${links}</nav>
+      <div class="mobile-nav__foot">
+        ${tel('menu', 'mobile-nav__phone')}
+        <button type="button" class="btn btn--block el-cta" data-open-modal="menu" data-mm-close aria-haspopup="dialog" aria-controls="el-modal">${CTA_LABEL}</button>
+      </div>
+    </aside>
+  </div>`;
 }
 
 function hero(): string {
@@ -240,6 +260,22 @@ function faq(): string {
   </section>`;
 }
 
+/** Карта: карточка организации по orgId, иначе поиск организации по названию и адресу */
+function mapUrls(): { widget: string; open: string } {
+  const { orgId, search } = EL_CONFIG.map;
+  if (orgId) {
+    return {
+      widget: `https://yandex.ru/map-widget/v1/?ol=biz&oid=${orgId}&z=17`,
+      open: `https://yandex.ru/maps/org/${orgId}/`,
+    };
+  }
+  const q = encodeURIComponent(search);
+  return {
+    widget: `https://yandex.ru/map-widget/v1/?mode=search&text=${q}&z=17`,
+    open: `https://yandex.ru/maps/?mode=search&text=${q}&z=17`,
+  };
+}
+
 function contacts(): string {
   return `<section class="section el-sec--gray" id="contacts" aria-labelledby="el-contacts-h" data-scroll-goal="scroll_contacts">
     <div class="container el-contacts">
@@ -251,13 +287,12 @@ function contacts(): string {
           <li>${elIcon('phone', 'el-contacts__icon')}${tel('contacts', 'el-contacts__phone')}</li>
           <li>${elIcon('pin', 'el-contacts__icon')}<span>${EL.contacts.address}</span></li>
         </ul>
-        <div class="el-contacts__entrance">${photo(EL.photos.entrance)}</div>
       </div>
       <div class="el-contacts__map" data-reveal>
         <div class="el-map">
-          <iframe class="el-map__frame" src="${EL_CONFIG.map.widget}" title="${EL.contacts.mapTitle}" loading="lazy" width="600" height="450" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <iframe class="el-map__frame" src="${mapUrls().widget}" title="${EL.contacts.mapTitle}" loading="lazy" width="600" height="450" referrerpolicy="strict-origin-when-cross-origin"></iframe>
         </div>
-        <a class="el-link el-map__open" href="${EL_CONFIG.map.open}" target="_blank" rel="noopener noreferrer" data-map-link>${EL.contacts.mapLink}${elIcon('arrow-right', 'el-link__icon')}</a>
+        <a class="el-link el-map__open" href="${mapUrls().open}" target="_blank" rel="noopener noreferrer" data-map-link>${EL.contacts.mapLink}${elIcon('arrow-right', 'el-link__icon')}</a>
       </div>
     </div>
     <div class="container">
@@ -299,6 +334,7 @@ function modal(): string {
 export function renderElectronicsPage(): string {
   return [
     header(),
+    mobileMenu(),
     '<main id="main" class="el-main">',
     hero(),
     result(),

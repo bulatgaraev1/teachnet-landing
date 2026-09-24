@@ -41,7 +41,9 @@ export function initModal(): void {
 
   dlg.addEventListener('close', () => {
     if (!chosen) track('modal_close_empty', { from_block: fromBlock });
-    opener?.focus();
+    // кнопка в закрытом меню невидима, фокус возвращаем на бургер
+    const back = opener?.closest('.mobile-nav') ? document.querySelector<HTMLElement>('[data-mm-open]') : opener;
+    back?.focus();
     opener = null;
   });
 }

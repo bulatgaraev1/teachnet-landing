@@ -58,12 +58,14 @@ export const EL_CONFIG = {
   },
 
   /**
-   * Яндекс.Карты. Поиск по адресу; если организация есть в Яндекс Бизнесе,
-   * точнее заменить на ссылку с её oid.
+   * Яндекс.Карты: карточка организации TEACHNET.
+   * orgId: номер организации из ссылки вида https://yandex.ru/maps/org/teachnet/1234567890/
+   * (открыть карточку в Яндекс.Картах, скопировать число из адреса). Пока не задан,
+   * карта ищет организацию по названию и адресу (search).
    */
   map: {
-    widget: 'https://yandex.ru/map-widget/v1/?mode=search&text=%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%8C%2C%20%D1%83%D0%BB.%20%D0%9F%D0%B0%D0%B2%D0%BB%D1%8E%D1%85%D0%B8%D0%BD%D0%B0%2C%20108%D0%B1&z=16',
-    open: 'https://yandex.ru/maps/?mode=search&text=%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%8C%2C%20%D1%83%D0%BB.%20%D0%9F%D0%B0%D0%B2%D0%BB%D1%8E%D1%85%D0%B8%D0%BD%D0%B0%2C%20108%D0%B1&z=17',
+    orgId: '',
+    search: 'TEACHNET, Казань, улица Павлюхина, 108Б',
   },
 
   links: {
