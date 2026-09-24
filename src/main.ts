@@ -13,8 +13,14 @@ import { initForm } from './components/form';
 import { initStickyBar } from './components/sticky-bar';
 import { initCookieBanner } from './components/cookie-banner';
 import { initMobileMenu } from './components/mobile-menu';
+import { initReturnPosition } from './lib/return-position';
+import { captureVisit } from './lib/visit';
+
+// до DOMContentLoaded: обработчик pageshow должен успеть подписаться
+initReturnPosition();
 
 function init(): void {
+  captureVisit();
   initHeader();
   initNav();
   initReveal();
