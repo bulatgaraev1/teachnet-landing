@@ -349,7 +349,9 @@ html:not(.el-js) .el-page [data-reveal] { opacity: 1; transform: none; }
 
 /* ---------- 7. преподаватель ---------- */
 .el-teacher { display: grid; gap: 28px; align-items: center; }
-@media (min-width: 880px) { .el-teacher { grid-template-columns: minmax(0, 420px) 1fr; gap: 56px; } }
+/* две колонки с 960px, как у остальных блоков «фото + текст»: на 880–959px колонка текста
+   слишком узкая и выходила выше портрета */
+@media (min-width: 960px) { .el-teacher { grid-template-columns: minmax(0, 420px) 1fr; gap: 56px; } }
 .el-teacher .h2 { margin-bottom: 12px; }
 .el-list { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
 .el-list li { display: flex; align-items: flex-start; gap: 12px; }
@@ -533,7 +535,7 @@ html:has(.el-modal[open]) { overflow: hidden; }
   .el-press__source { font-size: 16px; }
   .el-press__read { font-size: 15px; }
 }
-@media (max-width: 879px) {
+@media (max-width: 959px) {
   /* портрет преподавателя не на весь экран: заголовок блока виден сразу */
   .el-photo--portrait { max-width: 260px; }
 }
