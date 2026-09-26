@@ -528,3 +528,24 @@ html:has(.el-modal[open]) { overflow: hidden; }
 @media (max-width: 360px) {
   .el-header__inner { gap: 6px; }
 }
+
+/* ---------- окно записи: форма заявки (компонент формы сайта) ---------- */
+.el-modal { width: min(460px, calc(100% - 24px)); }
+.el-modal__form { margin-bottom: 18px; }
+.el-modal__form .form-grid { gap: 12px; }
+.el-modal__or {
+  margin: 4px 0 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-soft);
+  text-align: center;
+}
+.el-modal .el-msgs { gap: 8px; }
+.el-modal .el-msg { min-height: 52px; padding-block: 6px; font-size: 16px; }
+.el-modal .el-msg__logo { width: 36px; height: 36px; }
+@media (max-width: 479px) {
+  .el-modal__box { padding: 24px 16px 18px; }
+}
+
+/* ---------- цена: «Стоимость занятий:» над суммой ---------- */
+.el-price__lead { flex-basis: 100%; font-weight: 600; font-size: 18px; color: var(--text-soft); }
