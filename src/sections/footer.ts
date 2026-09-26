@@ -22,6 +22,7 @@ export function footer(withScrollGoal = false): string {
         <div>
           <img class="footer-logo" src="/images/logo-white.svg" width="140" height="44" loading="lazy" decoding="async" alt="${SITE.brand}" />
           <p class="footer-soft" style="max-width:34ch">Школа инженерии и робототехники для детей в Казани</p>
+          <p style="margin-top:12px"><a href="/electronics">Электроника для детей 10–15 лет</a></p>
           <div class="footer-social">
             <a href="${SITE.social.vk}" target="_blank" rel="noopener" aria-label="ВКонтакте"><img class="footer-social__img" src="/images/icon-vk.png" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
             <a href="${SITE.social.telegram}" target="_blank" rel="noopener" aria-label="Telegram"><img class="footer-social__img" src="/images/icon-telegram.png" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>

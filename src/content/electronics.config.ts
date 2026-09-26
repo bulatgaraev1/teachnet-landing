@@ -1,6 +1,6 @@
 /**
  * Страница /electronics: все плейсхолдеры и ссылки в одном месте.
- * Значения в квадратных скобках нужно заменить на реальные до мёрджа в main.
+ * Заглушек не осталось: мессенджеры, карта и публикации заполнены реальными ссылками.
  */
 
 export interface MessengerLink {
@@ -12,16 +12,14 @@ export interface MessengerLink {
 
 export const EL_CONFIG = {
   /**
-   * Мессенджеры в окне записи. К ссылке добавляется параметр param=electronics_<код источника>.
+   * Мессенджеры в окне записи. Если param задан, к ссылке добавляется
+   * param=electronics_<код источника> (сейчас только у VK: ref=electronics_<код>).
    * base: адрес без параметров. param: имя параметра (null, если добавлять не нужно).
    */
   messengers: {
-    // ПЛЕЙСХОЛДЕР: имя Telegram-бота, например https://t.me/teachnet_bot
-    telegram: { base: 'https://t.me/[BOT]', param: 'start' },
-    // ПЛЕЙСХОЛДЕР: короткое имя сообщества VK (на сайте сейчас vk.com/teachnetru)
-    vk: { base: 'https://vk.me/[GROUP]', param: 'ref' },
-    // ПЛЕЙСХОЛДЕР: ссылка MAX (на сайте в подвале сейчас https://max.ru/id165505564947_biz)
-    max: { base: '[ССЫЛКА]', param: 'start' },
+    telegram: { base: 'https://t.me/teachnet_school', param: null },
+    vk: { base: 'https://vk.me/teachnetru', param: 'ref' },
+    max: { base: 'https://max.ru/id165505564947_biz', param: null },
   } as Record<'telegram' | 'vk' | 'max', MessengerLink>,
 
   /** Префикс параметра источника: start=electronics_<код> */
@@ -64,7 +62,7 @@ export const EL_CONFIG = {
    * карта ищет организацию по названию и адресу (search).
    */
   map: {
-    orgId: '',
+    orgId: '153081578625',
     search: 'TEACHNET, Казань, улица Павлюхина, 108Б',
   },
 

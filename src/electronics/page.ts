@@ -10,6 +10,7 @@ import { SITE } from '../lib/site';
 import { footer } from '../sections/footer';
 import { cookieBanner } from '../components/cookie-banner';
 import { accordion } from '../components/accordion';
+import { leadForm } from '../components/form';
 import { elIcon } from './icons';
 import type { ElIcon } from './icons';
 import { photo } from './photo';
@@ -235,7 +236,7 @@ function price(): string {
     <div class="container el-narrow">
       <div class="el-price" data-reveal>
         <div class="el-price__main">
-          <h2 class="el-price__title" id="el-price-h"><span class="el-price__amount">${nbsp(EL.price.amount)}</span> <span class="el-price__period">${EL.price.period}</span></h2>
+          <h2 class="el-price__title" id="el-price-h"><span class="el-price__lead">${EL.price.lead}</span> <span class="el-price__amount">${nbsp(EL.price.amount)}</span> <span class="el-price__period">${EL.price.period}</span></h2>
           <p class="lead">${EL.price.sub}</p>
         </div>
         <div class="el-price__details">
@@ -315,8 +316,12 @@ function modal(): string {
   return `<dialog class="el-modal" id="el-modal" aria-labelledby="el-modal-title" aria-describedby="el-modal-text">
     <div class="el-modal__box">
       <button type="button" class="el-modal__close" data-modal-close aria-label="${EL.modal.close}">${elIcon('x')}</button>
-      <h2 class="el-modal__title" id="el-modal-title">${EL.modal.title}</h2>
+      <p class="el-modal__title" id="el-modal-title">${EL.modal.title}</p>
       <p class="el-modal__text" id="el-modal-text">${EL.modal.text}</p>
+      <div class="el-modal__form">
+        ${leadForm({ id: 'el-lead-form', source: 'electronics', ageType: 'select', ageOptions: [...EL.modal.ageOptions], submitLabel: EL.modal.formSubmit })}
+      </div>
+      <p class="el-modal__or">${EL.modal.or}</p>
       <ul class="el-msgs">
         ${messenger('telegram', EL.modal.telegram, 'icon-telegram.png')}
         ${messenger('vk', EL.modal.vk, 'icon-vk.png')}

@@ -1,5 +1,5 @@
 /**
- * Окно записи на нативном <dialog>. Открывается любой из четырёх кнопок
+ * Окно записи на нативном <dialog>: форма заявки + мессенджеры и звонок. Открывается кнопками
  * [data-open-modal]; фокус внутри, закрытие по Escape, клику вне окна и крестику,
  * после закрытия фокус возвращается на кнопку, которая его открыла.
  */
@@ -40,7 +40,8 @@ export function initModal(): void {
   });
 
   dlg.addEventListener('close', () => {
-    if (!chosen) track('modal_close_empty', { from_block: fromBlock });
+    const sent = !!dlg.querySelector('.lead-form.is-sent');
+    if (!chosen && !sent) track('modal_close_empty', { from_block: fromBlock });
     // кнопка в закрытом меню невидима, фокус возвращаем на бургер
     const back = opener?.closest('.mobile-nav') ? document.querySelector<HTMLElement>('[data-mm-open]') : opener;
     back?.focus();

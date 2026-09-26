@@ -15,18 +15,26 @@ export interface LeadFormOptions {
   ageType?: 'input' | 'select';
   /** подпись кнопки отправки */
   submitLabel?: string;
+  /** id формы: если на странице несколько форм, у каждой свой (по умолчанию lead-form) */
+  id?: string;
+  /** варианты возраста для ageType: 'select' */
+  ageOptions?: string[];
 }
 
 export function leadForm(opts: LeadFormOptions = {}): string {
-  const { source = '', ageType = 'input', submitLabel = 'Записаться бесплатно' } = opts;
+  const {
+    source = '',
+    ageType = 'input',
+    submitLabel = 'Записаться бесплатно',
+    id = 'lead-form',
+    ageOptions = ['6–8', '9–12', '13–16'],
+  } = opts;
 
   const ageField =
     ageType === 'select'
       ? `<select class="field field--select" name="age" autocomplete="off" aria-label="Сколько лет ребёнку">
           <option value="" disabled selected>Сколько лет ребёнку</option>
-          <option value="6–8">6–8</option>
-          <option value="9–12">9–12</option>
-          <option value="13–16">13–16</option>
+${ageOptions.map((o) => `          <option value="${o}">${o}</option>`).join('\n')}
         </select>
         <span class="field-error">Выберите возраст ребёнка</span>`
       : `<input class="field" type="text" name="age" placeholder="Возраст ребёнка" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="Возраст ребёнка" />
@@ -36,7 +44,7 @@ export function leadForm(opts: LeadFormOptions = {}): string {
     ? `<input type="hidden" name="source" value="${source}" />`
     : '';
 
-  return `<form class="lead-form" id="lead-form" novalidate>
+  return `<form class="lead-form" id="${id}" novalidate>
     <div class="form-grid">
       <div class="field-row">
         <input class="field" type="text" name="name" placeholder="Имя" autocomplete="name" aria-label="Имя" />
@@ -165,8 +173,8 @@ function setError(input: Element, on: boolean): void {
   }
 }
 
-export function initForm(root: ParentNode = document): void {
-  const form = root.querySelector<HTMLFormElement>('#lead-form');
+export function initForm(root: ParentNode = document, id = 'lead-form'): void {
+  const form = root.querySelector<HTMLFormElement>(`#${id}`);
   if (!form) return;
 
   // захват источника трафика и ClientID в скрытые поля (до отправки)

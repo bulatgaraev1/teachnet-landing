@@ -141,7 +141,7 @@ $digits  = preg_replace('/\D/', '', post('phone'));
 $age     = clean(post('age'), 16);
 $consent = trim(post('consent'));
 // источник заявки: только из белого списка, иначе — обычная заявка с сайта
-$source  = in_array(post('source'), ['child-masterclass'], true) ? 'child-masterclass' : 'website';
+$source  = in_array(post('source'), ['child-masterclass', 'electronics'], true) ? post('source') : 'website';
 
 $utm_source   = clean(post('utm_source'), 255);
 $utm_medium   = clean(post('utm_medium'), 255);
@@ -240,7 +240,9 @@ if ($DB_NAME !== '' && $DB_USER !== '') {
 // Заголовок зависит от источника — чтобы заявки с мастер-класса было видно отдельно.
 $heading = $source === 'child-masterclass'
     ? 'Новая заявка — бесплатный мастер-класс (Твой Ход)'
-    : 'Новая заявка с лендинга TEACHNET';
+    : ($source === 'electronics'
+        ? 'Новая заявка — курс электроники (пробный урок)'
+        : 'Новая заявка с лендинга TEACHNET');
 $text =
     $heading . "\n\n" .
     "Имя: " . $name . "\n" .
