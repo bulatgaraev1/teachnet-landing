@@ -233,17 +233,16 @@ function trust(): string {
 function price(): string {
   const inc = EL.price.included.map((t) => `<li>${elIcon('check', 'el-tick')}<span>${t}</span></li>`).join('');
   return `<section class="section el-sec--gray" id="price" aria-labelledby="el-price-h" data-scroll-goal="scroll_price">
-    <div class="container el-narrow">
-      <div class="el-price" data-reveal>
-        <div class="el-price__main">
+    <div class="container">
+      <div class="el-price-wrap">
+        <div class="el-price" data-reveal>
           <h2 class="el-price__title" id="el-price-h"><span class="el-price__lead">${EL.price.lead}</span> <span class="el-price__amount">${nbsp(EL.price.amount)}</span> <span class="el-price__period">${EL.price.period}</span></h2>
-          <p class="lead">${EL.price.sub}</p>
-        </div>
-        <div class="el-price__details">
+          <p class="lead el-price__sub">${EL.price.sub}</p>
           <p class="el-price__label">${EL.price.includedLabel}</p>
           <ul class="el-list">${inc}</ul>
           ${ctaButton('price')}
         </div>
+        <div class="el-price-photo" data-reveal>${photo(EL.photos.price, { cls: 'el-photo--price' })}</div>
       </div>
     </div>
   </section>`;

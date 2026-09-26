@@ -387,17 +387,37 @@ html:not(.el-js) .el-page [data-reveal] { opacity: 1; transform: none; }
 .el-press__source { font-family: var(--font-head); font-weight: 600; font-size: 19px; line-height: 1.25; color: var(--text); }
 .el-press__read { font-weight: 500; font-size: 16px; color: var(--action); }
 
-/* ---------- 9. стоимость ---------- */
+/* ---------- 9. стоимость: карточка слева, фото справа ---------- */
+.el-price-wrap { display: grid; gap: 20px; }
+/* карточка: одна колонка (подпись, цена, строка, «Входят:», список, кнопка) */
 .el-price {
-  display: grid;
-  gap: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   padding: 28px 22px;
   border-radius: var(--r-card);
   background: #fff;
   box-shadow: var(--shadow);
 }
-@media (min-width: 800px) {
-  .el-price { grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding: 48px; }
+.el-price__sub { margin-bottom: 24px; }
+/* мобайл: фото под карточкой на всю ширину, 4:3 (пропорция из photo()) */
+.el-price-photo .el-photo { border-radius: var(--r-card); }
+@media (min-width: 768px) {
+  .el-price-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
+  .el-price { padding: 36px 32px; }
+  /* фото той же высоты, что карточка: не участвует в высоте строки, заполняет ячейку */
+  .el-price-photo { position: relative; min-height: 100%; }
+  .el-price-photo > .el-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto !important;
+    object-fit: cover;
+  }
+}
+@media (min-width: 1024px) {
+  .el-price { padding: 48px; }
 }
 .el-price__title {
   display: flex;
@@ -416,8 +436,8 @@ html:not(.el-js) .el-page [data-reveal] { opacity: 1; transform: none; }
 }
 .el-price__period { font-weight: 600; font-size: 20px; color: var(--text-soft); }
 .el-price__label { font-weight: 600; color: var(--text); }
-.el-price__details .el-list { margin-top: 12px; }
-.el-price__details .el-cta { margin-top: 24px; }
+.el-price .el-list { margin-top: 12px; }
+.el-price .el-cta { margin-top: 28px; }
 
 /* ---------- 10. вопросы: аккордеон сайта (.acc из components.css), ширина как на главной ---------- */
 .el-faq-wrap { max-width: 880px; }
