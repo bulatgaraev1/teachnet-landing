@@ -328,24 +328,16 @@ html:not(.el-js) .el-page [data-reveal] { opacity: 1; transform: none; }
 .el-photo--module.el-ph { padding: 12px; }
 .el-photo--module .el-ph__text { font-size: 14px; }
 
-/* ---------- 6. прогресс: 4 карточки + фото ---------- */
+/* ---------- 6. прогресс: 4 карточки + фото 3:2 ---------- */
 .el-progress { display: grid; gap: 24px; }
 .el-progress__cards { display: grid; gap: 14px; }
-/* планшет: карточки 2×2, фото под ними */
+/* планшет: карточки 2×2, фото под ними на всю ширину */
 @media (min-width: 600px) { .el-progress__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-/* десктоп: карточки столбиком слева, фото справа на всю их высоту */
+/* фото 3:2 показывается целиком на всех экранах (пропорция из photo()), без обрезки.
+   Десктоп: карточки столбиком слева, фото справа по центру их высоты */
 @media (min-width: 960px) {
-  .el-progress { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: stretch; }
+  .el-progress { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: center; }
   .el-progress__cards { grid-template-columns: 1fr; }
-  .el-progress__media { position: relative; min-height: 100%; }
-  .el-progress__media > .el-photo {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    aspect-ratio: auto !important;
-    object-fit: cover;
-  }
 }
 .el-card {
   display: flex;

@@ -10,7 +10,8 @@
     "preview": "vite preview --port 4173",
     "assets": "node scripts/process-logo.mjs && node scripts/make-placeholders.mjs",
     "assets:logo": "node scripts/process-logo.mjs",
-    "assets:placeholders": "node scripts/make-placeholders.mjs"
+    "assets:placeholders": "node scripts/make-placeholders.mjs",
+    "optimize-images": "node scripts/optimize-images.mjs"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.0",
