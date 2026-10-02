@@ -336,8 +336,8 @@ function modal(): string {
       </div>
       <p class="el-modal__or">${EL.modal.or}</p>
       <ul class="el-msgs">
-        ${messenger('telegram', EL.modal.telegram, 'icon-telegram.png')}
-        ${messenger('max', EL.modal.max, 'icon-max.png')}
+        ${messenger('telegram', EL.modal.telegram, 'icon-telegram.webp')}
+        ${messenger('max', EL.modal.max, 'icon-max.webp')}
         <li><a class="el-msg" href="${SITE.phoneHref}" data-place="modal">
           <span class="el-msg__logo el-msg__logo--phone">${elIcon('phone')}</span>
           <span class="el-msg__label">${EL.modal.call}<span class="el-msg__sub">${SITE.phoneDisplay}</span></span>
