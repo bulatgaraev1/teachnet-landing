@@ -289,43 +289,64 @@ html:not(.el-js) .el-page [data-reveal] { opacity: 1; transform: none; }
 .el-trial__grid { display: grid; gap: 32px; align-items: center; }
 @media (min-width: 960px) { .el-trial__grid { grid-template-columns: 1fr 1fr; gap: 56px; } }
 .el-trial__copy .el-chips { margin-top: 24px; }
-.el-trial__addr { display: flex; align-items: center; gap: 8px; margin-top: 18px; }
-.el-trial__pin { width: 20px; height: 20px; }
+/* филиалы: адрес + уточнение мелким шрифтом */
+.el-branches-list { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+.el-branch-line { display: flex; align-items: flex-start; gap: 10px; }
+.el-branch-line > span { display: flex; flex-direction: column; }
+.el-branch-line__addr { font-weight: 500; }
+.el-branch-line__note { font-size: 14px; line-height: 1.4; opacity: 0.85; }
+.el-trial__pin { flex: none; width: 20px; height: 20px; margin-top: 3px; }
 .el-trial__cta { margin-top: 28px; }
 
-/* ---------- 5. программа: простой нумерованный список ---------- */
-.el-mods { display: flex; flex-direction: column; gap: 10px; }
-.el-mod {
+/* ---------- 5. программа: карточки по месяцам, 4×2 на десктопе ---------- */
+.el-months { display: grid; gap: 12px; }
+@media (min-width: 600px) { .el-months { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .el-months { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; } }
+.el-month {
   display: flex;
-  align-items: baseline;
-  gap: 14px;
-  padding: 16px 18px;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
   border-radius: 18px;
   background: #fff;
   box-shadow: 0 4px 18px rgba(45, 99, 151, 0.07);
 }
-@media (min-width: 720px) { .el-mod { gap: 18px; padding: 18px 24px; } }
-.el-mod__num {
-  flex: none;
-  min-width: 30px;
-  font-family: var(--font-head);
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 1.3;
+@media (min-width: 1024px) { .el-month { padding: 22px 20px; } }
+.el-month__label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--brand);
 }
-.el-mod__text { color: var(--text-soft); line-height: 1.4; }
-.el-mod__title { font-family: var(--font-head); font-weight: 600; color: var(--text); }
+.el-month__title { font-family: var(--font-head); font-weight: 600; font-size: 19px; line-height: 1.25; color: var(--text); }
+.el-month__build { font-size: 16px; line-height: 1.45; color: var(--text-soft); }
+.el-month__build-label { font-weight: 600; color: var(--text); }
 .el-mods__photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
 @media (min-width: 720px) { .el-mods__photos { gap: 20px; margin-top: 28px; max-width: 640px; } }
 .el-photo--module { border-radius: 16px; }
 .el-photo--module.el-ph { padding: 12px; }
 .el-photo--module .el-ph__text { font-size: 14px; }
 
-/* ---------- 6. прогресс ---------- */
-.el-split { display: grid; gap: 24px; align-items: center; }
-@media (min-width: 960px) { .el-split { grid-template-columns: 1fr 1fr; gap: 48px; } }
-.el-progress__cards { display: flex; flex-direction: column; gap: 14px; }
+/* ---------- 6. прогресс: 4 карточки + фото ---------- */
+.el-progress { display: grid; gap: 24px; }
+.el-progress__cards { display: grid; gap: 14px; }
+/* планшет: карточки 2×2, фото под ними */
+@media (min-width: 600px) { .el-progress__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* десктоп: карточки столбиком слева, фото справа на всю их высоту */
+@media (min-width: 960px) {
+  .el-progress { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: stretch; }
+  .el-progress__cards { grid-template-columns: 1fr; }
+  .el-progress__media { position: relative; min-height: 100%; }
+  .el-progress__media > .el-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto !important;
+    object-fit: cover;
+  }
+}
 .el-card {
   display: flex;
   align-items: flex-start;
@@ -444,19 +465,40 @@ html:not(.el-js) .el-page [data-reveal] { opacity: 1; transform: none; }
 /* ---------- 10. вопросы: аккордеон сайта (.acc из components.css), ширина как на главной ---------- */
 .el-faq-wrap { max-width: 880px; }
 
-/* ---------- 11. контакты ---------- */
-.el-contacts { display: grid; gap: 32px; }
-@media (min-width: 960px) { .el-contacts { grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: start; } }
-.el-contacts .h2 { margin-bottom: 12px; }
-.el-contacts__cta { margin: 24px 0 28px; }
-.el-contacts__list { display: flex; flex-direction: column; gap: 12px; }
-.el-contacts__list li { display: flex; align-items: center; gap: 12px; }
-.el-contacts__icon { color: var(--brand); }
+/* ---------- 11. контакты: два филиала с картами ---------- */
+.el-contacts__copy { max-width: 780px; }
+.el-contacts__copy .h2 { margin-bottom: 12px; }
+.el-contacts__cta { margin: 24px 0 20px; }
+.el-contacts__phone-line { display: flex; align-items: center; gap: 12px; }
+.el-contacts__icon { flex: none; color: var(--brand); }
 .el-contacts__phone { font-weight: 600; color: var(--text); }
-.el-map { aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r-card); background: #e7edf5; }
+.el-branches { display: grid; gap: 20px; margin-top: 32px; }
+@media (min-width: 768px) { .el-branches { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 40px; } }
+.el-branch {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: var(--r-card);
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+.el-branch__addr { display: flex; align-items: flex-start; gap: 10px; font-weight: 600; color: var(--text); }
+.el-branch__addr .icon { margin-top: 2px; }
+.el-branch__note { margin: 4px 0 16px 34px; font-size: 14px; line-height: 1.4; color: var(--text-soft); }
+.el-map { aspect-ratio: 4 / 3; overflow: hidden; border-radius: 16px; background: #e7edf5; }
 .el-map__frame { display: block; width: 100%; height: 100%; border: 0; }
 .el-map__open { margin-top: 14px; }
-.el-cross { margin-top: 44px; }
+.el-cross { margin-top: 40px; }
+
+/* подпись группы «О нас пишут» (не заголовок) */
+.el-eyebrow {
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
 
 /* ---------- окно записи (<dialog>) ---------- */
 .el-modal {

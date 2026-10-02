@@ -2,11 +2,13 @@
  * Страница /electronics: курс электроники и программирования для детей 10–15 лет.
  * Рендерится на сборке (импортируется vite.config.ts) в статичный HTML, как и
  * остальные страницы сайта. Тексты: src/content/electronics.ts, ссылки и
- * плейсхолдеры: src/content/electronics.config.ts. Клиентский JS: ./main.ts.
+ * карты и мессенджеры: src/content/electronics.config.ts, филиалы: SITE.branches.
+ * Клиентский JS: ./main.ts.
  */
 import { EL, CTA_LABEL } from '../content/electronics';
 import { EL_CONFIG } from '../content/electronics.config';
 import { SITE } from '../lib/site';
+import type { Branch } from '../lib/site';
 import { footer } from '../sections/footer';
 import { cookieBanner } from '../components/cookie-banner';
 import { accordion } from '../components/accordion';
@@ -132,6 +134,11 @@ function lesson(): string {
   </section>`;
 }
 
+/** Адрес филиала + уточнение мелким шрифтом */
+function branchLine(b: Branch, iconCls: string): string {
+  return `<li class="el-branch-line">${elIcon('pin', iconCls)}<span><span class="el-branch-line__addr">${b.address}</span><span class="el-branch-line__note">${b.note}</span></span></li>`;
+}
+
 function trial(): string {
   const chips = EL.trial.chips.map((c) => `<li class="el-chip el-chip--light">${c}</li>`).join('');
   return `<section class="section el-trial" id="trial" aria-labelledby="el-trial-h" data-scroll-goal="scroll_trial">
@@ -140,7 +147,7 @@ function trial(): string {
         <h2 class="h2" id="el-trial-h">${EL.trial.h2}</h2>
         <p class="lead el-trial__sub">${EL.trial.sub}</p>
         <ul class="el-chips" aria-label="Условия пробного урока">${chips}</ul>
-        <p class="el-trial__addr">${elIcon('pin', 'el-trial__pin')}<span>${EL.trial.address}</span></p>
+        <ul class="el-branches-list">${SITE.branches.map((b) => branchLine(b, 'el-trial__pin')).join('')}</ul>
         <div class="el-trial__cta">${ctaButton('trial', 'el-cta--light')}</div>
       </div>
       <div class="el-trial__media" data-reveal>${photo(EL.photos.trial, { cls: 'el-photo--on-brand' })}</div>
@@ -151,16 +158,17 @@ function trial(): string {
 function program(): string {
   const items = EL.program.modules
     .map(
-      (m, i) => `<li class="el-mod">
-          <span class="el-mod__num">${String(i + 1).padStart(2, '0')}</span>
-          <span class="el-mod__text"><span class="el-mod__title">${m.title}</span> — <span class="el-mod__product">${m.product}</span></span>
+      (m, i) => `<li class="el-month">
+          <span class="el-month__label">${EL.program.monthLabel} ${i + 1}</span>
+          <h3 class="el-month__title">${m.title}</h3>
+          <p class="el-month__build"><span class="el-month__build-label">${EL.program.buildLabel}</span> ${m.build}</p>
         </li>`,
     )
     .join('');
   return `<section class="section el-sec--gray" id="program" aria-labelledby="el-program-h">
-    <div class="container el-narrow">
+    <div class="container">
       ${sectionHead('el-program-h', EL.program.h2, EL.program.sub)}
-      <ol class="el-mods" data-reveal>${items}</ol>
+      <ol class="el-months" data-reveal>${items}</ol>
       <div class="el-mods__photos" data-reveal>
         ${photo(EL.photos.module1, { cls: 'el-photo--module' })}
         ${photo(EL.photos.module2, { cls: 'el-photo--module' })}
@@ -184,9 +192,9 @@ function progress(): string {
   return `<section class="section el-sec--white" aria-labelledby="el-progress-h">
     <div class="container">
       ${sectionHead('el-progress-h', EL.progress.h2, EL.progress.sub)}
-      <div class="el-split">
+      <div class="el-progress">
         <ul class="el-progress__cards" data-reveal>${cards}</ul>
-        <div class="el-split__media" data-reveal>${photo(EL.photos.journal)}</div>
+        <div class="el-progress__media" data-reveal>${photo(EL.photos.journal, { cls: 'el-photo--progress' })}</div>
       </div>
     </div>
   </section>`;
@@ -225,6 +233,7 @@ function trust(): string {
         <p class="el-trust__sub"><span class="el-bignum">${EL.trust.subNum}</span> <span class="lead">${EL.trust.subText}</span></p>
       </div>
       <ul class="el-chips el-trust__chips" data-reveal>${chips}</ul>
+      <p class="el-eyebrow" data-reveal>${EL.trust.pressLabel}</p>
       <ul class="el-press-grid" data-reveal>${press}</ul>
     </div>
   </section>`;
@@ -260,48 +269,42 @@ function faq(): string {
   </section>`;
 }
 
-/** Карта: карточка организации по orgId, иначе поиск организации по названию и адресу */
-function mapUrls(): { widget: string; open: string } {
-  const { orgId, search } = EL_CONFIG.map;
-  if (orgId) {
-    return {
-      widget: `https://yandex.ru/map-widget/v1/?ol=biz&oid=${orgId}&z=17`,
-      open: `https://yandex.ru/maps/org/${orgId}/`,
-    };
-  }
-  const q = encodeURIComponent(search);
+/** Карта-виджет и ссылка на карточку организации в Яндекс.Картах */
+function mapUrls(b: Branch): { widget: string; open: string } {
   return {
-    widget: `https://yandex.ru/map-widget/v1/?mode=search&text=${q}&z=17`,
-    open: `https://yandex.ru/maps/?mode=search&text=${q}&z=17`,
+    widget: `https://yandex.ru/map-widget/v1/?ol=biz&oid=${b.orgId}&z=17`,
+    open: `https://yandex.ru/maps/org/${b.orgId}/`,
   };
+}
+
+function branchCard(b: Branch): string {
+  const m = mapUrls(b);
+  return `<li class="el-branch" data-branch="${b.id}">
+          <p class="el-branch__addr">${elIcon('pin', 'el-contacts__icon')}<span>${b.address}</span></p>
+          <p class="el-branch__note">${b.note}</p>
+          <div class="el-map">
+            <iframe class="el-map__frame" src="${m.widget}" title="${EL.contacts.mapTitlePrefix} ${b.address}" loading="lazy" width="600" height="450" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          </div>
+          <a class="el-link el-map__open" href="${m.open}" target="_blank" rel="noopener noreferrer" data-map-link="${b.id}">${EL.contacts.mapLink}${elIcon('arrow-right', 'el-link__icon')}</a>
+        </li>`;
 }
 
 function contacts(): string {
   return `<section class="section el-sec--gray" id="contacts" aria-labelledby="el-contacts-h" data-scroll-goal="scroll_contacts">
-    <div class="container el-contacts">
+    <div class="container">
       <div class="el-contacts__copy" data-reveal>
         <h2 class="h2" id="el-contacts-h">${EL.contacts.h2}</h2>
         <p class="lead">${EL.contacts.sub}</p>
         <div class="el-contacts__cta">${ctaButton('final')}</div>
-        <ul class="el-contacts__list">
-          <li>${elIcon('phone', 'el-contacts__icon')}${tel('contacts', 'el-contacts__phone')}</li>
-          <li>${elIcon('pin', 'el-contacts__icon')}<span>${EL.contacts.address}</span></li>
-        </ul>
+        <p class="el-contacts__phone-line">${elIcon('phone', 'el-contacts__icon')}${tel('contacts', 'el-contacts__phone')}</p>
       </div>
-      <div class="el-contacts__map" data-reveal>
-        <div class="el-map">
-          <iframe class="el-map__frame" src="${mapUrls().widget}" title="${EL.contacts.mapTitle}" loading="lazy" width="600" height="450" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-        </div>
-        <a class="el-link el-map__open" href="${mapUrls().open}" target="_blank" rel="noopener noreferrer" data-map-link>${EL.contacts.mapLink}${elIcon('arrow-right', 'el-link__icon')}</a>
-      </div>
-    </div>
-    <div class="container">
+      <ul class="el-branches" data-reveal>${SITE.branches.map(branchCard).join('')}</ul>
       <p class="el-cross" data-reveal><a class="el-link" href="${EL_CONFIG.links.robotics}" data-cross>${EL.contacts.cross}</a></p>
     </div>
   </section>`;
 }
 
-function messenger(id: 'telegram' | 'vk' | 'max', label: string, img: string): string {
+function messenger(id: 'telegram' | 'max', label: string, img: string): string {
   const m = EL_CONFIG.messengers[id];
   const href = m.param ? `${m.base}?${m.param}=${EL_CONFIG.startPrefix}` : m.base;
   return `<li><a class="el-msg" href="${href}" target="_blank" rel="noopener" data-msg="${id}">
@@ -318,12 +321,22 @@ function modal(): string {
       <p class="el-modal__title" id="el-modal-title">${EL.modal.title}</p>
       <p class="el-modal__text" id="el-modal-text">${EL.modal.text}</p>
       <div class="el-modal__form">
-        ${leadForm({ id: 'el-lead-form', source: 'electronics', ageType: 'select', ageOptions: [...EL.modal.ageOptions], submitLabel: EL.modal.formSubmit })}
+        ${leadForm({
+          id: 'el-lead-form',
+          source: 'electronics',
+          ageType: 'select',
+          ageOptions: [...EL.modal.ageOptions],
+          phoneLabel: EL.modal.phoneLabel,
+          branches: SITE.branches.map((b) => ({ value: b.id, label: b.selectLabel })),
+          branchLabel: EL.modal.branchLabel,
+          branchError: EL.modal.branchError,
+          submitLabel: EL.modal.formSubmit,
+          footText: EL.modal.formFoot,
+        })}
       </div>
       <p class="el-modal__or">${EL.modal.or}</p>
       <ul class="el-msgs">
         ${messenger('telegram', EL.modal.telegram, 'icon-telegram.png')}
-        ${messenger('vk', EL.modal.vk, 'icon-vk.png')}
         ${messenger('max', EL.modal.max, 'icon-max.png')}
         <li><a class="el-msg" href="${SITE.phoneHref}" data-place="modal">
           <span class="el-msg__logo el-msg__logo--phone">${elIcon('phone')}</span>
