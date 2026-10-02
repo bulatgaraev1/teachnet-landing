@@ -1,6 +1,6 @@
 /**
  * Страница /electronics: все плейсхолдеры и ссылки в одном месте.
- * Заглушек не осталось: мессенджеры, карта и публикации заполнены реальными ссылками.
+ * Заглушек нет. Адреса филиалов и номера организаций в Яндекс.Картах: SITE.branches (src/lib/site.ts).
  */
 
 export interface MessengerLink {
@@ -12,14 +12,14 @@ export interface MessengerLink {
 
 export const EL_CONFIG = {
   /**
-   * Мессенджеры в окне записи. Если param задан, к ссылке добавляется
-   * param=electronics_<код источника> (сейчас только у VK: ref=electronics_<код>).
+   * Мессенджеры. В окне записи выводятся Telegram и MAX (VK оставлен в конфиге, но не выводится).
+   * Если param задан, к ссылке добавляется param=electronics_<код источника>.
    * base: адрес без параметров. param: имя параметра (null, если добавлять не нужно).
    */
   messengers: {
     telegram: { base: 'https://t.me/teachnet_school', param: null },
     vk: { base: 'https://vk.me/teachnetru', param: 'ref' },
-    max: { base: 'https://max.ru/id165505564947_biz', param: null },
+    max: { base: 'https://max.ru/u/f9LHodD0cOKc9s3rPv7x6iCWvLQizbFQCEjGr-erGK_8SKhrYM8uGAmFPmQ', param: null },
   } as Record<'telegram' | 'vk' | 'max', MessengerLink>,
 
   /** Префикс параметра источника: start=electronics_<код> */
@@ -53,17 +53,6 @@ export const EL_CONFIG = {
     kai: 'https://kai.ru/news/new?id=14465643',
     tatarinform:
       'https://www.tatar-inform.ru/news/put-yunogo-inzenera-v-kazani-skolniki-sozdayut-elektrotexniku-svoimi-rukami-6035800',
-  },
-
-  /**
-   * Яндекс.Карты: карточка организации TEACHNET.
-   * orgId: номер организации из ссылки вида https://yandex.ru/maps/org/teachnet/1234567890/
-   * (открыть карточку в Яндекс.Картах, скопировать число из адреса). Пока не задан,
-   * карта ищет организацию по названию и адресу (search).
-   */
-  map: {
-    orgId: '153081578625',
-    search: 'TEACHNET, Казань, улица Павлюхина, 108Б',
   },
 
   links: {

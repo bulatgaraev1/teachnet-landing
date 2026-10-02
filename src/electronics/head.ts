@@ -6,6 +6,7 @@
  */
 import { EL } from '../content/electronics';
 import { heroPreload } from './photo';
+import { SITE } from '../lib/site';
 
 const ORIGIN = 'https://teachnet.ru';
 export const PAGE_PATH = '/electronics';
@@ -46,6 +47,19 @@ function service(): Record<string, unknown> {
         priceCurrency: 'RUB',
         referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON', unitText: 'месяц' },
       },
+      // оба филиала (SITE.branches): где проходят занятия
+      availableAtOrFrom: SITE.branches.map((b) => ({
+        '@type': 'Place',
+        name: `${SITE.brand}, ${b.street}`,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: b.street,
+          addressLocality: SITE.address.locality,
+          addressRegion: SITE.address.region,
+          addressCountry: SITE.address.country,
+        },
+        hasMap: `https://yandex.ru/maps/org/${b.orgId}/`,
+      })),
     },
   };
 }

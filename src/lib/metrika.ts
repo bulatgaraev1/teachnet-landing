@@ -12,12 +12,14 @@
 export const YM_COUNTER_ID = 96429194;
 
 type YmCallback = (clientId: string) => void;
-type Ym = (id: number, action: string, value: string | YmCallback) => void;
+type Ym = (id: number, action: string, value: string | YmCallback, params?: Record<string, string>) => void;
 
-export function reachGoal(goal: string): void {
+/** params: необязательные параметры цели (например, branch для lead_form на /electronics) */
+export function reachGoal(goal: string, params?: Record<string, string>): void {
   const ym = (window as unknown as { ym?: Ym }).ym;
   if (YM_COUNTER_ID && typeof ym === 'function') {
-    ym(YM_COUNTER_ID, 'reachGoal', goal);
+    if (params) ym(YM_COUNTER_ID, 'reachGoal', goal, params);
+    else ym(YM_COUNTER_ID, 'reachGoal', goal);
   }
 }
 

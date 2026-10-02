@@ -124,7 +124,7 @@ export function initAnalytics(): void {
     const href = a.getAttribute('href') || '';
     if (href.startsWith('tel:')) track('phone_click', { place: phonePlace(a) });
     else if (a.dataset.press) track('press_click', { source: a.dataset.press });
-    else if (a.hasAttribute('data-map-link')) track('map_click');
+    else if (a.dataset.mapLink) track('map_click', { branch: a.dataset.mapLink });
     else if (a.hasAttribute('data-cross')) track('cross_robotics');
   });
 

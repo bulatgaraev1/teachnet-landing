@@ -19,6 +19,14 @@ export interface LeadFormOptions {
   id?: string;
   /** варианты возраста для ageType: 'select' */
   ageOptions?: string[];
+  /** подпись поля телефона (placeholder и aria-label); по умолчанию маска «+7 (___) ___-__-__» */
+  phoneLabel?: string;
+  /** обязательный выпадающий список «Филиал» (name="branch"); по умолчанию не выводится */
+  branches?: { value: string; label: string }[];
+  branchLabel?: string;
+  branchError?: string;
+  /** строка под кнопкой */
+  footText?: string;
 }
 
 export function leadForm(opts: LeadFormOptions = {}): string {
@@ -28,7 +36,22 @@ export function leadForm(opts: LeadFormOptions = {}): string {
     submitLabel = 'Записаться бесплатно',
     id = 'lead-form',
     ageOptions = ['6–8', '9–12', '13–16'],
+    phoneLabel = '',
+    branches = [],
+    branchLabel = 'Филиал',
+    branchError = 'Выберите филиал',
+    footText = 'Перезвоним в течение 15 минут в рабочее время. Только чтобы согласовать время.',
   } = opts;
+
+  const branchField = branches.length
+    ? `<div class="field-row">
+        <select class="field field--select" name="branch" autocomplete="off" aria-label="${branchLabel}">
+          <option value="" disabled selected>${branchLabel}</option>
+${branches.map((b) => `          <option value="${b.value}">${b.label}</option>`).join('\n')}
+        </select>
+        <span class="field-error">${branchError}</span>
+      </div>`
+    : '';
 
   const ageField =
     ageType === 'select'
@@ -51,10 +74,11 @@ ${ageOptions.map((o) => `          <option value="${o}">${o}</option>`).join('\n
         <span class="field-error">Напишите, как вас зовут</span>
       </div>
       <div class="field-row">
-        <input class="field" type="tel" name="phone" placeholder="+7 (___) ___-__-__" inputmode="tel" autocomplete="tel" aria-label="Телефон" />
+        <input class="field" type="tel" name="phone" placeholder="${phoneLabel || '+7 (___) ___-__-__'}" inputmode="tel" autocomplete="tel" aria-label="${phoneLabel || 'Телефон'}" />
         <span class="field-error">Введите номер телефона полностью</span>
       </div>
-      <div class="field-row">${ageField}</div>
+      <div class="field-row">${ageField}</div>${branchField ? `
+      ${branchField}` : ''}
       <label class="consent">
         <input type="checkbox" name="consent" value="1" />
         <span>Я даю согласие на обработку <a href="${SITE.legal.consent}" target="_blank" rel="noopener">персональных данных</a></span>
@@ -73,7 +97,7 @@ ${ageOptions.map((o) => `          <option value="${o}">${o}</option>`).join('\n
       ${sourceField}
       <button type="submit" class="btn btn--block">${submitLabel}</button>
     </div>
-    <p class="form-foot micro">Перезвоним в течение 15 минут в рабочее время. Только чтобы согласовать время.</p>
+    <p class="form-foot micro">${footText}</p>
     <div class="form-success" role="status" aria-live="polite">
       <span class="form-success__check">${icon('check')}</span>
       <h3 class="h3">Спасибо, перезвоним</h3>
@@ -184,6 +208,7 @@ export function initForm(root: ParentNode = document, id = 'lead-form'): void {
   const phoneEl = form.elements.namedItem('phone') as HTMLInputElement;
   const ageEl = form.elements.namedItem('age') as HTMLInputElement | HTMLSelectElement;
   const consentEl = form.elements.namedItem('consent') as HTMLInputElement;
+  const branchEl = form.elements.namedItem('branch') as HTMLSelectElement | null;
   const hpEl = form.elements.namedItem('website') as HTMLInputElement;
 
   // маска телефона
@@ -207,6 +232,7 @@ export function initForm(root: ParentNode = document, id = 'lead-form'): void {
     setError(ageEl, false),
   );
   consentEl.addEventListener('change', () => setError(consentEl, false));
+  branchEl?.addEventListener('change', () => setError(branchEl, false));
 
   function validate(): boolean {
     let ok = true;
@@ -230,6 +256,10 @@ export function initForm(root: ParentNode = document, id = 'lead-form'): void {
       setError(ageEl, true);
       ok = false;
     }
+    if (branchEl && branchEl.value === '') {
+      setError(branchEl, true);
+      ok = false;
+    }
     if (!consentEl.checked) {
       setError(consentEl, true);
       ok = false;
@@ -239,7 +269,8 @@ export function initForm(root: ParentNode = document, id = 'lead-form'): void {
 
   function showSuccess(fireGoal = true): void {
     form!.classList.add('is-sent');
-    if (fireGoal) reachGoal('lead_form'); // цель Метрики (96429194) — только для реальной заявки
+    // цель Метрики (96429194) — только для реальной заявки; с полем «Филиал» передаём branch
+    if (fireGoal) reachGoal('lead_form', branchEl?.value ? { branch: branchEl.value } : undefined);
     form!.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 

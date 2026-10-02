@@ -143,6 +143,14 @@ $consent = trim(post('consent'));
 // источник заявки: только из белого списка, иначе — обычная заявка с сайта
 $source  = in_array(post('source'), ['child-masterclass', 'electronics'], true) ? post('source') : 'website';
 
+// филиал: только из белого списка (id из SITE.branches), иначе пусто
+$BRANCHES = [
+    'pavlyukhina' => 'Казань, ул. Павлюхина, 108б (напротив Kazan Mall)',
+    'mardzhani'   => 'Казань, ул. Марджани, 28 (Старо-Татарская слобода, набережная озера Кабан)',
+];
+$branch     = array_key_exists(post('branch'), $BRANCHES) ? post('branch') : '';
+$branchText = $branch !== '' ? "\nФилиал: " . $BRANCHES[$branch] : '';
+
 $utm_source   = clean(post('utm_source'), 255);
 $utm_medium   = clean(post('utm_medium'), 255);
 $utm_campaign = clean(post('utm_campaign'), 255);
@@ -208,13 +216,7 @@ if ($DB_NAME !== '' && $DB_USER !== '') {
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_TIMEOUT            => 5,
         ]);
-        $stmt = $pdo->prepare(
-            'INSERT INTO leads (name, phone, child_age, created_at, source, '
-            . 'utm_source, utm_medium, utm_campaign, utm_term, utm_content, yclid, ym_client_id, referrer) '
-            . 'VALUES (:name, :phone, :child_age, NOW(), :source, '
-            . ':utm_source, :utm_medium, :utm_campaign, :utm_term, :utm_content, :yclid, :ym_client_id, :referrer)'
-        );
-        $stmt->execute([
+        $params = [
             ':name'         => $name,
             ':phone'        => $phone,
             ':child_age'    => $age,
@@ -227,7 +229,21 @@ if ($DB_NAME !== '' && $DB_USER !== '') {
             ':yclid'        => $yclid,
             ':ym_client_id' => $ym_client_id,
             ':referrer'     => $referrer,
-        ]);
+        ];
+        $cols = 'name, phone, child_age, created_at, source, '
+            . 'utm_source, utm_medium, utm_campaign, utm_term, utm_content, yclid, ym_client_id, referrer';
+        $vals = ':name, :phone, :child_age, NOW(), :source, '
+            . ':utm_source, :utm_medium, :utm_campaign, :utm_term, :utm_content, :yclid, :ym_client_id, :referrer';
+        try {
+            // колонка branch (ALTER TABLE leads ADD COLUMN branch VARCHAR(32) DEFAULT NULL)
+            $stmt = $pdo->prepare("INSERT INTO leads ({$cols}, branch) VALUES ({$vals}, :branch)");
+            $stmt->execute($params + [':branch' => $branch !== '' ? $branch : null]);
+        } catch (Throwable $e) {
+            // колонки branch ещё нет: пишем заявку без неё, чтобы не терять записи
+            error_log('TeachNet lead: запись без branch — ' . $e->getMessage());
+            $stmt = $pdo->prepare("INSERT INTO leads ({$cols}) VALUES ({$vals})");
+            $stmt->execute($params);
+        }
         $leadId = (int) $pdo->lastInsertId();
     } catch (Throwable $e) {
         error_log('TeachNet lead: ошибка записи в БД — ' . $e->getMessage());
@@ -247,7 +263,7 @@ $text =
     $heading . "\n\n" .
     "Имя: " . $name . "\n" .
     "Телефон: " . $phone . "\n" .
-    "Возраст ребёнка: " . $age .
+    "Возраст ребёнка: " . $age . $branchText .
     "\n\n— Источник —\n" . $sourceText .
     "\n\nВремя: " . $timeText;
 if ($leadId) {
@@ -290,7 +306,7 @@ if ($EMAIL_TO !== '') {
         $body    =
             "Имя: " . $name . "\n" .
             "Телефон: " . $phone . "\n" .
-            "Возраст ребёнка: " . $age .
+            "Возраст ребёнка: " . $age . $branchText .
             "\n\n— Источник —\n" . $sourceText .
             "\n\nВремя: " . $timeText .
             ($leadId ? "\nЗаявка #" . $leadId : '');
