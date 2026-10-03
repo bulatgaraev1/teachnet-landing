@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /dash
 
 Sitemap: https://teachnet.ru/sitemap.xml
