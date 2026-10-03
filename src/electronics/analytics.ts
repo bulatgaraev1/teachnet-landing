@@ -55,7 +55,8 @@ function markOnce(goal: string): void {
 const DWELL_MS = 600;
 
 /**
- * scroll_trial / scroll_price / scroll_faq / scroll_contacts: блок виден на 50%
+ * scroll_el_hero … scroll_el_trust, scroll_trial / scroll_price / scroll_faq / scroll_contacts
+ * (все секции с data-scroll-goal, сверху вниз): блок виден на 50%
  * (для блоков выше экрана: закрывает не меньше половины окна) непрерывно 600 мс,
  * один раз за визит. Выдержка отсекает пролёт через блок при переходе по якорю.
  */

@@ -70,6 +70,14 @@ const GOAL_NAMES = [
     'scroll_footer' => 'Подвал',
     'scroll_trial' => 'Пробный урок',
     'scroll_contacts' => 'Контакты',
+    // глубина просмотра /electronics (свои идентификаторы, чтобы не смешиваться с главной)
+    'scroll_el_hero' => 'Первый экран (электроника)',
+    'scroll_el_result' => 'Результат по месяцам (электроника)',
+    'scroll_el_lesson' => 'Как проходят занятия (электроника)',
+    'scroll_el_program' => 'Программа курса (электроника)',
+    'scroll_el_progress' => 'Прогресс, который видно (электроника)',
+    'scroll_el_teacher' => 'Ведёт инженер (электроника)',
+    'scroll_el_trust' => 'Нам доверяют (электроника)',
 ];
 
 /** Шаг воронки «Дошли до цены или формы» и «Нажали «Записаться»» — по всему сайту. */
@@ -106,7 +114,8 @@ const DASH_BEHAVIOR = [
     ],
     'electronics' => [
         'path' => '/electronics',
-        'depth' => ['scroll_trial', 'scroll_price', 'scroll_faq', 'scroll_contacts'],
+        'depth' => ['scroll_el_hero', 'scroll_el_result', 'scroll_el_lesson', 'scroll_trial', 'scroll_el_program',
+            'scroll_el_progress', 'scroll_el_teacher', 'scroll_el_trust', 'scroll_price', 'scroll_faq', 'scroll_contacts'],
         'cta' => ['cta_hero' => 'Первый экран', 'cta_trial' => 'Блок «Пробный урок»', 'cta_price' => 'Блок цены',
             'cta_final' => 'Контакты', 'cta_menu' => 'Мобильное меню'],
         'contact' => ['lead_form' => 'Форма', 'msg_telegram' => 'Telegram', 'msg_max' => 'MAX', 'phone_click' => 'Звонок'],
