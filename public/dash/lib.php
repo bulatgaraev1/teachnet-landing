@@ -32,15 +32,27 @@ final class DashError extends RuntimeException {}
 /**
  * Конфиг выше веб-корня. Ищем так же, как send.php ищет send_config.php
  * (несколько уровней выше веб-корня), только /dash лежит на уровень глубже.
+ * null — файла нет; DashError — файл есть, но с ошибкой (текст можно показать).
  */
 function dash_find_config(string $file): ?array {
     foreach ([__DIR__ . '/../../' . $file, __DIR__ . '/../../../' . $file, __DIR__ . '/../../../../' . $file] as $path) {
-        if (is_file($path)) {
-            $cfg = @include $path;
-            if (is_array($cfg)) {
-                return $cfg;
-            }
+        if (!is_file($path)) {
+            continue;
         }
+        // посторонний вывод конфига (пустая строка или BOM в начале, пробелы после закрывающего тега) отбрасываем
+        ob_start();
+        try {
+            $cfg = include $path; // предупреждения из конфига — в лог (display_errors выключен в index/api)
+        } catch (Throwable $e) {
+            error_log('TeachNet dash: ошибка в ' . $file . ' — ' . $e->getMessage());
+            throw new DashError('Файл ' . $file . ' не читается: в нём ошибка PHP. Сверьте его с шаблоном <?php return [ … ];');
+        } finally {
+            ob_get_clean();
+        }
+        if (!is_array($cfg)) {
+            throw new DashError('Файл ' . $file . ' найден, но не возвращает настройки. Сверьте его с шаблоном <?php return [ … ];');
+        }
+        return $cfg;
     }
     return null;
 }

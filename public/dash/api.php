@@ -6,6 +6,13 @@
  * Метрика (счётчик из dash_config.php) + таблица leads (доступ из send_config.php).
  */
 declare(strict_types=1);
+
+// Ошибки PHP — только в лог: в ответе только наш JSON с понятным текстом.
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+// Буфер вывода: случайный пробел или BOM не испортит заголовки, сессию и JSON.
+ob_start();
+
 require __DIR__ . '/lib.php';
 
 dash_headers();
@@ -18,7 +25,11 @@ function out(int $code, array $data): void {
     exit;
 }
 
-$cfg = dash_find_config('dash_config.php');
+try {
+    $cfg = dash_find_config('dash_config.php');
+} catch (DashError $e) {
+    out(503, ['error' => $e->getMessage()]);
+}
 if (!$cfg) {
     out(503, ['error' => 'Не найден dash_config.php']);
 }
@@ -232,11 +243,10 @@ $gm = static fn (string $ident, string $kind) => isset($goals[$ident]) ? 'ym:s:g
 
 /* ---------- база ---------- */
 
-$sendCfg = dash_find_config('send_config.php');
 $pdo = null;
 $dbError = null;
 try {
-    $pdo = dash_db($sendCfg);
+    $pdo = dash_db(dash_find_config('send_config.php'));
 } catch (DashError $e) {
     $dbError = $e->getMessage();
     $result['errors'][] = $dbError;
