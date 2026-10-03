@@ -40,6 +40,11 @@ export const SITE = {
     { label: 'О нас пишут', href: '#press' },
     { label: 'Вопросы', href: '#faq' },
   ],
+  // Курсы: колонка «Курсы» в подвале (новый курс — одна строка). goal — клик-цель Метрики
+  courses: [
+    { label: 'Электроника, 10–15 лет', href: '/electronics', goal: 'footer_electronics' },
+    { label: 'Робототехника на LEGO, 5–9 лет', href: '/#programs', goal: 'footer_robotics' },
+  ],
   // Отдельные статические страницы (см. content/ и *.html в корне проекта)
   legal: {
     consent: '/personal-data-consent', // Согласие на обработку персональных данных

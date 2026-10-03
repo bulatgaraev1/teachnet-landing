@@ -659,8 +659,12 @@
 .site-footer a { color: rgba(255, 255, 255, 0.78); transition: color 0.2s ease; }
 .site-footer a:hover { color: #fff; }
 .footer-grid { display: grid; gap: 40px; }
+/* планшет: бренд | Курсы, «Контакты» переносятся под бренд; десктоп: бренд | Курсы | Контакты */
 @media (min-width: 760px) {
-  .footer-grid { grid-template-columns: 1.6fr 1fr; gap: 56px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px 56px; }
+}
+@media (min-width: 960px) {
+  .footer-grid { grid-template-columns: 1.6fr 1fr 1fr; }
 }
 .footer-logo { height: 44px; width: auto; margin-bottom: 18px; }
 .footer-soft { color: rgba(255, 255, 255, 0.6); }
