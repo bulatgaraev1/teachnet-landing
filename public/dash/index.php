@@ -5,6 +5,13 @@
  * выше веб-корня (см. lib.php). Не индексируется (X-Robots-Tag, meta robots, robots.txt).
  */
 declare(strict_types=1);
+
+// Ошибки PHP — только в лог: на странице пользователь видит только наши понятные сообщения.
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+// Буфер вывода: случайный пробел или BOM не помешает старту сессии и отправке заголовков.
+ob_start();
+
 require __DIR__ . '/lib.php';
 
 dash_headers();
@@ -71,7 +78,12 @@ function page_message(string $title, string $text): void {
 <?php
 }
 
-$cfg = dash_find_config('dash_config.php');
+try {
+    $cfg = dash_find_config('dash_config.php');
+} catch (DashError $e) {
+    page_message('Ошибка в dash_config.php', $e->getMessage());
+    exit;
+}
 if (!$cfg) {
     page_message('Не найден dash_config.php', 'Положите файл dash_config.php на сервер рядом с send_config.php, выше папки сайта. Шаблон — в описании дашборда.');
     exit;
