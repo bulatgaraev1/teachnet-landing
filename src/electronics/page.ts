@@ -72,7 +72,7 @@ function mobileMenu(): string {
 
 function hero(): string {
   const facts = EL.hero.facts.map((f) => `<li class="el-fact">${f}</li>`).join('');
-  return `<section class="el-hero el-sec--white" aria-labelledby="el-h1">
+  return `<section class="el-hero el-sec--white" aria-labelledby="el-h1" data-scroll-goal="scroll_el_hero">
     <div class="el-dots" aria-hidden="true"></div>
     <div class="container el-hero__grid">
       <div class="el-hero__copy">
@@ -106,7 +106,7 @@ function result(): string {
         </li>`,
     )
     .join('');
-  return `<section class="section el-sec--gray" id="result" aria-labelledby="el-result-h">
+  return `<section class="section el-sec--gray" id="result" aria-labelledby="el-result-h" data-scroll-goal="scroll_el_result">
     <div class="container">
       ${sectionHead('el-result-h', EL.result.h2, EL.result.sub)}
       <ol class="el-stages" data-reveal>${stages}</ol>
@@ -124,7 +124,7 @@ function lesson(): string {
         </li>`,
     )
     .join('');
-  return `<section class="section el-sec--white" id="lesson" aria-labelledby="el-lesson-h">
+  return `<section class="section el-sec--white" id="lesson" aria-labelledby="el-lesson-h" data-scroll-goal="scroll_el_lesson">
     <div class="container">
       ${sectionHead('el-lesson-h', EL.lesson.h2, EL.lesson.sub)}
       <ol class="el-steps" data-reveal>${steps}</ol>
@@ -165,7 +165,7 @@ function program(): string {
         </li>`,
     )
     .join('');
-  return `<section class="section el-sec--gray" id="program" aria-labelledby="el-program-h">
+  return `<section class="section el-sec--gray" id="program" aria-labelledby="el-program-h" data-scroll-goal="scroll_el_program">
     <div class="container">
       ${sectionHead('el-program-h', EL.program.h2, EL.program.sub)}
       <ol class="el-months" data-reveal>${items}</ol>
@@ -189,7 +189,7 @@ function progress(): string {
         </li>`,
     )
     .join('');
-  return `<section class="section el-sec--white" aria-labelledby="el-progress-h">
+  return `<section class="section el-sec--white" aria-labelledby="el-progress-h" data-scroll-goal="scroll_el_progress">
     <div class="container">
       ${sectionHead('el-progress-h', EL.progress.h2, EL.progress.sub)}
       <div class="el-progress">
@@ -204,7 +204,7 @@ function teacher(): string {
   const facts = EL.teacher.facts
     .map((f) => `<li>${elIcon('check', 'el-tick')}<span>${f}</span></li>`)
     .join('');
-  return `<section class="section el-sec--gray" aria-labelledby="el-teacher-h">
+  return `<section class="section el-sec--gray" aria-labelledby="el-teacher-h" data-scroll-goal="scroll_el_teacher">
     <div class="container el-teacher">
       <div class="el-teacher__media" data-reveal>${photo(EL.photos.teacher, { cls: 'el-photo--portrait' })}</div>
       <div class="el-teacher__copy" data-reveal>
@@ -226,7 +226,7 @@ function trust(): string {
         </a></li>`,
     )
     .join('');
-  return `<section class="section el-sec--white" aria-labelledby="el-trust-h">
+  return `<section class="section el-sec--white" aria-labelledby="el-trust-h" data-scroll-goal="scroll_el_trust">
     <div class="container">
       <div class="el-head" data-reveal>
         <h2 class="h2" id="el-trust-h">${EL.trust.h2}</h2>
