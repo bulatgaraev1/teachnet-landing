@@ -15,6 +15,15 @@ export function footer(withScrollGoal = false): string {
         <p class="footer-support__text">Проект создан при поддержке Федерального государственного бюджетного учреждения «Фонд содействия развитию малых форм предприятий в научно-технической сфере» в рамках программы «Студенческий стартап» федерального проекта «Платформа университетского технологического предпринимательства».</p>
       </div>`;
   */
+  // колонка «Курсы» строится из SITE.courses; клик-цели через [data-goal] (lib/nav.ts,
+  // на /electronics — src/electronics/analytics.ts)
+  const courses = SITE.courses
+    // возраст «5–9 лет» не разрывается при переносе (ни после тире, ни перед «лет»)
+    .map((c) => {
+      const label = c.label.replace(/(\d+–\d+ лет)/, '<span style="white-space:nowrap">$1</span>');
+      return `<p style="line-height:2"><a href="${c.href}" data-goal="${c.goal}">${label}</a></p>`;
+    })
+    .join('\n          ');
   return `<footer class="site-footer"${scrollAttr}>
     <div class="container">
       <div class="footer-grid">
@@ -22,7 +31,6 @@ export function footer(withScrollGoal = false): string {
         <div>
           <img class="footer-logo" src="/images/logo-white.svg" width="140" height="44" loading="lazy" decoding="async" alt="${SITE.brand}" />
           <p class="footer-soft" style="max-width:34ch">Школа инженерии и робототехники для детей в Казани</p>
-          <p style="margin-top:12px"><a href="/electronics">Электроника для детей 10–15 лет</a></p>
           <div class="footer-social">
             <a href="${SITE.social.vk}" target="_blank" rel="noopener" aria-label="ВКонтакте"><img class="footer-social__img" src="/images/icon-vk.webp" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
             <a href="${SITE.social.telegram}" target="_blank" rel="noopener" aria-label="Telegram"><img class="footer-social__img" src="/images/icon-telegram.webp" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
@@ -33,6 +41,11 @@ export function footer(withScrollGoal = false): string {
             ИНН: ${SITE.requisites.inn}<br>
             ОГРНИП: ${SITE.requisites.ogrnip}
           </p>
+        </div>
+
+        <div>
+          <p class="footer-col__title">Курсы</p>
+          ${courses}
         </div>
 
         <div>

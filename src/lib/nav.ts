@@ -34,10 +34,17 @@ export function initNav(): void {
     history.pushState(null, '', href);
   });
 
-  // клик-цели: на элементе с data-goal шлём именно его идентификатор (отдельная цель)
-  document.addEventListener('click', (e) => {
+  // клик-цели: на элементе с data-goal шлём именно его идентификатор (отдельная цель).
+  // Цель уходит синхронно в момент клика, до перехода; переход не блокируем
+  // (preventDefault нет), отправку переживающую уход со страницы делает Метрика (beacon).
+  const sendGoal = (e: MouseEvent): void => {
     const el = (e.target as HTMLElement).closest<HTMLElement>('[data-goal]');
     const goal = el?.getAttribute('data-goal');
     if (goal) reachGoal(goal);
+  };
+  document.addEventListener('click', sendGoal);
+  // средний клик (открыть в новой вкладке) не даёт события click
+  document.addEventListener('auxclick', (e) => {
+    if (e.button === 1) sendGoal(e);
   });
 }

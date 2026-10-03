@@ -126,6 +126,13 @@ export function initAnalytics(): void {
     else if (a.dataset.press) track('press_click', { source: a.dataset.press });
     else if (a.dataset.mapLink) track('map_click', { branch: a.dataset.mapLink });
     else if (a.hasAttribute('data-cross')) track('cross_robotics');
+    else if (a.dataset.goal) track(a.dataset.goal); // общий подвал: footer_electronics, footer_robotics
+  });
+  // средний клик (открыть в новой вкладке) по ссылкам с целью
+  document.addEventListener('auxclick', (e) => {
+    if (e.button !== 1) return;
+    const a = (e.target as Element | null)?.closest?.<HTMLElement>('a[data-goal]');
+    if (a?.dataset.goal) track(a.dataset.goal);
   });
 
   initScrollGoals();
