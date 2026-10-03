@@ -6,7 +6,7 @@ Options -Indexes
     Header always set X-Robots-Tag "noindex, nofollow"
 </IfModule>
 
-# lib.php — только для подключения из index.php / api.php, по HTTP закрыт
-<Files "lib.php">
+# lib.php, report.php, crm.php — только для подключения из index.php / api.php, по HTTP закрыты
+<FilesMatch "^(lib|report|crm)\.php$">
     Require all denied
-</Files>
+</FilesMatch>
