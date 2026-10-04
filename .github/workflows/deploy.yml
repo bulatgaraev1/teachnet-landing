@@ -3,6 +3,13 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+# токену GitHub в этом процессе нужно только чтение кода
+permissions:
+  contents: read
+# два деплоя подряд не идут одновременно (иначе путается синхронизация FTP)
+concurrency:
+  group: deploy
+  cancel-in-progress: false
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -13,9 +20,11 @@ jobs:
           node-version: 22
       - run: npm ci
       - run: npm run build
+      # действие закреплено по коммиту (тег можно перевесить); FTPS — пароль не идёт открытым текстом
       - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
         with:
+          protocol: ftps
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
