@@ -553,7 +553,7 @@ final class DashReport {
             throw new DashError((string) $this->dbError);
         }
         [$x, $y] = self::range($a, $b);
-        $st = $pdo->prepare('SELECT * FROM leads WHERE created_at >= ? AND created_at < ? ORDER BY created_at DESC, id DESC');
+        $st = $pdo->prepare('SELECT * FROM leads WHERE created_at >= ? AND created_at < ? AND ' . DASH_EXCLUDED_SQL . ' ORDER BY created_at DESC, id DESC');
         $st->execute([$x, $y]);
         $rows = array_map(fn ($r) => $this->normalize($r), $st->fetchAll());
         if ($byBranch && $this->branch !== 'all') {
@@ -572,7 +572,7 @@ final class DashReport {
             return $this->memo[$key];
         }
         [$x, $y] = self::range($a, $b);
-        $st = $this->db()->prepare("SELECT * FROM leads WHERE $col >= ? AND $col < ?");
+        $st = $this->db()->prepare("SELECT * FROM leads WHERE $col >= ? AND $col < ? AND " . DASH_EXCLUDED_SQL);
         $st->execute([$x, $y]);
         $rows = array_map(fn ($r) => $this->normalize($r), $st->fetchAll());
         if ($this->branch !== 'all') {
@@ -592,7 +592,7 @@ final class DashReport {
         if (isset($this->memo['unanswered'])) {
             return $this->memo['unanswered'];
         }
-        $st = $this->db()->query("SELECT * FROM leads WHERE status = 'new' ORDER BY created_at DESC, id DESC");
+        $st = $this->db()->query("SELECT * FROM leads WHERE status = 'new' AND " . DASH_EXCLUDED_SQL . ' ORDER BY created_at DESC, id DESC');
         return $this->memo['unanswered'] = array_map(fn ($r) => $this->normalize($r), $st->fetchAll());
     }
 
@@ -874,7 +874,7 @@ final class DashReport {
         if (!$this->schema()['status']) {
             return false;
         }
-        return $this->memo['anyStatus'] ??= (bool) $this->db()->query("SELECT COUNT(*) FROM leads WHERE status NOT IN ('new', 'archive')")->fetchColumn();
+        return $this->memo['anyStatus'] ??= (bool) $this->db()->query("SELECT COUNT(*) FROM leads WHERE status NOT IN ('new', 'archive') AND " . DASH_EXCLUDED_SQL)->fetchColumn();
     }
 
     private function card(string $id, string $label, ?float $value, ?float $prev, array $series, array $o = []): array {
@@ -1481,7 +1481,7 @@ final class DashReport {
         }
         // ни одной заявки 3 дня подряд
         if ($this->db()) {
-            $last = $this->db()->query('SELECT MAX(created_at) FROM leads')->fetchColumn();
+            $last = $this->db()->query('SELECT MAX(created_at) FROM leads WHERE ' . DASH_EXCLUDED_SQL)->fetchColumn();
             $lastD = $last ? $this->dt((string) $last) : null;
             if ($lastD && $lastD < $this->now->modify('-3 days')) {
                 $alerts[] = 'Ни одной заявки 3 дня подряд. Последняя — ' . dash_day_label($lastD) . '.';

@@ -9,6 +9,8 @@ import { renderChildPage } from './src/child';
 import { siteJsonLd } from './src/lib/jsonld';
 import { renderElectronicsPage } from './src/electronics/page';
 import { electronicsHead } from './src/electronics/head';
+import { renderTechPage } from './src/tech/page';
+import { techHead } from './src/tech/head';
 
 // Контент страницы собирается из секций (чистые функции) и встраивается в index.html
 // на этапе сборки/дев-сервера — статичный HTML, без рантайм-инъекции (важно для SEO и LCP,
@@ -75,6 +77,8 @@ export default defineConfig({
             body = renderChildPage();
           } else if (slug === 'electronics') {
             body = renderElectronicsPage();
+          } else if (slug === 'tech') {
+            body = renderTechPage();
           } else if (slug !== 'index') {
             body = renderLegalPage(slug) || renderPage();
           } else {
@@ -89,6 +93,10 @@ export default defineConfig({
           if (slug === 'electronics') {
             out = out.replace('<!--el-head-->', electronicsHead());
           }
+          // /tech: SEO-мета, preload рендера платы, JSON-LD (BreadcrumbList, FAQPage)
+          if (slug === 'tech') {
+            out = out.replace('<!--tech-head-->', techHead());
+          }
           return resolvePhotos(out);
         },
       },
@@ -102,6 +110,7 @@ export default defineConfig({
         main: pageInput('index'),
         child: pageInput('child'),
         electronics: pageInput('electronics'),
+        tech: pageInput('tech'),
         privacy: pageInput('privacy'),
         'personal-data-consent': pageInput('personal-data-consent'),
         'cookie-policy': pageInput('cookie-policy'),

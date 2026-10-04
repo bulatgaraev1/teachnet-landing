@@ -35,6 +35,8 @@ $DB_NAME   = $cfg['db_name']   ?? '';
 $DB_USER   = $cfg['db_user']   ?? '';
 $DB_PASS   = $cfg['db_pass']   ?? '';
 $EMAIL_TO  = $cfg['email_to']  ?? '';
+// адрес Bot API; tg_api в конфиге — только для проверки на стенде, на сервере не задаётся
+$TG_API    = rtrim((string) ($cfg['tg_api'] ?? 'https://api.telegram.org'), '/');
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -132,6 +134,127 @@ if (post('website') !== '') {
 if (rate_limited(client_ip())) {
     http_response_code(429);
     echo json_encode(['ok' => false, 'error' => 'rate_limited']);
+    exit;
+}
+
+// ── Заявка на платы TEACHNET UNO (страница /tech) ────────────────────────────
+// Свои поля: «Кто вы», контакт (телефон или Telegram), организация, число плат.
+// Канал тот же: Telegram (основной) + база + email. Детские заявки ниже не меняются.
+if (post('source') === 'tech') {
+    $ROLES = [
+        'school'  => 'Школа',
+        'club'    => 'Кружок или центр',
+        'teacher' => 'Педагог',
+        'self'    => 'Для себя',
+        'other'   => 'Другое',
+    ];
+    $role    = array_key_exists(post('role'), $ROLES) ? post('role') : 'other';
+    $name    = clean(post('name'), 100);
+    $contact = clean(post('contact'), 100);
+    $org     = $role === 'self' ? '' : clean(post('org'), 150);
+    $qtyRaw  = trim(post('qty'));
+    $qty     = preg_match('/^\d{1,6}$/', $qtyRaw) ? max(1, (int) $qtyRaw) : 1;
+    $consent = trim(post('consent'));
+
+    if ($name === '' || $contact === '' || $consent === '') {
+        http_response_code(422);
+        echo json_encode(['ok' => false, 'error' => 'validation']);
+        exit;
+    }
+    // номер из 11 цифр приводим к виду +7 (999) 123-45-67; Telegram и прочее — как ввели
+    $cDigits = preg_replace('/\D/', '', $contact);
+    if (strlen($cDigits) === 11 && preg_match('/^[\d\s()+\-]+$/', $contact)) {
+        $cSub    = substr($cDigits, -10);
+        $contact = '+7 (' . substr($cSub, 0, 3) . ') ' . substr($cSub, 3, 3) . '-' . substr($cSub, 6, 2) . '-' . substr($cSub, 8, 2);
+    }
+    if ($BOT_TOKEN === '' || $CHAT_ID === '') {
+        http_response_code(500);
+        echo json_encode(['ok' => false, 'error' => 'not_configured']);
+        exit;
+    }
+
+    $utm_source   = clean(post('utm_source'), 255);
+    $utm_medium   = clean(post('utm_medium'), 255);
+    $utm_campaign = clean(post('utm_campaign'), 255);
+    $utm_term     = clean(post('utm_term'), 255);
+    $utm_content  = clean(post('utm_content'), 255);
+    $yclid        = clean(post('yclid'), 255);
+    $ym_client_id = clean(post('ym_client_id'), 255);
+    $referrer     = clean(post('referrer'), 512);
+    $sourceText =
+        "utm_source: " . $utm_source . "\n" .
+        "utm_medium: " . $utm_medium . "\n" .
+        "utm_campaign: " . $utm_campaign . "\n" .
+        "utm_term: " . $utm_term . "\n" .
+        "utm_content: " . $utm_content . "\n" .
+        "Реферер: " . $referrer . "\n" .
+        "ym_client_id: " . $ym_client_id;
+    if ($yclid !== '') {
+        $sourceText .= "\nyclid: " . $yclid;
+    }
+    $timeText = (new DateTime('now', new DateTimeZone('Europe/Moscow')))->format('d.m.Y H:i') . ' (МСК)';
+
+    // база (best-effort): source=tech, контакт — в колонке phone; в аналитику школы не попадает
+    $leadId = null;
+    if ($DB_NAME !== '' && $DB_USER !== '') {
+        try {
+            $pdo = new PDO("mysql:host={$DB_HOST};dbname={$DB_NAME};charset=utf8mb4", $DB_USER, $DB_PASS, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_TIMEOUT => 5,
+            ]);
+            $stmt = $pdo->prepare(
+                'INSERT INTO leads (name, phone, child_age, created_at, source, utm_source, utm_medium, utm_campaign, utm_term, utm_content, yclid, ym_client_id, referrer) '
+                . "VALUES (:name, :phone, '', NOW(), 'tech', :utm_source, :utm_medium, :utm_campaign, :utm_term, :utm_content, :yclid, :ym_client_id, :referrer)"
+            );
+            $stmt->execute([
+                ':name' => $name, ':phone' => $contact,
+                ':utm_source' => $utm_source, ':utm_medium' => $utm_medium, ':utm_campaign' => $utm_campaign,
+                ':utm_term' => $utm_term, ':utm_content' => $utm_content, ':yclid' => $yclid,
+                ':ym_client_id' => $ym_client_id, ':referrer' => $referrer,
+            ]);
+            $leadId = (int) $pdo->lastInsertId();
+        } catch (Throwable $e) {
+            error_log('TeachNet lead (tech): ошибка записи в БД — ' . $e->getMessage());
+        }
+    }
+
+    $heading = 'Новая заявка — платы TEACHNET UNO';
+    $body =
+        "Кто: " . $ROLES[$role] . "\n" .
+        "Имя: " . $name . "\n" .
+        "Контакт: " . $contact .
+        ($org !== '' ? "\nОрганизация: " . $org : '') .
+        "\nСколько плат: " . $qty .
+        "\n\n— Источник —\n" . $sourceText .
+        "\n\nВремя: " . $timeText .
+        ($leadId ? "\nЗаявка #" . $leadId : '');
+
+    $ch = curl_init($TG_API . "/bot{$BOT_TOKEN}/sendMessage");
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => http_build_query(['chat_id' => $CHAT_ID, 'text' => $heading . "\n\n" . $body, 'disable_web_page_preview' => true]),
+        CURLOPT_TIMEOUT        => 15,
+    ]);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($response === false || $httpCode !== 200) {
+        http_response_code(502);
+        echo json_encode(['ok' => false, 'error' => 'telegram_failed']);
+        exit;
+    }
+
+    if ($EMAIL_TO !== '') {
+        try {
+            $host = preg_replace('/[^A-Za-z0-9.\-:]/', '', $_SERVER['HTTP_HOST'] ?? 'localhost') ?: 'localhost';
+            @mail($EMAIL_TO, '=?UTF-8?B?' . base64_encode($heading) . '?=', $body,
+                "From: no-reply@" . $host . "\r\nContent-Type: text/plain; charset=utf-8\r\n");
+        } catch (Throwable $e) {
+            error_log('TeachNet lead (tech): ошибка отправки email — ' . $e->getMessage());
+        }
+    }
+    echo json_encode(['ok' => true]);
     exit;
 }
 
@@ -271,7 +394,7 @@ if ($leadId) {
 }
 
 // ── Отправка в Telegram (основной канал) ─────────────────────────────────────
-$url = "https://api.telegram.org/bot{$BOT_TOKEN}/sendMessage";
+$url = "{$TG_API}/bot{$BOT_TOKEN}/sendMessage";
 $payload = http_build_query([
     'chat_id' => $CHAT_ID,
     'text'    => $text,

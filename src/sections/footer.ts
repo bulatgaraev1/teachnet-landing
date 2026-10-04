@@ -1,7 +1,11 @@
 /** Подвал (§11). Тёмный фон, белый логотип, контакты, реквизиты, юр-ссылки. */
 import { SITE } from '../lib/site';
 
-export function footer(withScrollGoal = false): string {
+/**
+ * @param withScrollGoal скролл-цель подвала (только главная)
+ * @param extraLines строки внизу подвала для отдельной страницы (например, атрибуция на /tech)
+ */
+export function footer(withScrollGoal = false, extraLines: readonly string[] = []): string {
   // скролл-цель подвала вешаем только на главной (передаётся из page.ts),
   // чтобы scroll_footer не срабатывал на дочерних/юридических страницах
   const scrollAttr = withScrollGoal ? ' data-scroll-goal="scroll_footer"' : '';
@@ -60,7 +64,8 @@ export function footer(withScrollGoal = false): string {
       </div>
 
       ${fsiSupport}
-
+${extraLines.length ? `      <div class="footer-extra">${extraLines.map((l) => `<p class="footer-soft">${l}</p>`).join('')}</div>
+` : ''}
       <div class="footer-bottom">
         <img class="footer-itpark" src="/images/logo-itpark.svg" width="90" height="50" loading="lazy" decoding="async" alt="IT-парк" />
         <div class="footer-bottom__links">
