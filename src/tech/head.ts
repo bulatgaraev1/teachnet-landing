@@ -1,9 +1,9 @@
 /**
  * <head> страницы /tech: title, description, canonical, Open Graph, Twitter Card,
- * preload рендера платы и JSON-LD (BreadcrumbList, FAQPage). Генерируется на сборке
- * из src/content/tech.ts. Product не используется: цены пока нет (заглушка [ЦЕНА]).
+ * preload рендера платы и JSON-LD (BreadcrumbList, Product с ценой, FAQPage). Генерируется
+ * на сборке из src/content/tech.ts.
  */
-import { TECH } from '../content/tech';
+import { TECH, PRICE_RUB, TERM_DATE } from '../content/tech';
 import { BOARD_IMG, BOARD_IMG_800 } from './page';
 
 const ORIGIN = 'https://teachnet.ru';
@@ -48,6 +48,25 @@ export function techHead(): string {
         { '@type': 'ListItem', position: 1, name: TECH.meta.breadcrumbHome, item: `${ORIGIN}/` },
         { '@type': 'ListItem', position: 2, name: TECH.meta.breadcrumbPage, item: PAGE_URL },
       ],
+    }),
+    ld({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: 'TEACHNET UNO',
+      description: TECH.meta.description,
+      image: [`${ORIGIN}${BOARD_IMG}`, OG_IMAGE],
+      brand: { '@type': 'Brand', name: 'TEACHNET' },
+      url: PAGE_URL,
+      offers: {
+        '@type': 'Offer',
+        url: `${PAGE_URL}#order`,
+        price: String(PRICE_RUB),
+        priceCurrency: 'RUB',
+        // первая партия ещё не вышла — предзаказ с датой начала продаж
+        availability: 'https://schema.org/PreOrder',
+        availabilityStarts: TERM_DATE,
+        seller: { '@id': `${ORIGIN}/#organization` },
+      },
     }),
     ld({
       '@context': 'https://schema.org',
