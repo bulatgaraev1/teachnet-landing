@@ -2,4 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /dash
 
+# Яндекс: метки рекламы и отладки не создают дублей страниц
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&yclid&ysclid&_ym_debug
+
 Sitemap: https://teachnet.ru/sitemap.xml

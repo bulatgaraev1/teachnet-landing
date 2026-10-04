@@ -19,10 +19,10 @@ export function final(): string {
       </div>
       <div style="text-align:center" data-reveal>${cta({ label: 'Бесплатный пробный урок', goal: 'block12_cta' })}</div>
       <div class="final__contacts" data-reveal>
-        <a href="${SITE.phoneHref}">${SITE.phoneDisplay}</a>
-        <a href="${SITE.social.vk}" target="_blank" rel="noopener">ВКонтакте</a>
-        <a href="${SITE.social.telegram}" target="_blank" rel="noopener">Telegram</a>
-        <a href="${SITE.social.max}" target="_blank" rel="noopener">MAX</a>
+        <a href="${SITE.phoneHref}" data-goal="phone_click" data-goal-place="final">${SITE.phoneDisplay}</a>
+        <a href="${SITE.social.vk}" target="_blank" rel="noopener" data-goal="contact_click" data-goal-type="vk" data-goal-place="final">ВКонтакте</a>
+        <a href="${SITE.social.telegram}" target="_blank" rel="noopener" data-goal="contact_click" data-goal-type="telegram" data-goal-place="final">Telegram</a>
+        <a href="${SITE.social.max}" target="_blank" rel="noopener" data-goal="contact_click" data-goal-type="max" data-goal-place="final">MAX</a>
       </div>
       <div class="final__photos" data-reveal>${photos}</div>
     </div>

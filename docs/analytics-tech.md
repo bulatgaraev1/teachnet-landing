@@ -8,7 +8,8 @@
   параметры — атрибуты `data-goal-<имя>` (например, `data-goal-place="menu"` → `{ place: "menu" }`);
 - прокрутка — атрибут `data-scroll-goal` (`src/lib/scroll-goals.ts`): раздел виден на 50 %
   (высокий — середина прошла центр окна) 600 мс подряд, один раз за просмотр страницы;
-- вкладки, выбор на плате, вопросы и форма — в `src/tech/board.ts`, `src/tech/main.ts`, `src/tech/form.ts`.
+- вкладки, выбор на плате и форма — в `src/tech/board.ts`, `src/tech/form.ts`; раскрытие вопросов — общий
+  `initFaqGoals()` (`src/lib/faq-goals.ts`, атрибут `data-faq-goal` у секции).
 
 В идентификаторах нет «cta», чтобы общая цель «Воронка: нажали Записаться» (регулярное
 выражение `cta|^block4_signup$`) не засчитывала заказы плат как заявки на занятия.
@@ -81,8 +82,8 @@
 
 ## Подвал (общий для сайта)
 
-`footer_electronics`, `footer_robotics`, `footer_tech` — те же цели, что на остальных страницах
-(см. `docs/analytics-electronics.md`).
+`footer_electronics`, `footer_robotics`, `footer_tech`, а также контакты подвала: `phone_click {place: footer}`
+и `contact_click {type, place: footer}` — те же цели, что на остальных страницах (см. `docs/analytics-electronics.md`).
 
 ## Составная цель (рекомендуется)
 

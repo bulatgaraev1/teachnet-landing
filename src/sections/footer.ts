@@ -1,6 +1,11 @@
 /** Подвал (§11). Тёмный фон, белый логотип, контакты, реквизиты, юр-ссылки. */
 import { SITE } from '../lib/site';
 
+/** Клик-цель контакта в подвале: contact_click с типом (vk / telegram / max / email / support) и place=footer */
+function contactGoal(type: string): string {
+  return ` data-goal="contact_click" data-goal-type="${type}" data-goal-place="footer"`;
+}
+
 export function footer(withScrollGoal: boolean | string = false): string {
   // скролл-цель подвала: true — scroll_footer (только главная, передаётся из page.ts),
   // строка — своя цель страницы (например, scroll_tech_footer на /tech)
@@ -38,9 +43,9 @@ export function footer(withScrollGoal: boolean | string = false): string {
           <img class="footer-logo" src="/images/logo-white.svg" width="140" height="44" loading="lazy" decoding="async" alt="${SITE.brand}" />
           <p class="footer-soft" style="max-width:34ch">Школа инженерии и робототехники для детей в Казани</p>
           <div class="footer-social">
-            <a href="${SITE.social.vk}" target="_blank" rel="noopener" aria-label="ВКонтакте"><img class="footer-social__img" src="/images/icon-vk.webp" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
-            <a href="${SITE.social.telegram}" target="_blank" rel="noopener" aria-label="Telegram"><img class="footer-social__img" src="/images/icon-telegram.webp" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
-            <a href="${SITE.social.max}" target="_blank" rel="noopener" aria-label="MAX"><img class="footer-social__img" src="/images/icon-max.webp" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
+            <a href="${SITE.social.vk}" target="_blank" rel="noopener" aria-label="ВКонтакте"${contactGoal('vk')}><img class="footer-social__img" src="/images/icon-vk.webp" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
+            <a href="${SITE.social.telegram}" target="_blank" rel="noopener" aria-label="Telegram"${contactGoal('telegram')}><img class="footer-social__img" src="/images/icon-telegram.webp" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
+            <a href="${SITE.social.max}" target="_blank" rel="noopener" aria-label="MAX"${contactGoal('max')}><img class="footer-social__img" src="/images/icon-max.webp" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
           </div>
           <p class="footer-req" style="margin-top:24px">
             ${SITE.requisites.name}<br>
@@ -58,9 +63,9 @@ export function footer(withScrollGoal: boolean | string = false): string {
 
         <div>
           <p class="footer-col__title">Контакты</p>
-          <p style="line-height:2"><a href="${SITE.emailHref}">${SITE.email}</a></p>
-          <p style="line-height:2"><a href="${SITE.phoneHref}">${SITE.phoneDisplay}</a></p>
-          <p style="line-height:2;margin-top:8px"><a href="${SITE.social.chat}" target="_blank" rel="noopener">Чат поддержки</a></p>
+          <p style="line-height:2"><a href="${SITE.emailHref}"${contactGoal('email')}>${SITE.email}</a></p>
+          <p style="line-height:2"><a href="${SITE.phoneHref}" data-goal="phone_click" data-goal-place="footer">${SITE.phoneDisplay}</a></p>
+          <p style="line-height:2;margin-top:8px"><a href="${SITE.social.chat}" target="_blank" rel="noopener"${contactGoal('support')}>Чат поддержки</a></p>
           <p class="footer-soft">ежедневно с 10:00 до 21:00</p>
         </div>
 

@@ -33,7 +33,10 @@ const GOAL_NAMES = [
     // связь
     'msg_telegram' => 'Telegram в окне записи (электроника)',
     'msg_max' => 'MAX в окне записи (электроника)',
-    'phone_click' => 'Клик по телефону (электроника)',
+    'phone_click' => 'Клик по телефону',
+    'contact_click' => 'Мессенджеры, почта и чат (подвал, финал)',
+    'faq_open' => 'Раскрыли вопрос (главная)',
+    'el_faq_open' => 'Раскрыли вопрос (электроника)',
     'nav_phone' => 'Телефон в шапке и меню (главная)',
     // переходы
     'programs_electronics' => 'Главная → «Подробнее о курсе» электроники',
@@ -145,8 +148,9 @@ const DASH_BEHAVIOR = [
             'scroll_parents', 'scroll_team', 'scroll_conversion', 'scroll_price', 'scroll_press', 'scroll_faq', 'scroll_final', 'scroll_footer'],
         'cta' => ['hero_cta' => 'Первый экран', 'nav_cta' => 'Шапка', 'burger_cta' => 'Мобильное меню',
             'sticky_cta' => 'Плавающая кнопка', 'block4_signup' => 'Под программами', 'block12_cta' => 'Финальный блок'],
-        'contact' => ['lead_form' => 'Форма', 'nav_phone' => 'Звонок'],
-        'links' => ['programs_electronics', 'footer_electronics', 'footer_robotics', 'footer_tech', 'nav_programs', 'nav_price', 'nav_press', 'nav_faq',
+        'contact' => ['lead_form' => 'Форма', 'nav_phone' => 'Звонок из шапки и меню', 'phone_click' => 'Звонок из финала и подвала',
+            'contact_click' => 'Мессенджеры и почта'],
+        'links' => ['programs_electronics', 'footer_electronics', 'footer_robotics', 'footer_tech', 'nav_programs', 'nav_price', 'nav_press', 'nav_faq', 'faq_open',
             'press_click_minmol', 'press_click_monrt', 'press_click_kai', 'press_click_tatarinform'],
     ],
     'electronics' => [
@@ -155,8 +159,9 @@ const DASH_BEHAVIOR = [
             'scroll_el_progress', 'scroll_el_teacher', 'scroll_el_trust', 'scroll_price', 'scroll_faq', 'scroll_contacts'],
         'cta' => ['cta_hero' => 'Первый экран', 'cta_trial' => 'Блок «Пробный урок»', 'cta_price' => 'Блок цены',
             'cta_final' => 'Контакты', 'cta_menu' => 'Мобильное меню'],
-        'contact' => ['lead_form' => 'Форма', 'msg_telegram' => 'Telegram', 'msg_max' => 'MAX', 'phone_click' => 'Звонок'],
-        'links' => ['el_nav_program', 'el_nav_price', 'el_nav_faq', 'el_nav_contacts', 'cross_robotics', 'back_click', 'footer_electronics', 'footer_robotics', 'footer_tech', 'press_click', 'map_click', 'modal_close_empty'],
+        'contact' => ['lead_form' => 'Форма', 'msg_telegram' => 'Telegram', 'msg_max' => 'MAX', 'phone_click' => 'Звонок',
+            'contact_click' => 'Мессенджеры и почта в подвале'],
+        'links' => ['el_nav_program', 'el_nav_price', 'el_nav_faq', 'el_nav_contacts', 'el_faq_open', 'cross_robotics', 'back_click', 'footer_electronics', 'footer_robotics', 'footer_tech', 'press_click', 'map_click', 'modal_close_empty'],
     ],
 ];
 

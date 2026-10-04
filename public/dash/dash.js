@@ -493,7 +493,7 @@
     right.appendChild(contact);
     g.appendChild(right);
     body.appendChild(g);
-    var links = card(el('h3', '', 'Переходы между страницами и публикации'), D.table(['Действие', 'Раз за период'], j.links.map(function (r) {
+    var links = card(el('h3', '', 'Переходы, меню и вопросы'), D.table(['Действие', 'Раз за период'], j.links.map(function (r) {
       var w = el('div'); w.appendChild(document.createTextNode(r.label)); w.appendChild(el('span', 'id', ' ' + r.id));
       if (r.missing) { w.appendChild(document.createTextNode(' ')); w.appendChild(el('span', 'badge', 'не создана в Метрике')); }
       return [w, r.missing ? '—' : num(r.value)];

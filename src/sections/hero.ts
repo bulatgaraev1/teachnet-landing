@@ -17,7 +17,7 @@ export function hero(): string {
           </div>
         </div>
         <div class="hero__media" data-reveal style="--reveal-delay:120ms">
-          <img class="ph hero__photo" src="/images/hero.svg" width="1280" height="760" alt="" fetchpriority="high" decoding="async" />
+          <img class="ph hero__photo" src="/images/hero.svg" width="1280" height="760" alt="Дети собирают робота из конструктора на занятии по робототехнике" fetchpriority="high" decoding="async" />
         </div>
       </div>
     </div>

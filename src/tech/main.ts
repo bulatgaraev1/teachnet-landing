@@ -14,7 +14,7 @@ import { initAccordion } from '../components/accordion';
 import { initMobileMenu } from '../components/mobile-menu';
 import { initGoalLinks } from '../lib/nav';
 import { initScrollGoals } from '../lib/scroll-goals';
-import { reachGoal } from '../lib/metrika';
+import { initFaqGoals } from '../lib/faq-goals';
 import { initBoard } from './board';
 import type { BoardApi } from './board';
 import { initTechForm } from './form';
@@ -36,16 +36,6 @@ function initAnchors(board: BoardApi | null): void {
   });
 }
 
-/** Цель на раскрытие вопроса: номер и текст вопроса — параметры */
-function initFaqGoals(): void {
-  document.querySelectorAll<HTMLButtonElement>('#faq .acc-trigger').forEach((t, i) => {
-    // слушатель после initAccordion: к этому моменту aria-expanded уже переключён
-    t.addEventListener('click', () => {
-      if (t.getAttribute('aria-expanded') === 'true') reachGoal('tech_faq_open', { n: String(i + 1), q: (t.textContent || '').trim() });
-    });
-  });
-}
-
 function init(): void {
   const board = initBoard();
   initTechForm();
@@ -55,7 +45,7 @@ function init(): void {
   initHeader();
   initReveal();
   initAccordion();
-  initFaqGoals();
+  initFaqGoals(); // tech_faq_open {n, q}
   initMobileMenu();
   initCookieBanner();
 }

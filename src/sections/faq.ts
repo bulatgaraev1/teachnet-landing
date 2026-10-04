@@ -18,7 +18,7 @@ export const ITEMS: AccItem[] = [
   },
   {
     q: 'Где проходят занятия?',
-    a: `Занятия проходят по адресу: ${SITE.address.full}.`,
+    a: `В двух филиалах: ${SITE.branches.map((b) => `${b.address} (${b.note})`).join(', и ')}.`,
   },
   {
     q: 'Если пропустили занятие?',
@@ -31,13 +31,14 @@ export const ITEMS: AccItem[] = [
 ];
 
 export function faq(): string {
-  return `<section class="section" id="faq" aria-labelledby="faq-h" data-scroll-goal="scroll_faq">
+  // вопрос без ответа (заглушка <!-- TODO -->) на странице не показываем, пока нет текста
+  return `<section class="section" id="faq" aria-labelledby="faq-h" data-scroll-goal="scroll_faq" data-faq-goal="faq_open">
     <div class="blobs"></div>
     <div class="container layer" style="max-width:880px">
       <div class="section-head" data-reveal>
         <h2 class="h2" id="faq-h">Частые вопросы родителей</h2>
       </div>
-      <div data-reveal>${accordion(ITEMS)}</div>
+      <div data-reveal>${accordion(ITEMS.filter((it) => !it.a.includes('<!--')))}</div>
     </div>
   </section>`;
 }
