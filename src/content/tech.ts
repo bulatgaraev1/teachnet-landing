@@ -13,9 +13,9 @@ export const TERM = '[СРОК]';
  * Кнопки скачивания в блоке «Педагогам». Пока href пустой, кнопка видна, но неактивна.
  * Когда появится файл, заполните href, например: '/files/teachnet-uno.pdf'.
  */
-export const TECH_DOWNLOADS: { label: string; href: string }[] = [
-  { label: 'Описание платы (PDF)', href: '' },
-  { label: 'Назначение выводов (PDF)', href: '' },
+export const TECH_DOWNLOADS: { label: string; href: string; goal: string }[] = [
+  { label: 'Описание платы (PDF)', href: '', goal: 'tech_pdf_board' },
+  { label: 'Назначение выводов (PDF)', href: '', goal: 'tech_pdf_pins' },
 ];
 
 export const TECH = {
@@ -28,12 +28,13 @@ export const TECH = {
     breadcrumbPage: 'TEACHNET UNO',
   },
 
+  /** goal — клик-цель Метрики (в шапке и в меню одна цель, место — параметр place) */
   nav: [
-    { label: 'Что на плате', href: '#board' },
-    { label: 'Сравнение', href: '#compare' },
-    { label: 'Характеристики', href: '#specs' },
-    { label: 'Педагогам', href: '#teachers' },
-    { label: 'Вопросы', href: '#faq' },
+    { label: 'Что на плате', href: '#board', goal: 'tech_nav_board' },
+    { label: 'Сравнение', href: '#compare', goal: 'tech_nav_compare' },
+    { label: 'Характеристики', href: '#specs', goal: 'tech_nav_specs' },
+    { label: 'Педагогам', href: '#teachers', goal: 'tech_nav_teachers' },
+    { label: 'Вопросы', href: '#faq', goal: 'tech_nav_faq' },
   ],
   cta: 'Оставить заявку',
   menu: { open: 'Открыть меню', close: 'Закрыть меню', label: 'Меню страницы' },

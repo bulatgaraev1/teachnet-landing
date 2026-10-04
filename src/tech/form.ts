@@ -29,6 +29,16 @@ export function initTechForm(): void {
 
   fillAttribution(form);
 
+  // цель «начали заполнять» — один раз за просмотр страницы
+  let started = false;
+  const onStart = (): void => {
+    if (started) return;
+    started = true;
+    reachGoal('tech_form_start');
+  };
+  form.addEventListener('focusin', onStart);
+  form.addEventListener('change', onStart);
+
   // «Сколько плат»: пока человек сам не менял число, оно следует за выбором «Кто вы»
   let qtyTouched = false;
   qty.addEventListener('input', () => { qtyTouched = true; });
@@ -48,6 +58,7 @@ export function initTechForm(): void {
     [name, contact, consent].forEach((i) => i.removeAttribute('aria-invalid'));
   }
   function showError(text: string, input: HTMLInputElement): void {
+    reachGoal('tech_form_error', { field: input.name });
     errBox.textContent = text;
     errBox.hidden = false;
     input.setAttribute('aria-invalid', 'true');
@@ -74,6 +85,7 @@ export function initTechForm(): void {
   }
 
   again.addEventListener('click', () => {
+    reachGoal('tech_form_again');
     form.reset(); // «Школа», 10 плат, пустые поля
     qtyTouched = false;
     onRole();
@@ -105,7 +117,7 @@ export function initTechForm(): void {
     try {
       const res = await fetch('/send.php', { method: 'POST', body: new FormData(form) });
       if (!res.ok) throw new Error('bad status ' + res.status);
-      reachGoal('tech_lead', { role: role() });
+      reachGoal('tech_lead', { role: role(), qty: qty.value });
       showDone(who);
     } catch (err) {
       errBox.textContent = `${t.netError} ${SITE.phoneDisplay}`;

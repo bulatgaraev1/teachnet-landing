@@ -32,20 +32,21 @@ function boardImg(cls: string, sizes: string, eager: boolean): string {
   return `<img class="${cls}" src="${BOARD_IMG}" srcset="${BOARD_IMG_800} 800w, ${BOARD_IMG} 1600w" sizes="${sizes}" width="${IMG_W}" height="${IMG_H}" alt="${TECH.meta.imageAlt}" decoding="async" ${load} />`;
 }
 
-function toOrder(label: string, cls = 'btn'): string {
-  return `<a class="${cls}" href="#order" data-anchor>${label}</a>`;
+/** Кнопка «Оставить заявку» (к форме); goal — клик-цель места */
+function toOrder(label: string, cls: string, goal: string): string {
+  return `<a class="${cls}" href="#order" data-anchor data-goal="${goal}">${label}</a>`;
 }
 
 function header(): string {
-  const nav = TECH.nav.map((n) => `<a href="${n.href}" data-anchor>${n.label}</a>`).join('');
+  const nav = TECH.nav.map((n) => `<a href="${n.href}" data-anchor data-goal="${n.goal}" data-goal-place="header">${n.label}</a>`).join('');
   return `<header class="site-header el-header tc-header" id="top">
     <div class="container site-header__inner el-header__inner">
-      <a href="/" class="site-header__brand el-header__brand" aria-label="${SITE.brand}, на главную">
+      <a href="/" class="site-header__brand el-header__brand" aria-label="${SITE.brand}, на главную" data-goal="tech_logo_home">
         ${LOGO}
       </a>
       <nav class="site-nav el-nav" aria-label="Разделы страницы">${nav}</nav>
       <div class="site-header__right">
-        ${toOrder(TECH.cta, 'btn btn--compact tc-header__cta')}
+        ${toOrder(TECH.cta, 'btn btn--compact tc-header__cta', 'tech_order_header')}
         <button class="burger" type="button" aria-label="${TECH.menu.open}" aria-expanded="false" aria-controls="mobile-nav" data-mm-open>${elIcon('menu')}</button>
       </div>
     </div>
@@ -54,7 +55,7 @@ function header(): string {
 
 /** Бургер-меню: разметка и поведение общего меню сайта (initMobileMenu) */
 function mobileMenu(): string {
-  const links = TECH.nav.map((n) => `<a class="mobile-nav__link" href="${n.href}" data-anchor>${n.label}</a>`).join('');
+  const links = TECH.nav.map((n) => `<a class="mobile-nav__link" href="${n.href}" data-anchor data-goal="${n.goal}" data-goal-place="menu">${n.label}</a>`).join('');
   return `<div class="mobile-nav" id="mobile-nav">
     <div class="mobile-nav__backdrop" data-mm-close></div>
     <aside class="mobile-nav__panel" role="dialog" aria-modal="true" aria-label="${TECH.menu.label}" id="mobile-nav-panel">
@@ -64,7 +65,7 @@ function mobileMenu(): string {
       </div>
       <nav class="mobile-nav__links" aria-label="Разделы страницы">${links}</nav>
       <div class="mobile-nav__foot">
-        ${toOrder(TECH.cta, 'btn btn--block')}
+        ${toOrder(TECH.cta, 'btn btn--block', 'tech_order_menu')}
       </div>
     </aside>
   </div>`;
@@ -75,7 +76,7 @@ function hero(): string {
   const stats = TECH.hero.stats
     .map((s) => `<li class="tc-stat"><span class="tc-stat__value">${s.value}</span><span class="tc-stat__label">${s.label}</span></li>`)
     .join('');
-  return `<section class="tc-hero el-sec--white" aria-labelledby="tc-h1">
+  return `<section class="tc-hero el-sec--white" aria-labelledby="tc-h1" data-scroll-goal="scroll_tech_hero">
     <div class="el-dots" aria-hidden="true"></div>
     <div class="container tc-hero__grid">
       <div class="tc-hero__copy">
@@ -83,8 +84,8 @@ function hero(): string {
         <h1 class="h1 tc-hero__title" id="tc-h1">${TECH.hero.h1}</h1>
         <p class="lead tc-hero__sub">${TECH.hero.sub}</p>
         <div class="tc-hero__cta">
-          ${toOrder(TECH.cta)}
-          <a class="btn btn--ghost" href="#board" data-anchor>${TECH.hero.ctaBoard}</a>
+          ${toOrder(TECH.cta, 'btn', 'tech_order_hero')}
+          <a class="btn btn--ghost" href="#board" data-anchor data-goal="tech_hero_board">${TECH.hero.ctaBoard}</a>
         </div>
         <ul class="tc-stats">${stats}</ul>
       </div>
@@ -150,7 +151,7 @@ function board(): string {
             <span class="tc-item__copy"><span class="tc-item__title">${g.label}</span><span class="tc-item__short">${g.purpose}</span></span>
           </button></li>`)
     .join('');
-  return `<section class="section el-sec--gray tc-board-sec" id="board" aria-labelledby="tc-board-h">
+  return `<section class="section el-sec--gray tc-board-sec" id="board" aria-labelledby="tc-board-h" data-scroll-goal="scroll_tech_board">
     <div class="container">
       ${head('tc-board-h', TECH.board.eyebrow, TECH.board.h2)}
       <div class="tc-board-grid">
@@ -207,7 +208,7 @@ function compare(): string {
     })
     .join('');
   const notes = c.notes.map((n) => `<p class="tc-compare__note">${n.strong ? `<b>${n.strong}</b> ` : ''}${n.text}</p>`).join('');
-  return `<section class="section el-sec--white" id="compare" aria-labelledby="tc-compare-h">
+  return `<section class="section el-sec--white" id="compare" aria-labelledby="tc-compare-h" data-scroll-goal="scroll_tech_compare">
     <div class="container">
       ${head('tc-compare-h', c.eyebrow, c.h2, c.sub)}
       <ul class="tc-legend" aria-label="Обозначения">${legend}</ul>
@@ -228,12 +229,12 @@ function compare(): string {
 function specs(): string {
   const s = TECH.specs;
   const rows = s.rows.map(([k, v]) => `<tr><th scope="row">${k}</th><td>${v}</td></tr>`).join('');
-  return `<section class="section el-sec--gray" id="specs" aria-labelledby="tc-specs-h">
+  return `<section class="section el-sec--gray" id="specs" aria-labelledby="tc-specs-h" data-scroll-goal="scroll_tech_specs">
     <div class="container tc-specs-grid">
       <div class="tc-specs__copy" data-reveal>
         <p class="el-eyebrow tc-eyebrow">${s.eyebrow}</p>
         <h2 class="h2" id="tc-specs-h">${s.h2}</h2>
-        <p class="tc-specs__note">${s.noteBefore}<a class="el-link" href="#board" data-anchor data-open-tab="pins">${s.noteLink}</a>${s.noteAfter}</p>
+        <p class="tc-specs__note">${s.noteBefore}<a class="el-link" href="#board" data-anchor data-open-tab="pins" data-goal="tech_specs_pins">${s.noteLink}</a>${s.noteAfter}</p>
       </div>
       <div class="tc-specs card" data-reveal>
         <table class="tc-spec-table"><caption class="sr-only">${s.h2}</caption><tbody>${rows}</tbody></table>
@@ -253,10 +254,10 @@ function teachers(): string {
   const dl = '<svg class="tc-download__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0l-4-4m4 4l4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const downloads = `<div class="tc-downloads">${TECH_DOWNLOADS.map((d) =>
     d.href
-      ? `<a class="btn tc-download" href="${d.href}" download>${d.label}${dl}</a>`
-      : `<button class="btn tc-download" type="button" disabled title="Файл появится позже">${d.label}${dl}</button>`,
+      ? `<a class="btn tc-download" href="${d.href}" download data-goal="${d.goal}">${d.label}${dl}</a>`
+      : `<button class="btn tc-download" type="button" disabled title="Файл появится позже" data-goal="${d.goal}">${d.label}${dl}</button>`,
   ).join('')}</div>`;
-  return `<section class="section el-sec--white" id="teachers" aria-labelledby="tc-teachers-h">
+  return `<section class="section el-sec--white" id="teachers" aria-labelledby="tc-teachers-h" data-scroll-goal="scroll_tech_teachers">
     <div class="container">
       <div class="tc-teachers" data-reveal>
         <p class="el-eyebrow tc-eyebrow tc-eyebrow--light">${t.eyebrow}</p>
@@ -306,7 +307,7 @@ function orderForm(): string {
 function order(): string {
   const o = TECH.order;
   const info = o.info.map((r) => `<div class="tc-info__row"><dt>${r.label}</dt><dd>${r.value}</dd></div>`).join('');
-  return `<section class="section el-sec--gray" id="order" aria-labelledby="tc-order-h">
+  return `<section class="section el-sec--gray" id="order" aria-labelledby="tc-order-h" data-scroll-goal="scroll_tech_order">
     <div class="container tc-order-grid">
       <div class="tc-order__copy" data-reveal>
         <p class="el-eyebrow tc-eyebrow">${o.eyebrow}</p>
@@ -327,10 +328,10 @@ function faq(): string {
   const items = TECH.faq.items.map((it, i) =>
     // ответ про выводы — со ссылкой на вкладку «Выводы» (текст тот же)
     i === TECH.faq.items.length - 1
-      ? { q: it.q, a: `<a class="el-link" href="#board" data-anchor data-open-tab="pins">${it.a.replace(/\.$/, '')}</a>.` }
+      ? { q: it.q, a: `<a class="el-link" href="#board" data-anchor data-open-tab="pins" data-goal="tech_faq_pins">${it.a.replace(/\.$/, '')}</a>.` }
       : { q: it.q, a: it.a },
   );
-  return `<section class="section el-sec--white" id="faq" aria-labelledby="tc-faq-h">
+  return `<section class="section el-sec--white" id="faq" aria-labelledby="tc-faq-h" data-scroll-goal="scroll_tech_faq">
     <div class="container el-faq-wrap">
       ${head('tc-faq-h', TECH.faq.eyebrow, TECH.faq.h2)}
       <div data-reveal>${accordion(items)}</div>
@@ -351,7 +352,7 @@ export function renderTechPage(): string {
     order(),
     faq(),
     '</main>',
-    footer(),
+    footer('scroll_tech_footer'),
     cookieBanner(),
   ].join('\n');
 }

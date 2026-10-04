@@ -5,6 +5,7 @@
  * здесь только переключение классов и атрибутов.
  */
 import { TECH } from '../content/tech';
+import { reachGoal } from '../lib/metrika';
 
 type Tab = 'features' | 'pins';
 
@@ -99,8 +100,13 @@ export function initBoard(): BoardApi | null {
     else selectGroup(group);
   }
 
+  // цели — только на действия человека (не на начальное состояние и не на переход по ссылке)
+  const userTab = (t: Tab, focus = false): void => {
+    if (t !== tab) reachGoal(t === 'pins' ? 'tech_tab_pins' : 'tech_tab_features');
+    setTab(t, focus);
+  };
   tabs.forEach((b, idx) => {
-    b.addEventListener('click', () => setTab(b.dataset.tab as Tab));
+    b.addEventListener('click', () => userTab(b.dataset.tab as Tab));
     // стрелки, Home и End — как у обычных вкладок
     b.addEventListener('keydown', (e) => {
       let next = -1;
@@ -110,12 +116,20 @@ export function initBoard(): BoardApi | null {
       else if (e.key === 'End') next = tabs.length - 1;
       if (next < 0) return;
       e.preventDefault();
-      setTab(tabs[next].dataset.tab as Tab, true);
+      userTab(tabs[next].dataset.tab as Tab, true);
     });
   });
-  markers.forEach((m) => m.addEventListener('click', () => selectFeature(Number(m.dataset.f))));
-  featItems.forEach((it) => it.addEventListener('click', () => selectFeature(Number(it.dataset.f))));
-  pinItems.forEach((it) => it.addEventListener('click', () => selectGroup(Number(it.dataset.g))));
+  const pickFeature = (n: number, via: string): void => {
+    reachGoal('tech_feature', { n: String(n), title: TECH.board.features[n - 1].title, via });
+    selectFeature(n);
+  };
+  markers.forEach((m) => m.addEventListener('click', () => pickFeature(Number(m.dataset.f), 'marker')));
+  featItems.forEach((it) => it.addEventListener('click', () => pickFeature(Number(it.dataset.f), 'list')));
+  pinItems.forEach((it) => it.addEventListener('click', () => {
+    const g = Number(it.dataset.g);
+    reachGoal('tech_pins_group', { group: TECH.board.pinGroups[g].label });
+    selectGroup(g);
+  }));
 
   setTab('features');
   return { openTab: (t) => { if (t !== tab) setTab(t); } };
