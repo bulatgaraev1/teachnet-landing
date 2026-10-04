@@ -117,6 +117,58 @@ function rate_limited(string $ip, int $max = 5, int $window = 600): bool {
     return $exceeded;
 }
 
+/** Сообщение в Telegram. true — Bot API принял (HTTP 200). */
+function tg_send(string $api, string $token, string $chatId, string $text): bool {
+    $ch = curl_init($api . "/bot{$token}/sendMessage");
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => http_build_query(['chat_id' => $chatId, 'text' => $text, 'disable_web_page_preview' => true]),
+        CURLOPT_TIMEOUT        => 15,
+    ]);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($response === false || $httpCode !== 200) {
+        error_log('TeachNet lead: Telegram не принял заявку, HTTP ' . $httpCode);
+        return false;
+    }
+    return true;
+}
+
+/** Письмо-дубль (best-effort). true — почтовый сервер хостинга принял письмо. */
+function mail_send(string $to, string $heading, string $body): bool {
+    if ($to === '') {
+        return false;
+    }
+    try {
+        // хост для From чистим от чужеродных символов (защита от инъекции заголовков)
+        $host = preg_replace('/[^A-Za-z0-9.\-:]/', '', $_SERVER['HTTP_HOST'] ?? 'localhost') ?: 'localhost';
+        return @mail($to, '=?UTF-8?B?' . base64_encode($heading) . '?=', $body,
+            "From: no-reply@" . $host . "\r\nContent-Type: text/plain; charset=utf-8\r\n");
+    } catch (Throwable $e) {
+        error_log('TeachNet lead: ошибка отправки email — ' . $e->getMessage());
+        return false;
+    }
+}
+
+/** Приписка к письму, если Telegram заявку не принял: письмо — запасной канал. */
+const TG_FAIL_NOTE = "\n\nВнимание: в Telegram эта заявка не ушла (Telegram не ответил). Проверьте бота.";
+
+/**
+ * Ответ форме. Заявка не потеряна, если её принял хотя бы один канал: Telegram, база или почта —
+ * тогда посетитель видит «Заявка отправлена». Ошибка — только если не сработало ничего.
+ */
+function finish_lead(bool $tgOk, ?int $leadId, bool $mailOk): void {
+    if ($tgOk || $leadId || $mailOk) {
+        echo json_encode(['ok' => true]);
+        exit;
+    }
+    http_response_code(502);
+    echo json_encode(['ok' => false, 'error' => 'telegram_failed']);
+    exit;
+}
+
 // ── Только POST ──────────────────────────────────────────────────────────────
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     http_response_code(405);
@@ -202,16 +254,22 @@ if (post('source') === 'tech') {
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_TIMEOUT => 5,
             ]);
-            $stmt = $pdo->prepare(
-                'INSERT INTO leads (name, phone, child_age, created_at, source, utm_source, utm_medium, utm_campaign, utm_term, utm_content, yclid, ym_client_id, referrer) '
-                . "VALUES (:name, :phone, '', NOW(), 'tech', :utm_source, :utm_medium, :utm_campaign, :utm_term, :utm_content, :yclid, :ym_client_id, :referrer)"
-            );
-            $stmt->execute([
+            $cols = 'name, phone, child_age, created_at, source, utm_source, utm_medium, utm_campaign, utm_term, utm_content, yclid, ym_client_id, referrer';
+            $vals = ":name, :phone, '', NOW(), 'tech', :utm_source, :utm_medium, :utm_campaign, :utm_term, :utm_content, :yclid, :ym_client_id, :referrer";
+            $params = [
                 ':name' => $name, ':phone' => $contact,
                 ':utm_source' => $utm_source, ':utm_medium' => $utm_medium, ':utm_campaign' => $utm_campaign,
                 ':utm_term' => $utm_term, ':utm_content' => $utm_content, ':yclid' => $yclid,
                 ':ym_client_id' => $ym_client_id, ':referrer' => $referrer,
-            ]);
+            ];
+            // кто, организация и число плат — в note, чтобы заказ был виден и в базе
+            $note = 'Кто: ' . $ROLES[$role] . ($org !== '' ? '; организация: ' . $org : '') . '; плат: ' . $qty;
+            try {
+                $pdo->prepare("INSERT INTO leads ({$cols}, note) VALUES ({$vals}, :note)")->execute($params + [':note' => $note]);
+            } catch (Throwable $e) {
+                // колонки note ещё нет (SQL дашборда не выполнен): пишем без неё
+                $pdo->prepare("INSERT INTO leads ({$cols}) VALUES ({$vals})")->execute($params);
+            }
             $leadId = (int) $pdo->lastInsertId();
         } catch (Throwable $e) {
             error_log('TeachNet lead (tech): ошибка записи в БД — ' . $e->getMessage());
@@ -229,33 +287,10 @@ if (post('source') === 'tech') {
         "\n\nВремя: " . $timeText .
         ($leadId ? "\nЗаявка #" . $leadId : '');
 
-    $ch = curl_init($TG_API . "/bot{$BOT_TOKEN}/sendMessage");
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => http_build_query(['chat_id' => $CHAT_ID, 'text' => $heading . "\n\n" . $body, 'disable_web_page_preview' => true]),
-        CURLOPT_TIMEOUT        => 15,
-    ]);
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    if ($response === false || $httpCode !== 200) {
-        http_response_code(502);
-        echo json_encode(['ok' => false, 'error' => 'telegram_failed']);
-        exit;
-    }
-
-    if ($EMAIL_TO !== '') {
-        try {
-            $host = preg_replace('/[^A-Za-z0-9.\-:]/', '', $_SERVER['HTTP_HOST'] ?? 'localhost') ?: 'localhost';
-            @mail($EMAIL_TO, '=?UTF-8?B?' . base64_encode($heading) . '?=', $body,
-                "From: no-reply@" . $host . "\r\nContent-Type: text/plain; charset=utf-8\r\n");
-        } catch (Throwable $e) {
-            error_log('TeachNet lead (tech): ошибка отправки email — ' . $e->getMessage());
-        }
-    }
-    echo json_encode(['ok' => true]);
-    exit;
+    // Telegram — основной канал; письмо уходит всегда, а если Telegram не ответил — с пометкой
+    $tgOk   = tg_send($TG_API, $BOT_TOKEN, $CHAT_ID, $heading . "\n\n" . $body);
+    $mailOk = mail_send($EMAIL_TO, $heading, $body . ($tgOk ? '' : TG_FAIL_NOTE));
+    finish_lead($tgOk, $leadId, $mailOk);
 }
 
 // ── Сбор и санитизация ───────────────────────────────────────────────────────
@@ -394,52 +429,16 @@ if ($leadId) {
 }
 
 // ── Отправка в Telegram (основной канал) ─────────────────────────────────────
-$url = "{$TG_API}/bot{$BOT_TOKEN}/sendMessage";
-$payload = http_build_query([
-    'chat_id' => $CHAT_ID,
-    'text'    => $text,
-    'disable_web_page_preview' => true,
-]);
-$ch = curl_init($url);
-curl_setopt_array($ch, [
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_POST           => true,
-    CURLOPT_POSTFIELDS     => $payload,
-    CURLOPT_TIMEOUT        => 15,
-]);
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
+$tgOk = tg_send($TG_API, $BOT_TOKEN, $CHAT_ID, $text);
 
-if ($response === false || $httpCode !== 200) {
-    http_response_code(502);
-    echo json_encode(['ok' => false, 'error' => 'telegram_failed']);
-    exit;
-}
+// ── Email-дубль: уходит всегда; если Telegram не ответил — это запасной канал ─
+$body =
+    "Имя: " . $name . "\n" .
+    "Телефон: " . $phone . "\n" .
+    "Возраст ребёнка: " . $age . $branchText .
+    "\n\n— Источник —\n" . $sourceText .
+    "\n\nВремя: " . $timeText .
+    ($leadId ? "\nЗаявка #" . $leadId : '');
+$mailOk = mail_send($EMAIL_TO, $heading, $body . ($tgOk ? '' : TG_FAIL_NOTE));
 
-// ── Email-дубль (best-effort) ────────────────────────────────────────────────
-if ($EMAIL_TO !== '') {
-    try {
-        // хост для From чистим от чужеродных символов (защита от инъекции заголовков)
-        $host = preg_replace('/[^A-Za-z0-9.\-:]/', '', $_SERVER['HTTP_HOST'] ?? 'localhost');
-        if ($host === '') {
-            $host = 'localhost';
-        }
-        $subject = '=?UTF-8?B?' . base64_encode($heading) . '?=';
-        $body    =
-            "Имя: " . $name . "\n" .
-            "Телефон: " . $phone . "\n" .
-            "Возраст ребёнка: " . $age . $branchText .
-            "\n\n— Источник —\n" . $sourceText .
-            "\n\nВремя: " . $timeText .
-            ($leadId ? "\nЗаявка #" . $leadId : '');
-        $headers =
-            "From: no-reply@" . $host . "\r\n" .
-            "Content-Type: text/plain; charset=utf-8\r\n";
-        @mail($EMAIL_TO, $subject, $body, $headers);
-    } catch (Throwable $e) {
-        error_log('TeachNet lead: ошибка отправки email — ' . $e->getMessage());
-    }
-}
-
-echo json_encode(['ok' => true]);
+finish_lead($tgOk, $leadId, $mailOk);
