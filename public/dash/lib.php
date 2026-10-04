@@ -447,6 +447,9 @@ const DASH_NEED_SQL = 'Выполните SQL из инструкции (шаг�
 
 /* ---------- словари: страницы, филиалы, статусы, каналы ---------- */
 
+/** Заявки не про обучение (заказ плат с /tech, source=tech) — в аналитику школы не попадают. */
+const DASH_EXCLUDED_SQL = "(source IS NULL OR source <> 'tech')";
+
 /** source заявки → курс / страница. */
 const DASH_SOURCES = [
     'website'           => 'Главная',

@@ -152,8 +152,8 @@ function readCookie(name: string): string {
   return m ? decodeURIComponent(m[1]) : '';
 }
 
-/** Заполняет скрытые поля формы источником трафика и ClientID Метрики. */
-function fillAttribution(form: HTMLFormElement): void {
+/** Заполняет скрытые поля формы источником трафика и ClientID Метрики (используется и формой /tech). */
+export function fillAttribution(form: HTMLFormElement): void {
   const attr = captureAttribution();
   for (const key of ATTR_KEYS) {
     const el = form.elements.namedItem(key);
