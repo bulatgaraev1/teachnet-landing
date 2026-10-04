@@ -113,7 +113,7 @@ function header(): string {
       <a href="/" class="site-header__brand" aria-label="${SITE.brand} — на главную">
         <img class="site-header__logo" src="/images/logo-dark.svg" width="121" height="38" alt="${SITE.brand}" />
       </a>
-      <span class="child-status">🟢 Идёт запись · Май – Июль 2026 · Казань</span>
+      <span class="child-status">Запись закрыта. Мастер-классы прошли</span>
     </div>
   </header>`;
 }
