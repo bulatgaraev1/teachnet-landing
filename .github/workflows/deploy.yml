@@ -21,3 +21,11 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
+      # IndexNow: сообщаем Яндексу (и через него — другим поисковикам протокола) об обновлении страниц.
+      # Ключ — публичный файл public/b887174e966bb3311dbb16685f6fabe3.txt, это не секрет. Сбой здесь деплой не ломает.
+      - name: IndexNow
+        continue-on-error: true
+        run: |
+          curl -sS -m 30 -o /dev/null -w "IndexNow HTTP %{http_code}\n" -X POST "https://yandex.com/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d '{"host":"teachnet.ru","key":"b887174e966bb3311dbb16685f6fabe3","keyLocation":"https://teachnet.ru/b887174e966bb3311dbb16685f6fabe3.txt","urlList":["https://teachnet.ru/","https://teachnet.ru/electronics","https://teachnet.ru/tech","https://teachnet.ru/child"]}'
