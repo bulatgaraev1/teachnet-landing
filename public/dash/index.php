@@ -69,18 +69,18 @@ if (!$cfg) {
     page_message('Не найден dash_config.php', 'Положите файл dash_config.php на сервер рядом с send_config.php, выше папки сайта. Шаблон — в описании дашборда.');
     exit;
 }
-if ((string) ($cfg['password'] ?? '') === '') {
-    page_message('Не задан пароль', 'В dash_config.php не заполнено поле password.');
+if ((string) ($cfg['password'] ?? '') === '' && (string) ($cfg['password_hash'] ?? '') === '') {
+    page_message('Не задан пароль', 'В dash_config.php не заполнено поле password (или password_hash).');
     exit;
 }
 
 dash_session_start();
 $ip = dash_client_ip();
 $error = '';
-$action = (string) ($_POST['action'] ?? '');
+$action = dash_param($_POST, 'action');
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    if (!dash_csrf_ok(is_string($_POST['csrf'] ?? null) ? $_POST['csrf'] : null)) {
+    if (!dash_csrf_ok(dash_param($_POST, 'csrf'))) {
         // нет cookie сессии — обычно страница открыта по http (cookie Secure) или cookie запрещены
         $error = empty($_COOKIE[session_name()])
             ? 'Браузер не сохранил cookie входа. Откройте страницу по адресу https://… и разрешите cookie.'
@@ -90,16 +90,20 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         header('Location: ./', true, 303);
         exit;
     } elseif ($action === 'login') {
-        if (dash_login_failures($ip) >= DASH_LOGIN_MAX) {
-            $error = 'Слишком много неверных попыток. Попробуйте через ' . dash_login_wait_minutes($ip) . ' мин.';
-        } elseif (dash_login(is_string($_POST['password'] ?? null) ? $_POST['password'] : '', $cfg)) {
+        // попытка записывается до проверки пароля (см. dash_login_begin)
+        [$wait, $left] = dash_login_begin($ip);
+        if ($wait === -1) {
+            $error = 'Вход временно недоступен: на сервере нет папки для счётчика попыток. Сообщите разработчику.';
+        } elseif ($wait > 0) {
+            $error = 'Слишком много попыток входа. Попробуйте через ' . $wait . ' мин.';
+        } elseif (dash_login(dash_param($_POST, 'password'), $cfg)) {
+            dash_login_success($ip);
             header('Location: ./', true, 303);
             exit;
         } else {
-            $left = DASH_LOGIN_MAX - dash_login_failures($ip, true);
             $error = $left > 0
                 ? 'Неверный пароль. Осталось попыток: ' . $left . '.'
-                : 'Слишком много неверных попыток. Попробуйте через ' . dash_login_wait_minutes($ip) . ' мин.';
+                : 'Неверный пароль. Попытки закончились — вход закрыт на ' . intdiv(DASH_LOGIN_WINDOW, 60) . ' мин.';
         }
     }
 }

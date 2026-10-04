@@ -56,7 +56,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         out(403, ['error' => 'Сессия устарела, обновите страницу']);
     }
     session_write_close();
-    $action = (string) ($_GET['action'] ?? '');
+    $action = dash_param($_GET, 'action');
     if ($action === 'refresh') {
         $ok = dash_clear_cache();
         out(200, ['ok' => $ok, 'message' => $ok ? 'Данные обновлены' : 'Обновлять можно не чаще раза в минуту']);
@@ -85,7 +85,7 @@ session_write_close(); // дальше сессия не нужна — не б�
 /* ---------- блоки ---------- */
 
 @set_time_limit(120);
-$block = (string) ($_GET['block'] ?? '');
+$block = dash_param($_GET, 'block');
 $report = new DashReport($cfg, $sendCfg, $_GET, $sendError);
 try {
     switch ($block) {
@@ -96,7 +96,7 @@ try {
             $data = $report->blockKpi();
             break;
         case 'funnel':
-            $data = $report->blockFunnel((string) ($_GET['page'] ?? 'all'));
+            $data = $report->blockFunnel(dash_param($_GET, 'page', 'all'));
             break;
         case 'flow':
             $data = $report->blockFlow();
@@ -108,7 +108,7 @@ try {
             $data = $report->blockPages();
             break;
         case 'behavior':
-            $data = $report->blockBehavior((string) ($_GET['page'] ?? 'main'));
+            $data = $report->blockBehavior(dash_param($_GET, 'page', 'main'));
             break;
         case 'audience':
             $data = $report->blockAudience();

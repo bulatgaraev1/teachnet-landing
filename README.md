@@ -41,15 +41,13 @@ scripts/       — генерация логотипов и плейсхолде
 
 | Где | Что |
 |---|---|
-| `public/send.php` | `$BOT_TOKEN` и `$CHAT_ID` Telegram-бота |
-| `index.html` | раскомментировать блок Яндекс.Метрики, вставить номер счётчика вместо `XXXXXXXX` |
-| `src/lib/metrika.ts` | `YM_COUNTER_ID` — тот же номер счётчика (для целей `lead_form` / `cta_click`) |
+| `send_config.php` — на сервере, **выше веб-корня** (не в репозитории и не в `public/`) | `bot_token`, `chat_id`, `db_host`, `db_name`, `db_user`, `db_pass`, `email_to`; по желанию `mail_from` (отправитель писем, по умолчанию `no-reply@teachnet.ru`). Секреты в `public/send.php` не вписывать: файл публичный и лежит в git |
+| `dash_config.php` — там же, рядом с `send_config.php` | `metrika_token`, `counter_id`, `password` (или `password_hash` — хеш из `password_hash()`), `token_issued` |
 | `src/lib/site.ts` | `legal.*` — URL документов (политика, согласие, cookie); `social.vk`, `social.telegram` — ссылки соцсетей (чат поддержки уже задан) |
 | `src/components/form.ts` | срок перезвона (блок 9, плейсхолдер `[···]`) |
-| `src/sections/faq.ts` | ответы «Где проходят занятия?» и «Если пропустили занятие?» |
+| `src/sections/faq.ts` | ответ «Если пропустили занятие?» (пока ответа нет, вопрос на странице скрыт) |
 | `src/sections/team.ts` | имена и роли преподавателей |
 | `public/images/` | положить реальные фото — см. раздел «Фото» ниже |
-| `public/robots.txt` | добавить `Sitemap:` после привязки домена |
 
 Все плейсхолдеры в коде помечены `// TODO` / `<!-- TODO -->`. Найти разом:
 ```bash

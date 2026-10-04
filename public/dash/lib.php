@@ -23,8 +23,10 @@ date_default_timezone_set('Europe/Moscow');
 const DASH_CACHE_TTL      = 3600; // кеш ответов Метрики, сек
 const DASH_ERROR_TTL      = 600;  // кеш ответа Метрики «ошибка в запросе» (400), сек
 const DASH_REFRESH_MIN    = 60;   // «Обновить» не чаще раза в минуту
-const DASH_LOGIN_MAX      = 5;    // неверных попыток входа…
+const DASH_LOGIN_MAX      = 5;    // попыток входа…
 const DASH_LOGIN_WINDOW   = 900;  // …за 15 минут с одного IP
+const DASH_LOGIN_GLOBAL_MAX    = 30;   // проверок пароля…
+const DASH_LOGIN_GLOBAL_WINDOW = 3600; // …за час на весь дашборд (перебор с многих адресов)
 const DASH_SESSION_TTL    = 43200; // сессия живёт 12 часов
 const DASH_API_LIMIT      = 180;  // запросов к Метрике за 5 минут (лимит Метрики — 200)
 const DASH_API_SLOTS      = 3;    // одновременных запросов к Метрике (лимит Метрики — 3)
@@ -57,9 +59,21 @@ function dash_find_config(string $file): ?array {
         if (!is_array($cfg)) {
             throw new DashError('Файл ' . $file . ' найден, но не возвращает настройки. Сверьте его с шаблоном <?php return [ … ];');
         }
+        if ($file === 'dash_config.php') {
+            dash_config_dir(dirname($path));
+        }
         return $cfg;
     }
     return null;
+}
+
+/** Папка, где лежит dash_config.php (выше веб-корня). Рядом с ней — папка состояния tn_state. */
+function dash_config_dir(?string $set = null): string {
+    static $dir = '';
+    if ($set !== null) {
+        $dir = $set;
+    }
+    return $dir;
 }
 
 /** Общие заголовки: не индексировать, не кешировать (CSP и прочее — из корневого .htaccess). */
@@ -98,8 +112,11 @@ function dash_csrf_ok(?string $token): bool {
 }
 
 function dash_login(string $password, array $cfg): bool {
+    // password_hash — хеш пароля (password_hash() в PHP); если его нет — password открытым текстом
+    $hash = (string) ($cfg['password_hash'] ?? '');
     $expected = (string) ($cfg['password'] ?? '');
-    if ($expected === '' || !hash_equals($expected, $password)) {
+    $ok = $hash !== '' ? password_verify($password, $hash) : ($expected !== '' && hash_equals($expected, $password));
+    if (!$ok) {
         return false;
     }
     session_regenerate_id(true);
@@ -123,70 +140,141 @@ function dash_logout(): void {
 
 /* ---------- защита от перебора пароля (как rate limit в send.php) ---------- */
 
-/** Реальный IP клиента (та же логика, что в send.php). */
-function dash_client_ip(): string {
-    $remote = $_SERVER['REMOTE_ADDR'] ?? '';
-    if (filter_var($remote, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
-        return $remote;
+/** Публичный IP или '' (IPv4, записанный как IPv6 «::ffff:1.2.3.4», приводим к IPv4). */
+function dash_public_ip(string $ip): string {
+    $ip = trim($ip);
+    if (stripos($ip, '::ffff:') === 0 && filter_var(substr($ip, 7), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+        $ip = substr($ip, 7);
     }
-    foreach (explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '') as $part) {
-        $ip = trim($part);
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
+    return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false ? $ip : '';
+}
+
+/**
+ * Реальный IP клиента (та же логика, что в send.php): публичный REMOTE_ADDR — ему и верим;
+ * иначе (прокси хостинга) — X-Forwarded-For справа налево: прокси дописывает адрес клиента
+ * в конец, а начало цепочки может подставить сам клиент.
+ */
+function dash_client_ip(): string {
+    $remote = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+    if (($ip = dash_public_ip($remote)) !== '') {
+        return $ip;
+    }
+    foreach (array_reverse(explode(',', (string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''))) as $part) {
+        if (($ip = dash_public_ip($part)) !== '') {
             return $ip;
         }
     }
     return $remote !== '' ? $remote : 'unknown';
 }
 
+/**
+ * Папка состояния (счётчики входа, кеш Метрики): рядом с dash_config.php, выше веб-корня —
+ * она только наша. Если её не создать — системная временная папка, как раньше. null — негде хранить.
+ */
 function dash_tmp_dir(string $name): ?string {
-    $dir = sys_get_temp_dir() . '/' . $name;
-    if (!is_dir($dir)) {
-        @mkdir($dir, 0700, true);
+    $base = dash_config_dir();
+    foreach ([$base !== '' ? $base . '/tn_state/' . $name : '', sys_get_temp_dir() . '/' . $name] as $dir) {
+        if ($dir === '') {
+            continue;
+        }
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0700, true);
+        }
+        if (is_dir($dir) && is_writable($dir)) {
+            return $dir;
+        }
     }
-    return is_dir($dir) && is_writable($dir) ? $dir : null;
+    return null;
+}
+
+/** Удалить файлы старше $maxAge секунд (счётчики входа, ключи кеша — чтобы папка не росла). */
+function dash_state_gc(string $dir, string $pattern, int $maxAge): void {
+    foreach (glob($dir . '/' . $pattern) ?: [] as $f) {
+        if ((int) @filemtime($f) < time() - $maxAge) {
+            @unlink($f);
+        }
+    }
 }
 
 /**
- * Неверные попытки входа с IP за окно. $add = true — записать ещё одну неудачу.
- * Возвращает число неудач за последние 15 минут.
+ * Счётчик событий в файле: под одной блокировкой читаем отметки времени за окно,
+ * $fn решает и возвращает [новый список, результат]. null — файл не открыть.
  */
-function dash_login_failures(string $ip, bool $add = false): int {
-    $dir = dash_tmp_dir('tn_dash_login');
-    if ($dir === null) {
-        return 0;
-    }
-    $fp = @fopen($dir . '/' . sha1($ip) . '.json', 'c+');
+function dash_counter(string $file, int $window, callable $fn) {
+    $fp = @fopen($file, 'c+');
     if ($fp === false) {
-        return 0;
+        return null;
     }
-    $now = time();
-    $hits = [];
+    $res = null;
     if (flock($fp, LOCK_EX)) {
+        $now = time();
         $hits = json_decode(stream_get_contents($fp) ?: '[]', true);
-        $hits = is_array($hits) ? $hits : [];
-        $hits = array_values(array_filter($hits, static fn ($t) => is_int($t) && ($now - $t) < DASH_LOGIN_WINDOW));
-        if ($add) {
-            $hits[] = $now;
-        }
+        $hits = is_array($hits) ? array_values(array_filter($hits, static fn ($t) => is_int($t) && ($now - $t) < $window)) : [];
+        [$hits, $res] = $fn($hits, $now);
         ftruncate($fp, 0);
         rewind($fp);
-        fwrite($fp, json_encode($hits));
+        fwrite($fp, json_encode(array_values($hits)));
         fflush($fp);
         flock($fp, LOCK_UN);
     }
     fclose($fp);
-    return count($hits);
+    return $res;
 }
 
-/** Сколько минут ждать до снятия блокировки (по самой старой неудаче в окне). */
-function dash_login_wait_minutes(string $ip): int {
+/**
+ * Можно ли проверять пароль. Попытка записывается ДО проверки, под той же блокировкой,
+ * что и проверка лимита: параллельные запросы не проскочат между «проверили» и «записали».
+ * Лимиты: DASH_LOGIN_MAX попыток за 15 минут с одного IP и DASH_LOGIN_GLOBAL_MAX проверок
+ * в час на весь дашборд (перебор с многих адресов). Удачный вход сбрасывает счётчик IP.
+ * Возвращает [ждать минут (0 — можно; -1 — негде вести счётчик, вход закрыт), сколько попыток останется].
+ */
+function dash_login_begin(string $ip): array {
     $dir = dash_tmp_dir('tn_dash_login');
-    $hits = $dir ? json_decode((string) @file_get_contents($dir . '/' . sha1($ip) . '.json'), true) : [];
-    $hits = is_array($hits) ? array_filter($hits, 'is_int') : [];
-    if (!$hits) {
-        return 0;
+    if ($dir === null) {
+        return [-1, 0];
     }
-    return max(1, (int) ceil((min($hits) + DASH_LOGIN_WINDOW - time()) / 60));
+    if (mt_rand(1, 20) === 1) {
+        dash_state_gc($dir, '*.json', 86400);
+    }
+    $wait = static fn (array $hits, int $now, int $window): int => max(1, (int) ceil((min($hits) + $window - $now) / 60));
+    $ipRes = dash_counter($dir . '/' . sha1($ip) . '.json', DASH_LOGIN_WINDOW, static function (array $hits, int $now) use ($wait) {
+        if (count($hits) >= DASH_LOGIN_MAX) {
+            return [$hits, [$wait($hits, $now, DASH_LOGIN_WINDOW), 0]];
+        }
+        $hits[] = $now;
+        return [$hits, [0, DASH_LOGIN_MAX - count($hits)]];
+    });
+    if ($ipRes === null) {
+        return [-1, 0];
+    }
+    if ($ipRes[0] > 0) {
+        return $ipRes;
+    }
+    $allWait = dash_counter($dir . '/_all.json', DASH_LOGIN_GLOBAL_WINDOW, static function (array $hits, int $now) use ($wait) {
+        if (count($hits) >= DASH_LOGIN_GLOBAL_MAX) {
+            return [$hits, $wait($hits, $now, DASH_LOGIN_GLOBAL_WINDOW)];
+        }
+        $hits[] = $now;
+        return [$hits, 0];
+    });
+    if ($allWait === null) {
+        return [-1, 0];
+    }
+    return $allWait > 0 ? [$allWait, 0] : $ipRes;
+}
+
+/** Удачный вход: прошлые неудачи этого IP забываем. */
+function dash_login_success(string $ip): void {
+    $dir = dash_tmp_dir('tn_dash_login');
+    if ($dir !== null) {
+        @unlink($dir . '/' . sha1($ip) . '.json');
+    }
+}
+
+/** Строковый параметр запроса (массив вместо строки — как будто параметра нет). */
+function dash_param(array $in, string $key, string $default = ''): string {
+    $v = $in[$key] ?? $default;
+    return is_string($v) ? $v : $default;
 }
 
 /* ---------- API Яндекс.Метрики ---------- */
@@ -281,9 +369,17 @@ function dash_cache_read(string $file): ?array {
  * Возвращает [декодированный ответ, время получения (unix)].
  */
 function metrika_get(array $cfg, string $path, array $params, bool $quiet = false): array {
-    $base = rtrim((string) ($cfg['api_base'] ?? DASH_API_BASE), '/'); // api_base — только для проверки на стенде
+    // api_base — только для проверки на стенде и только локальный адрес: токен не уйдёт на чужой сервер
+    $base = DASH_API_BASE;
+    if (preg_match('~^http://(127\.0\.0\.1|localhost)(:\d+)?$~', rtrim((string) ($cfg['api_base'] ?? ''), '/'))) {
+        $base = rtrim((string) $cfg['api_base'], '/');
+    }
     $url = $base . $path . ($params ? '?' . http_build_query($params) : '');
     $dir = dash_tmp_dir('tn_dash_cache');
+    if ($dir !== null && mt_rand(1, 100) === 1) {
+        dash_state_gc($dir, '[0-9a-f]*.json', 86400);
+        dash_state_gc($dir, '[0-9a-f]*.lock', 86400);
+    }
     $key = sha1($url);
     $cacheFile = $dir ? $dir . '/' . $key . '.json' : null;
 
@@ -383,7 +479,7 @@ function dash_db(?array $sendCfg): PDO {
         throw new DashError('Не найден send_config.php — нет доступа к базе заявок.');
     }
     try {
-        if (!empty($sendCfg['db_dsn'])) { // только для проверки на стенде
+        if (strpos((string) ($sendCfg['db_dsn'] ?? ''), 'sqlite:') === 0) { // только для проверки на стенде (SQLite)
             $pdo = new PDO((string) $sendCfg['db_dsn']);
         } else {
             if (empty($sendCfg['db_name']) || empty($sendCfg['db_user'])) {
