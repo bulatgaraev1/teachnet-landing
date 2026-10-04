@@ -13,6 +13,8 @@ import { initCookieBanner } from '../components/cookie-banner';
 import { initAccordion } from '../components/accordion';
 import { initMobileMenu } from '../components/mobile-menu';
 import { initGoalLinks } from '../lib/nav';
+import { initScrollGoals } from '../lib/scroll-goals';
+import { reachGoal } from '../lib/metrika';
 import { initBoard } from './board';
 import type { BoardApi } from './board';
 import { initTechForm } from './form';
@@ -34,14 +36,26 @@ function initAnchors(board: BoardApi | null): void {
   });
 }
 
+/** Цель на раскрытие вопроса: номер и текст вопроса — параметры */
+function initFaqGoals(): void {
+  document.querySelectorAll<HTMLButtonElement>('#faq .acc-trigger').forEach((t, i) => {
+    // слушатель после initAccordion: к этому моменту aria-expanded уже переключён
+    t.addEventListener('click', () => {
+      if (t.getAttribute('aria-expanded') === 'true') reachGoal('tech_faq_open', { n: String(i + 1), q: (t.textContent || '').trim() });
+    });
+  });
+}
+
 function init(): void {
   const board = initBoard();
   initTechForm();
   initAnchors(board);
-  initGoalLinks(); // клик-цели [data-goal]: ссылки подвала (курсы, разработки)
+  initGoalLinks(); // клик-цели [data-goal]: кнопки, меню, ссылки, подвал
+  initScrollGoals(); // скролл-цели [data-scroll-goal]: разделы страницы и подвал
   initHeader();
   initReveal();
   initAccordion();
+  initFaqGoals();
   initMobileMenu();
   initCookieBanner();
 }

@@ -46,7 +46,14 @@ export function initGoalLinks(): void {
   const sendGoal = (e: MouseEvent): void => {
     const el = (e.target as HTMLElement).closest<HTMLElement>('[data-goal]');
     const goal = el?.getAttribute('data-goal');
-    if (goal) reachGoal(goal);
+    if (!el || !goal) return;
+    // параметры цели — из атрибутов data-goal-<имя>="значение" (например, data-goal-place="menu")
+    const params: Record<string, string> = {};
+    for (const [k, v] of Object.entries(el.dataset)) {
+      if (k.startsWith('goal') && k !== 'goal' && v) params[k.charAt(4).toLowerCase() + k.slice(5)] = v;
+    }
+    if (Object.keys(params).length) reachGoal(goal, params);
+    else reachGoal(goal);
   };
   document.addEventListener('click', sendGoal);
   // средний клик (открыть в новой вкладке) не даёт события click

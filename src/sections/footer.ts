@@ -1,10 +1,11 @@
 /** Подвал (§11). Тёмный фон, белый логотип, контакты, реквизиты, юр-ссылки. */
 import { SITE } from '../lib/site';
 
-export function footer(withScrollGoal = false): string {
-  // скролл-цель подвала вешаем только на главной (передаётся из page.ts),
-  // чтобы scroll_footer не срабатывал на дочерних/юридических страницах
-  const scrollAttr = withScrollGoal ? ' data-scroll-goal="scroll_footer"' : '';
+export function footer(withScrollGoal: boolean | string = false): string {
+  // скролл-цель подвала: true — scroll_footer (только главная, передаётся из page.ts),
+  // строка — своя цель страницы (например, scroll_tech_footer на /tech)
+  const scrollGoal = typeof withScrollGoal === 'string' ? withScrollGoal : withScrollGoal ? 'scroll_footer' : '';
+  const scrollAttr = scrollGoal ? ` data-scroll-goal="${scrollGoal}"` : '';
   // Блок поддержки ФСИ временно скрыт по запросу. Чтобы вернуть — заполнить
   // fsiSupport разметкой из комментария ниже.
   const fsiSupport = '';
