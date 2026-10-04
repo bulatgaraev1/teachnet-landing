@@ -52,7 +52,22 @@ function localBusiness(html: string): Record<string, unknown> {
     },
     priceRange: '7000 ₽/месяц',
     areaServed: { '@type': 'City', name: SITE.address.locality },
-    sameAs: [SITE.social.vk, SITE.social.telegram],
+    sameAs: [SITE.social.vk, SITE.social.telegram, SITE.social.max],
+    // филиалы: адрес и карточка в Яндекс Картах у каждого
+    department: SITE.branches.map((b) => ({
+      '@type': 'LocalBusiness',
+      '@id': `${ORIGIN}/#${b.id}`,
+      name: `${SITE.brand}, ${b.street}`,
+      telephone: SITE.phoneDisplay,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: b.street,
+        addressLocality: SITE.address.locality,
+        addressRegion: SITE.address.region,
+        addressCountry: SITE.address.country,
+      },
+      hasMap: `https://yandex.ru/maps/org/${b.orgId}/`,
+    })),
     taxID: SITE.requisites.inn,
   };
 }

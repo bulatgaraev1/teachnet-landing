@@ -11,6 +11,7 @@ import { initReveal } from '../lib/reveal';
 import { captureVisit } from '../lib/visit';
 import { initCookieBanner } from '../components/cookie-banner';
 import { initAccordion } from '../components/accordion';
+import { initFaqGoals } from '../lib/faq-goals';
 import { initMobileMenu } from '../components/mobile-menu';
 import { initForm } from '../components/form';
 import { initAnalytics } from './analytics';
@@ -27,6 +28,7 @@ function init(): void {
   initHeader();
   initReveal();
   initAccordion();
+  initFaqGoals(); // el_faq_open {n, q}
   initMobileMenu();
   // форма записи в окне: своя id, чтобы не зацепить чужую форму
   initForm(document, 'el-lead-form');

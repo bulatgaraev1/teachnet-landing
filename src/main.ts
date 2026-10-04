@@ -9,6 +9,7 @@ import { initNav } from './lib/nav';
 import { initReveal, initRouteLine } from './lib/reveal';
 import { initScrollGoals } from './lib/scroll-goals';
 import { initAccordion } from './components/accordion';
+import { initFaqGoals } from './lib/faq-goals';
 import { initForm } from './components/form';
 import { initStickyBar } from './components/sticky-bar';
 import { initCookieBanner } from './components/cookie-banner';
@@ -27,6 +28,7 @@ function init(): void {
   initRouteLine();
   initScrollGoals();
   initAccordion();
+  initFaqGoals(); // faq_open {n, q} — секции с data-faq-goal
   initForm();
   initStickyBar();
   initCookieBanner();

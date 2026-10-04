@@ -260,7 +260,7 @@ function price(): string {
 }
 
 function faq(): string {
-  return `<section class="section el-sec--white" id="faq" aria-labelledby="el-faq-h" data-scroll-goal="scroll_faq">
+  return `<section class="section el-sec--white" id="faq" aria-labelledby="el-faq-h" data-scroll-goal="scroll_faq" data-faq-goal="el_faq_open">
     <div class="container el-faq-wrap">
       <div class="el-head" data-reveal>
         <h2 class="h2" id="el-faq-h">${EL.faq.h2}</h2>

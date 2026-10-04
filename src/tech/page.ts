@@ -331,7 +331,7 @@ function faq(): string {
       ? { q: it.q, a: `<a class="el-link" href="#board" data-anchor data-open-tab="pins" data-goal="tech_faq_pins">${it.a.replace(/\.$/, '')}</a>.` }
       : { q: it.q, a: it.a },
   );
-  return `<section class="section el-sec--white" id="faq" aria-labelledby="tc-faq-h" data-scroll-goal="scroll_tech_faq">
+  return `<section class="section el-sec--white" id="faq" aria-labelledby="tc-faq-h" data-scroll-goal="scroll_tech_faq" data-faq-goal="tech_faq_open">
     <div class="container el-faq-wrap">
       ${head('tc-faq-h', TECH.faq.eyebrow, TECH.faq.h2)}
       <div data-reveal>${accordion(items)}</div>
