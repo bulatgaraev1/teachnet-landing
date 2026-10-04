@@ -99,6 +99,9 @@ function client_ip(): string {
     return $remote !== '' ? $remote : 'unknown';
 }
 
+/** Домен сайта (без www): заявки со страниц этого домена принимаются всегда. */
+const SITE_HOST = 'teachnet.ru';
+
 /**
  * Заявка пришла со страницы нашего сайта. Браузер на чужой странице (скрытая форма, которая
  * шлёт заявки от имени посетителей) выдаёт себя заголовками Sec-Fetch-Site и Origin.
@@ -113,9 +116,10 @@ function same_origin(): bool {
         return true;
     }
     $bare = static fn (string $h): string => (string) preg_replace('/^www\./', '', strtolower($h));
-    $originHost = (string) parse_url($origin, PHP_URL_HOST);
-    $host = (string) parse_url('http://' . ($_SERVER['HTTP_HOST'] ?? ''), PHP_URL_HOST);
-    return $originHost !== '' && $bare($originHost) === $bare($host);
+    $originHost = $bare((string) parse_url($origin, PHP_URL_HOST));
+    $host = $bare((string) parse_url('http://' . ($_SERVER['HTTP_HOST'] ?? ''), PHP_URL_HOST));
+    // свой домен — всегда; иначе страница и send.php должны быть на одном адресе (стенд, зеркало)
+    return $originHost !== '' && ($originHost === SITE_HOST || $originHost === $host);
 }
 
 /**
