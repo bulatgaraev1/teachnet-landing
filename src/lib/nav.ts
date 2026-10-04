@@ -4,7 +4,7 @@
  * через reachGoal() (каждая кнопка/ссылка — отдельная цель). Уважает
  * prefers-reduced-motion.
  */
-import { reachGoal } from './metrika';
+import { goalParams, reachGoal } from './metrika';
 
 function headerOffset(): number {
   const raw = getComputedStyle(document.documentElement).getPropertyValue('--header-h');
@@ -48,12 +48,7 @@ export function initGoalLinks(): void {
     const goal = el?.getAttribute('data-goal');
     if (!el || !goal) return;
     // параметры цели — из атрибутов data-goal-<имя>="значение" (например, data-goal-place="menu")
-    const params: Record<string, string> = {};
-    for (const [k, v] of Object.entries(el.dataset)) {
-      if (k.startsWith('goal') && k !== 'goal' && v) params[k.charAt(4).toLowerCase() + k.slice(5)] = v;
-    }
-    if (Object.keys(params).length) reachGoal(goal, params);
-    else reachGoal(goal);
+    reachGoal(goal, goalParams(el));
   };
   document.addEventListener('click', sendGoal);
   // средний клик (открыть в новой вкладке) не даёт события click

@@ -3,7 +3,7 @@
  * Все цели идут через track(goal, params): не падает, если Метрика не загрузилась
  * или заблокирована. Полный список целей: docs/analytics-electronics.md.
  */
-import { YM_COUNTER_ID } from '../lib/metrika';
+import { YM_COUNTER_ID, goalParams } from '../lib/metrika';
 
 export type GoalParams = Record<string, string | number>;
 
@@ -127,13 +127,13 @@ export function initAnalytics(): void {
     else if (a.dataset.press) track('press_click', { source: a.dataset.press });
     else if (a.dataset.mapLink) track('map_click', { branch: a.dataset.mapLink });
     else if (a.hasAttribute('data-cross')) track('cross_robotics');
-    else if (a.dataset.goal) track(a.dataset.goal); // общий подвал: footer_electronics, footer_robotics
+    else if (a.dataset.goal) track(a.dataset.goal, goalParams(a)); // меню (el_nav_*, place) и общий подвал (footer_*)
   });
   // средний клик (открыть в новой вкладке) по ссылкам с целью
   document.addEventListener('auxclick', (e) => {
     if (e.button !== 1) return;
     const a = (e.target as Element | null)?.closest?.<HTMLElement>('a[data-goal]');
-    if (a?.dataset.goal) track(a.dataset.goal);
+    if (a?.dataset.goal) track(a.dataset.goal, goalParams(a));
   });
 
   initScrollGoals();

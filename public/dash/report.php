@@ -34,7 +34,7 @@ const GOAL_NAMES = [
     'msg_telegram' => 'Telegram в окне записи (электроника)',
     'msg_max' => 'MAX в окне записи (электроника)',
     'phone_click' => 'Клик по телефону (электроника)',
-    'nav_phone' => 'Телефон в шапке (главная)',
+    'nav_phone' => 'Телефон в шапке и меню (главная)',
     // переходы
     'programs_electronics' => 'Главная → «Подробнее о курсе» электроники',
     'footer_electronics' => 'Подвал → «Электроника»',
@@ -46,6 +46,10 @@ const GOAL_NAMES = [
     'nav_price' => 'Меню: «Цена» (главная)',
     'nav_press' => 'Меню: «О нас пишут» (главная)',
     'nav_faq' => 'Меню: «Вопросы» (главная)',
+    'el_nav_program' => 'Меню: «Программа» (электроника)',
+    'el_nav_price' => 'Меню: «Цена» (электроника)',
+    'el_nav_faq' => 'Меню: «Вопросы» (электроника)',
+    'el_nav_contacts' => 'Меню: «Контакты» (электроника)',
     'map_click' => '«Открыть в Яндекс Картах» (электроника)',
     'modal_close_empty' => 'Окно записи закрыто без выбора (электроника)',
     // публикации
@@ -152,7 +156,7 @@ const DASH_BEHAVIOR = [
         'cta' => ['cta_hero' => 'Первый экран', 'cta_trial' => 'Блок «Пробный урок»', 'cta_price' => 'Блок цены',
             'cta_final' => 'Контакты', 'cta_menu' => 'Мобильное меню'],
         'contact' => ['lead_form' => 'Форма', 'msg_telegram' => 'Telegram', 'msg_max' => 'MAX', 'phone_click' => 'Звонок'],
-        'links' => ['cross_robotics', 'back_click', 'footer_electronics', 'footer_robotics', 'footer_tech', 'press_click', 'map_click', 'modal_close_empty'],
+        'links' => ['el_nav_program', 'el_nav_price', 'el_nav_faq', 'el_nav_contacts', 'cross_robotics', 'back_click', 'footer_electronics', 'footer_robotics', 'footer_tech', 'press_click', 'map_click', 'modal_close_empty'],
     ],
 ];
 

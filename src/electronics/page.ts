@@ -32,7 +32,7 @@ function nbsp(s: string): string {
 }
 
 function header(): string {
-  const nav = EL.nav.map((n) => `<a href="${n.href}" data-anchor>${n.label}</a>`).join('');
+  const nav = EL.nav.map((n) => `<a href="${n.href}" data-anchor data-goal="${n.goal}" data-goal-place="header">${n.label}</a>`).join('');
   return `<header class="site-header el-header" id="top">
     <div class="container site-header__inner el-header__inner">
       <a class="el-back" href="${EL_CONFIG.links.directions}" data-back data-label-history="${EL.back.history}">
@@ -53,7 +53,9 @@ function header(): string {
 
 /** Бургер-меню: та же разметка и поведение, что у меню главной (initMobileMenu) */
 function mobileMenu(): string {
-  const links = EL.nav.map((n) => `<a class="mobile-nav__link" href="${n.href}" data-anchor>${n.label}</a>`).join('');
+  const links = EL.nav
+    .map((n) => `<a class="mobile-nav__link" href="${n.href}" data-anchor data-goal="${n.goal}" data-goal-place="menu">${n.label}</a>`)
+    .join('');
   return `<div class="mobile-nav" id="mobile-nav">
     <div class="mobile-nav__backdrop" data-mm-close></div>
     <aside class="mobile-nav__panel" role="dialog" aria-modal="true" aria-label="${EL.menu.label}" id="mobile-nav-panel">
