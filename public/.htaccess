@@ -39,6 +39,12 @@
     RewriteEngine On
     RewriteBase /
 
+    # www.teachnet.ru → teachnet.ru: один адрес сайта для поисковиков.
+    # .well-known не трогаем — через него продлевается SSL-сертификат.
+    RewriteCond %{HTTP_HOST} ^www\.teachnet\.ru$ [NC]
+    RewriteCond %{REQUEST_URI} !^/\.well-known/
+    RewriteRule ^ https://teachnet.ru%{REQUEST_URI} [R=301,L]
+
     # (#4) Скрытые файлы и папки (.git, .env, .htaccess и т.п.), кроме .well-known
     RewriteRule (^|/)\.(?!well-known/) - [F,L]
 
@@ -49,6 +55,11 @@
     RewriteCond %{DOCUMENT_ROOT}/$1.html -f
     RewriteRule ^(.+?)/?$ /$1.html [L]
 </IfModule>
+
+# Своя лёгкая страница «не найдено» (вместо стандартной страницы хостинга);
+# закрытые файлы (403) показывают её же — не выдаём, что файл существует
+ErrorDocument 404 /404.html
+ErrorDocument 403 /404.html
 
 # Скрытые файлы — ещё и без mod_rewrite (на случай, если он выключен), кроме .well-known
 <IfModule mod_alias.c>
