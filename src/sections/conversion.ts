@@ -1,6 +1,7 @@
 /** Блок 9. Конверсионный (§3 — заголовок по центру, §5 — glass на пятнах). Тексты дословно. */
 import { icon } from '../lib/icons';
 import { leadForm } from '../components/form';
+import { SITE } from '../lib/site';
 
 const POINTS = [
   'Ребёнок соберёт и запустит первого робота уже на этом занятии',
@@ -21,7 +22,12 @@ export function conversion(): string {
         <ul class="ticks" style="text-align:left;max-width:460px;margin:26px auto 0">${ticks}</ul>
       </div>
       <div class="conversion__form" style="max-width:560px;margin:0 auto" data-reveal>
-        ${leadForm()}
+        ${leadForm({
+          // филиал — как в форме /electronics: обязательный выбор из SITE.branches
+          branches: SITE.branches.map((b) => ({ value: b.id, label: b.selectLabel })),
+          branchLabel: 'Филиал',
+          branchError: 'Выберите филиал',
+        })}
       </div>
     </div>
   </section>`;
