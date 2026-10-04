@@ -312,7 +312,6 @@ function order(): string {
       <div class="tc-order__copy" data-reveal>
         <p class="el-eyebrow tc-eyebrow">${o.eyebrow}</p>
         <h2 class="h2" id="tc-order-h">${o.h2}</h2>
-        <p class="lead">${o.text}</p>
         <dl class="tc-info card">${info}</dl>
       </div>
       <div class="tc-order__form" data-reveal>
