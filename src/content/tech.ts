@@ -20,7 +20,7 @@ export const TECH_DOWNLOADS: { label: string; href: string; goal: string }[] = [
 
 export const TECH = {
   meta: {
-    title: 'TEACHNET UNO — учебная плата',
+    title: 'TEACHNET UNO — учебная плата по электронике для школ и кружков',
     description:
       'Учебная плата в форм-факторе UNO R3: защита от ошибок на уроке, USB-C, кнопка, RGB и тестовые точки на плате. Разработано в Казани.',
     imageAlt: 'Учебная плата TEACHNET UNO, вид сверху',
