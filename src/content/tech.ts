@@ -167,7 +167,6 @@ export const TECH = {
   order: {
     eyebrow: 'ЗАЯВКА',
     h2: 'Заказать платы',
-    text: 'Оставьте контакты — сообщим срок и цену первой партии.',
     info: [
       { label: 'Цена за плату', value: `${PRICE} ₽` },
       { label: 'Первая партия', value: TERM },
