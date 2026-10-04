@@ -34,9 +34,15 @@ export function initNav(): void {
     history.pushState(null, '', href);
   });
 
-  // клик-цели: на элементе с data-goal шлём именно его идентификатор (отдельная цель).
-  // Цель уходит синхронно в момент клика, до перехода; переход не блокируем
-  // (preventDefault нет), отправку переживающую уход со страницы делает Метрика (beacon).
+  initGoalLinks();
+}
+
+/**
+ * Клик-цели: на элементе с data-goal шлём именно его идентификатор (отдельная цель).
+ * Цель уходит синхронно в момент клика, до перехода; переход не блокируем
+ * (preventDefault нет), отправку переживающую уход со страницы делает Метрика (beacon).
+ */
+export function initGoalLinks(): void {
   const sendGoal = (e: MouseEvent): void => {
     const el = (e.target as HTMLElement).closest<HTMLElement>('[data-goal]');
     const goal = el?.getAttribute('data-goal');

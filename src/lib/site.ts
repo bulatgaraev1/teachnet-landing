@@ -45,6 +45,10 @@ export const SITE = {
     { label: 'Электроника, 10–15 лет', href: '/electronics', goal: 'footer_electronics' },
     { label: 'Робототехника на LEGO, 5–9 лет', href: '/#programs', goal: 'footer_robotics' },
   ],
+  // Разработки: блок «Разработки TEACHNET» под курсами в подвале. goal — клик-цель Метрики
+  products: [
+    { label: 'Учебная плата TEACHNET UNO', href: '/tech', goal: 'footer_tech' },
+  ],
   // Отдельные статические страницы (см. content/ и *.html в корне проекта)
   legal: {
     consent: '/personal-data-consent', // Согласие на обработку персональных данных

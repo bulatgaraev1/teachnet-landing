@@ -12,6 +12,7 @@ import { initReveal } from '../lib/reveal';
 import { initCookieBanner } from '../components/cookie-banner';
 import { initAccordion } from '../components/accordion';
 import { initMobileMenu } from '../components/mobile-menu';
+import { initGoalLinks } from '../lib/nav';
 import { initBoard } from './board';
 import type { BoardApi } from './board';
 import { initTechForm } from './form';
@@ -37,6 +38,7 @@ function init(): void {
   const board = initBoard();
   initTechForm();
   initAnchors(board);
+  initGoalLinks(); // клик-цели [data-goal]: ссылки подвала (курсы, разработки)
   initHeader();
   initReveal();
   initAccordion();

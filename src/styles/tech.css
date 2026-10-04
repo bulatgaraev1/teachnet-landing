@@ -17,7 +17,9 @@
   --tc-no: #b42318;
 }
 
-/* ---------- шапка ---------- */
+/* ---------- шапка: логотип TEACHNET ROBOTICS ---------- */
+.tc-logo { height: 40px; width: auto; }
+@media (min-width: 768px) { .tc-header .tc-logo { height: 44px; } }
 .tc-header__cta { display: none; }
 @media (min-width: 560px) { .tc-header__cta { display: inline-flex; } }
 @media (min-width: 1040px) { .tc-header .burger { display: none; } }
@@ -60,27 +62,6 @@
   box-shadow: var(--shadow);
 }
 .tc-hero__img { display: block; width: 100%; height: auto; }
-
-/* ---------- 2. полоса статуса ---------- */
-.tc-status-wrap { padding-bottom: 8px; }
-.tc-status {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 14px;
-  margin: 0;
-  padding: 16px 20px;
-  border-radius: 16px;
-  background: var(--footer-bg);
-  color: #fff;
-  font-size: 16px;
-  line-height: 1.45;
-}
-.tc-status__dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--brand-soft); }
-.tc-status > span:nth-child(2) { flex: 1 1 260px; }
-.tc-status__link { color: #fff; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-.tc-status__link:hover { text-decoration-thickness: 2px; }
-.tc-status__link:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 4px; }
 
 /* ---------- заголовки разделов ---------- */
 .tc-head .el-eyebrow { margin-bottom: 10px; }
@@ -321,8 +302,14 @@
 .tc-tcard__title { margin: 0 0 8px; font-family: var(--font-head); font-weight: 700; font-size: 20px; line-height: 1.25; }
 .tc-tcard__text { margin: 0; font-size: 16px; line-height: 1.5; color: rgba(255, 255, 255, 0.88); }
 .tc-downloads { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-.tc-download { background: #fff; color: var(--brand); }
+.tc-download { gap: 10px; background: #fff; color: var(--brand); }
 .tc-download:hover { background: #e8eff8; }
+.tc-download__icon { width: 20px; height: 20px; flex: none; }
+@media (max-width: 599px) {
+  .tc-download { width: 100%; height: auto; min-height: 52px; padding-block: 12px; justify-content: space-between; white-space: normal; text-align: left; }
+}
+.tc-download:disabled { opacity: 0.78; cursor: not-allowed; transform: none; }
+.tc-download:disabled:hover { background: #fff; }
 
 /* ---------- 7. заявка ---------- */
 .tc-order-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: start; }
@@ -369,8 +356,3 @@
 .tc-done[hidden] { display: none; }
 .tc-done p { margin: 0; }
 .tc-done .btn { margin-top: 8px; }
-
-/* ---------- подвал: строки страницы ---------- */
-.footer-extra { margin-top: 28px; font-size: 13px; line-height: 1.5; }
-.footer-extra p { margin: 0; }
-.footer-extra p + p { margin-top: 4px; }

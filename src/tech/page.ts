@@ -14,6 +14,8 @@ import { accordion } from '../components/accordion';
 import { elIcon } from '../electronics/icons';
 
 export const BOARD_IMG = '/images/tech/teachnet-uno-top.webp';
+/** логотип TEACHNET ROBOTICS — в шапке и меню этой страницы */
+const LOGO = '<img class="site-header__logo tc-logo" src="/images/logo-robotics.svg" width="122" height="44" alt="TEACHNET ROBOTICS" />';
 export const BOARD_IMG_800 = '/images/tech/teachnet-uno-top-800.webp';
 const IMG_W = 1600;
 const IMG_H = 1199;
@@ -39,7 +41,7 @@ function header(): string {
   return `<header class="site-header el-header tc-header" id="top">
     <div class="container site-header__inner el-header__inner">
       <a href="/" class="site-header__brand el-header__brand" aria-label="${SITE.brand}, на главную">
-        <img class="site-header__logo" src="/images/logo-dark.svg" width="121" height="38" alt="${SITE.brand}" />
+        ${LOGO}
       </a>
       <nav class="site-nav el-nav" aria-label="Разделы страницы">${nav}</nav>
       <div class="site-header__right">
@@ -57,7 +59,7 @@ function mobileMenu(): string {
     <div class="mobile-nav__backdrop" data-mm-close></div>
     <aside class="mobile-nav__panel" role="dialog" aria-modal="true" aria-label="${TECH.menu.label}" id="mobile-nav-panel">
       <div class="mobile-nav__head">
-        <img class="mobile-nav__logo" src="/images/logo-dark.svg" width="121" height="38" alt="${SITE.brand}" />
+        <img class="mobile-nav__logo tc-logo" src="/images/logo-robotics.svg" width="122" height="44" alt="TEACHNET ROBOTICS" />
         <button class="mobile-nav__close" type="button" aria-label="${TECH.menu.close}" data-mm-close>${elIcon('x')}</button>
       </div>
       <nav class="mobile-nav__links" aria-label="Разделы страницы">${links}</nav>
@@ -91,15 +93,6 @@ function hero(): string {
       </div>
     </div>
   </section>`;
-}
-
-function status(): string {
-  return `<div class="tc-status-wrap el-sec--white">
-    <div class="container">
-      <p class="tc-status"><span class="tc-status__dot" aria-hidden="true"></span><span><b>${TECH.status.strong}</b> ${TECH.status.text}</span>
-        <a class="tc-status__link" href="#order" data-anchor>${TECH.status.link}</a></p>
-    </div>
-  </div>`;
 }
 
 function head(id: string, eyebrow: string, h2: string, sub = ''): string {
@@ -256,11 +249,13 @@ function teachers(): string {
   const cards = t.cards
     .map((c) => `<li class="tc-tcard"><span class="tc-tcard__num">${c.num}.</span><p class="tc-tcard__title">${c.title}</p><p class="tc-tcard__text">${c.text}</p></li>`)
     .join('');
-  // кнопки PDF появятся, когда в TECH_DOWNLOADS будут заполнены href (без ссылок-заглушек)
-  const files = TECH_DOWNLOADS.filter((d) => d.href);
-  const downloads = files.length
-    ? `<div class="tc-downloads">${files.map((d) => `<a class="btn tc-download" href="${d.href}" download>${d.label}</a>`).join('')}</div>`
-    : '';
+  // кнопки PDF: с файлом — ссылка на скачивание, пока файла нет — неактивная кнопка (без ссылок-заглушек)
+  const dl = '<svg class="tc-download__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0l-4-4m4 4l4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const downloads = `<div class="tc-downloads">${TECH_DOWNLOADS.map((d) =>
+    d.href
+      ? `<a class="btn tc-download" href="${d.href}" download>${d.label}${dl}</a>`
+      : `<button class="btn tc-download" type="button" disabled title="Файл появится позже">${d.label}${dl}</button>`,
+  ).join('')}</div>`;
   return `<section class="section el-sec--white" id="teachers" aria-labelledby="tc-teachers-h">
     <div class="container">
       <div class="tc-teachers" data-reveal>
@@ -349,7 +344,6 @@ export function renderTechPage(): string {
     mobileMenu(),
     '<main id="main" class="el-main tc-main">',
     hero(),
-    status(),
     board(),
     compare(),
     specs(),
@@ -357,7 +351,7 @@ export function renderTechPage(): string {
     order(),
     faq(),
     '</main>',
-    footer(false, TECH.footerLines),
+    footer(),
     cookieBanner(),
   ].join('\n');
 }
