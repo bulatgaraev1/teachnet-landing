@@ -1,11 +1,7 @@
 /** Подвал (§11). Тёмный фон, белый логотип, контакты, реквизиты, юр-ссылки. */
 import { SITE } from '../lib/site';
 
-/**
- * @param withScrollGoal скролл-цель подвала (только главная)
- * @param extraLines строки внизу подвала для отдельной страницы (например, атрибуция на /tech)
- */
-export function footer(withScrollGoal = false, extraLines: readonly string[] = []): string {
+export function footer(withScrollGoal = false): string {
   // скролл-цель подвала вешаем только на главной (передаётся из page.ts),
   // чтобы scroll_footer не срабатывал на дочерних/юридических страницах
   const scrollAttr = withScrollGoal ? ' data-scroll-goal="scroll_footer"' : '';
@@ -19,7 +15,8 @@ export function footer(withScrollGoal = false, extraLines: readonly string[] = [
         <p class="footer-support__text">Проект создан при поддержке Федерального государственного бюджетного учреждения «Фонд содействия развитию малых форм предприятий в научно-технической сфере» в рамках программы «Студенческий стартап» федерального проекта «Платформа университетского технологического предпринимательства».</p>
       </div>`;
   */
-  // колонка «Курсы» строится из SITE.courses; клик-цели через [data-goal] (lib/nav.ts,
+  // колонка «Курсы» (и под ней «Разработки TEACHNET») строится из SITE.courses / SITE.products;
+  // клик-цели через [data-goal] (lib/nav.ts,
   // на /electronics — src/electronics/analytics.ts)
   const courses = SITE.courses
     // возраст «5–9 лет» не разрывается при переносе (ни после тире, ни перед «лет»)
@@ -27,6 +24,10 @@ export function footer(withScrollGoal = false, extraLines: readonly string[] = [
       const label = c.label.replace(/(\d+–\d+ лет)/, '<span style="white-space:nowrap">$1</span>');
       return `<p style="line-height:2"><a href="${c.href}" data-goal="${c.goal}">${label}</a></p>`;
     })
+    .join('\n          ');
+  // «Разработки TEACHNET» под курсами: SITE.products, цели — так же через [data-goal]
+  const products = SITE.products
+    .map((p) => `<p style="line-height:2"><a href="${p.href}" data-goal="${p.goal}">${p.label}</a></p>`)
     .join('\n          ');
   return `<footer class="site-footer"${scrollAttr}>
     <div class="container">
@@ -50,6 +51,8 @@ export function footer(withScrollGoal = false, extraLines: readonly string[] = [
         <div>
           <p class="footer-col__title">Курсы</p>
           ${courses}
+          <p class="footer-col__title footer-col__title--next">Разработки TEACHNET</p>
+          ${products}
         </div>
 
         <div>
@@ -64,8 +67,7 @@ export function footer(withScrollGoal = false, extraLines: readonly string[] = [
       </div>
 
       ${fsiSupport}
-${extraLines.length ? `      <div class="footer-extra">${extraLines.map((l) => `<p class="footer-soft">${l}</p>`).join('')}</div>
-` : ''}
+
       <div class="footer-bottom">
         <img class="footer-itpark" src="/images/logo-itpark.svg" width="90" height="50" loading="lazy" decoding="async" alt="IT-парк" />
         <div class="footer-bottom__links">

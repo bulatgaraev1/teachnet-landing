@@ -678,6 +678,7 @@
   letter-spacing: 0.02em;
   margin-bottom: 14px;
 }
+.footer-col__title--next { margin-top: 28px; }
 .footer-social { display: flex; gap: 12px; margin-top: 18px; }
 /* Иконки соцсетей — оригинальные логотипы VK / Telegram / MAX. У каждого своя
    фирменная заливка и скруглённые углы, поэтому сам PNG выступает плиткой:

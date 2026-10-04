@@ -39,6 +39,7 @@ const GOAL_NAMES = [
     'programs_electronics' => 'Главная → «Подробнее о курсе» электроники',
     'footer_electronics' => 'Подвал → «Электроника»',
     'footer_robotics' => 'Подвал → «Робототехника на LEGO»',
+    'footer_tech' => 'Подвал → «Учебная плата TEACHNET UNO»',
     'cross_robotics' => 'Электроника → «Смотрите робототехнику»',
     'back_click' => 'Кнопка «Назад» (электроника)',
     'nav_programs' => 'Меню: «Программы» (главная)',
@@ -109,7 +110,7 @@ const DASH_BEHAVIOR = [
         'cta' => ['hero_cta' => 'Первый экран', 'nav_cta' => 'Шапка', 'burger_cta' => 'Мобильное меню',
             'sticky_cta' => 'Плавающая кнопка', 'block4_signup' => 'Под программами', 'block12_cta' => 'Финальный блок'],
         'contact' => ['lead_form' => 'Форма', 'nav_phone' => 'Звонок'],
-        'links' => ['programs_electronics', 'footer_electronics', 'footer_robotics', 'nav_programs', 'nav_price', 'nav_press', 'nav_faq',
+        'links' => ['programs_electronics', 'footer_electronics', 'footer_robotics', 'footer_tech', 'nav_programs', 'nav_price', 'nav_press', 'nav_faq',
             'press_click_minmol', 'press_click_monrt', 'press_click_kai', 'press_click_tatarinform'],
     ],
     'electronics' => [
@@ -119,7 +120,7 @@ const DASH_BEHAVIOR = [
         'cta' => ['cta_hero' => 'Первый экран', 'cta_trial' => 'Блок «Пробный урок»', 'cta_price' => 'Блок цены',
             'cta_final' => 'Контакты', 'cta_menu' => 'Мобильное меню'],
         'contact' => ['lead_form' => 'Форма', 'msg_telegram' => 'Telegram', 'msg_max' => 'MAX', 'phone_click' => 'Звонок'],
-        'links' => ['cross_robotics', 'back_click', 'footer_electronics', 'footer_robotics', 'press_click', 'map_click', 'modal_close_empty'],
+        'links' => ['cross_robotics', 'back_click', 'footer_electronics', 'footer_robotics', 'footer_tech', 'press_click', 'map_click', 'modal_close_empty'],
     ],
 ];
 
