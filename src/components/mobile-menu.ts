@@ -13,12 +13,9 @@ import { icon } from '../lib/icons';
 import { SITE } from '../lib/site';
 
 export function mobileMenu(): string {
+  // пункты и телефон шлют те же цели, что в шапке (nav_*), с place=menu
   const links = SITE.nav
-    .map((n) => {
-      // «О нас пишут» из бургера шлёт ту же цель nav_press, что и из хедера
-      const g = n.href === '#press' ? ' data-goal="nav_press"' : '';
-      return `<a class="mobile-nav__link" href="${n.href}"${g}>${n.label}</a>`;
-    })
+    .map((n) => `<a class="mobile-nav__link" href="${n.href}" data-goal="${n.goal}" data-goal-place="menu">${n.label}</a>`)
     .join('');
 
   return `<div class="mobile-nav" id="mobile-nav">
@@ -30,7 +27,7 @@ export function mobileMenu(): string {
       </div>
       <nav class="mobile-nav__links" aria-label="Разделы сайта">${links}</nav>
       <div class="mobile-nav__foot">
-        <a class="mobile-nav__phone" href="${SITE.phoneHref}">${SITE.phoneDisplay}</a>
+        <a class="mobile-nav__phone" href="${SITE.phoneHref}" data-goal="nav_phone" data-goal-place="menu">${SITE.phoneDisplay}</a>
         ${cta({ label: 'Бесплатный пробный урок', block: true, goal: 'burger_cta' })}
       </div>
     </aside>

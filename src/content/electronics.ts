@@ -235,11 +235,12 @@ export const EL = {
   },
 
   /** Навигация в шапке страницы */
+  // goal — клик-цель Метрики (шапка и бургер-меню, место — параметр place)
   nav: [
-    { label: 'Программа', href: '#program' },
-    { label: 'Цена', href: '#price' },
-    { label: 'Вопросы', href: '#faq' },
-    { label: 'Контакты', href: '#contacts' },
+    { label: 'Программа', href: '#program', goal: 'el_nav_program' },
+    { label: 'Цена', href: '#price', goal: 'el_nav_price' },
+    { label: 'Вопросы', href: '#faq', goal: 'el_nav_faq' },
+    { label: 'Контакты', href: '#contacts', goal: 'el_nav_contacts' },
   ],
 
   /** Фото: подпись для плейсхолдера (что должно быть в кадре) и alt готового фото */

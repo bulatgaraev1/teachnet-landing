@@ -23,6 +23,16 @@ export function reachGoal(goal: string, params?: Record<string, string>): void {
   }
 }
 
+/** Параметры клик-цели из атрибутов data-goal-<имя>="значение"
+ *  (data-goal-place="menu" → { place: "menu" }); нет атрибутов — undefined */
+export function goalParams(el: HTMLElement): Record<string, string> | undefined {
+  const params: Record<string, string> = {};
+  for (const [k, v] of Object.entries(el.dataset)) {
+    if (k.startsWith('goal') && k !== 'goal' && v) params[k.charAt(4).toLowerCase() + k.slice(5)] = v;
+  }
+  return Object.keys(params).length ? params : undefined;
+}
+
 /**
  * ClientID Яндекс.Метрики через её API — надёжнее, чем парсить куку _ym_uid.
  * Если счётчик не подключён / номер не задан — колбэк просто не вызывается.

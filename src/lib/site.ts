@@ -34,11 +34,12 @@ export const SITE = {
   phoneHref: 'tel:+79934151434',
   email: 'hello@teachnet.ru',
   emailHref: 'mailto:hello@teachnet.ru',
+  // goal — клик-цель Метрики; одна и та же в шапке и в бургер-меню, место — параметр place
   nav: [
-    { label: 'Программы', href: '#programs' },
-    { label: 'Цена', href: '#price' },
-    { label: 'О нас пишут', href: '#press' },
-    { label: 'Вопросы', href: '#faq' },
+    { label: 'Программы', href: '#programs', goal: 'nav_programs' },
+    { label: 'Цена', href: '#price', goal: 'nav_price' },
+    { label: 'О нас пишут', href: '#press', goal: 'nav_press' },
+    { label: 'Вопросы', href: '#faq', goal: 'nav_faq' },
   ],
   // Курсы: колонка «Курсы» в подвале (новый курс — одна строка). goal — клик-цель Метрики
   courses: [
