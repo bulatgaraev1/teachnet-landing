@@ -6,9 +6,13 @@
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    # браузер, раз открыв сайт по https, дальше ходит только по https (по http заголовок игнорируется)
+    Header always set Strict-Transport-Security "max-age=31536000"
+    Header always set Permissions-Policy "camera=(), microphone=(), payment=(), usb=()"
     # Мягкий CSP: self + инлайн-скрипты/стили + домены Яндекс.Метрики (счётчик/Вебвизор).
+    # frame-ancestors: во фрейм сайт встраивает только он сам и Метрика (карты кликов, Вебвизор).
     # Если что-то из Метрики перестанет работать — ослабьте или закомментируйте строку.
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru https://mc.yandex.com https://yastatic.net https://*.yandex.ru; connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yastatic.net https://*.yandex.ru wss://mc.yandex.ru wss://*.yandex.ru; img-src 'self' data: https://mc.yandex.ru https://mc.yandex.com https://yastatic.net https://*.yandex.ru; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src 'self' https://mc.yandex.ru https://mc.yandex.com https://*.yandex.ru https://yandex.ru; base-uri 'self'; form-action 'self'"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru https://mc.yandex.com https://yastatic.net https://*.yandex.ru; connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yastatic.net https://*.yandex.ru wss://mc.yandex.ru wss://*.yandex.ru; img-src 'self' data: https://mc.yandex.ru https://mc.yandex.com https://yastatic.net https://*.yandex.ru; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src 'self' https://mc.yandex.ru https://mc.yandex.com https://*.yandex.ru https://yandex.ru; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'self' https://metrika.yandex.ru https://metrika.yandex.by https://metrica.yandex.com https://webvisor.com https://*.webvisor.com; upgrade-insecure-requests"
 </IfModule>
 
 # ── Сжатие и кэш браузера (скорость повторных заходов) ──
@@ -46,8 +50,13 @@
     RewriteRule ^(.+?)/?$ /$1.html [L]
 </IfModule>
 
-# Конфиг с секретами (на всякий случай, если окажется в веб-корне) и прочие
-# чувствительные расширения — закрыты по HTTP.
-<FilesMatch "(^send_config\.php$|\.(env|ini|sh|sql|bak|old|log|lock|dist)$)">
+# Скрытые файлы — ещё и без mod_rewrite (на случай, если он выключен), кроме .well-known
+<IfModule mod_alias.c>
+    RedirectMatch 404 "(^|/)\.(?!well-known/)"
+</IfModule>
+
+# Конфиги с секретами (на всякий случай, если окажутся в веб-корне), резервные копии,
+# архивы и прочие служебные файлы — закрыты по HTTP.
+<FilesMatch "(^(send|dash)_config\.php$|~$|\.(env|ini|sh|sql|bak|old|orig|swp|log|lock|dist|zip|tar|gz|tgz|7z|rar)$)">
     Require all denied
 </FilesMatch>

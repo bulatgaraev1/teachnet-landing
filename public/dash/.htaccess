@@ -4,6 +4,8 @@ Options -Indexes
 
 <IfModule mod_headers.c>
     Header always set X-Robots-Tag "noindex, nofollow"
+    # строже корневого: только свои скрипты и запросы, без встраивания в чужие страницы
+    Header always set Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'"
 </IfModule>
 
 # lib.php, report.php, crm.php — только для подключения из index.php / api.php, по HTTP закрыты

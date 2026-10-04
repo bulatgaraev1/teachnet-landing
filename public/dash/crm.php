@@ -22,6 +22,12 @@ function crm_str(array $in, string $key, int $max, bool $multiline = false): str
     return mb_strlen($v) > $max ? mb_substr($v, 0, $max) : $v;
 }
 
+/** Номер записи из запроса: целое число больше нуля, иначе 0 (запись не найдётся). */
+function crm_id(array $in): int {
+    $v = $in['id'] ?? '';
+    return is_string($v) ? (int) filter_var($v, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'default' => 0]]) : 0;
+}
+
 /** Дата-время из поля datetime-local («2026-10-05T17:00») или пусто. */
 function crm_datetime(string $v): ?string {
     if ($v === '') {
@@ -47,7 +53,7 @@ function crm_need(array $schema, string $what): void {
 
 /** Полный номер телефона заявки (по клику на маску). */
 function crm_phone(PDO $pdo, array $in): array {
-    $id = (int) ($in['id'] ?? 0);
+    $id = crm_id($in);
     $st = $pdo->prepare('SELECT phone FROM leads WHERE id = ?');
     $st->execute([$id]);
     $phone = $st->fetchColumn();
@@ -67,7 +73,7 @@ function crm_phone(PDO $pdo, array $in): array {
  */
 function crm_lead_update(PDO $pdo, array $schema, array $in): array {
     crm_need($schema, 'status');
-    $id = (int) ($in['id'] ?? 0);
+    $id = crm_id($in);
     $st = $pdo->prepare('SELECT * FROM leads WHERE id = ?');
     $st->execute([$id]);
     $lead = $st->fetch();
@@ -239,13 +245,13 @@ function crm_spend_update(PDO $pdo, array $schema, array $in): array {
     crm_need($schema, 'spend');
     [$month, $channel, $amount, $comment] = crm_spend_fields($in);
     $st = $pdo->prepare('UPDATE ad_spend SET month = ?, channel = ?, amount = ?, comment = ? WHERE id = ?');
-    $st->execute([$month, $channel, $amount, $comment !== '' ? $comment : null, (int) ($in['id'] ?? 0)]);
+    $st->execute([$month, $channel, $amount, $comment !== '' ? $comment : null, crm_id($in)]);
     return ['ok' => true, 'message' => 'Расход сохранён'];
 }
 
 function crm_spend_delete(PDO $pdo, array $schema, array $in): array {
     crm_need($schema, 'spend');
     $st = $pdo->prepare('DELETE FROM ad_spend WHERE id = ?');
-    $st->execute([(int) ($in['id'] ?? 0)]);
+    $st->execute([crm_id($in)]);
     return ['ok' => true, 'message' => 'Расход удалён'];
 }
