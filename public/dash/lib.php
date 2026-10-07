@@ -551,6 +551,7 @@ const DASH_SOURCES = [
     'website'           => 'Главная',
     'electronics'       => 'Электроника',
     'child-masterclass' => 'Мастер-класс',
+    'links'             => 'Визитка /links',
 ];
 
 const DASH_BRANCHES = [
