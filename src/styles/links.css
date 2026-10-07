@@ -1,0 +1,223 @@
+/* ============================================================
+   Страница-визитка /links (ссылка из профиля соцсетей).
+   Одна колонка до 480 px по центру, кнопки во всю ширину, высота от 56 px,
+   между кнопками 12 px. Цвета, шрифты, скругления — токены сайта (tokens.css).
+   Селекторы с префиксом .ln- — на другие страницы не влияют.
+   ============================================================ */
+.ln-page {
+  background:
+    radial-gradient(120% 420px at 50% 0, color-mix(in srgb, var(--brand-soft) 30%, transparent), transparent),
+    var(--bg);
+}
+.ln {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 28px 16px 24px;
+}
+@media (min-width: 560px) { .ln { padding-top: 48px; } }
+
+/* ---------- шапка ---------- */
+.ln-head { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.ln-logo { margin: 4px 0 0; line-height: 0; }
+.ln-logo img { width: 240px; height: auto; }
+.ln-tagline {
+  margin-top: 18px;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--text);
+  text-wrap: balance;
+}
+.ln-meta { margin-top: 4px; font-size: 15px; color: var(--text-soft); }
+
+/* ---------- оффер ---------- */
+.ln-offer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: center;
+  margin: 6px 0 2px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand) 11%, #fff);
+  color: var(--brand);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.2;
+}
+.ln-offer__icon { width: 18px; height: 18px; stroke-width: 2.25; }
+
+/* ---------- главная кнопка: сильнее всех остальных ---------- */
+.btn.ln-primary {
+  width: 100%;
+  height: auto;
+  min-height: 64px;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: normal;
+  text-wrap: balance;
+  box-shadow: 0 12px 28px rgba(16, 85, 203, 0.32);
+}
+
+/* ---------- кнопки связи (вторичный стиль) ---------- */
+.ln-actions,
+.ln-list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.ln-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 10px 16px;
+  border: 1px solid var(--field-border);
+  border-radius: var(--r-btn);
+  background: #fff;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 1.2;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.ln-btn:hover { background: #eef3fa; border-color: var(--brand-soft); }
+.ln-btn__logo { flex: none; width: 32px; height: 32px; border-radius: 9px; }
+.ln-btn__logo--phone { display: inline-flex; align-items: center; justify-content: center; background: var(--brand); color: #fff; }
+.ln-btn__logo--phone .icon { width: 18px; height: 18px; }
+.ln-btn__label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ln-btn__sub { font-size: 14px; font-weight: 400; color: var(--text-soft); }
+
+/* ---------- блоки ниже кнопок ---------- */
+.ln-rest {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--field-border);
+}
+.ln-h2 {
+  margin-bottom: 12px;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+/* курсы */
+.ln-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 12px 16px;
+  border: 1px solid var(--field-border);
+  border-radius: var(--r-btn);
+  background: #fff;
+  color: var(--text);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.ln-card:hover { background: #eef3fa; border-color: var(--brand-soft); }
+.ln-card__body { display: flex; flex: 1; flex-direction: column; gap: 3px; min-width: 0; }
+.ln-card__title { font-weight: 500; font-size: 17px; line-height: 1.25; }
+.ln-card__age { font-size: 14px; font-weight: 500; color: var(--brand); }
+.ln-card__arrow { width: 20px; height: 20px; color: var(--text-soft); }
+
+/* адреса */
+.ln-branch {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--field-border);
+  border-radius: 18px;
+  background: #fff;
+}
+.ln-branch__addr { display: flex; gap: 10px; padding-inline: 2px; font-weight: 500; font-size: 16px; line-height: 1.35; }
+.ln-branch__pin { width: 20px; height: 20px; margin-top: 1px; color: var(--brand); }
+.ln-branch__note { display: block; margin-top: 2px; font-weight: 400; font-size: 14px; color: var(--text-soft); }
+.ln-route {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  border-radius: var(--r-btn);
+  background: color-mix(in srgb, var(--brand) 9%, #fff);
+  color: var(--action);
+  font-weight: 500;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+.ln-route:hover { background: color-mix(in srgb, var(--brand) 15%, #fff); }
+
+/* публикации */
+.ln-press { font-size: 14px; line-height: 1.7; color: var(--text-soft); }
+.ln-press a { color: var(--brand); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--brand) 35%, transparent); text-underline-offset: 3px; }
+
+/* подвал */
+.ln-foot { display: flex; flex-direction: column; gap: 14px; text-align: center; }
+.ln-site {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 10px 16px;
+  border: 1.5px solid color-mix(in srgb, var(--brand) 45%, transparent);
+  border-radius: var(--r-btn);
+  color: var(--brand);
+  font-weight: 500;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+.ln-site:hover { background: color-mix(in srgb, var(--brand) 8%, #fff); }
+.ln-site__icon { width: 18px; height: 18px; }
+.ln-legal { font-size: 13px; line-height: 1.6; color: var(--text-soft); }
+.ln-legal a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.ln-req { font-size: 12px; line-height: 1.5; color: var(--text-soft); }
+
+/* фокус с клавиатуры */
+.ln-primary:focus-visible,
+.ln-btn:focus-visible,
+.ln-card:focus-visible,
+.ln-route:focus-visible,
+.ln-site:focus-visible { outline: 3px solid color-mix(in srgb, var(--action) 55%, transparent); outline-offset: 2px; }
+
+/* мягкое появление блоков ниже кнопок; шапка и кнопки связи видны сразу */
+@media (prefers-reduced-motion: no-preference) {
+  .ln-rest > * { animation: ln-in 0.45s ease-out both; }
+}
+@keyframes ln-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- окно записи: стили .el-modal с /electronics ---------- */
+.ln-modal .el-modal__box { outline: none; }
+.ln-modal .form-grid { gap: 12px; }
+.ln-modal .btn--block { height: 56px; }
+
+/* cookie-плашка на визитке: компактная, в одну строку с кнопкой — не закрывает кнопки связи */
+.ln-page .cookie {
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px 10px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.94);
+}
+.ln-page .cookie__text { font-size: 12.5px; line-height: 1.4; }
+.ln-page .cookie__row { flex: none; }
+.ln-page .cookie .btn--compact { height: 40px; padding-inline: 16px; }
+@media (min-width: 720px) {
+  .ln-page .cookie { left: 24px; right: auto; bottom: 24px; max-width: 420px; }
+}

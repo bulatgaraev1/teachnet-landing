@@ -400,7 +400,7 @@ $digits  = preg_replace('/\D/', '', post('phone'));
 $age     = clean(post('age'), 16);
 $consent = trim(post('consent'));
 // источник заявки: только из белого списка, иначе — обычная заявка с сайта
-$source  = in_array(post('source'), ['child-masterclass', 'electronics'], true) ? post('source') : 'website';
+$source  = in_array(post('source'), ['child-masterclass', 'electronics', 'links'], true) ? post('source') : 'website';
 
 // филиал: только из белого списка (id из SITE.branches), иначе пусто
 $BRANCHES = [
@@ -518,7 +518,9 @@ $heading = $source === 'child-masterclass'
     ? 'Новая заявка — бесплатный мастер-класс (Твой Ход)'
     : ($source === 'electronics'
         ? 'Новая заявка — курс электроники (пробный урок)'
-        : 'Новая заявка с лендинга TEACHNET');
+        : ($source === 'links'
+            ? 'Новая заявка — визитка /links (из соцсетей)'
+            : 'Новая заявка с лендинга TEACHNET'));
 $text =
     $heading . "\n\n" .
     "Имя: " . $name . "\n" .

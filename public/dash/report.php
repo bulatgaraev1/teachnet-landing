@@ -1188,14 +1188,15 @@ final class DashReport {
         $rows = $this->byDim(['ym:s:startURLPath'], array_merge(['ym:s:visits', 'ym:s:bounceRate'], $reachM, $ctaM, [$leadM]),
             $this->from, $this->to, '', 500);
         $groups = [];
-        foreach (['main' => 'Главная', 'electronics' => 'Электроника', 'child' => 'Мастер-классы', 'other' => 'Другие'] as $k => $label) {
+        foreach (['main' => 'Главная', 'electronics' => 'Электроника', 'child' => 'Мастер-классы', 'links' => 'Визитка /links', 'other' => 'Другие'] as $k => $label) {
             $groups[$k] = ['key' => $k, 'label' => $label, 'visits' => 0.0, 'bounce_w' => 0.0, 'reach' => 0.0, 'cta' => 0.0, 'leads' => 0.0];
         }
         foreach ($rows as $r) {
             $path = strtolower(rtrim(strtok($r['dims'][0]['name'] ?? '', '?') ?: '/', '/')) ?: '/';
             $k = in_array($path, ['/', '/index.html'], true) ? 'main'
                 : (in_array($path, ['/electronics', '/electronics.html'], true) ? 'electronics'
-                : (in_array($path, ['/child', '/child.html'], true) ? 'child' : 'other'));
+                : (in_array($path, ['/child', '/child.html'], true) ? 'child'
+                : (in_array($path, ['/links', '/links.html'], true) ? 'links' : 'other')));
             $v = $r['m']['ym:s:visits'] ?? 0;
             $groups[$k]['visits'] += $v;
             $groups[$k]['bounce_w'] += $v * ($r['m']['ym:s:bounceRate'] ?? 0);

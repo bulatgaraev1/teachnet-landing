@@ -27,6 +27,9 @@ export interface LeadFormOptions {
   branchError?: string;
   /** строка под кнопкой */
   footText?: string;
+  /** экран после отправки: заголовок и текст (по умолчанию «Спасибо, перезвоним») */
+  successTitle?: string;
+  successText?: string;
 }
 
 export function leadForm(opts: LeadFormOptions = {}): string {
@@ -41,6 +44,8 @@ export function leadForm(opts: LeadFormOptions = {}): string {
     branchLabel = 'Филиал',
     branchError = 'Выберите филиал',
     footText = 'Перезвоним в течение 15 минут в рабочее время. Только чтобы согласовать время.',
+    successTitle = 'Спасибо, перезвоним',
+    successText = 'Заявка принята. Свяжемся с вами, чтобы согласовать удобное время бесплатного урока.',
   } = opts;
 
   const branchField = branches.length
@@ -100,8 +105,8 @@ ${ageOptions.map((o) => `          <option value="${o}">${o}</option>`).join('\n
     <p class="form-foot micro">${footText}</p>
     <div class="form-success" role="status" aria-live="polite">
       <span class="form-success__check">${icon('check')}</span>
-      <h3 class="h3">Спасибо, перезвоним</h3>
-      <p class="muted">Заявка принята. Свяжемся с вами, чтобы согласовать удобное время бесплатного урока.</p>
+      <h3 class="h3">${successTitle}</h3>
+      <p class="muted">${successText}</p>
     </div>
   </form>`;
 }
@@ -197,7 +202,8 @@ function setError(input: Element, on: boolean): void {
   }
 }
 
-export function initForm(root: ParentNode = document, id = 'lead-form'): void {
+/** goalExtra: дополнительные параметры цели lead_form (например, { source: 'links' }) */
+export function initForm(root: ParentNode = document, id = 'lead-form', goalExtra?: Record<string, string>): void {
   const form = root.querySelector<HTMLFormElement>(`#${id}`);
   if (!form) return;
 
@@ -269,8 +275,11 @@ export function initForm(root: ParentNode = document, id = 'lead-form'): void {
 
   function showSuccess(fireGoal = true): void {
     form!.classList.add('is-sent');
-    // цель Метрики (96429194) — только для реальной заявки; с полем «Филиал» передаём branch
-    if (fireGoal) reachGoal('lead_form', branchEl?.value ? { branch: branchEl.value } : undefined);
+    // цель Метрики (96429194) — только для реальной заявки; с полем «Филиал» передаём branch, плюс goalExtra
+    if (fireGoal) {
+      const params = { ...(branchEl?.value ? { branch: branchEl.value } : {}), ...goalExtra };
+      reachGoal('lead_form', Object.keys(params).length ? params : undefined);
+    }
     form!.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
