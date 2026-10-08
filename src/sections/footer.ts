@@ -6,7 +6,13 @@ function contactGoal(type: string): string {
   return ` data-goal="contact_click" data-goal-type="${type}" data-goal-place="footer"`;
 }
 
-export function footer(withScrollGoal: boolean | string = false): string {
+export interface FooterOptions {
+  /** колонка «Курсы» / «Разработки TEACHNET» со ссылками на другие страницы сайта (по умолчанию есть);
+   *  на самостоятельных лендингах её нет, а логотип ведёт наверх страницы */
+  pageLinks?: boolean;
+}
+
+export function footer(withScrollGoal: boolean | string = false, { pageLinks = true }: FooterOptions = {}): string {
   // скролл-цель подвала: true — scroll_footer (только главная, передаётся из page.ts),
   // строка — своя цель страницы (например, scroll_tech_footer на /tech)
   const scrollGoal = typeof withScrollGoal === 'string' ? withScrollGoal : withScrollGoal ? 'scroll_footer' : '';
@@ -40,7 +46,7 @@ export function footer(withScrollGoal: boolean | string = false): string {
       <div class="footer-grid">
 
         <div>
-          <img class="footer-logo" src="/images/logo-white.svg" width="140" height="44" loading="lazy" decoding="async" alt="${SITE.brand}" />
+          ${pageLinks ? '' : '<a href="#top" class="footer-logo-link" aria-label="Наверх страницы">'}<img class="footer-logo" src="/images/logo-white.svg" width="140" height="44" loading="lazy" decoding="async" alt="${SITE.brand}" />${pageLinks ? '' : '</a>'}
           <p class="footer-soft" style="max-width:34ch">Школа инженерии и робототехники для детей в Казани</p>
           <div class="footer-social">
             <a href="${SITE.social.vk}" target="_blank" rel="noopener" aria-label="ВКонтакте"${contactGoal('vk')}><img class="footer-social__img" src="/images/icon-vk.webp" width="40" height="40" loading="lazy" decoding="async" alt="" /></a>
@@ -54,13 +60,13 @@ export function footer(withScrollGoal: boolean | string = false): string {
           </p>
         </div>
 
-        <div>
+${pageLinks ? `        <div>
           <p class="footer-col__title">Курсы</p>
           ${courses}
           <p class="footer-col__title footer-col__title--next">Разработки TEACHNET</p>
           ${products}
         </div>
-
+` : ''}
         <div>
           <p class="footer-col__title">Контакты</p>
           <p style="line-height:2"><a href="${SITE.emailHref}"${contactGoal('email')}>${SITE.email}</a></p>

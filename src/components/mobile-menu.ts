@@ -11,10 +11,12 @@
 import { cta } from './button';
 import { icon } from '../lib/icons';
 import { SITE } from '../lib/site';
+import type { NavItem } from '../lib/site';
 
-export function mobileMenu(): string {
+/** nav: пункты меню (по умолчанию — меню главной SITE.nav) */
+export function mobileMenu(nav: readonly NavItem[] = SITE.nav): string {
   // пункты и телефон шлют те же цели, что в шапке (nav_*), с place=menu
-  const links = SITE.nav
+  const links = nav
     .map((n) => `<a class="mobile-nav__link" href="${n.href}" data-goal="${n.goal}" data-goal-place="menu">${n.label}</a>`)
     .join('');
 

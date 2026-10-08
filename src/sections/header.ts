@@ -3,16 +3,24 @@
 import { cta } from '../components/button';
 import { icon } from '../lib/icons';
 import { SITE } from '../lib/site';
+import type { NavItem } from '../lib/site';
 
-export function header(): string {
+export interface HeaderOptions {
+  /** пункты меню (по умолчанию — меню главной SITE.nav) */
+  nav?: readonly NavItem[];
+  /** логотип: тёмный на светлой шапке (по умолчанию) или белый на тёмной */
+  logo?: string;
+}
+
+export function header({ nav: items = SITE.nav, logo = '/images/logo-dark.svg' }: HeaderOptions = {}): string {
   // клик-цели пунктов меню: те же, что в бургер-меню, с place=header
-  const nav = SITE.nav
+  const nav = items
     .map((n) => `<a href="${n.href}" data-goal="${n.goal}" data-goal-place="header">${n.label}</a>`)
     .join('');
   return `<header class="site-header" id="top">
     <div class="container site-header__inner">
       <a href="#top" class="site-header__brand" aria-label="${SITE.brand} — на главную">
-        <img class="site-header__logo" src="/images/logo-dark.svg" width="121" height="38" alt="${SITE.brand}" />
+        <img class="site-header__logo" src="${logo}" width="121" height="38" alt="${SITE.brand}" />
       </a>
       <nav class="site-nav" aria-label="Разделы сайта">${nav}</nav>
       <div class="site-header__right">

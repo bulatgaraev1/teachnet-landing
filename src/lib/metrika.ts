@@ -12,7 +12,7 @@
 export const YM_COUNTER_ID = 96429194;
 
 type YmCallback = (clientId: string) => void;
-type Ym = (id: number, action: string, value: string | YmCallback, params?: Record<string, string>) => void;
+type Ym = (id: number, action: string, value: string | YmCallback | Record<string, string>, params?: Record<string, string>) => void;
 
 /** params: необязательные параметры цели (например, branch для lead_form на /electronics) */
 export function reachGoal(goal: string, params?: Record<string, string>): void {
@@ -21,6 +21,12 @@ export function reachGoal(goal: string, params?: Record<string, string>): void {
     if (params) ym(YM_COUNTER_ID, 'reachGoal', goal, params);
     else ym(YM_COUNTER_ID, 'reachGoal', goal);
   }
+}
+
+/** Параметры визита (например, { ab_variant: 'b' } на вариантах главной): ym(id, 'params', …) */
+export function visitParams(params: Record<string, string>): void {
+  const ym = (window as unknown as { ym?: Ym }).ym;
+  if (YM_COUNTER_ID && typeof ym === 'function') ym(YM_COUNTER_ID, 'params', params);
 }
 
 /** Параметры клик-цели из атрибутов data-goal-<имя>="значение"

@@ -8,16 +8,18 @@ export interface AccItem {
   a: string;
 }
 
-export function accordion(items: AccItem[]): string {
+/** openFirst: первый вопрос раскрыт сразу (ответ виден без клика) */
+export function accordion(items: AccItem[], { openFirst = false }: { openFirst?: boolean } = {}): string {
   return `<div class="acc">${items
     .map((it, i) => {
       const pid = `faq-panel-${i}`;
+      const open = openFirst && i === 0;
       return `<div class="acc-item">
-  <button class="acc-trigger" type="button" aria-expanded="false" aria-controls="${pid}">
+  <button class="acc-trigger" type="button" aria-expanded="${open}" aria-controls="${pid}">
     <span>${it.q}</span>
     <span class="acc-icon" aria-hidden="true"></span>
   </button>
-  <div class="acc-panel" id="${pid}" role="region">
+  <div class="acc-panel" id="${pid}" role="region"${open ? ' style="height:auto"' : ''}>
     <div class="acc-panel__inner">${it.a}</div>
   </div>
 </div>`;
