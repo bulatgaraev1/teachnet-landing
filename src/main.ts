@@ -16,11 +16,16 @@ import { initCookieBanner } from './components/cookie-banner';
 import { initMobileMenu } from './components/mobile-menu';
 import { initReturnPosition } from './lib/return-position';
 import { captureVisit } from './lib/visit';
+import { visitParams } from './lib/metrika';
 
 // до DOMContentLoaded: обработчик pageshow должен успеть подписаться
 initReturnPosition();
 
 function init(): void {
+  // Варианты главной для A/B-теста (/education, /education2) работают на этом же скрипте:
+  // вариант и source заявки — в атрибутах <body data-ab-variant="b" data-lead-source="education">
+  const ab = document.body.dataset;
+  if (ab.abVariant) visitParams({ ab_variant: ab.abVariant });
   captureVisit();
   initHeader();
   initNav();
@@ -29,7 +34,8 @@ function init(): void {
   initScrollGoals();
   initAccordion();
   initFaqGoals(); // faq_open {n, q} — секции с data-faq-goal
-  initForm();
+  // на вариантах цель lead_form уходит с source варианта (на главной — как было)
+  initForm(document, 'lead-form', ab.leadSource ? { source: ab.leadSource } : undefined);
   initStickyBar();
   initCookieBanner();
   initMobileMenu();

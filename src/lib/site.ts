@@ -13,6 +13,13 @@ const ADDRESS = {
 
 export type BranchId = 'pavlyukhina' | 'mardzhani';
 
+/** Пункт меню шапки и бургер-меню: якорь на странице и клик-цель Метрики */
+export interface NavItem {
+  label: string;
+  href: string;
+  goal: string;
+}
+
 export interface Branch {
   id: BranchId;
   /** «Казань, ул. …»: для плашек, карточек и FAQ */

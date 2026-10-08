@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
-import { readdirSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { basename } from 'node:path';
 import { renderPage } from './src/page';
@@ -12,6 +12,8 @@ import { electronicsHead } from './src/electronics/head';
 import { renderTechPage } from './src/tech/page';
 import { techHead } from './src/tech/head';
 import { renderLinksPage } from './src/links/page';
+import { renderEducationPage } from './src/variants/education';
+import { renderEducation2Page } from './src/variants/education2';
 
 // Контент страницы собирается из секций (чистые функции) и встраивается в index.html
 // на этапе сборки/дев-сервера — статичный HTML, без рантайм-инъекции (важно для SEO и LCP,
@@ -58,6 +60,19 @@ function resolvePhotos(html: string): string {
   );
 }
 
+// Стили блоков вариантов главной (A/B-тест): встраиваются <style> только в /education и /education2.
+// Через import они попали бы в общий CSS (cssCodeSplit: false) и утяжелили бы все страницы сайта.
+const AB_CSS = fileURLToPath(new URL('./src/styles/ab.css', import.meta.url));
+function abStyle(): string {
+  // без комментариев и лишних пробелов (пробел-комбинатор в селекторах сохраняется)
+  const css = readFileSync(AB_CSS, 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/\s*([{};,])\s*/g, '$1')
+    .trim();
+  return `<style>${css}</style>`;
+}
+
 // Точки входа: главная (index.html) + отдельные юридические страницы.
 // Каждая — реальный статичный HTML, доступный по своему URL.
 const pageInput = (name: string) => fileURLToPath(new URL(`./${name}.html`, import.meta.url));
@@ -71,10 +86,14 @@ export default defineConfig({
       transformIndexHtml: {
         order: 'pre',
         handler(html, ctx) {
-          // имя страницы по её html-файлу: index | child | links | privacy | personal-data-consent | cookie-policy
+          // имя страницы по её html-файлу: index | education | education2 | child | links | privacy | …
           const slug = basename(ctx.path).replace(/\.html$/, '');
           let body: string;
-          if (slug === 'links') {
+          if (slug === 'education') {
+            body = renderEducationPage();
+          } else if (slug === 'education2') {
+            body = renderEducation2Page();
+          } else if (slug === 'links') {
             body = renderLinksPage();
           } else if (slug === 'child') {
             body = renderChildPage();
@@ -88,6 +107,10 @@ export default defineConfig({
             body = renderPage();
           }
           let out = html.replace('<!--app-->', body);
+          // варианты главной: свои стили блоков — встроенным <style> (читается при каждой сборке/запросе)
+          if (slug === 'education' || slug === 'education2') {
+            out = out.replace('<!--ab-style-->', abStyle());
+          }
           // JSON-LD (LocalBusiness + FAQPage) — только на главной, из SITE/FAQ
           if (slug === 'index') {
             out = out.replace('<!--jsonld-->', siteJsonLd(html));
@@ -119,6 +142,9 @@ export default defineConfig({
         'cookie-policy': pageInput('cookie-policy'),
         // визитка для ссылки в профиле соцсетей: /links и /links/ (без редиректа, как остальные страницы)
         links: pageInput('links'),
+        // варианты главной для A/B-теста: /education (B «Сравнение»), /education2 (C «Манифест»)
+        education: pageInput('education'),
+        education2: pageInput('education2'),
       },
     },
   },
