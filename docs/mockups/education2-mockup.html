@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Макет /education2 — вариант C «Манифест»</title>
+<!-- МАКЕТ-ЭТАЛОН для вёрстки. Не страница сайта. Картинки и шрифты — из public/ проекта. -->
+<style>
+@font-face{font-family:'Onest';font-style:normal;font-weight:600;font-display:swap;src:url('/fonts/onest-cyrillic-600.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Onest';font-style:normal;font-weight:600;font-display:swap;src:url('/fonts/onest-latin-600.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Onest';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/onest-cyrillic-700.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Onest';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/onest-latin-700.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/golos-cyrillic-400.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/golos-latin-400.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/golos-cyrillic-500.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/golos-latin-500.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+</style>
+<style>
+body{margin:0;background:#0e1a28}
+a{color:#8fb4ff}a:hover{color:#c3d6ff}
+@container mpage (max-width: 820px){.mc-nav{display:none !important}.mc-phone{display:none !important}}
+@container mpage (max-width: 560px){.mc-head-btn{display:none !important}}
+</style>
+<style>
+html{scroll-behavior:smooth}
+#mprice-info,#signup,#msignup{scroll-margin-top:96px}
+section[id]{scroll-margin-top:72px}
+.mc-burger{display:none;position:relative}
+.mc-burger summary::-webkit-details-marker{display:none}
+@container mpage (max-width: 820px){.mc-burger{display:block}}
+</style>
+</head>
+<body>
+<div style="container-type: inline-size; container-name: mpage; width: 100%; background: #0e1a28; color: #ffffff; font-family: 'Golos Text', system-ui, sans-serif; font-size: 17px; line-height: 1.55">
+
+<header style="position: sticky; top: 0; z-index: 5; background: rgba(14,26,40,0.9); backdrop-filter: blur(10px); border-bottom: 1px solid #1f3147">
+<div style="max-width: 1200px; margin: 0 auto; padding: 14px clamp(16px, 4cqi, 48px); display: flex; align-items: center; justify-content: space-between; gap: 24px">
+<a href="#top" aria-label="TEACHNET — на главную" style="display: flex; align-items: center"><img src="/images/logo-white.svg" alt="TEACHNET" style="height: 34px; width: auto; display: block"></a>
+<nav class="mc-nav" aria-label="Разделы" style="display: flex; gap: 28px; font-size: 15px; font-weight: 500">
+<a href="#seen" style="color: #dbe3ee; text-decoration: none">Что мы видели</a>
+<a href="#rules" style="color: #dbe3ee; text-decoration: none">Наши правила</a>
+<a href="#steps" style="color: #dbe3ee; text-decoration: none">Ступени</a>
+<a href="#who" style="color: #dbe3ee; text-decoration: none">Кто мы</a>
+<a href="#mprice-info" style="color: #dbe3ee; text-decoration: none">Цена</a>
+<a href="#gallery" style="color: #dbe3ee; text-decoration: none">Галерея</a>
+</nav>
+<div style="display: flex; align-items: center; gap: 18px">
+<a class="mc-phone" href="tel:+79934151434" style="color: #ffffff; text-decoration: none; font-weight: 500; font-size: 15px; white-space: nowrap">+7 (993) 415-14-34</a>
+<a class="mc-head-btn" href="#msignup" style="background: #1055cb; color: #ffffff; text-decoration: none; font-weight: 500; font-size: 15px; padding: 12px 20px; border-radius: 14px; white-space: nowrap">Записаться</a>
+<details class="mc-burger">
+<summary aria-label="Открыть меню" style="list-style: none; cursor: pointer; width: 46px; height: 46px; border-radius: 12px; border: 1px solid #22374f; background: #1c3350; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></summary>
+<nav aria-label="Меню" style="position: absolute; right: 0; top: calc(100% + 10px); width: 300px; max-width: calc(100cqi - 32px); background: #132338; border: 1px solid #22374f; border-radius: 18px; box-shadow: 0 16px 40px rgba(14,26,40,0.22); padding: 10px 18px 18px; display: flex; flex-direction: column">
+<a href="#seen" style="color: #ffffff; text-decoration: none; font-size: 17px; font-weight: 500; padding: 12px 4px; border-bottom: 1px solid #22374f">Что мы видели</a>
+<a href="#rules" style="color: #ffffff; text-decoration: none; font-size: 17px; font-weight: 500; padding: 12px 4px; border-bottom: 1px solid #22374f">Наши правила</a>
+<a href="#steps" style="color: #ffffff; text-decoration: none; font-size: 17px; font-weight: 500; padding: 12px 4px; border-bottom: 1px solid #22374f">Ступени</a>
+<a href="#who" style="color: #ffffff; text-decoration: none; font-size: 17px; font-weight: 500; padding: 12px 4px; border-bottom: 1px solid #22374f">Кто мы</a>
+<a href="#mprice-info" style="color: #ffffff; text-decoration: none; font-size: 17px; font-weight: 500; padding: 12px 4px; border-bottom: 1px solid #22374f">Цена</a>
+<a href="#gallery" style="color: #ffffff; text-decoration: none; font-size: 17px; font-weight: 500; padding: 12px 4px; border-bottom: 1px solid #22374f">Галерея</a>
+<a href="tel:+79934151434" style="color: #ffffff; text-decoration: none; font-size: 17px; font-weight: 500; padding: 14px 4px 16px">+7 (993) 415-14-34</a>
+<a href="#msignup" style="background: #1055cb; color: #ffffff; text-decoration: none; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 16px; padding: 14px 18px; border-radius: 14px; text-align: center">Записаться на пробный урок</a>
+</nav>
+</details>
+</div>
+</div>
+</header>
+
+<main id="top">
+
+<section aria-labelledby="m-h1" style="padding: clamp(56px, 8cqi, 128px) clamp(16px, 4cqi, 48px) clamp(56px, 7cqi, 112px)">
+<div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: clamp(24px, 3cqi, 36px)">
+<span style="align-self: flex-start; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #a7bada; border: 1px solid #2c4561; padding: 8px 14px; border-radius: 999px">Манифест TEACHNET</span>
+<h1 id="m-h1" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(38px, 6.4cqi, 92px); line-height: 1.0; letter-spacing: -0.03em; max-width: 1120px; text-wrap: balance">Мы устали от школ, которые развлекают детей, а не учат.</h1>
+<p style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(30px, 4.4cqi, 64px); line-height: 1.05; letter-spacing: -0.02em; color: #8fb4ff">Поэтому создали TEACHNET.</p>
+<p style="margin: 0; font-size: clamp(17px, 1.5cqi, 21px); color: #b8c4d4; max-width: 640px">Школа инженерии для детей 5–15 лет в Казани. Преподаватель не в своих делах, а весь урок ведёт детей и объясняет, как и почему всё работает.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center">
+<a href="#msignup" style="background: #1055cb; color: #ffffff; text-decoration: none; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 18px; padding: 18px 30px; border-radius: 14px; box-shadow: 0 10px 30px rgba(16,85,203,0.45)">Проверить на бесплатном уроке</a>
+<span style="font-size: 14px; color: #8a9bb0">60 минут · можно посмотреть, как идёт урок · бесплатно</span>
+</div>
+</div>
+</section>
+
+<section aria-label="Фото с занятий" style="padding: 0 clamp(16px, 4cqi, 48px)">
+<div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px">
+<img src="/images/hero.webp" alt="Дети собирают робота вместе с преподавателем" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px">
+<img src="/images/team-1.webp" alt="Преподаватель объясняет устройство механизма" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px">
+<img src="/images/mission.webp" alt="Испытание робота на миссии" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px">
+</div>
+</section>
+
+<section id="seen" aria-labelledby="seen-h2" style="padding: clamp(64px, 8cqi, 128px) clamp(16px, 4cqi, 48px); min-height: 782px">
+<div style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #a7bada">Что мы видели</span>
+<h2 id="seen-h2" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(30px, 3.6cqi, 52px); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance">Вот за что родители платят во многих кружках робототехники</h2>
+</div>
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+
+<li style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 22px 0; border-top: 1px solid #1f3147">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 18px; color: #5f7590">01</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(20px, 2.2cqi, 30px); line-height: 1.25; color: #e4ebf3">«Вот инструкция, собирайте» — и преподаватель в телефоне.</span>
+</li>
+
+<li style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 22px 0; border-top: 1px solid #1f3147">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 18px; color: #5f7590">02</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(20px, 2.2cqi, 30px); line-height: 1.25; color: #e4ebf3">Час сборки по картинкам. Ноль понимания, как это работает.</span>
+</li>
+
+<li style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 22px 0; border-top: 1px solid #1f3147">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 18px; color: #5f7590">03</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(20px, 2.2cqi, 30px); line-height: 1.25; color: #e4ebf3">9–15 детей на педагога. Застрял — сиди и жди.</span>
+</li>
+
+<li style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 22px 0; border-top: 1px solid #1f3147">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 18px; color: #5f7590">04</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(20px, 2.2cqi, 30px); line-height: 1.25; color: #e4ebf3">Год занятий — а ребёнок не знает, зачем роботу датчик.</span>
+</li>
+
+<li style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 22px 0; border-top: 1px solid #1f3147">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 18px; color: #5f7590">05</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(20px, 2.2cqi, 30px); line-height: 1.25; color: #e4ebf3">Родителям — красивые фото в чате. Знаний за ними нет.</span>
+</li>
+
+</ol>
+<div style="background: #ffffff; color: #0e1a28; border-radius: 24px; padding: clamp(26px, 4cqi, 48px)">
+<p style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(26px, 3.4cqi, 48px); line-height: 1.08; letter-spacing: -0.02em">Это не образование. Это платная продлёнка с конструктором.</p>
+</div>
+</div>
+</section>
+
+<section id="rules" aria-labelledby="rules-h2" style="padding: clamp(64px, 8cqi, 128px) clamp(16px, 4cqi, 48px); background: #f5f8fc; color: #18222f; min-height: 562px">
+<div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 14px; max-width: 820px">
+<span style="font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #316397">Наши правила</span>
+<h2 id="rules-h2" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(30px, 3.6cqi, 52px); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance">Шесть правил, которые мы не нарушаем</h2>
+<p style="margin: 0; font-size: 18px; color: #3d4c5f">Миссии и награды у нас тоже есть. Но интерес — инструмент, чтобы ребёнок захотел разобраться, а не способ занять его на час.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 14px">
+
+<div style="background: #ffffff; border: 1px solid #e3eaf3; border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #316397">Правило 1</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2">Никаких телефонов у преподавателя</span>
+<span style="font-size: 15px; line-height: 1.5; color: #3d4c5f">Весь урок с детьми: сюжет, вопросы, испытания вместе с группой.</span>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e3eaf3; border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #316397">Правило 2</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2">Объясняем, почему работает</span>
+<span style="font-size: 15px; line-height: 1.5; color: #3d4c5f">Не только как собрать, но и почему механизм устроен именно так.</span>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e3eaf3; border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #316397">Правило 3</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2">Не делаем за ребёнка</span>
+<span style="font-size: 15px; line-height: 1.5; color: #3d4c5f">Застрял — наводящий вопрос. Решение ребёнок находит сам.</span>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e3eaf3; border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #316397">Правило 4</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2">Не больше 6 детей в группе</span>
+<span style="font-size: 15px; line-height: 1.5; color: #3d4c5f">Внимание каждому, а не только самым активным.</span>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e3eaf3; border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #316397">Правило 5</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2">Родитель видит всё</span>
+<span style="font-size: 15px; line-height: 1.5; color: #3d4c5f">Видео с каждого занятия, памятки и открытые защиты проектов.</span>
+</div>
+
+<div style="background: #ffffff; border: 1px solid #e3eaf3; border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #316397">Правило 6</span>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2">Прогресс — за навыки</span>
+<span style="font-size: 15px; line-height: 1.5; color: #3d4c5f">Ранги и печати в паспорте — за умения, а не за посещаемость.</span>
+</div>
+
+</div>
+</div>
+</section>
+
+<section id="steps" aria-labelledby="steps-h2" style="padding: clamp(64px, 8cqi, 128px) clamp(16px, 4cqi, 48px) clamp(32px, 3cqi, 48px); color: #ffffff">
+<div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 14px; max-width: 820px">
+<span style="font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #a7bada">Ступени обучения</span>
+<h2 id="steps-h2" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(30px, 3.6cqi, 52px); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance">От первого робота до своего инженерного проекта</h2>
+<p style="margin: 0; font-size: 18px; color: #b8c4d4">Своя программа под каждый возраст и понятная траектория роста: каждая ступень опирается на предыдущую — от первого робота до автоматики и собственных проектов.</p>
+</div>
+<ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px">
+
+<li style="background: #132338; border: 1px solid #22374f; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 14px">
+<span style="flex: 0 0 auto; width: 48px; height: 48px; border-radius: 50%; background: #1055cb; color: #ffffff; display: flex; align-items: center; justify-content: center; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 20px">1</span>
+<span style="font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #cfe0ff; background: #1c3350; padding: 6px 12px; border-radius: 999px">от 5 лет</span>
+</div>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 24px; line-height: 1.2">Робототехника на LEGO</span>
+<span style="font-size: 16px; line-height: 1.5; color: #b8c4d4">Первый собственный робот. Основы механики, электроники и программирования — через миссии и испытания.</span>
+<div style="margin-top: auto; padding-top: 14px; border-top: 1px solid #22374f; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 15px; line-height: 1.45; color: #e4ebf3"><b style="font-weight: 500; color: #8fb4ff">Итоги модулей:</b> сам собирает и программирует роботов — от простых к сложным.</span>
+<span style="font-size: 14px; color: #8a9bb0">60 минут · группа до 6 человек</span>
+</div>
+</li>
+
+<li style="background: #132338; border: 1px solid #22374f; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 14px">
+<span style="flex: 0 0 auto; width: 48px; height: 48px; border-radius: 50%; background: #1055cb; color: #ffffff; display: flex; align-items: center; justify-content: center; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 20px">2</span>
+<span style="font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #cfe0ff; background: #1c3350; padding: 6px 12px; border-radius: 999px">от 10 лет</span>
+</div>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 24px; line-height: 1.2">Электроника</span>
+<span style="font-size: 16px; line-height: 1.5; color: #b8c4d4">Реальные платы, датчики и моторы. Ребёнок сам рассчитывает схему, проверяет её прибором и пишет программу.</span>
+<div style="margin-top: auto; padding-top: 14px; border-top: 1px solid #22374f; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 15px; line-height: 1.45; color: #e4ebf3"><b style="font-weight: 500; color: #8fb4ff">Итоги модулей:</b> проектирует, собирает и защищает собственные устройства.</span>
+<span style="font-size: 14px; color: #8a9bb0">90 минут · группа до 6 человек</span>
+</div>
+</li>
+
+<li style="background: #132338; border: 1px solid #22374f; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 14px">
+<span style="flex: 0 0 auto; width: 48px; height: 48px; border-radius: 50%; background: #1055cb; color: #ffffff; display: flex; align-items: center; justify-content: center; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 20px">3</span>
+<span style="font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #cfe0ff; background: #1c3350; padding: 6px 12px; border-radius: 999px">от 14 лет</span>
+</div>
+<span style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 24px; line-height: 1.2">Продвинутая электроника и робототехника</span>
+<span style="font-size: 16px; line-height: 1.5; color: #b8c4d4">Автоматика и робототехника: устройства, которые сами следят за обстановкой и принимают решения. Ребёнок проектирует их от схемы до программы.</span>
+<div style="margin-top: auto; padding-top: 14px; border-top: 1px solid #22374f; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 15px; line-height: 1.45; color: #e4ebf3"><b style="font-weight: 500; color: #8fb4ff">Итоги модулей:</b> создаёт автономного робота или систему автоматики под реальную задачу.</span>
+<span style="font-size: 14px; color: #8a9bb0">90 минут · группа до 6 человек</span>
+</div>
+</li>
+
+</ol>
+<div style="display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center">
+<a href="#msignup" style="background: #1055cb; color: #ffffff; text-decoration: none; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 17px; padding: 16px 26px; border-radius: 14px">Подобрать ступень на пробном уроке</a>
+<span style="font-size: 15px; color: #8a9bb0">С какой ступени начать — определим на первом занятии по возрасту и подготовке.</span>
+</div>
+</div>
+</section>
+
+<section id="noted" aria-labelledby="noted-h2" style="padding: clamp(32px, 3cqi, 48px) clamp(16px, 4cqi, 48px); color: #ffffff">
+<div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
+<h2 id="noted-h2" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(26px, 2.8cqi, 40px); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">Наше дело актуальное, и это отметили</h2>
+<ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 12px">
+<li style="display: flex; flex-direction: column; gap: 10px"><div style="background: #ffffff; border-radius: 18px; height: 104px; padding: 14px; display: flex; align-items: center; justify-content: center"><img src="/images/logo-itpark.webp" alt="IT-парк" style="max-width: 100%; max-height: 72px; width: auto; height: auto; display: block"></div><span style="font-size: 13px; line-height: 1.35; color: #b8c4d4; text-align: center">IT-парк</span></li>
+<li style="display: flex; flex-direction: column; gap: 10px"><div style="background: #ffffff; border-radius: 18px; height: 104px; padding: 14px; display: flex; align-items: center; justify-content: center"><img src="/images/logo-edu.webp" alt="Министерство образования и науки РТ" style="max-width: 100%; max-height: 72px; width: auto; height: auto; display: block"></div><span style="font-size: 13px; line-height: 1.35; color: #b8c4d4; text-align: center">Минобрнауки РТ</span></li>
+<li style="display: flex; flex-direction: column; gap: 10px"><div style="background: #ffffff; border-radius: 18px; height: 104px; padding: 14px; display: flex; align-items: center; justify-content: center"><img src="/images/logo-youth-ministry.webp" alt="Министерство по делам молодёжи РТ" style="max-width: 100%; max-height: 72px; width: auto; height: auto; display: block"></div><span style="font-size: 13px; line-height: 1.35; color: #b8c4d4; text-align: center">Минмолодёжи РТ</span></li>
+<li style="display: flex; flex-direction: column; gap: 10px"><div style="background: #ffffff; border-radius: 18px; height: 104px; padding: 14px; display: flex; align-items: center; justify-content: center"><img src="/images/logo-kai.webp" alt="КНИТУ-КАИ" style="max-width: 100%; max-height: 72px; width: auto; height: auto; display: block"></div><span style="font-size: 13px; line-height: 1.35; color: #b8c4d4; text-align: center">КНИТУ-КАИ</span></li>
+<li style="display: flex; flex-direction: column; gap: 10px"><div style="background: #ffffff; border-radius: 18px; height: 104px; padding: 14px; display: flex; align-items: center; justify-content: center"><img src="/images/logo-kazan.webp" alt="Школа №4" style="max-width: 100%; max-height: 76px; width: auto; height: auto; display: block"></div><span style="font-size: 13px; line-height: 1.35; color: #b8c4d4; text-align: center">Школа №4</span></li>
+<li style="display: flex; flex-direction: column; gap: 10px"><div style="background: #ffffff; border-radius: 18px; height: 104px; padding: 14px; display: flex; align-items: center; justify-content: center"><img src="/images/logo-semya.webp" alt="Семья вместе" style="max-width: 100%; max-height: 72px; width: auto; height: auto; display: block"></div><span style="font-size: 13px; line-height: 1.35; color: #b8c4d4; text-align: center">«Семья вместе»</span></li>
+</ul>
+</div>
+</section>
+
+<section id="who" aria-labelledby="who-h2" style="padding: clamp(32px, 3cqi, 48px) clamp(16px, 4cqi, 48px) clamp(64px, 8cqi, 128px)">
+<div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(28px, 4cqi, 56px); align-items: center">
+<div style="display: flex; flex-direction: column; gap: 18px">
+<span style="font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #a7bada">Кто мы</span>
+<h2 id="who-h2" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(30px, 3.6cqi, 52px); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance">Школа инженеров, а не аниматоров</h2>
+<p style="margin: 0; font-size: 18px; color: #b8c4d4">Программы и учебное оборудование разрабатываем сами. Основатель — инженер-конструктор, выпускник КНИТУ-КАИ с красным дипломом.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<span style="font-size: 14px; font-weight: 500; color: #dbe3ee; border: 1px solid #2c4561; padding: 8px 14px; border-radius: 999px">Резидент IT-парка</span>
+<span style="font-size: 14px; font-weight: 500; color: #dbe3ee; border: 1px solid #2c4561; padding: 8px 14px; border-radius: 999px">Свои учебные разработки на отечественных компонентах</span>
+<span style="font-size: 14px; font-weight: 500; color: #dbe3ee; border: 1px solid #2c4561; padding: 8px 14px; border-radius: 999px">Поддержка Фонда содействия инновациям</span>
+</div>
+</div>
+<img src="/images/team-2.webp" alt="Основатель TEACHNET на занятии с детьми" style="display: block; width: 100%; max-width: 520px; justify-self: center; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 24px">
+</div>
+</section>
+
+<section aria-labelledby="dare-h2" style="padding: 0 clamp(16px, 4cqi, 48px) clamp(64px, 8cqi, 128px)">
+<div style="max-width: 1200px; margin: 0 auto; background: #1055cb; border-radius: 28px; padding: clamp(28px, 5cqi, 64px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(24px, 4cqi, 48px); align-items: center">
+<div style="display: flex; flex-direction: column; gap: 18px; align-items: flex-start">
+<span style="font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #cfe0ff">Проверьте нас</span>
+<h2 id="dare-h2" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(30px, 4cqi, 56px); line-height: 1.05; letter-spacing: -0.02em; max-width: 980px; text-wrap: balance">Приходите на пробный урок и смотрите за каждой минутой</h2>
+<p style="margin: 0; font-size: clamp(17px, 1.6cqi, 21px); color: #e3ecff; max-width: 760px">Наблюдайте, как идёт занятие. Увидите, что детей оставили с инструкцией, — можете не возвращаться. Это бесплатно.</p>
+<a href="#msignup" style="background: #ffffff; color: #1055cb; text-decoration: none; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 18px; padding: 18px 30px; border-radius: 14px">Записаться и проверить</a>
+</div>
+<img src="/images/final-1.webp" alt="Пробный урок в TEACHNET" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px">
+</div>
+</section>
+
+<section id="mprice" aria-labelledby="mprice-h2" style="padding: clamp(64px, 8cqi, 128px) clamp(16px, 4cqi, 48px); background: #f5f8fc; color: #18222f">
+<div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(28px, 4cqi, 56px); align-items: start">
+<div id="mprice-info" style="display: flex; flex-direction: column; gap: 22px">
+<span style="font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #316397">Стоимость</span>
+<h2 id="mprice-h2" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(36px, 4.4cqi, 60px); line-height: 1.05; letter-spacing: -0.02em">7 000 ₽ в месяц. Всё включено.</h2>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 17px; color: #3d4c5f">
+<li style="display: flex; gap: 12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#316397" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: 0 0 auto; margin-top: 2px"><path d="M4.5 12.5l5 5 10-11"></path></svg>4 занятия в месяц в группе до 6 человек</li>
+<li style="display: flex; gap: 12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#316397" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: 0 0 auto; margin-top: 2px"><path d="M4.5 12.5l5 5 10-11"></path></svg>Конструкторы и оборудование — наши</li>
+<li style="display: flex; gap: 12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#316397" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: 0 0 auto; margin-top: 2px"><path d="M4.5 12.5l5 5 10-11"></path></svg>Паспорт инженера и материалы для родителей</li>
+<li style="display: flex; gap: 12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#316397" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: 0 0 auto; margin-top: 2px"><path d="M4.5 12.5l5 5 10-11"></path></svg>Видео с каждого занятия в родительский чат</li>
+</ul>
+<p style="margin: 0; font-size: 17px; font-weight: 500">Первый урок бесплатный. Решайте после него.</p>
+</div>
+<form id="msignup" aria-labelledby="msignup-h" style="background: #ffffff; border: 1px solid #e3eaf3; border-radius: 26px; padding: clamp(22px, 3cqi, 36px); display: flex; flex-direction: column; gap: 16px; box-shadow: 0 8px 32px rgba(45,99,151,0.1)">
+<p id="msignup-h" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 26px; line-height: 1.2">Запишитесь и посмотрите, как мы учим</p>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Имя<input type="text" placeholder="Как к вам обращаться" style="font: inherit; font-weight: 400; font-size: 16px; padding: 14px 16px; border: 1px solid #c9d7ec; border-radius: 12px; background: #f9fbfe"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Номер телефона<input type="tel" placeholder="+7 (___) ___-__-__" style="font: inherit; font-weight: 400; font-size: 16px; padding: 14px 16px; border: 1px solid #c9d7ec; border-radius: 12px; background: #f9fbfe"></label>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Возраст ребёнка<select style="font: inherit; font-weight: 400; font-size: 16px; padding: 14px 16px; border: 1px solid #c9d7ec; border-radius: 12px; background: #f9fbfe"><option>5–7 лет</option><option>8–9 лет</option><option>10–12 лет</option><option>13–15 лет</option></select></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Филиал<select style="font: inherit; font-weight: 400; font-size: 16px; padding: 14px 16px; border: 1px solid #c9d7ec; border-radius: 12px; background: #f9fbfe"><option>ул. Павлюхина, 108б</option><option>ул. Марджани, 28</option></select></label>
+</div>
+<label style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #5a6b80"><input type="checkbox" style="margin-top: 3px; width: 18px; height: 18px"><span>Согласен на обработку <a href="#consent" style="color: #1055cb">персональных данных</a></span></label>
+<button type="button" style="font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 18px; background: #1055cb; color: #ffffff; border: 0; border-radius: 14px; padding: 18px 24px; cursor: pointer">Записаться на пробный урок</button>
+<p style="margin: 0; font-size: 13px; color: #5a6b80; text-align: center">Перезвоним в течение 15 минут в рабочее время</p>
+</form>
+</div>
+</section>
+
+<section id="gallery" aria-labelledby="gallery-h2" style="padding: clamp(64px, 8cqi, 128px) 0 0; color: #ffffff">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 4cqi, 48px); display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: flex-end; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #a7bada">Галерея</span>
+<h2 id="gallery-h2" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(30px, 3.6cqi, 52px); line-height: 1.08; letter-spacing: -0.02em">Как проходят наши занятия</h2>
+</div>
+<span style="font-size: 15px; color: #8a9bb0">Листайте вправо →</span>
+</div>
+<ul aria-label="Фото с занятий" style="list-style: none; margin: 28px 0 0; padding: 0 clamp(16px, 4cqi, 48px) 8px max(clamp(16px, 4cqi, 48px), calc((100cqi - 1200px) / 2)); display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: max(clamp(16px, 4cqi, 48px), calc((100cqi - 1200px) / 2)); -webkit-overflow-scrolling: touch">
+<li style="flex: 0 0 min(78%, 440px); scroll-snap-align: start"><img src="/images/hero.webp" alt="Дети собирают робота на занятии" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px"></li>
+<li style="flex: 0 0 min(78%, 440px); scroll-snap-align: start"><img src="/images/team-1.webp" alt="Преподаватель объясняет устройство механизма" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px"></li>
+<li style="flex: 0 0 min(78%, 440px); scroll-snap-align: start"><img src="/images/mission.webp" alt="Испытание робота на миссии" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px"></li>
+<li style="flex: 0 0 min(78%, 440px); scroll-snap-align: start"><img src="/images/team-2.webp" alt="Преподаватель с детьми на занятии" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px"></li>
+<li style="flex: 0 0 min(78%, 440px); scroll-snap-align: start"><img src="/images/passport.webp" alt="Паспорт инженера с печатями" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px"></li>
+<li style="flex: 0 0 min(78%, 440px); scroll-snap-align: start"><img src="/images/final-1.webp" alt="Дети на занятии TEACHNET" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px"></li>
+</ul>
+</section>
+
+<section aria-labelledby="mfinal-h2" style="padding: clamp(64px, 8cqi, 128px) clamp(16px, 4cqi, 48px)">
+<div style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; align-items: flex-start">
+<h2 id="mfinal-h2" style="margin: 0; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: clamp(32px, 4.8cqi, 68px); line-height: 1.02; letter-spacing: -0.025em; text-wrap: balance">Хватит платить за то, чтобы ребёнка просто заняли.</h2>
+<p style="margin: 0; font-size: clamp(17px, 1.6cqi, 21px); color: #b8c4d4; max-width: 640px">Один бесплатный урок покажет разницу.</p>
+<a href="#msignup" style="background: #1055cb; color: #ffffff; text-decoration: none; font-family: Onest, system-ui, sans-serif; font-weight: 700; font-size: 18px; padding: 18px 30px; border-radius: 14px">Бесплатный пробный урок</a>
+</div>
+</section>
+
+</main>
+
+<footer style="background: #08111c; color: #8a9bb0; padding: 40px clamp(16px, 4cqi, 48px)">
+<div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 16px 40px; justify-content: space-between; align-items: center; font-size: 14px">
+<img src="/images/logo-white.svg" alt="TEACHNET" style="height: 28px; width: auto; display: block">
+<span>© TEACHNET 2026 · ИП Гараев Б. И.</span>
+<span>Казань, ул. Павлюхина, 108б · ул. Марджани, 28</span>
+<a href="tel:+79934151434" style="color: #ffffff; text-decoration: none">+7 (993) 415-14-34</a>
+</div>
+</footer>
+
+</div>
+</body>
+</html>

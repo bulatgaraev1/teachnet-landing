@@ -4,9 +4,18 @@ import { SITE } from '../../lib/site';
 
 const AGES = ['5–7', '8–9', '10–12', '13–15'];
 
-export function formCard({ title, sub = '', source }: { title: string; sub?: string; source: string }): string {
-  return `<div class="ab-form" id="conversion" data-scroll-goal="scroll_conversion">
-        <p class="ab-form__title" id="lead">${title}</p>${sub ? `
+interface FormCardOptions {
+  title: string;
+  sub?: string;
+  source: string;
+  /** id карточки (якорь кнопок записи) и id заголовка — у макетов B и C свои */
+  id?: string;
+  titleId?: string;
+}
+
+export function formCard({ title, sub = '', source, id = 'conversion', titleId = 'lead' }: FormCardOptions): string {
+  return `<div class="ab-form" id="${id}" data-scroll-goal="scroll_conversion">
+        <p class="ab-form__title" id="${titleId}">${title}</p>${sub ? `
         <p class="ab-form__sub">${sub}</p>` : ''}
         ${leadForm({
           source,

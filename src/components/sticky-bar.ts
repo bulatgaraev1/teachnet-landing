@@ -7,10 +7,11 @@
  */
 import { cta } from './button';
 
-export function stickyBar(): string {
+/** href — куда ведёт кнопка (по умолчанию форма #lead; на /education2 — #msignup) */
+export function stickyBar({ href = '#lead' }: { href?: string } = {}): string {
   return `<div class="sticky-cta" id="sticky-cta" aria-hidden="true">
     <span class="sticky-cta__text">Первый урок — бесплатный</span>
-    ${cta({ label: 'Записаться', compact: true, goal: 'sticky_cta' })}
+    ${cta({ label: 'Записаться', href, compact: true, goal: 'sticky_cta' })}
   </div>`;
 }
 
@@ -19,8 +20,8 @@ export function initStickyBar(root: ParentNode = document): void {
   if (!bar) return;
   // Бар виден только в средней части страницы. Скрыт там, где есть своя кнопка
   // или показывать его рано/поздно: первые два блока (#hero и лента доверия .trust),
-  // блок формы (#conversion), финальный CTA (#final) и подвал (.site-footer).
-  const hideSections = ['#hero', '.trust', '#conversion', '#final', '.site-footer']
+  // блок формы (#conversion, на /education2 — #msignup), финальный CTA (#final) и подвал (.site-footer).
+  const hideSections = ['#hero', '.trust', '#conversion', '#msignup', '#final', '.site-footer']
     .map((s) => document.querySelector(s))
     .filter((el): el is Element => el !== null);
 
