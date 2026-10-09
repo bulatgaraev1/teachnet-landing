@@ -7,13 +7,14 @@ import './styles/main.css';
 import { initHeader } from './lib/header';
 import { initNav } from './lib/nav';
 import { initReveal, initRouteLine } from './lib/reveal';
-import { initScrollGoals } from './lib/scroll-goals';
+import { initScrollGoals, initSwipeGoals } from './lib/scroll-goals';
 import { initAccordion } from './components/accordion';
 import { initFaqGoals } from './lib/faq-goals';
 import { initForm } from './components/form';
 import { initStickyBar } from './components/sticky-bar';
 import { initCookieBanner } from './components/cookie-banner';
 import { initMobileMenu } from './components/mobile-menu';
+import { initDropdownMenu } from './components/dropdown-menu';
 import { initReturnPosition } from './lib/return-position';
 import { captureVisit } from './lib/visit';
 import { visitParams } from './lib/metrika';
@@ -32,6 +33,7 @@ function init(): void {
   initReveal();
   initRouteLine();
   initScrollGoals();
+  initSwipeGoals(); // лента с data-swipe-goal (галерея /education2)
   initAccordion();
   initFaqGoals(); // faq_open {n, q} — секции с data-faq-goal
   // на вариантах цель lead_form уходит с source варианта (на главной — как было)
@@ -39,6 +41,7 @@ function init(): void {
   initStickyBar();
   initCookieBanner();
   initMobileMenu();
+  initDropdownMenu(); // выпадающее меню под шапкой (/education2)
 }
 
 if (document.readyState === 'loading') {

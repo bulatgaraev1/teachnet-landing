@@ -64,3 +64,20 @@ export function initScrollGoals(): void {
 
   els.forEach((el) => observer.observe(el));
 }
+
+/**
+ * Цель на первую прокрутку горизонтальной ленты (data-swipe-goal="…", например галерея
+ * /education2): уходит один раз за просмотр страницы, когда пользователь сдвинул ленту.
+ * Сама страница ленту не прокручивает, поэтому любой сдвиг — действие пользователя.
+ */
+export function initSwipeGoals(): void {
+  document.querySelectorAll<HTMLElement>('[data-swipe-goal]').forEach((el) => {
+    const goal = el.getAttribute('data-swipe-goal') || '';
+    const onScroll = (): void => {
+      if (Math.abs(el.scrollLeft) < 4) return; // доводка scroll-snap на месте — не прокрутка
+      el.removeEventListener('scroll', onScroll);
+      reachGoal(goal);
+    };
+    if (goal) el.addEventListener('scroll', onScroll, { passive: true });
+  });
+}

@@ -11,6 +11,13 @@ function headerOffset(): number {
   return (parseInt(raw, 10) || 64) + 14;
 }
 
+/** Отступ блока от верха окна: на вариантах главной (body.ab-page) — своя отбивка блока
+ *  из CSS (scroll-margin-top по макету, как у /education2), иначе — по высоте шапки */
+function scrollOffset(target: Element): number {
+  const own = document.body.classList.contains('ab-page') ? parseFloat(getComputedStyle(target).scrollMarginTop) : 0;
+  return own || headerOffset();
+}
+
 export function initNav(): void {
   document.addEventListener('click', (e) => {
     const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
@@ -29,7 +36,7 @@ export function initNav(): void {
 
     e.preventDefault();
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset();
+    const top = target.getBoundingClientRect().top + window.scrollY - scrollOffset(target);
     window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
     history.pushState(null, '', href);
   });

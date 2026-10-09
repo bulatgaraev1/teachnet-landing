@@ -81,6 +81,56 @@
 .ab-header--dark .ab-header__nav a { color: #dbe3ee; }
 .ab-header--dark .ab-header__phone { color: #fff; }
 .ab-header--dark .burger { color: #fff; }
+/* C: бургер и выпадающее меню — по макету (размеры — как макет отрисовывает: поля и рамка сверх ширины) */
+.ab-burger { display: none; position: relative; }
+@media (max-width: 820px) {
+  .ab-burger { display: block; }
+}
+.ab-burger__btn {
+  box-sizing: content-box;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid #22374f;
+  background: #1c3350;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.ab-dd {
+  box-sizing: content-box;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 300px;
+  max-width: calc(100vw - 32px - 38px); /* панель с полями и рамкой — не шире экрана минус 16 px с каждой стороны */
+  background: #132338;
+  border: 1px solid #22374f;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(14, 26, 40, 0.22);
+  padding: 10px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.55;
+}
+.ab-dd[hidden] { display: none; }
+.ab-dd__link,
+.ab-dd__phone { color: #fff; font-size: 17px; font-weight: 500; }
+.ab-dd__link { padding: 12px 4px; border-bottom: 1px solid #22374f; }
+.ab-dd__phone { padding: 14px 4px 16px; }
+.ab-dd__cta {
+  background: #1055cb;
+  color: #fff;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 16px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  text-align: center;
+}
 
 /* ---------- кнопки ---------- */
 .ab-btn {
@@ -97,6 +147,7 @@
 }
 .ab-btn--glow { box-shadow: 0 10px 30px rgba(16, 85, 203, 0.45); }
 .ab-btn--white { background: #fff; color: #1055cb; box-shadow: none; }
+.ab-btn--md { font-size: 17px; padding: 16px 26px; box-shadow: none; }
 
 /* ---------- общие элементы секций B ---------- */
 .ab-sec { padding: clamp(56px, 7vw, 104px) clamp(16px, 4vw, 48px); }
@@ -428,9 +479,19 @@
    C: тёмная подача
    ============================================================ */
 .ab-dark { background: #0e1a28; color: #fff; }
+/* в макете C у кнопок межстрочный интервал страницы (1.55) */
+.ab-dark .ab-btn { line-height: 1.55; }
 .ab-msec { padding: clamp(64px, 8vw, 128px) clamp(16px, 4vw, 48px); }
 .ab-msec--light { background: #f5f8fc; color: #18222f; }
 .ab-msec--flush { padding-top: 0; }
+/* отбивки по макету: «Ступени» снизу, «Наше дело актуальное» сверху и снизу, «Кто мы» сверху */
+.ab-msec--steps { padding-bottom: clamp(32px, 3vw, 48px); }
+.ab-msec--noted { padding-top: clamp(32px, 3vw, 48px); padding-bottom: clamp(32px, 3vw, 48px); }
+.ab-msec--who { padding-top: clamp(32px, 3vw, 48px); }
+/* якоря: блок встаёт под шапкой (цена и форма — с запасом), как в макете */
+.ab-dark section[id] { scroll-margin-top: 72px; }
+.ab-dark #mprice-info,
+.ab-dark #msignup { scroll-margin-top: 96px; }
 .ab-meyebrow { font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #a7bada; }
 .ab-msec--light .ab-meyebrow { color: #316397; }
 .ab-mh2 {
@@ -443,6 +504,7 @@
   color: inherit;
   text-wrap: balance;
 }
+.ab-mh2--plain { text-wrap: wrap; }
 .ab-mp { margin: 0; font-size: 18px; color: #b8c4d4; }
 .ab-mchip {
   align-self: flex-start;
@@ -512,7 +574,11 @@
   letter-spacing: -0.02em;
 }
 
+/* минимальная высота блока — из макета (считается без полей) */
+.ab-dark #seen { box-sizing: content-box; min-height: 782px; }
+
 /* C: правила */
+.ab-dark #rules { box-sizing: content-box; min-height: 562px; }
 .ab-rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 14px; }
 .ab-rule {
   background: #fff;
@@ -526,6 +592,112 @@
 .ab-rule__n { font-family: var(--font-head); font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #316397; }
 .ab-rule__title { font-family: var(--font-head); font-weight: 700; font-size: 22px; line-height: 1.2; }
 .ab-rule__text { font-size: 15px; line-height: 1.5; color: #3d4c5f; }
+
+/* C: ступени обучения */
+.ab-msteps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 16px;
+}
+.ab-mstep {
+  background: #132338;
+  border: 1px solid #22374f;
+  border-radius: 24px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ab-mstep__top { display: flex; align-items: center; gap: 14px; }
+.ab-mstep__n {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #1055cb;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 20px;
+}
+.ab-mstep__age {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #cfe0ff;
+  background: #1c3350;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.ab-mstep__title { font-family: var(--font-head); font-weight: 700; font-size: 24px; line-height: 1.2; }
+.ab-mstep__text { font-size: 16px; line-height: 1.5; color: #b8c4d4; }
+.ab-mstep__foot {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #22374f;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ab-mstep__result { font-size: 15px; line-height: 1.45; color: #e4ebf3; }
+.ab-mstep__result b { font-weight: 500; color: #8fb4ff; }
+.ab-mstep__meta { font-size: 14px; color: #8a9bb0; }
+.ab-msteps__cta { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; }
+.ab-msteps__note { font-size: 15px; color: #8a9bb0; }
+
+/* C: наше дело актуальное (логотипы) */
+.ab-noted__h2 {
+  margin: 0;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(26px, 2.8vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-wrap: balance;
+}
+.ab-noted {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+  gap: 12px;
+}
+/* на узком телефоне — тоже по два в ряд */
+@media (max-width: 400px) {
+  .ab-noted { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.ab-noted__item { display: flex; flex-direction: column; gap: 10px; }
+.ab-noted__card {
+  box-sizing: content-box;
+  background: #fff;
+  border-radius: 18px;
+  height: 104px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ab-noted__logo { max-width: 100%; max-height: 72px; width: auto; height: auto; display: block; }
+.ab-noted__logo--tall { max-height: 76px; }
+/* логотипа ещё нет — название текстом */
+.ab-noted__name {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.25;
+  color: #0e1a28;
+  text-align: center;
+}
+.ab-noted__caption { font-size: 13px; line-height: 1.35; color: #b8c4d4; text-align: center; }
 
 /* C: кто мы */
 .ab-who__photo {
@@ -543,11 +715,13 @@
   background: #1055cb;
   border-radius: 28px;
   padding: clamp(28px, 5vw, 64px);
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  gap: clamp(24px, 4vw, 48px);
+  align-items: center;
 }
+.ab-dare__copy { display: flex; flex-direction: column; gap: 18px; align-items: flex-start; }
+.ab-dare__photo { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px; }
 .ab-dare__eyebrow { font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #cfe0ff; }
 .ab-dare__h2 {
   margin: 0;
@@ -563,8 +737,44 @@
 .ab-dare__p { margin: 0; max-width: 760px; font-size: clamp(17px, 1.6vw, 21px); color: #e3ecff; }
 
 /* C: стоимость и форма */
-.ab-msec--light .ab-price__h2 { letter-spacing: -0.02em; }
+.ab-msec--light .ab-price__h2 { letter-spacing: -0.02em; text-wrap: wrap; }
 .ab-msec--light .ab-form { border: 1px solid #e3eaf3; box-shadow: 0 8px 32px rgba(45, 99, 151, 0.1); }
+/* поля не шире карточки на узком телефоне (иначе список филиалов растягивает их за край) */
+.ab-dark .ab-form .form-grid { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 560px) {
+  .ab-dark .ab-form .form-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+/* кнопка и галочка — как в макете: подпись кнопки переносится на узком экране */
+.ab-dark .ab-form .btn { line-height: normal; white-space: normal; }
+.ab-dark .ab-form .consent input { margin-bottom: 3px; }
+
+/* C: галерея — лента листается вбок, первая карточка — по левому краю заголовка, лента уходит за правый край */
+.ab-mgallery { padding: clamp(64px, 8vw, 128px) 0 0; }
+.ab-mgallery__head {
+  box-sizing: content-box;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 48px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.ab-mgallery__hint { font-size: 15px; color: #8a9bb0; }
+.ab-mgallery__strip {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0 clamp(16px, 4vw, 48px) 8px max(clamp(16px, 4vw, 48px), calc((100% - 1200px) / 2));
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: max(clamp(16px, 4vw, 48px), calc((100% - 1200px) / 2));
+  -webkit-overflow-scrolling: touch;
+}
+.ab-mgallery__strip li { flex: 0 0 min(78%, 440px); scroll-snap-align: start; }
+.ab-mgallery__strip img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px; }
 
 /* C: финал */
 .ab-mfinal { display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
