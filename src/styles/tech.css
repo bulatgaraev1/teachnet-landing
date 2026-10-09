@@ -302,10 +302,13 @@
 .tc-tcard__title { margin: 0 0 8px; font-family: var(--font-head); font-weight: 700; font-size: 20px; line-height: 1.25; }
 .tc-tcard__text { margin: 0; font-size: 16px; line-height: 1.5; color: rgba(255, 255, 255, 0.88); }
 .tc-downloads { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.tc-dl { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.tc-dl__note { padding-left: 4px; font-size: 13px; line-height: 1.3; color: rgba(255, 255, 255, 0.75); }
 .tc-download { gap: 10px; background: #fff; color: var(--brand); }
 .tc-download:hover { background: #e8eff8; }
 .tc-download__icon { width: 20px; height: 20px; flex: none; }
 @media (max-width: 599px) {
+  .tc-dl { width: 100%; }
   .tc-download { width: 100%; height: auto; min-height: 52px; padding-block: 12px; justify-content: space-between; white-space: normal; text-align: left; }
 }
 .tc-download:disabled { opacity: 0.78; cursor: not-allowed; transform: none; }
