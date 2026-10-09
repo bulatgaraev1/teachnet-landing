@@ -623,7 +623,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   function drawTrail(c) {
     var n = trail.length / 2, i, f;
     c.globalCompositeOperation = LI; c.lineCap = 'round';
-    for (i = 1; i < n; i++) { f = i / n; c.strokeStyle = rgba('95,212,255', f * f * 0.5 * edgeA(trail[i * 2 + 1])); c.lineWidth = 2 + f * 14; c.beginPath(); c.moveTo(trail[i * 2 - 2], trail[i * 2 - 1]); c.lineTo(trail[i * 2], trail[i * 2 + 1]); c.stroke(); }
+    for (i = 1; i < n; i++) { f = i / n; c.strokeStyle = rgba('95,212,255', f * f * 0.8 * edgeA(trail[i * 2 + 1])); c.lineWidth = 2 + f * 16; c.beginPath(); c.moveTo(trail[i * 2 - 2], trail[i * 2 - 1]); c.lineTo(trail[i * 2], trail[i * 2 + 1]); c.stroke(); }
     c.globalCompositeOperation = SO;
   }
   function drawFlyer(c) {
