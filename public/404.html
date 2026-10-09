@@ -2,36 +2,653 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#060b14" />
   <title>Страница не найдена — TEACHNET</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="/fonts/onest-latin-700.woff2" as="font" type="font/woff2" crossorigin />
+  <!--
+    Страница 404 (и 403 для закрытых файлов, см. .htaccess). Отдаётся по любому адресу,
+    поэтому все ссылки — абсолютные. Всё встроено в файл: внешние скрипты запрещены CSP сайта.
+    Цифры «404» — частицы на canvas: слетаются при загрузке, разлетаются от курсора,
+    по клику — взрыв, третий клик подряд собирает «TEACHNET». При prefers-reduced-motion — без анимации.
+  -->
   <style>
-    :root { --ink: #14213d; --muted: #5b6475; --brand: #316397; --bg: #f5f8fc; }
+    @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-latin-700.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-2199, U+2713; }
+    @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-cyrillic-700.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-latin-400.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-cyrillic-400.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-latin-500.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-cyrillic-500.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+
+    :root {
+      --bg: #060b14;
+      --ink: #eef3ff;
+      --muted: #a3b3cc;
+      --brand: #1055cb;
+      --glow: #8fb4ff;
+      --cyan: #5fd4ff;
+      --gold: #ffcb6b;
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px;
-      background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
-    main { max-width: 520px; text-align: center; }
-    img { display: block; margin: 0 auto 32px; }
-    h1 { margin: 0 0 12px; font-size: 28px; line-height: 1.2; }
-    p { margin: 0 0 24px; color: var(--muted); }
-    .btn { display: inline-block; padding: 14px 24px; border-radius: 12px; background: var(--brand); color: #fff; text-decoration: none; font-weight: 600; }
-    nav { margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; }
-    nav a { color: var(--brand); }
+    html, body { margin: 0; }
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      background: var(--bg);
+      color: var(--ink);
+      font: 17px/1.55 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+
+    /* ---------- космос: туманности, планета, холст с частицами ---------- */
+    .space { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; isolation: isolate; }
+        /* туманности — мягкие радиальные градиенты, неподвижные: размытие и анимация огромных слоёв тормозят слабые устройства,
+       движение даёт холст (звёзды с параллаксом, частицы) */
+    .nebula { position: absolute; border-radius: 50%; opacity: 0.6; pointer-events: none; z-index: -2; }
+    .nebula--a { width: 70vmax; height: 70vmax; left: -24vmax; top: -28vmax; background: radial-gradient(circle, rgba(37, 82, 170, 0.75) 0%, rgba(29, 63, 138, 0.35) 30%, rgba(29, 63, 138, 0.1) 52%, transparent 70%); }
+    .nebula--b { width: 64vmax; height: 64vmax; right: -26vmax; top: 6vh; background: radial-gradient(circle, rgba(92, 52, 170, 0.6) 0%, rgba(75, 42, 143, 0.28) 32%, rgba(75, 42, 143, 0.08) 52%, transparent 70%); opacity: 0.5; }
+    .nebula--c { width: 54vmax; height: 54vmax; left: 22vw; bottom: -34vmax; background: radial-gradient(circle, rgba(18, 120, 160, 0.6) 0%, rgba(14, 106, 143, 0.25) 32%, rgba(14, 106, 143, 0.06) 52%, transparent 70%); opacity: 0.45; }
+
+    .planet { position: absolute; left: -9vmin; bottom: -14vmin; width: 34vmin; height: 34vmin; z-index: -1; pointer-events: none; }
+    .planet__body {
+      position: absolute; inset: 0; border-radius: 50%;
+      background:
+        radial-gradient(circle at 34% 30%, #5d8fe8 0%, #2a55b0 28%, #142b63 58%, #070f26 80%),
+        #0b1a3d;
+      box-shadow: 0 0 60px 6px rgba(80, 140, 255, 0.25), inset -18px -24px 50px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+    }
+    .planet__body::after {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: repeating-linear-gradient(-28deg, rgba(255, 255, 255, 0.05) 0 6px, transparent 6px 18px);
+    }
+    .planet__ring {
+      position: absolute; left: -32%; top: 38%; width: 164%; height: 26%; border-radius: 50%;
+      border: 2px solid rgba(143, 180, 255, 0.45);
+      box-shadow: 0 0 18px rgba(143, 180, 255, 0.35);
+      transform: rotate(-18deg);
+    }
+
+    #space { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+    /* звёзды рисуются один раз; параллакс — сдвигом слоя (transform), без перерисовки */
+    .stars { position: absolute; left: -40px; top: -40px; width: calc(100% + 80px); height: calc(100% + 80px); z-index: 0; pointer-events: none; will-change: transform; }
+
+    /* ---------- содержимое ---------- */
+    .wrap {
+      position: relative; z-index: 1;
+      min-height: 100vh; min-height: 100svh;
+      display: grid; grid-template-rows: auto 1fr auto;
+      padding: 18px clamp(16px, 4vw, 48px) 22px;
+      pointer-events: none;
+    }
+    .wrap a, .wrap button { pointer-events: auto; }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .top img { display: block; height: 32px; width: auto; }
+    .top__phone { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px; white-space: nowrap; }
+    .top__phone:hover { color: var(--ink); }
+
+    .stage { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8px 0 12px; }
+    .digits { position: relative; width: min(100%, 980px); height: clamp(130px, 30vh, 330px); }
+    /* без JS — те же цифры обычным текстом (с JS их рисуют частицы) */
+    .digits__txt {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font: 700 clamp(120px, 30vh, 320px)/1 'Onest', system-ui, sans-serif; letter-spacing: -0.04em;
+      background: linear-gradient(100deg, var(--cyan), var(--glow) 45%, #9b8cff);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 0 30px rgba(95, 160, 255, 0.45));
+    }
+    .js-ok .digits__txt { visibility: hidden; }
+
+    .robot-hop {
+      position: absolute; right: max(-2%, calc(50% - 560px)); top: -6%;
+      width: clamp(84px, 12vw, 170px);
+      transition: transform 1s cubic-bezier(0.5, 0, 0.3, 1), opacity 1s ease;
+    }
+    /* пасхалка «TEACHNET»: робот улетает в космос и освобождает место надписи, потом возвращается */
+    .egg .robot-hop { transform: translate(160%, -140%) scale(0.3) rotate(40deg); opacity: 0; }
+    .robot {
+      display: block; width: 100%; height: auto; overflow: visible;
+      animation: float 7s ease-in-out infinite;
+      will-change: transform;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-6deg); }
+      50% { transform: translate3d(-10px, 18px, 0) rotate(5deg); }
+    }
+    .robot__flame { transform-origin: 50% 0; animation: flame 0.18s ease-in-out infinite alternate; }
+    .robot__flame--b { animation-delay: 0.09s; }
+    @keyframes flame { from { transform: scaleY(0.75); opacity: 0.8; } to { transform: scaleY(1.15); opacity: 1; } }
+    .robot__led { animation: blink 1.6s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0.15; } }
+    .robot__arm { transform-origin: 118px 112px; animation: wave 2.4s ease-in-out infinite; }
+    @keyframes wave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-24deg); } }
+    .robot__panel rect { animation: blink 1.1s steps(1) infinite; }
+    .robot__panel rect:nth-child(2) { animation-delay: 0.35s; }
+    .robot__panel rect:nth-child(3) { animation-delay: 0.7s; }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px; margin: 6px 0 14px;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #bcd0f2;
+      border: 1px solid rgba(143, 180, 255, 0.35); background: rgba(16, 40, 80, 0.35);
+      padding: 7px 14px; border-radius: 999px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    .chip__dot { width: 8px; height: 8px; border-radius: 50%; background: #ff6b6b; box-shadow: 0 0 10px #ff6b6b; animation: blink 1.2s steps(1) infinite; }
+    h1 {
+      margin: 0; max-width: 760px;
+      font: 700 clamp(28px, 4.2vw, 52px)/1.06 'Onest', system-ui, sans-serif; letter-spacing: -0.02em;
+      text-wrap: balance;
+      text-shadow: 0 0 40px rgba(60, 120, 255, 0.35);
+    }
+    .lead { margin: 14px 0 0; max-width: 600px; color: var(--muted); font-size: clamp(16px, 1.5vw, 19px); text-wrap: pretty; }
+    .log {
+      margin: 16px 0 0; min-height: 1.6em;
+      font: 14px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+      color: #7fe3ff; text-shadow: 0 0 12px rgba(95, 212, 255, 0.6);
+    }
+    .log__cursor { display: inline-block; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+
+    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 14px; margin-top: 24px; }
+    .btn {
+      position: relative; display: inline-flex; align-items: center; gap: 10px; overflow: hidden;
+      padding: 16px 26px; border-radius: 14px; text-decoration: none;
+      font: 700 17px/1.2 'Onest', system-ui, sans-serif; color: #fff; background: var(--brand);
+      box-shadow: 0 0 0 1px rgba(143, 180, 255, 0.35) inset, 0 12px 36px rgba(16, 85, 203, 0.55);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn::after {
+      content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 40%;
+      background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      transform: translateX(-160%) skewX(-20deg); animation: shine 3.6s ease-in-out infinite;
+    }
+    @keyframes shine { 0%, 55% { transform: translateX(-160%) skewX(-20deg); } 100% { transform: translateX(330%) skewX(-20deg); } }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(143, 180, 255, 0.6) inset, 0 16px 44px rgba(16, 85, 203, 0.75); }
+    .btn--ghost { background: rgba(255, 255, 255, 0.06); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22) inset; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .btn--ghost::after { display: none; }
+    .btn--ghost:hover { background: rgba(255, 255, 255, 0.12); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4) inset; }
+    .btn:focus-visible, .links a:focus-visible, .top a:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+    .btn svg { flex: 0 0 auto; }
+
+    .hint { margin: 18px 0 0; font-size: 13px; color: #6f86a8; letter-spacing: 0.02em; }
+    .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; font-size: 14px; }
+    .links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid rgba(163, 179, 204, 0.3); }
+    .links a:hover { color: var(--ink); border-color: var(--ink); }
+
+    @media (max-width: 640px) {
+      .top__phone { display: none; }
+      .digits { height: clamp(110px, 24vh, 200px); }
+      .robot-hop { top: -40%; right: 0; width: 74px; }
+      .planet { width: 46vmin; height: 46vmin; left: -20vmin; bottom: -22vmin; }
+      .btn { width: 100%; justify-content: center; }
+      .actions { width: 100%; max-width: 380px; }
+      .hint { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <a href="/" aria-label="TEACHNET — на главную"><img src="/images/logo-dark.svg" width="121" height="38" alt="TEACHNET" /></a>
-    <h1>Такой страницы нет</h1>
-    <p>Возможно, ссылка устарела или в адресе опечатка. Всё о занятиях — на главной.</p>
-    <a class="btn" href="/">На главную</a>
-    <nav aria-label="Разделы сайта">
-      <a href="/#programs">Программы</a>
-      <a href="/electronics">Электроника, 10–15 лет</a>
-      <a href="/tech">Учебная плата TEACHNET UNO</a>
-      <a href="tel:+79934151434">+7 (993) 415-14-34</a>
-    </nav>
-  </main>
+  <div class="space">
+    <div class="nebula nebula--a" aria-hidden="true"></div>
+    <div class="nebula nebula--b" aria-hidden="true"></div>
+    <div class="nebula nebula--c" aria-hidden="true"></div>
+    <div class="planet" aria-hidden="true"><div class="planet__body"></div><div class="planet__ring"></div></div>
+    <canvas class="stars" aria-hidden="true"></canvas>
+    <canvas class="stars" aria-hidden="true"></canvas>
+    <canvas id="space" aria-hidden="true"></canvas>
+
+    <div class="wrap">
+      <header class="top">
+        <a href="/" aria-label="TEACHNET — на главную"><img src="/images/logo-white.svg" width="102" height="32" alt="TEACHNET" /></a>
+        <a class="top__phone" href="tel:+79934151434">+7 (993) 415-14-34</a>
+      </header>
+
+      <main class="stage">
+        <div class="digits">
+          <span class="digits__txt" aria-hidden="true">404</span>
+          <div class="robot-hop"><svg class="robot" viewBox="0 0 160 210" aria-hidden="true">
+            <defs>
+              <linearGradient id="r-metal" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#f4f8ff" />
+                <stop offset="1" stop-color="#9fb6da" />
+              </linearGradient>
+              <linearGradient id="r-visor" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#16294d" />
+                <stop offset="1" stop-color="#050b18" />
+              </linearGradient>
+              <linearGradient id="r-flame" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#fff6d6" />
+                <stop offset="0.4" stop-color="#ffcb6b" />
+                <stop offset="1" stop-color="#ff6b3d" stop-opacity="0" />
+              </linearGradient>
+              <radialGradient id="r-eye">
+                <stop offset="0" stop-color="#e8fbff" />
+                <stop offset="0.45" stop-color="#5fd4ff" />
+                <stop offset="1" stop-color="#5fd4ff" stop-opacity="0" />
+              </radialGradient>
+              <radialGradient id="r-glow">
+                <stop offset="0" stop-color="#3f7dff" stop-opacity="0.45" />
+                <stop offset="1" stop-color="#3f7dff" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+            <!-- свечение вокруг робота (вместо CSS-тени: так дешевле) -->
+            <ellipse cx="80" cy="110" rx="86" ry="100" fill="url(#r-glow)" />
+            <!-- реактивный ранец -->
+            <rect x="52" y="112" width="56" height="44" rx="10" fill="#6e86ad" />
+            <path class="robot__flame" d="M60 156 h14 l-7 40 z" fill="url(#r-flame)" />
+            <path class="robot__flame robot__flame--b" d="M86 156 h14 l-7 40 z" fill="url(#r-flame)" />
+            <!-- антенна -->
+            <line x1="80" y1="22" x2="80" y2="8" stroke="#c9d8f2" stroke-width="3" stroke-linecap="round" />
+            <circle class="robot__led" cx="80" cy="7" r="5" fill="#ffcb6b" />
+            <circle cx="80" cy="7" r="9" fill="#ffcb6b" opacity="0.25" />
+            <!-- голова -->
+            <rect x="34" y="20" width="92" height="70" rx="26" fill="url(#r-metal)" stroke="#8fb4ff" stroke-width="2" />
+            <rect x="44" y="32" width="72" height="44" rx="18" fill="url(#r-visor)" />
+            <path d="M52 40 q10 -6 22 -4" stroke="rgba(255,255,255,0.45)" stroke-width="3" fill="none" stroke-linecap="round" />
+            <g id="robot-eyes">
+              <circle cx="66" cy="55" r="9" fill="url(#r-eye)" />
+              <circle cx="94" cy="55" r="9" fill="url(#r-eye)" />
+              <circle cx="66" cy="55" r="3.2" fill="#ffffff" />
+              <circle cx="94" cy="55" r="3.2" fill="#ffffff" />
+            </g>
+            <path d="M70 68 q10 6 20 0" stroke="#5fd4ff" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.8" />
+            <!-- корпус -->
+            <rect x="46" y="92" width="68" height="62" rx="18" fill="url(#r-metal)" stroke="#8fb4ff" stroke-width="2" />
+            <g class="robot__panel">
+              <rect x="60" y="108" width="10" height="6" rx="3" fill="#5fd4ff" />
+              <rect x="75" y="108" width="10" height="6" rx="3" fill="#ffcb6b" />
+              <rect x="90" y="108" width="10" height="6" rx="3" fill="#ff6b6b" />
+            </g>
+            <rect x="58" y="122" width="44" height="20" rx="6" fill="#16294d" />
+            <text x="80" y="136" text-anchor="middle" font-family="Onest, sans-serif" font-weight="700" font-size="11" fill="#8fb4ff">404</text>
+            <!-- руки -->
+            <path d="M46 106 q-22 6 -26 28" stroke="#c9d8f2" stroke-width="9" fill="none" stroke-linecap="round" />
+            <circle cx="20" cy="136" r="7" fill="#f4f8ff" stroke="#8fb4ff" stroke-width="2" />
+            <g class="robot__arm">
+              <path d="M114 106 q22 -6 28 -26" stroke="#c9d8f2" stroke-width="9" fill="none" stroke-linecap="round" />
+              <circle cx="142" cy="78" r="7" fill="#f4f8ff" stroke="#8fb4ff" stroke-width="2" />
+            </g>
+          </svg></div>
+        </div>
+
+        <span class="chip"><span class="chip__dot"></span>Ошибка 404 · сигнал потерян</span>
+        <h1>Эта страница улетела в&nbsp;открытый космос</h1>
+        <p class="lead">Ссылка устарела или в адресе опечатка. Наши роботы уже прочёсывают сектор — а&nbsp;вы пока возвращайтесь на&nbsp;Землю.</p>
+        <p class="log" aria-hidden="true"><span id="log"></span><span class="log__cursor">▍</span></p>
+
+        <div class="actions">
+          <a class="btn" href="/">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+            Вернуться на главную
+          </a>
+          <a class="btn btn--ghost" href="/#lead">Записаться на пробный урок</a>
+        </div>
+        <p class="hint" id="hint">Проведите курсором по цифрам — и нажмите</p>
+      </main>
+
+      <nav class="links" aria-label="Разделы сайта">
+        <a href="/#programs">Программы</a>
+        <a href="/electronics">Электроника, 10–15 лет</a>
+        <a href="/tech">Учебная плата TEACHNET UNO</a>
+      </nav>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+      var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var touch = window.matchMedia && matchMedia('(hover: none)').matches;
+      var cvs = document.getElementById('space');
+      var ctx = cvs && cvs.getContext && cvs.getContext('2d');
+      var space = document.querySelector('.space');
+      var digits = document.querySelector('.digits');
+      var hint = document.getElementById('hint');
+      var logEl = document.getElementById('log');
+      var eyes = document.getElementById('robot-eyes');
+
+      /* ---------- строка «лога робота» ---------- */
+      var LINES = ['> сканируем сектор 4-0-4…', '> страница не найдена: сигнал потерян', '> курс на главную проложен ✓'];
+      if (reduce) {
+        logEl.textContent = LINES[LINES.length - 1];
+      } else {
+        (function typeLine(i, pos) {
+          var line = LINES[i];
+          logEl.textContent = line.slice(0, pos);
+          if (pos < line.length) return setTimeout(function () { typeLine(i, pos + 1); }, 34 + Math.random() * 40);
+          if (i < LINES.length - 1) setTimeout(function () { typeLine(i + 1, 0); }, 1100);
+        })(0, 0);
+      }
+      if (touch && hint) hint.textContent = 'Коснитесь цифр';
+      if (!ctx) return;
+
+      // на телефоне холст в 1,5× — частицы светящиеся, разницы не видно, а рисовать вдвое дешевле
+      var DPR = Math.min(window.devicePixelRatio || 1, touch ? 1.5 : 2);
+      var quality = touch ? 0.6 : 1; // доля частиц; снижается сама, если устройство не успевает
+      var starLayers = [], twinkle = [];
+      var W = 0, H = 0;
+      var parts = [], sparks = [], rings = [], meteors = [];
+      var pointer = { x: -1e4, y: -1e4, on: false }, par = { x: 0, y: 0, tx: 0, ty: 0 };
+      var start = performance.now(), last = start, word = '404', clicks = [], morphTimer = 0;
+
+      /* светящиеся точки — заранее отрисованные спрайты (быстрее, чем градиент на каждую частицу) */
+      function sprite(rgb, r) {
+        var c = document.createElement('canvas'), s = r * 2;
+        c.width = c.height = s;
+        var g = c.getContext('2d'), gr = g.createRadialGradient(r, r, 0, r, r, r);
+        gr.addColorStop(0, 'rgba(255,255,255,0.9)');
+        gr.addColorStop(0.16, 'rgba(' + rgb + ',0.95)');
+        gr.addColorStop(0.5, 'rgba(' + rgb + ',0.25)');
+        gr.addColorStop(1, 'rgba(' + rgb + ',0)');
+        g.fillStyle = gr;
+        g.fillRect(0, 0, s, s);
+        return c;
+      }
+      var PAL = ['95,212,255', '120,170,255', '143,180,255', '155,140,255', '255,255,255'];
+      var SPR = PAL.map(function (c) { return sprite(c, 16); });
+      var GOLD = sprite('255,203,107', 16);
+
+      /* ---------- точки букв: текст рисуется в невидимом холсте и считываются закрашенные пиксели ---------- */
+      function sample(text, n) {
+        var r = digits.getBoundingClientRect(), base = space.getBoundingClientRect();
+        var w = Math.max(10, Math.round(r.width)), h = Math.max(10, Math.round(r.height));
+        var c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        var g = c.getContext('2d');
+        var fs = 100;
+        g.font = '700 ' + fs + 'px Onest, system-ui, sans-serif';
+        var tw = g.measureText(text).width;
+        fs = Math.min(h * 0.98, (w * 0.94) / (tw / fs));
+        g.font = '700 ' + fs + 'px Onest, system-ui, sans-serif';
+        g.textAlign = 'center';
+        g.textBaseline = 'middle';
+        g.fillStyle = '#fff';
+        g.fillText(text, w / 2, h / 2 + fs * 0.04);
+        var d = g.getImageData(0, 0, w, h).data, filled = 0, x, y;
+        for (y = 0; y < h; y += 2) for (x = 0; x < w; x += 2) if (d[(y * w + x) * 4 + 3] > 140) filled++;
+        var step = Math.max(2, Math.sqrt((filled * 4) / n));
+        var pts = [], ox = r.left - base.left, oy = r.top - base.top;
+        for (y = step / 2; y < h; y += step) {
+          for (x = step / 2; x < w; x += step) {
+            if (d[((y | 0) * w + (x | 0)) * 4 + 3] > 140) pts.push({ x: ox + x + (Math.random() - 0.5) * step * 0.5, y: oy + y + (Math.random() - 0.5) * step * 0.5, u: x / w });
+          }
+        }
+        return pts;
+      }
+
+      function targetCount() {
+        var a = W * H;
+        return Math.round(Math.max(360, Math.min(1600, a / 750) * quality));
+      }
+
+      function setWord(text, gold) {
+        var pts = sample(text, targetCount());
+        if (!pts.length) return;
+        word = text;
+        for (var i = pts.length - 1; i > 0; i--) { var j = (Math.random() * (i + 1)) | 0, t = pts[i]; pts[i] = pts[j]; pts[j] = t; }
+        var first = parts.length === 0;
+        if (pts.length > parts.length) {
+          for (var k = parts.length; k < pts.length; k++) {
+            var ang = Math.random() * Math.PI * 2, dist = Math.max(W, H) * (0.6 + Math.random() * 0.6);
+            parts.push({
+              x: W / 2 + Math.cos(ang) * dist, y: H / 2 + Math.sin(ang) * dist,
+              vx: Math.sin(ang) * 6, vy: -Math.cos(ang) * 6,
+              hx: 0, hy: 0, s: 0.5 + Math.random() * 0.75, ph: Math.random() * 6.28, c: 0, gold: false
+            });
+          }
+        }
+        parts.length = Math.max(pts.length, 1);
+        for (var p = 0; p < parts.length; p++) {
+          var q = pts[p % pts.length], P = parts[p];
+          P.hx = q.x; P.hy = q.y;
+          P.c = Math.random() < 0.08 ? 4 : Math.min(3, Math.floor(q.u * 4));
+          P.gold = !!gold && Math.random() < 0.55;
+        }
+        if (first) start = performance.now();
+      }
+
+      /* звёзды рисуются один раз в два слоя (дальний и ближний) — в кадре это два drawImage со сдвигом-параллаксом;
+         отдельно, по одной, мерцают только яркие */
+      var PAD = 40, starEls = document.querySelectorAll('.stars');
+      function makeStars() {
+        starLayers = [0.4, 1].map(function (z, i) {
+          var c = starEls[i];
+          c.width = Math.round((W + PAD * 2) * DPR); c.height = Math.round((H + PAD * 2) * DPR);
+          var g = c.getContext('2d');
+          g.setTransform(DPR, 0, 0, DPR, 0, 0);
+          return { c: c, g: g, z: z, ox: 1e9, oy: 1e9 };
+        });
+        twinkle = [];
+        var n = Math.round(Math.min(480, (W * H) / 2800));
+        for (var i = 0; i < n; i++) {
+          var z = Math.random(), x = Math.random() * (W + PAD * 2), y = Math.random() * (H + PAD * 2), r = 0.4 + z * 1.3;
+          if (z > 0.82 && twinkle.length < 46) { twinkle.push({ x: x - PAD, y: y - PAD, z: 1, r: r + 0.2, tw: Math.random() * 6.28, sp: 0.6 + Math.random() * 2 }); continue; }
+          var L = starLayers[z > 0.55 ? 1 : 0];
+          L.g.globalAlpha = 0.35 + z * 0.6;
+          L.g.fillStyle = z > 0.75 ? '#cfe0ff' : '#ffffff';
+          L.g.beginPath(); L.g.arc(x, y, r, 0, 6.283); L.g.fill();
+        }
+      }
+
+      function resize() {
+        var r = space.getBoundingClientRect();
+        W = r.width; H = r.height;
+        cvs.width = Math.round(W * DPR); cvs.height = Math.round(H * DPR);
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        makeStars();
+        setWord(word, word !== '404');
+        if (reduce) draw(0, true);
+      }
+
+      /* ---------- взаимодействие ---------- */
+      function local(e) {
+        var r = space.getBoundingClientRect();
+        return { x: e.clientX - r.left, y: e.clientY - r.top };
+      }
+      window.addEventListener('pointermove', function (e) {
+        var p = local(e);
+        pointer.x = p.x; pointer.y = p.y; pointer.on = true;
+        par.tx = (e.clientX / window.innerWidth - 0.5) * 2;
+        par.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+        if (!reduce && Math.random() < 0.7) spark(p.x, p.y, 1, 1.2);
+        lookAt(e.clientX, e.clientY);
+      }, { passive: true });
+      window.addEventListener('pointerleave', function () { pointer.on = false; pointer.x = pointer.y = -1e4; });
+      document.addEventListener('pointerout', function (e) { if (!e.relatedTarget) { pointer.on = false; pointer.x = pointer.y = -1e4; } });
+      window.addEventListener('pointerdown', function (e) {
+        if (e.target.closest && e.target.closest('a, button')) return;
+        var p = local(e);
+        if (reduce) return;
+        boom(p.x, p.y);
+        if (touch) { setTimeout(function () { pointer.on = false; pointer.x = pointer.y = -1e4; }, 450); }
+        var now = performance.now();
+        clicks = clicks.filter(function (t) { return now - t < 1600; });
+        clicks.push(now);
+        if (clicks.length >= 3 && word === '404') {
+          clicks = [];
+          setTimeout(function () { setWord('TEACHNET', true); digits.classList.add('egg'); }, 260);
+          clearTimeout(morphTimer);
+          morphTimer = setTimeout(function () { setWord('404', false); digits.classList.remove('egg'); }, 3800);
+        }
+      });
+
+      function lookAt(cx, cy) {
+        if (!eyes) return;
+        var r = eyes.getBoundingClientRect();
+        var dx = cx - (r.left + r.width / 2), dy = cy - (r.top + r.height / 2), d = Math.hypot(dx, dy) || 1;
+        var k = Math.min(1, d / 260) * 4;
+        eyes.setAttribute('transform', 'translate(' + ((dx / d) * k).toFixed(2) + ' ' + ((dy / d) * k).toFixed(2) + ')');
+      }
+
+      function spark(x, y, n, sp) {
+        for (var i = 0; i < n; i++) {
+          var a = Math.random() * 6.28, v = Math.random() * sp;
+          sparks.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, s: 0.3 + Math.random() * 0.5, c: (Math.random() * 5) | 0 });
+        }
+        if (sparks.length > 400) sparks.splice(0, sparks.length - 400);
+      }
+
+      function boom(x, y) {
+        rings.push({ x: x, y: y, r: 6, life: 1 });
+        spark(x, y, 46, 7);
+        for (var i = 0; i < parts.length; i++) {
+          var P = parts[i], dx = P.x - x, dy = P.y - y, d = Math.hypot(dx, dy) || 1;
+          var f = Math.min(26, 5200 / (d + 60));
+          P.vx += (dx / d) * f * (0.6 + Math.random() * 0.8);
+          P.vy += (dy / d) * f * (0.6 + Math.random() * 0.8);
+        }
+      }
+
+      /* ---------- кадр ---------- */
+      function draw(now, still) {
+        var dt = Math.min(2.2, (now - last) / 16.67 || 1);
+        last = now;
+        var t = (now - start) / 1000;
+        ctx.clearRect(0, 0, W, H);
+
+        par.x += (par.tx - par.x) * 0.05;
+        par.y += (par.ty - par.y) * 0.05;
+
+        // звёзды: два готовых слоя сдвигаются за курсором (параллакс), яркие мерцают на холсте
+        for (var l = 0; l < starLayers.length; l++) {
+          var SL = starLayers[l], ox = -par.x * 26 * SL.z, oy = -par.y * 18 * SL.z;
+          if (Math.abs(ox - SL.ox) > 0.15 || Math.abs(oy - SL.oy) > 0.15) {
+            SL.ox = ox; SL.oy = oy;
+            SL.c.style.transform = 'translate3d(' + ox.toFixed(1) + 'px,' + oy.toFixed(1) + 'px,0)';
+          }
+        }
+        ctx.fillStyle = '#ffffff';
+        for (var i = 0; i < twinkle.length; i++) {
+          var s = twinkle[i];
+          ctx.globalAlpha = still ? 0.8 : 0.3 + 0.7 * Math.abs(Math.sin(t * s.sp * 0.6 + s.tw));
+          ctx.beginPath();
+          ctx.arc(s.x - par.x * 26, s.y - par.y * 18, s.r, 0, 6.283);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        // падающие звёзды
+        if (!still && Math.random() < 0.006 * dt && meteors.length < 2) {
+          meteors.push({ x: Math.random() * W * 0.8 + W * 0.2, y: Math.random() * H * 0.35, vx: -(9 + Math.random() * 6), vy: 4 + Math.random() * 3, life: 1 });
+        }
+        ctx.lineCap = 'round';
+        for (var m = meteors.length - 1; m >= 0; m--) {
+          var M = meteors[m];
+          M.x += M.vx * dt; M.y += M.vy * dt; M.life -= 0.012 * dt;
+          if (M.life <= 0 || M.x < -100 || M.y > H + 100) { meteors.splice(m, 1); continue; }
+          var gr = ctx.createLinearGradient(M.x, M.y, M.x - M.vx * 9, M.y - M.vy * 9);
+          gr.addColorStop(0, 'rgba(255,255,255,' + M.life + ')');
+          gr.addColorStop(1, 'rgba(143,180,255,0)');
+          ctx.strokeStyle = gr; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(M.x, M.y); ctx.lineTo(M.x - M.vx * 9, M.y - M.vy * 9); ctx.stroke();
+        }
+
+        ctx.globalCompositeOperation = 'lighter';
+
+        // частицы цифр: пружина к своей точке, «дыхание», отталкивание от курсора
+        var intro = Math.min(1, t / 1.6), k = 0.006 + 0.05 * intro * intro, dampK = Math.pow(0.86, dt);
+        var R = Math.max(70, Math.min(W, H) * 0.14), R2 = R * R;
+        // чем гуще частицы, тем тусклее каждая: иначе при сложении света цифры выгорают в белое
+        var alphaK = Math.min(1, Math.max(0.55, 520 / parts.length));
+        for (var p = 0; p < parts.length; p++) {
+          var P = parts[p];
+          if (still) { P.x = P.hx; P.y = P.hy; }
+          else {
+            var hx = P.hx + Math.sin(t * 1.3 + P.ph) * 1.6, hy = P.hy + Math.cos(t * 1.1 + P.ph) * 1.6;
+            var ax = (hx - P.x) * k, ay = (hy - P.y) * k;
+            if (pointer.on) {
+              var dx = P.x - pointer.x, dy = P.y - pointer.y, d2 = dx * dx + dy * dy;
+              if (d2 < R2) {
+                var d = Math.sqrt(d2) || 1, f = (1 - d / R) * 5.2;
+                ax += (dx / d) * f + (-dy / d) * f * 0.35;
+                ay += (dy / d) * f + (dx / d) * f * 0.35;
+              }
+            }
+            P.vx = (P.vx + ax * dt) * dampK;
+            P.vy = (P.vy + ay * dt) * dampK;
+            P.x += P.vx * dt; P.y += P.vy * dt;
+          }
+          var speed = Math.min(1, Math.abs(P.vx) + Math.abs(P.vy)) * 0.6;
+          var size = (7 + P.s * 7) * (1 + speed * 0.5);
+          var img = P.gold ? GOLD : SPR[P.c];
+          ctx.globalAlpha = (still ? 0.9 : 0.5 + 0.45 * Math.abs(Math.sin(t * 2 + P.ph))) * alphaK;
+          ctx.drawImage(img, P.x - size / 2, P.y - size / 2, size, size);
+        }
+
+        // искры за курсором и от взрывов
+        for (var j = sparks.length - 1; j >= 0; j--) {
+          var S = sparks[j];
+          S.x += S.vx * dt; S.y += S.vy * dt; S.vx *= 0.96; S.vy *= 0.96; S.life -= 0.022 * dt;
+          if (S.life <= 0) { sparks.splice(j, 1); continue; }
+          var ss = 6 + S.s * 10;
+          ctx.globalAlpha = S.life;
+          ctx.drawImage(SPR[S.c], S.x - ss / 2, S.y - ss / 2, ss, ss);
+        }
+
+        // ударная волна
+        for (var q = rings.length - 1; q >= 0; q--) {
+          var G = rings[q];
+          G.r += 9 * dt; G.life -= 0.028 * dt;
+          if (G.life <= 0) { rings.splice(q, 1); continue; }
+          ctx.globalAlpha = G.life * 0.8;
+          ctx.strokeStyle = 'rgba(143,180,255,1)';
+          ctx.lineWidth = 2 + G.life * 3;
+          ctx.beginPath(); ctx.arc(G.x, G.y, G.r, 0, 6.283); ctx.stroke();
+        }
+
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      // если устройство не успевает (кадр дольше ~26 мс), частиц становится меньше — один-два раза
+      var fN = 0, fSum = 0, fPrev = 0, cuts = 0;
+      function loop(now) {
+        if (fPrev && now - start > 2200 && cuts < 2) {
+          fSum += now - fPrev; fN++;
+          if (fN >= 50) {
+            if (fSum / fN > 26) { cuts++; quality *= 0.55; setWord(word, word !== '404'); }
+            fN = fSum = 0;
+          }
+        }
+        fPrev = now;
+        draw(now, false);
+        raf = requestAnimationFrame(loop);
+      }
+
+      var raf = 0, rto = 0, lastW = 0;
+      function init() {
+        resize();
+        lastW = W;
+        document.documentElement.classList.add('js-ok');
+        if (!reduce) raf = requestAnimationFrame(loop);
+        window.addEventListener('resize', function () {
+          clearTimeout(rto);
+          rto = setTimeout(function () {
+            // на телефоне при прокрутке меняется только высота (панель адреса) — цифры не пересобираем
+            var r = space.getBoundingClientRect();
+            if (Math.abs(r.width - lastW) < 1 && Math.abs(r.height - H) < 120) return;
+            lastW = r.width;
+            resize();
+          }, 160);
+        });
+      }
+
+      // ждём шрифт Onest, чтобы цифры собрались его начертанием (но не дольше 1,2 с)
+      var started = false;
+      function go() { if (!started) { started = true; init(); } }
+      if (document.fonts && document.fonts.load) {
+        Promise.race([
+          document.fonts.load('700 100px Onest', '404TEACHNET'),
+          new Promise(function (res) { setTimeout(res, 1200); })
+        ]).then(go, go);
+      } else {
+        go();
+      }
+    })();
+  </script>
 </body>
 </html>
