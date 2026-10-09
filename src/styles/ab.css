@@ -414,7 +414,8 @@
 }
 .ab-form .field--select { padding-right: 44px; }
 .ab-form .consent { gap: 10px; font-size: 13px; color: #5a6b80; }
-.ab-form .consent input { width: 18px; height: 18px; margin-top: 3px; }
+.ab-form .consent input { width: 18px; height: 18px; margin-top: 3px; margin-bottom: 3px; }
+/* кнопка — как в макетах B и C; на узком телефоне подпись переносится, а не вылезает за кнопку */
 .ab-form .btn {
   height: auto;
   padding: 18px 24px;
@@ -422,11 +423,14 @@
   font-family: var(--font-head);
   font-weight: 700;
   font-size: 18px;
+  line-height: normal;
+  white-space: normal;
 }
 .ab-form .form-foot { margin-top: 16px; text-align: center; font-size: 13px; color: #5a6b80; }
-/* возраст и филиал — в одну строку, когда хватает ширины (как в макете) */
+/* возраст и филиал — в одну строку, когда хватает ширины (как в макете);
+   minmax(0, 1fr) — поля не шире карточки (список филиалов не растягивает колонки) */
 @media (min-width: 560px) {
-  .ab-form .form-grid { grid-template-columns: 1fr 1fr; gap: 16px 12px; }
+  .ab-form .form-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 12px; }
   .ab-form .form-grid > * { grid-column: 1 / -1; }
   .ab-form .form-grid > div.field-row:nth-of-type(3),
   .ab-form .form-grid > div.field-row:nth-of-type(4) { grid-column: auto; }
@@ -739,14 +743,6 @@
 /* C: стоимость и форма */
 .ab-msec--light .ab-price__h2 { letter-spacing: -0.02em; text-wrap: wrap; }
 .ab-msec--light .ab-form { border: 1px solid #e3eaf3; box-shadow: 0 8px 32px rgba(45, 99, 151, 0.1); }
-/* поля не шире карточки на узком телефоне (иначе список филиалов растягивает их за край) */
-.ab-dark .ab-form .form-grid { grid-template-columns: minmax(0, 1fr); }
-@media (min-width: 560px) {
-  .ab-dark .ab-form .form-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-}
-/* кнопка и галочка — как в макете: подпись кнопки переносится на узком экране */
-.ab-dark .ab-form .btn { line-height: normal; white-space: normal; }
-.ab-dark .ab-form .consent input { margin-bottom: 3px; }
 
 /* C: галерея — лента листается вбок, первая карточка — по левому краю заголовка, лента уходит за правый край */
 .ab-mgallery { padding: clamp(64px, 8vw, 128px) 0 0; }

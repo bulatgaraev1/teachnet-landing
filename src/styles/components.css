@@ -500,7 +500,8 @@
 }
 
 /* ---------- Форма (§7, блок 9) ---------- */
-.form-grid { display: grid; gap: 14px; }
+/* minmax(0, 1fr): на узком телефоне поля не шире формы (список с длинным вариантом не растягивает колонку) */
+.form-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
 .field {
   height: 56px;
   width: 100%;
