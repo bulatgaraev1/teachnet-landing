@@ -1,8 +1,7 @@
 /** Блоки варианта C (/education2 «Манифест») — по макету docs/mockups/education2-mockup.html. */
-import { existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { tick } from './svg';
 import { formCard } from './form-card';
+import { LOGOS, logoSrc } from './logos';
 
 /** Якорь всех кнопок записи на странице — карточка формы (как в макете) */
 export const SIGNUP = '#msignup';
@@ -144,29 +143,11 @@ export function stepsC(): string {
   </section>`;
 }
 
-// Логотипы «Наше дело актуальное»: файл кладут в public/images/ (webp / jpg / jpeg / png).
-// Проверка на сборке: если файла ещё нет, в карточке — название текстом, без битой картинки.
-const IMAGES_DIR = fileURLToPath(new URL('../../../public/images/', import.meta.url));
-const LOGO_FORMATS = ['webp', 'jpg', 'jpeg', 'png'];
-const NOTED = [
-  { file: 'logo-itpark', alt: 'IT-парк', caption: 'IT-парк' },
-  { file: 'logo-edu', alt: 'Министерство образования и науки РТ', caption: 'Минобрнауки РТ' },
-  { file: 'logo-youth-ministry', alt: 'Министерство по делам молодёжи РТ', caption: 'Минмолодёжи РТ' },
-  { file: 'logo-kai', alt: 'КНИТУ-КАИ', caption: 'КНИТУ-КАИ' },
-  { file: 'logo-kazan', alt: 'Школа №4', caption: 'Школа №4', tall: true },
-  { file: 'logo-semya', alt: 'Семья вместе', caption: '«Семья вместе»' },
-];
-
-function logoSrc(file: string): string | null {
-  const ext = LOGO_FORMATS.find((e) => existsSync(`${IMAGES_DIR}${file}.${e}`));
-  return ext ? `/images/${file}.${ext}` : null;
-}
-
 export function notedC(): string {
-  const items = NOTED.map((l) => {
+  const items = LOGOS.map((l) => {
     const src = logoSrc(l.file);
     const inner = src
-      ? `<img class="ab-noted__logo${l.tall ? ' ab-noted__logo--tall' : ''}" src="${src}" loading="lazy" decoding="async" alt="${l.alt}" />`
+      ? `<img class="ab-noted__logo${l.size ? ` ab-noted__logo--${l.size}` : ''}" src="${src}" loading="lazy" decoding="async" alt="${l.alt}" />`
       : `<span class="ab-noted__name">${l.alt}</span>`;
     return `<li class="ab-noted__item"><div class="ab-noted__card">${inner}</div><span class="ab-noted__caption">${l.caption}</span></li>`;
   }).join('\n        ');
