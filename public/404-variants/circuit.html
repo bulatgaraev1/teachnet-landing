@@ -17,293 +17,290 @@
     prefers-reduced-motion: без мерцания и бегущих импульсов, состояния переключаются мгновенно.
   -->
   <style>
-    @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-latin-700.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-2199, U+2713; }
-    @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-cyrillic-700.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
-    @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-latin-400.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
-    @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-cyrillic-400.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
-    @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-latin-500.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
-    @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-cyrillic-500.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+  @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-latin-700.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-2199, U+2713; }
+  @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-cyrillic-700.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+  @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-latin-400.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-cyrillic-400.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+  @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-latin-500.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-cyrillic-500.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
 
-    :root {
-      --bg: #060b14; --ink: #eef3ff; --muted: #a3b3cc; --brand: #1055cb;
-      --cyan: #5fd4ff; --gold: #ffcb6b; --green: #46ff7a; --red: #ff4040;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; }
-    body {
-      min-height: 100vh; min-height: 100svh;
-      background: var(--bg); color: var(--ink);
-      font: 17px/1.55 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-      overflow-x: hidden; -webkit-font-smoothing: antialiased;
-    }
-    a { color: inherit; }
+  :root {
+    --bg: #060b14; --ink: #eef3ff; --muted: #a3b3cc; --brand: #1055cb;
+    --cyan: #5fd4ff; --gold: #ffcb6b; --green: #46ff7a; --red: #ff4040;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh; min-height: 100svh;
+    background: var(--bg); color: var(--ink);
+    font: 17px/1.55 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    overflow-x: hidden; -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
 
-    /* ---------- фон: тёмный стол-«чертёж» с мягким светом, всё неподвижно ---------- */
-    .bg {
-      position: fixed; inset: 0; z-index: -2; pointer-events: none;
-      background:
-        radial-gradient(55% 45% at 52% 58%, rgba(22, 110, 82, 0.30), transparent 72%),
-        radial-gradient(42% 38% at 8% 4%, rgba(16, 85, 203, 0.28), transparent 70%),
-        radial-gradient(36% 36% at 96% 96%, rgba(95, 212, 255, 0.10), transparent 70%),
-        var(--bg);
-    }
-    .bg::after {
-      content: ''; position: absolute; inset: 0;
-      background-image: linear-gradient(rgba(143, 180, 255, 0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(143, 180, 255, 0.055) 1px, transparent 1px);
-      background-size: 36px 36px;
-      -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 50%, #000 25%, transparent 80%);
-      mask-image: radial-gradient(ellipse 70% 65% at 50% 50%, #000 25%, transparent 80%);
-    }
-    .flash {
-      position: fixed; inset: 0; z-index: 20; pointer-events: none; opacity: 0;
-      background: radial-gradient(circle at var(--fx, 50%) var(--fy, 50%), rgba(210, 255, 225, 0.55), rgba(70, 255, 122, 0.16) 28%, transparent 62%);
-    }
-    .flash.go { animation: flash 0.9s ease-out; }
-    @keyframes flash { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
+  /* — фон: тёмный стол-«чертёж» с мягким светом, всё неподвижно — */
+  .bg {
+    position: fixed; inset: 0; z-index: -2; pointer-events: none;
+    background:
+      radial-gradient(55% 45% at 52% 58%, rgba(22, 110, 82, 0.30), transparent 72%),
+      radial-gradient(42% 38% at 8% 4%, rgba(16, 85, 203, 0.28), transparent 70%),
+      radial-gradient(36% 36% at 96% 96%, rgba(95, 212, 255, 0.10), transparent 70%),
+      var(--bg);
+  }
+  .bg::after {
+    content: ''; position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(143, 180, 255, 0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(143, 180, 255, 0.055) 1px, transparent 1px);
+    background-size: 36px 36px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 50%, #000 25%, transparent 80%);
+    mask-image: radial-gradient(ellipse 70% 65% at 50% 50%, #000 25%, transparent 80%);
+  }
+  .flash {
+    position: fixed; inset: 0; z-index: 20; pointer-events: none; opacity: 0;
+    background: radial-gradient(circle at var(--fx, 50%) var(--fy, 50%), rgba(210, 255, 225, 0.55), rgba(70, 255, 122, 0.16) 28%, transparent 62%);
+  }
+  .flash.go { animation: flash 0.9s ease-out; }
+  @keyframes flash { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
 
-    /* ---------- каркас ---------- */
-    .wrap {
-      min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column;
-      padding: 16px clamp(16px, 4vw, 48px) 18px;
-      padding-left: max(clamp(16px, 4vw, 48px), env(safe-area-inset-left));
-      padding-right: max(clamp(16px, 4vw, 48px), env(safe-area-inset-right));
-    }
-    .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .top img { display: block; height: 32px; width: auto; }
-    .top__phone { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px; white-space: nowrap; }
-    .top__phone:hover { color: var(--ink); }
-    .main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4px 0 8px; }
+  /* — каркас — */
+  .wrap {
+    min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column;
+    padding: 16px clamp(16px, 4vw, 48px) 18px;
+    padding-left: max(clamp(16px, 4vw, 48px), env(safe-area-inset-left));
+    padding-right: max(clamp(16px, 4vw, 48px), env(safe-area-inset-right));
+  }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .top img { display: block; height: 32px; width: auto; }
+  .top__phone { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px; white-space: nowrap; }
+  .top__phone:hover { color: var(--ink); }
+  .main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 4px 0 8px; }
 
-    .pill {
-      display: inline-flex; align-items: center; gap: 9px; margin: 2px 0 10px; padding: 6px 13px 6px 11px; border-radius: 999px;
-      font: 700 12.5px/1.2 var(--mono); letter-spacing: 0.04em; color: #ffb8b2;
-      border: 1px solid rgba(255, 64, 64, 0.38); background: rgba(255, 64, 64, 0.08);
-      transition: color 0.3s, border-color 0.3s, background-color 0.3s;
-    }
-    .pill__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); box-shadow: 0 0 10px var(--red); animation: blink 1.1s steps(1) infinite; }
-    @keyframes blink { 50% { opacity: 0.2; } }
-    .is-done .pill { color: #c2ffd5; border-color: rgba(70, 255, 122, 0.45); background: rgba(70, 255, 122, 0.08); }
-    .is-done .pill__dot { background: var(--green); box-shadow: 0 0 10px var(--green); animation: none; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 9px; margin: 2px 0 10px; padding: 6px 13px 6px 11px; border-radius: 999px;
+    font: 700 12.5px/1.2 var(--mono); letter-spacing: 0.04em; color: #ffb8b2;
+    border: 1px solid rgba(255, 64, 64, 0.38); background: rgba(255, 64, 64, 0.08);
+    transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+  }
+  .pill__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); box-shadow: 0 0 10px var(--red); animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0.2; } }
+  .is-done .pill { color: #c2ffd5; border-color: rgba(70, 255, 122, 0.45); background: rgba(70, 255, 122, 0.08); }
+  .is-done .pill__dot { background: var(--green); box-shadow: 0 0 10px var(--green); animation: none; }
 
-    h1 {
-      margin: 0; max-width: 900px;
-      font: 700 clamp(30px, 3.7vw, 54px)/1.05 'Onest', system-ui, sans-serif; letter-spacing: -0.02em; text-wrap: balance;
-    }
-    .h1-acc {
-      background: linear-gradient(95deg, #ffd27a 10%, #ff8a5c 60%, #ff5a5a);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-    .lead { margin: 10px 0 0; max-width: 780px; color: var(--muted); font-size: clamp(15px, 1.35vw, 18px); text-wrap: pretty; }
+  h1 {
+    margin: 0; max-width: 900px;
+    font: 700 clamp(30px, 3.7vw, 54px)/1.05 'Onest', system-ui, sans-serif; letter-spacing: -0.02em; text-wrap: balance;
+  }
+  .h1-acc {
+    background: linear-gradient(95deg, #ffd27a 10%, #ff8a5c 60%, #ff5a5a);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lead { margin: 10px 0 0; max-width: 780px; color: var(--muted); font-size: clamp(15px, 1.35vw, 18px); text-wrap: pretty; }
 
-    /* ---------- сцена: плата (SVG), эффекты (canvas), Тич, провод (SVG) ---------- */
-    .stage {
-      position: relative; margin: 8px auto 0; flex: 0 0 auto;
-      width: min(100%, 1440px, max(640px, calc((100vh - 372px) * 1.875)));
-      aspect-ratio: 1200 / 640;
-    }
-    @supports (height: 100svh) { .stage { width: min(100%, 1440px, max(640px, calc((100svh - 372px) * 1.875))); } }
-    .js .stage { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
-    .stage::before, .stage::after {
-      content: ''; position: absolute; left: 12%; right: -2%; top: -8%; bottom: -8%; z-index: -1; pointer-events: none;
-      background: radial-gradient(closest-side, rgba(34, 150, 108, 0.22), transparent);
-    }
-    .stage::after { background: radial-gradient(closest-side, rgba(70, 255, 122, 0.26), rgba(95, 212, 255, 0.06) 60%, transparent); opacity: 0; transition: opacity 0.8s; }
-    .is-done .stage::after { opacity: 1; }
-    .sheen { position: absolute; overflow: hidden; pointer-events: none; }
-    .sheen::before {
-      content: ''; position: absolute; top: -10%; bottom: -10%; left: 0; width: 32%;
-      background: linear-gradient(100deg, transparent, rgba(205, 255, 228, 0.2) 45%, rgba(255, 255, 255, 0.28) 50%, rgba(205, 255, 228, 0.2) 55%, transparent);
-      transform: translateX(-130%) skewX(-18deg);
-    }
-    .is-done .sheen::before { animation: sheen 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.05s; }
-    @keyframes sheen { to { transform: translateX(420%) skewX(-18deg); } }
-    .pcb, .wire, #fx { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
-    #fx, .wire { pointer-events: none; }
-    .wire .grab { pointer-events: all; cursor: grab; fill: transparent; }
-    .wire path.grab { fill: none; stroke: transparent; stroke-width: 36; pointer-events: stroke; }
-    .wire .padhit { pointer-events: all; cursor: pointer; fill: transparent; }
-    .is-on .wire .padhit { pointer-events: none; }
-    .dragging, .dragging * { cursor: grabbing !important; }
+  /* — сцена: плата (SVG), эффекты (canvas), Тич, провод (SVG) — */
+  .stage {
+    position: relative; margin: 8px auto 0; flex: 0 0 auto;
+    width: min(100%, 1440px, max(640px, calc((100vh - 384px) * 1.875)));
+    aspect-ratio: 1200 / 640;
+  }
+  @supports (height: 100svh) { .stage { width: min(100%, 1440px, max(640px, calc((100svh - 384px) * 1.875))); } }
+  .js .stage { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+  .stage::before, .stage::after {
+    content: ''; position: absolute; left: 12%; right: -2%; top: -8%; bottom: -8%; z-index: -1; pointer-events: none;
+    background: radial-gradient(closest-side, rgba(34, 150, 108, 0.22), transparent);
+  }
+  .stage::after { background: radial-gradient(closest-side, rgba(70, 255, 122, 0.26), rgba(95, 212, 255, 0.06) 60%, transparent); opacity: 0; transition: opacity 0.8s; }
+  .is-done .stage::after { opacity: 1; }
+  .sheen { position: absolute; overflow: hidden; pointer-events: none; }
+  .sheen::before {
+    content: ''; position: absolute; top: -10%; bottom: -10%; left: 0; width: 32%;
+    background: linear-gradient(100deg, transparent, rgba(205, 255, 228, 0.2) 45%, rgba(255, 255, 255, 0.28) 50%, rgba(205, 255, 228, 0.2) 55%, transparent);
+    transform: translateX(-130%) skewX(-18deg);
+  }
+  .is-done .sheen::before { animation: sheen 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.05s; }
+  @keyframes sheen { to { transform: translateX(420%) skewX(-18deg); } }
+  .pcb, .wire, #fx { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+  #fx, .wire { pointer-events: none; }
+  .wire .grab { pointer-events: all; cursor: grab; fill: transparent; }
+  .wire path.grab { fill: none; stroke: transparent; stroke-width: 36; pointer-events: stroke; }
+  .wire .padhit { pointer-events: all; cursor: pointer; fill: transparent; }
+  .is-on .wire .padhit { pointer-events: none; }
+  .dragging, .dragging * { cursor: grabbing !important; }
 
-    /* без JS — простой индикатор «404» на месте платы */
-    .fallback {
-      position: absolute; left: 21%; right: 4%; top: 8%; bottom: 14%;
-      display: flex; align-items: center; justify-content: center; border-radius: 24px;
-      background: linear-gradient(135deg, #125a45, #072419); box-shadow: inset 0 0 0 2px #04170f, 0 30px 60px rgba(0, 0, 0, 0.45);
-    }
-    .fallback span {
-      padding: 2% 6%; border-radius: 14px; background: #0b0909; box-shadow: 0 0 0 6px #1b1e22;
-      font: 700 clamp(56px, 11vw, 150px)/1 'Onest', system-ui, sans-serif; letter-spacing: 0.08em; color: #ff4040; text-shadow: 0 0 24px rgba(255, 64, 64, 0.65);
-    }
-    .js .fallback { display: none; }
+  /* без JS — простой индикатор «404» на месте платы */
+  .fallback {
+    position: absolute; left: 21%; right: 4%; top: 8%; bottom: 14%;
+    display: flex; align-items: center; justify-content: center; border-radius: 24px;
+    background: linear-gradient(135deg, #125a45, #072419); box-shadow: inset 0 0 0 2px #04170f, 0 30px 60px rgba(0, 0, 0, 0.45);
+  }
+  .fallback span {
+    padding: 2% 6%; border-radius: 14px; background: #0b0909; box-shadow: 0 0 0 6px #1b1e22;
+    font: 700 clamp(56px, 11vw, 150px)/1 'Onest', system-ui, sans-serif; letter-spacing: 0.08em; color: #ff4040; text-shadow: 0 0 24px rgba(255, 64, 64, 0.65);
+  }
+  .js .fallback { display: none; }
 
-    /* Тич: два кадра (показывает / «класс!») одной высоты, стоят перед платой и показывают на обрыв */
-    .tichbox { position: absolute; left: 0; top: 36.2%; width: 17.92%; aspect-ratio: 320 / 588; animation: bob 5s ease-in-out infinite; will-change: transform; }
-    @keyframes bob { 50% { transform: translateY(-1.4%); } }
-    .tich { position: absolute; left: 0; bottom: 0; height: 100%; width: auto; transform-origin: 45% 100%; transition: opacity 0.3s, transform 0.55s cubic-bezier(0.3, 1.6, 0.5, 1); }
-    .tich--th { opacity: 0; transform: scale(0.86) translateY(3%); }
-    .is-done .tich--pt { opacity: 0; transform: scale(0.92); }
-    .is-done .tich--th { opacity: 1; transform: none; }
-    .is-done .tichbox { animation: cheer 0.7s ease-in-out 3, bob 5s ease-in-out 2.1s infinite; }
-    @keyframes cheer { 50% { transform: translateY(-5%); } }
+  /* Тич: два кадра (показывает / «класс!») одной высоты, стоят перед платой и показывают на обрыв */
+  .tichbox { position: absolute; left: 0; top: 36.2%; width: 17.92%; aspect-ratio: 320 / 588; animation: bob 5s ease-in-out infinite; will-change: transform; }
+  @keyframes bob { 50% { transform: translateY(-1.4%); } }
+  .tich { position: absolute; left: 0; bottom: 0; height: 100%; width: auto; transform-origin: 45% 100%; transition: opacity 0.3s, transform 0.55s cubic-bezier(0.3, 1.6, 0.5, 1); }
+  .tich--th { opacity: 0; transform: scale(0.86) translateY(3%); }
+  .is-done .tich--pt { opacity: 0; transform: scale(0.92); }
+  .is-done .tich--th { opacity: 1; transform: none; }
+  .is-done .tichbox { animation: cheer 0.7s ease-in-out 3, bob 5s ease-in-out 2.1s infinite; }
+  @keyframes cheer { 50% { transform: translateY(-5%); } }
 
-    .tip {
-      position: absolute; left: 0; top: 0; z-index: 5; max-width: 250px; padding: 9px 12px 10px; border-radius: 10px;
-      text-align: left; pointer-events: none;
-      background: rgba(6, 22, 16, 0.94); border: 1px solid rgba(233, 240, 234, 0.32);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45); color: #dfe9e2; font-size: 13.5px; line-height: 1.35;
-    }
-    .tip[hidden] { display: none; }
-    .tip b { display: block; margin-bottom: 3px; font: 700 12px/1.2 var(--mono); letter-spacing: 0.05em; color: var(--gold); }
+  .tip {
+    position: absolute; left: 0; top: 0; z-index: 5; max-width: 250px; padding: 9px 12px 10px; border-radius: 10px;
+    text-align: left; pointer-events: none;
+    background: rgba(6, 22, 16, 0.94); border: 1px solid rgba(233, 240, 234, 0.32);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45); color: #dfe9e2; font-size: 13.5px; line-height: 1.35;
+  }
+  .tip[hidden] { display: none; }
+  .tip b { display: block; margin-bottom: 3px; font: 700 12px/1.2 var(--mono); letter-spacing: 0.05em; color: var(--gold); }
 
-    /* ---------- элементы платы ---------- */
-    .pcb text { font-family: var(--mono); font-weight: 700; }
-    .sk { fill: #e9f0ea; fill-opacity: 0.82; letter-spacing: 0.04em; }
-    .pcb .sk-t { fill: #e9f0ea; fill-opacity: 0.92; font-family: 'Onest', system-ui, sans-serif; letter-spacing: 0.05em; }
-    .skl { fill: none; stroke: #e9f0ea; stroke-opacity: 0.55; stroke-width: 1.5; }
-    .pcb .eng { fill: #66717e; font-family: 'Onest', system-ui, sans-serif; text-anchor: middle; letter-spacing: 0.06em; }
-    .tr { fill: none; stroke: #b4843a; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
-    .trh { fill: none; stroke: #ffdf98; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-opacity: 0.45; }
-    .dt { fill: none; stroke: #1a684d; stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }
-    .via { fill: #c19648; } .vh { fill: #061a12; }
-    .lit, .lit-g {
-      fill: none; stroke-linecap: round; stroke-linejoin: round;
-      stroke-dasharray: 1.02 1.2; stroke-dashoffset: 1.06; transition: stroke-dashoffset 0.3s linear;
-    }
-    .lit-g { stroke: #46ff7a; stroke-width: 16; stroke-opacity: 0.22; }
-    .lit { stroke: #d6ffe3; stroke-width: 2.6; }
-    .on .lit, .on .lit-g { stroke-dashoffset: 0; transition-duration: var(--dur, 0.2s); transition-delay: var(--d, 0s); }
-    .cmp { cursor: help; }
-    .pin { fill: #c3c9d1; }
-    .alive .pin { animation: chase 1.4s linear infinite; animation-delay: calc(var(--i) * -0.04375s); }
-    @keyframes chase { 0% { fill: #eafff1; } 8% { fill: #46ff7a; } 26%, 100% { fill: #c3c9d1; } }
-    .core { opacity: 0; transition: opacity 0.4s; }
-    .alive .core { opacity: 1; animation: core 2.2s ease-in-out infinite; }
-    @keyframes core { 50% { opacity: 0.45; } }
-    .s { fill: #ff4040; fill-opacity: 0.06; }
-    .s.on { fill-opacity: 0.66; stroke: #ff4040; stroke-width: 4; stroke-opacity: 0.16; stroke-linejoin: round; }
-    .digits { animation: flick 3.4s steps(1) infinite; }
-    @keyframes flick { 0%, 100% { opacity: 0.9; } 9% { opacity: 0.35; } 11% { opacity: 0.85; } 38% { opacity: 0.2; } 40% { opacity: 0.8; } 41% { opacity: 0.4; } 43% { opacity: 0.9; } 74% { opacity: 0.55; } 75% { opacity: 0.12; } 77% { opacity: 0.85; } }
-    .bloom { fill: url(#gBr); opacity: 0.8; }
-    .disp.ok .digits { animation: none; opacity: 1; }
-    .disp.ok .s { fill: #46ff7a; }
-    .disp.ok .s.on { fill: #b9ffcf; fill-opacity: 1; stroke: #46ff7a; stroke-width: 5; stroke-opacity: 0.45; }
-    .disp.ok .bloom { fill: url(#gBg); opacity: 1; }
-    .lcd .s { fill: #15231a; fill-opacity: 0.07; stroke: none; }
-    .lcd .s.on { fill-opacity: 0.88; stroke: none; }
-    .led-halo, .led-hi { opacity: 0; transition: opacity 0.25s; }
-    .on .led-halo, .on .led-hi { opacity: 1; transition-delay: var(--d, 0s); }
-    .sl-hi, .sl-halo { opacity: 0; transition: opacity 0.2s; }
-    .on .smd-on .sl-hi, .on .smd-on .sl-halo { opacity: 1; }
-    .alive .smd-l .sl-hi, .alive .smd-l .sl-halo { animation: blink 1s steps(1) infinite; opacity: 1; }
-    .anno { transition: opacity 0.35s; }
-    .anno-bad text { fill: #ff6a5c; font-family: 'Onest', system-ui, sans-serif; }
-    .anno-ok text { fill: #6dff96; font-family: 'Onest', system-ui, sans-serif; }
-    .anno path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-    .anno-bad path { stroke: #ff6a5c; }
-    .anno-ok path { stroke: #6dff96; }
-    .anno-ok, .on .anno-bad { opacity: 0; }
-    /* красный маркер обводит обрыв «от руки» один раз при загрузке */
-    .anno-bad path, .anno-bad text { animation: draw 0.9s cubic-bezier(0.5, 0, 0.3, 1) 0.5s backwards; }
-    .anno-bad path { stroke-dasharray: 1 1; }
-    .anno-bad path + path { animation-delay: 1.1s; animation-duration: 0.5s; }
-    .anno-bad text { animation: pop 0.35s ease-out 1.5s backwards; }
-    @keyframes draw { from { stroke-dashoffset: 1; } }
-    @keyframes pop { from { opacity: 0; transform: translateY(6px); } }
-    .on .anno-ok { opacity: 1; }
-    .rm-spark { display: none; }
-    .lcd-i { fill: #15231a; font-family: var(--mono); }
+  /* — элементы платы — */
+  .pcb text { font-family: var(--mono); font-weight: 700; }
+  .sk { fill: #e9f0ea; fill-opacity: 0.82; letter-spacing: 0.04em; }
+  .pcb .sk-t { fill: #e9f0ea; fill-opacity: 0.92; font-family: 'Onest', system-ui, sans-serif; letter-spacing: 0.05em; }
+  .skl { fill: none; stroke: #e9f0ea; stroke-opacity: 0.55; stroke-width: 1.5; }
+  .pcb .eng { fill: #66717e; font-family: 'Onest', system-ui, sans-serif; text-anchor: middle; letter-spacing: 0.06em; }
+  .tr { fill: none; stroke: #b4843a; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+  .trh { fill: none; stroke: #ffdf98; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-opacity: 0.45; }
+  .dt { fill: none; stroke: #1a684d; stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }
+  .via { fill: #c19648; } .vh { fill: #061a12; }
+  .lit, .lit-g {
+    fill: none; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 1.02 1.2; stroke-dashoffset: 1.06; transition: stroke-dashoffset 0.3s linear;
+  }
+  .lit-g { stroke: #46ff7a; stroke-width: 16; stroke-opacity: 0.22; }
+  .lit { stroke: #d6ffe3; stroke-width: 2.6; }
+  .on .lit, .on .lit-g { stroke-dashoffset: 0; transition-duration: var(--dur, 0.2s); transition-delay: var(--d, 0s); }
+  .cmp { cursor: help; }
+  .pin { fill: #c3c9d1; }
+  .alive .pin { animation: chase 1.4s linear infinite; animation-delay: calc(var(--i) * -0.04375s); }
+  @keyframes chase { 0% { fill: #eafff1; } 8% { fill: #46ff7a; } 26%, 100% { fill: #c3c9d1; } }
+  .core { opacity: 0; transition: opacity 0.4s; }
+  .alive .core { opacity: 1; animation: core 2.2s ease-in-out infinite; }
+  @keyframes core { 50% { opacity: 0.45; } }
+  .s { fill: #ff4040; fill-opacity: 0.06; }
+  .s.on { fill-opacity: 0.66; stroke: #ff4040; stroke-width: 4; stroke-opacity: 0.16; stroke-linejoin: round; }
+  .digits { animation: flick 3.4s steps(1) infinite; }
+  @keyframes flick { 0%, 100% { opacity: 0.9; } 9% { opacity: 0.35; } 11% { opacity: 0.85; } 38% { opacity: 0.2; } 40% { opacity: 0.8; } 41% { opacity: 0.4; } 43% { opacity: 0.9; } 74% { opacity: 0.55; } 75% { opacity: 0.12; } 77% { opacity: 0.85; } }
+  .bloom { fill: url(#gBr); opacity: 0.8; }
+  .disp.ok .digits { animation: none; opacity: 1; }
+  .disp.ok .s { fill: #46ff7a; }
+  .disp.ok .s.on { fill: #b9ffcf; fill-opacity: 1; stroke: #46ff7a; stroke-width: 5; stroke-opacity: 0.45; }
+  .disp.ok .bloom { fill: url(#gBg); opacity: 1; }
+  .lcd .s { fill: #15231a; fill-opacity: 0.07; stroke: none; }
+  .lcd .s.on { fill-opacity: 0.88; stroke: none; }
+  .led-halo, .led-hi { opacity: 0; transition: opacity 0.25s; }
+  .on .led-halo, .on .led-hi { opacity: 1; transition-delay: var(--d, 0s); }
+  .sl-hi, .sl-halo { opacity: 0; transition: opacity 0.2s; }
+  .on .smd-on .sl-hi, .on .smd-on .sl-halo { opacity: 1; }
+  .alive .smd-l .sl-hi, .alive .smd-l .sl-halo { animation: blink 1s steps(1) infinite; opacity: 1; }
+  .anno { transition: opacity 0.35s; }
+  .anno-bad text { fill: #ff6a5c; font-family: 'Onest', system-ui, sans-serif; }
+  .anno-ok text { fill: #6dff96; font-family: 'Onest', system-ui, sans-serif; }
+  .anno path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .anno-bad path { stroke: #ff6a5c; }
+  .anno-ok path { stroke: #6dff96; }
+  .anno-ok, .on .anno-bad { opacity: 0; }
+  /* красный маркер обводит обрыв «от руки» один раз при загрузке */
+  .anno-bad path { stroke-dasharray: 1 1; animation: draw 0.7s cubic-bezier(0.5, 0, 0.3, 1) 0.3s backwards; }
+  .anno-bad path + path { animation-delay: 0.85s; animation-duration: 0.4s; }
+  .anno-bad text { animation: pop 0.35s ease-out 1s backwards; }
+  @keyframes draw { from { stroke-dashoffset: 1; } }
+  @keyframes pop { from { opacity: 0; transform: translateY(6px); } }
+  .on .anno-ok { opacity: 1; }
+  .rm-spark { display: none; }
+  .lcd-i { fill: #15231a; font-family: var(--mono); }
 
-    /* провод и «крокодил» */
-    .w-sh { fill: none; stroke: #000; stroke-opacity: 0.32; stroke-width: 12; stroke-linecap: round; }
-    .c-sh { fill: #000; fill-opacity: 0.32; }
-    .w-o { fill: none; stroke: #5e0d0a; stroke-width: 11.5; stroke-linecap: round; }
-    .w-b { fill: none; stroke: #e2392c; stroke-width: 8.5; stroke-linecap: round; }
-    .w-h { fill: none; stroke: #ffc4b8; stroke-opacity: 0.55; stroke-width: 2.4; stroke-linecap: round; }
-    .w-l { fill: none; stroke: #e6ffee; stroke-width: 2; stroke-linecap: round; opacity: 0; transition: opacity 0.3s; }
-    .on .w-l { opacity: 0.9; transition-delay: var(--d, 0s); }
-    .w-hs { fill: none; stroke: #16191d; stroke-width: 14; stroke-linecap: round; }
-    .target { fill: none; stroke: var(--gold); stroke-width: 2.5; transform-box: fill-box; transform-origin: center; animation: ring 1.8s ease-out infinite; }
-    .target.t2 { animation-delay: -0.9s; }
-    @keyframes ring { 0% { transform: scale(0.7); opacity: 0.95; } 100% { transform: scale(1.9); opacity: 0; } }
-    .near .target { stroke: var(--green); stroke-width: 3.5; animation-duration: 0.7s; }
-    .aff-a { fill: none; stroke: var(--gold); stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 2 9; animation: march 0.9s linear infinite; }
-    .aff-h { fill: none; stroke: var(--gold); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-    .aff text { fill: var(--gold); font: 700 17px 'Onest', system-ui, sans-serif; }
-    @keyframes march { to { stroke-dashoffset: -11; } }
-    .aff { transition: opacity 0.3s; }
-    .touched .aff-x, .is-on .aff, .dragging .aff-x { opacity: 0; }
-    .is-on .aff, .touched .aff-a, .touched .aff-h, .touched .aff text { display: none; }
-    .hl { fill: none; stroke: #bff6ff; stroke-width: 1.6; stroke-dasharray: 5 4; opacity: 0; pointer-events: none; transition: opacity 0.15s; }
-    .hl.show { opacity: 0.9; }
+  /* провод и «крокодил» */
+  .w-sh { fill: none; stroke: #000; stroke-opacity: 0.32; stroke-width: 12; stroke-linecap: round; }
+  .c-sh { fill: #000; fill-opacity: 0.32; }
+  .w-o { fill: none; stroke: #5e0d0a; stroke-width: 11.5; stroke-linecap: round; }
+  .w-b { fill: none; stroke: #e2392c; stroke-width: 8.5; stroke-linecap: round; }
+  .w-h { fill: none; stroke: #ffc4b8; stroke-opacity: 0.55; stroke-width: 2.4; stroke-linecap: round; }
+  .w-l { fill: none; stroke: #e6ffee; stroke-width: 2; stroke-linecap: round; opacity: 0; transition: opacity 0.3s; }
+  .on .w-l { opacity: 0.9; transition-delay: var(--d, 0s); }
+  .w-hs { fill: none; stroke: #16191d; stroke-width: 14; stroke-linecap: round; }
+  .target { fill: none; stroke: var(--gold); stroke-width: 2.5; transform-box: fill-box; transform-origin: center; animation: ring 1.8s ease-out infinite; }
+  .target.t2 { animation-delay: -0.9s; }
+  @keyframes ring { 0% { transform: scale(0.7); opacity: 0.95; } 100% { transform: scale(1.9); opacity: 0; } }
+  .near .target { stroke: var(--green); stroke-width: 3.5; animation-duration: 0.7s; }
+  .aff-a { fill: none; stroke: var(--gold); stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 2 9; animation: march 0.9s linear infinite; }
+  .aff-h { fill: none; stroke: var(--gold); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+  .aff text { fill: var(--gold); font: 700 17px 'Onest', system-ui, sans-serif; }
+  @keyframes march { to { stroke-dashoffset: -11; } }
+  .touched .aff-x, .is-on .aff { display: none; }
+  .hl { fill: none; stroke: #bff6ff; stroke-width: 1.6; stroke-dasharray: 5 4; opacity: 0; pointer-events: none; transition: opacity 0.15s; }
+  .hl.show { opacity: 0.9; }
 
-    /* ---------- управление и кнопки ---------- */
-    .ctrl { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; margin-top: 6px; min-height: 40px; }
-    .js-only { display: none; }
-    .js .js-only { display: flex; }
-    .status { margin: 0; font-size: 15px; color: #c8d5ea; text-wrap: balance; }
-    .status svg { display: inline-block; vertical-align: -3px; margin-right: 7px; color: var(--gold); }
-    .status.ok { color: #a8ffc4; font-weight: 500; text-shadow: 0 0 16px rgba(70, 255, 122, 0.45); }
-    .status.ok svg { color: var(--green); }
-    .hhint { color: #6f86a8; font-size: 13px; }
-    .mini {
-      display: inline-flex; align-items: center; gap: 7px; padding: 8px 15px 8px 12px; border-radius: 999px; cursor: pointer;
-      border: 1px solid rgba(255, 203, 107, 0.45); background: rgba(255, 203, 107, 0.08); color: #ffe3aa;
-      font: 500 14px/1.1 'Golos Text', system-ui, sans-serif; transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-    }
-    .mini:hover { background: rgba(255, 203, 107, 0.16); }
-    .is-on .mini { border-color: rgba(163, 179, 204, 0.4); background: rgba(255, 255, 255, 0.05); color: var(--muted); }
-    .is-on .mini:hover { background: rgba(255, 255, 255, 0.1); color: var(--ink); }
+  /* — управление и кнопки — */
+  .ctrl { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; margin-top: 6px; min-height: 40px; }
+  .js-only { display: none; }
+  .js .js-only { display: flex; }
+  .status { margin: 0; font-size: 15px; color: #c8d5ea; text-wrap: balance; }
+  .status svg { display: inline-block; vertical-align: -3px; margin-right: 7px; color: var(--gold); }
+  .status.ok { color: #a8ffc4; font-weight: 500; text-shadow: 0 0 16px rgba(70, 255, 122, 0.45); }
+  .status.ok svg { color: var(--green); }
+  .hhint { color: #6f86a8; font-size: 13px; }
+  .mini {
+    display: inline-flex; align-items: center; gap: 7px; padding: 8px 15px 8px 12px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255, 203, 107, 0.45); background: rgba(255, 203, 107, 0.08); color: #ffe3aa;
+    font: 500 14px/1.1 'Golos Text', system-ui, sans-serif; transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .mini:hover { background: rgba(255, 203, 107, 0.16); }
+  .is-on .mini { border-color: rgba(163, 179, 204, 0.4); background: rgba(255, 255, 255, 0.05); color: var(--muted); }
+  .is-on .mini:hover { background: rgba(255, 255, 255, 0.1); color: var(--ink); }
 
-    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 14px; margin-top: 14px; }
-    .btn {
-      position: relative; display: inline-flex; align-items: center; gap: 10px; overflow: hidden;
-      padding: 15px 26px; border-radius: 14px; text-decoration: none;
-      font: 700 17px/1.2 'Onest', system-ui, sans-serif; color: #fff; background: var(--brand);
-      box-shadow: 0 0 0 1px rgba(143, 180, 255, 0.35) inset, 0 12px 36px rgba(16, 85, 203, 0.5);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.4s;
-    }
-    .btn::after {
-      content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 40%;
-      background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-      transform: translateX(-160%) skewX(-20deg); animation: shine 3.6s ease-in-out infinite;
-    }
-    @keyframes shine { 0%, 55% { transform: translateX(-160%) skewX(-20deg); } 100% { transform: translateX(330%) skewX(-20deg); } }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(143, 180, 255, 0.6) inset, 0 16px 44px rgba(16, 85, 203, 0.7); }
-    .btn--ghost { background: rgba(255, 255, 255, 0.06); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22) inset; }
-    .btn--ghost::after { display: none; }
-    .btn--ghost:hover { background: rgba(255, 255, 255, 0.12); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4) inset; }
-    .is-done .btn--main { background-color: #0f62e0; animation: live 1.5s ease-in-out infinite; }
-    .is-done .btn--main::after { animation-duration: 1.5s; }
-    @keyframes live {
-      0%, 100% { box-shadow: 0 0 0 1px rgba(150, 255, 190, 0.7) inset, 0 0 0 0 rgba(70, 255, 122, 0.55), 0 12px 36px rgba(16, 85, 203, 0.55); }
-      50% { box-shadow: 0 0 0 1px rgba(150, 255, 190, 0.9) inset, 0 0 0 9px rgba(70, 255, 122, 0), 0 0 46px rgba(70, 255, 122, 0.55); }
-    }
-    .btn:focus-visible, .links a:focus-visible, .top a:focus-visible, .mini:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
-    .btn svg { flex: 0 0 auto; }
-    .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; margin-top: 18px; font-size: 14px; }
-    .links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid rgba(163, 179, 204, 0.3); }
-    .links a:hover { color: var(--ink); border-color: var(--ink); }
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 14px; margin-top: 14px; }
+  .btn {
+    position: relative; display: inline-flex; align-items: center; gap: 10px; overflow: hidden;
+    padding: 15px 26px; border-radius: 14px; text-decoration: none;
+    font: 700 17px/1.2 'Onest', system-ui, sans-serif; color: #fff; background: var(--brand);
+    box-shadow: 0 0 0 1px rgba(143, 180, 255, 0.35) inset, 0 12px 36px rgba(16, 85, 203, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.4s;
+  }
+  .btn::after {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 40%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: translateX(-160%) skewX(-20deg); animation: shine 3.6s ease-in-out infinite;
+  }
+  @keyframes shine { 0%, 55% { transform: translateX(-160%) skewX(-20deg); } 100% { transform: translateX(330%) skewX(-20deg); } }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(143, 180, 255, 0.6) inset, 0 16px 44px rgba(16, 85, 203, 0.7); }
+  .btn--ghost { background: rgba(255, 255, 255, 0.06); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22) inset; }
+  .btn--ghost::after { display: none; }
+  .btn--ghost:hover { background: rgba(255, 255, 255, 0.12); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4) inset; }
+  .is-done .btn--main { background-color: #0f62e0; animation: live 1.5s ease-in-out infinite; }
+  .is-done .btn--main::after { animation-duration: 1.5s; }
+  @keyframes live {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(150, 255, 190, 0.7) inset, 0 0 0 0 rgba(70, 255, 122, 0.55), 0 12px 36px rgba(16, 85, 203, 0.55); }
+    50% { box-shadow: 0 0 0 1px rgba(150, 255, 190, 0.9) inset, 0 0 0 9px rgba(70, 255, 122, 0), 0 0 46px rgba(70, 255, 122, 0.55); }
+  }
+  .btn:focus-visible, .links a:focus-visible, .top a:focus-visible, .mini:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+  .btn svg { flex: 0 0 auto; }
+  .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; margin-top: 18px; font-size: 14px; }
+  .links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid rgba(163, 179, 204, 0.3); }
+  .links a:hover { color: var(--ink); border-color: var(--ink); }
 
-    @media (hover: none) { .hhint { display: none; } }
-    @media (max-width: 900px) { .hhint { display: none; } }
-    @media (max-width: 640px) {
-      .top__phone { display: none; }
-      .lead { font-size: 15px; }
-      .stage { width: 100%; max-width: 440px; aspect-ratio: 600 / 880; margin-top: 10px; }
-      .stage::before, .stage::after { left: -4%; right: -4%; }
-      .tichbox { top: 56.9%; width: 23.33%; }
-      .fallback { left: 6%; right: 6%; top: 4%; bottom: 40%; }
-      .status { font-size: 14px; }
-      .actions { width: 100%; max-width: 400px; }
-      .btn { width: 100%; justify-content: center; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-      .rm-spark { display: inline; }
-      .on .rm-spark { display: none; }
-    }
+  @media (hover: none) { .hhint { display: none; } }
+  @media (max-width: 900px) { .hhint { display: none; } }
+  @media (max-width: 640px) {
+    .top__phone { display: none; }
+    .lead { font-size: 15px; }
+    .stage { width: 100%; max-width: 440px; aspect-ratio: 600 / 880; margin-top: 10px; }
+    .stage::before, .stage::after { left: -4%; right: -4%; }
+    .tichbox { top: 56.9%; width: 23.33%; }
+    .fallback { left: 6%; right: 6%; top: 4%; bottom: 40%; }
+    .status { font-size: 14px; }
+    .actions { width: 100%; max-width: 400px; }
+    .btn { width: 100%; justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .rm-spark { display: inline; }
+    .on .rm-spark { display: none; }
+  }
   </style>
 </head>
 <body>
@@ -362,909 +359,748 @@
   </div>
 
   <script>
-  (function () {
-    'use strict';
-    var root = document.documentElement;
-    root.classList.add('js');
-    var mm = function (q) { return window.matchMedia ? matchMedia(q) : { matches: false }; };
-    var reduce = mm('(prefers-reduced-motion: reduce)').matches;
-    var touch = mm('(hover: none)').matches;
-    var mqM = mm('(max-width: 640px)');
-    var $ = function (id) { return document.getElementById(id); };
-    var stage = $('stage'), pcb = $('pcb'), wire = $('wire'), fx = $('fx'), tip = $('tip');
-    var ctx = fx.getContext && fx.getContext('2d');
-    var DPR = Math.min(window.devicePixelRatio || 1, touch ? 1.5 : 2);
+(() => {
+  'use strict';
+  const root = document.documentElement;
+  root.classList.add('js');
+  const mm = q => window.matchMedia ? matchMedia(q) : { matches: false };
+  const reduce = mm('(prefers-reduced-motion: reduce)').matches, touch = mm('(hover: none)').matches, mqM = mm('(max-width: 640px)');
+  const $ = id => document.getElementById(id);
+  const stage = $('stage'), pcb = $('pcb'), wire = $('wire'), fx = $('fx'), tip = $('tip');
+  const ctx = fx.getContext && fx.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, touch ? 1.5 : 2);
+  const hyp = Math.hypot, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
-    /* ================= раскладки платы (координаты в единицах viewBox) ================= */
-    // вертикаль → диагональ 45° → вертикаль: так разводят дорожки на настоящих платах
-    function r45(x1, y1, x2, y2) {
-      var a = Math.abs(x2 - x1), s = y2 > y1 ? 1 : -1, ym = (y1 + y2) / 2;
-      return [[x1, y1], [x1, ym - s * a / 2], [x2, ym + s * a / 2], [x2, y2]];
-    }
-    var LD = {
-      w: 1200, h: 640, board: [190, 34, 968, 524],
-      holes: [[224, 68], [1124, 68], [224, 524], [1124, 524]],
-      title: [256, 80, 25],
-      hdr: [560, 62, 34, 16], hdrL: ['5V', 'GND', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9'],
-      bat: [236, 136, 200, 68], batP: [452, 170], batN: [220, 170],
-      r1: [[482, 170], [566, 170]], r1L: [524, 150, 'middle'],
-      u1: [680, 218, 112, 12],
-      disp: [820, 124, 270, 140], dg: [56, 92, 11], dPads: [[808, 200], [1074, 278]],
-      leds: [336, [820, 875, 930, 985, 1040]],
-      q1: [680, 336], c3: [306, 290, 26],
-      r2: [[392, 252], [392, 322]], r2L: [410, 292, 'start'],
-      padL: [470, 400], padR: [600, 400], gap: [507, 563],
-      anno: [536, 330],
-      meter: [994, 386, -6, 1], tp: [[884, 508], [930, 530]], tpL: [[-12, 4, 'end'], [-12, 4, 'end']],
-      cable: { L: 330, rest: [512, 612] }, clipS: 1, snap: 56,
-      pours: [[252, 424, 192, 108]],
-      code: [652, 470], credit: [714, 488],
-      onl: [[506, 214], [552, 214]],
-      smd: [[578, 124, 0, 'c', 'C4'], [480, 232, 0, 'r', 'R3', 'l'], [662, 372, 90, 'c', 'C1', 'l'], [698, 372, 90, 'c', 'C2', 'r'], [1000, 294, 0, 'r', 'R4']],
-      loop: [
-        { p: [[452, 170], [482, 170]] },
-        { p: [[482, 170], [566, 170]], res: 1 },
-        { p: [[566, 170], [582, 170], [600, 188], [612, 188]] },
-        { j: 'u1' },
-        { p: [[748, 200], [808, 200]] },
-        { j: 'disp' },
-        { p: [[1074, 278], [1074, 336], [790, 336], [764, 362], [764, 436], [636, 436], [600, 400]] },
-        { c: 1 },
-        { p: [[470, 400], [250, 400], [220, 370], [220, 170]] }
-      ],
-      deco: function () {
-        var d = [r45(594, 70, 638, 150), r45(628, 70, 650, 150), [[662, 70], [662, 150]], r45(696, 70, 674, 150),
-          r45(730, 70, 698, 150), r45(764, 70, 710, 150), r45(798, 70, 722, 150), [[560, 70], [560, 96]],
-          [[612, 236], [530, 236], [514, 252], [392, 252]], [[612, 248], [540, 248], [520, 268], [440, 268]],
-          [[612, 212], [590, 212]], [[612, 224], [582, 224]],
-          r45(674, 286, 662, 326), r45(686, 286, 698, 326), [[662, 346], [662, 362]], [[698, 346], [698, 362]],
-          [[662, 382], [662, 394]], [[698, 382], [698, 394]],
-          [[638, 286], [638, 306]], [[650, 286], [650, 318]], [[722, 286], [722, 300], [744, 322], [744, 408]],
-          [[748, 236], [784, 236], [800, 252], [800, 290]], [[748, 248], [778, 248], [790, 260], [790, 308]],
-          [[748, 212], [792, 212]], [[306, 262], [306, 222]], [[306, 318], [306, 344], [370, 344], [392, 322]],
-          [[1110, 104], [1110, 300]], [[884, 508], [884, 474]]];
-        [832, 866, 900, 934, 968, 1002, 1036, 1070].forEach(function (x) { d.push([[x, 70], [x, 132]]); });
-        return d;
-      },
-      vias: [[560, 96], [440, 268], [590, 212], [582, 224], [638, 306], [650, 318], [744, 408], [800, 290], [790, 308],
-        [792, 212], [306, 222], [1110, 104], [1110, 300], [884, 474], [662, 394], [698, 394]]
-    };
-    var LM = {
-      w: 600, h: 880, board: [28, 16, 544, 712],
-      holes: [[58, 46], [542, 46], [58, 698], [542, 698]],
-      title: [86, 52, 19],
-      hdr: [318, 44, 26, 8], hdrL: ['5V', 'GND', 'A0', 'A1', 'A2', 'A3', 'D2', 'D3'],
-      bat: [66, 372, 180, 64], batP: [262, 404], batN: [50, 404],
-      r1: [[284, 404], [352, 404]], r1L: [318, 386, 'middle'],
-      u1: [450, 431.5, 104, 11], u1L: 'tr',
-      disp: [88, 100, 424, 164], dg: [86, 120, 15], dPads: [[76, 182], [524, 182]],
-      leds: [318, [160, 230, 300, 370, 440]],
-      q1: [450, 536], c3: [172, 500, 24],
-      r2: [[236, 474], [236, 534]], r2L: [252, 508, 'start'],
-      padL: [252, 610], padR: [382, 610], gap: [289, 345],
-      anno: [318, 552],
-      meter: [446, 668, -6, 0.8], tp: [[410, 666], [416, 700]], tpL: [[0, -12, 'middle'], [11, 4, 'start']],
-      cable: { L: 290, rest: [318, 800] }, clipS: 1.15, snap: 62,
-      pours: [[88, 634, 158, 78]],
-      code: null, credit: null,
-      onl: null,
-      smd: [[130, 460, 0, 'r', 'R3']],
-      loop: [
-        { p: [[262, 404], [284, 404]] },
-        { p: [[284, 404], [352, 404]], res: 1 },
-        { p: [[352, 404], [388, 404]] },
-        { j: 'u1' },
-        { p: [[477.5, 370], [477.5, 330], [465.5, 318], [96, 318], [76, 298], [76, 182]] },
-        { j: 'disp' },
-        { p: [[524, 182], [546, 182], [546, 580], [516, 610], [382, 610]] },
-        { c: 1 },
-        { p: [[252, 610], [84, 610], [50, 576], [50, 404]] }
-      ],
-      deco: function () {
-        var d = [[[388, 448], [282, 448], [256, 474], [236, 474]], [[388, 459], [318, 459], [304, 473], [304, 492]],
-          [[512, 415], [530, 415]], [[512, 437], [530, 437]], [[512, 459], [530, 459]],
-          r45(444.5, 494, 431, 526), r45(455.5, 494, 469, 526), [[411.5, 494], [411.5, 516]],
-          [[172, 472], [172, 446]], [[172, 528], [172, 548], [222, 548], [236, 534]]];
-        [318, 344, 370, 396, 422, 448, 474, 500].forEach(function (x) { d.push([[x, 52], [x, 106]]); });
-        return d;
-      },
-      vias: [[530, 415], [530, 437], [530, 459], [304, 492], [411.5, 516], [172, 446]]
-    };
+  /* — раскладки платы (единицы viewBox): горизонтальная и вертикальная для телефона — */
+  // вертикаль → диагональ 45° → вертикаль: так разводят дорожки на настоящих платах
+  const r45 = (x1, y1, x2, y2) => { const a = Math.abs(x2 - x1), s = y2 > y1 ? 1 : -1, m = (y1 + y2) / 2; return [[x1, y1], [x1, m - s * a / 2], [x2, m + s * a / 2], [x2, y2]]; };
+  const vert = (xs, y1, y2) => xs.map(x => [[x, y1], [x, y2]]);
+  const LD = {
+    w: 1200, h: 640, board: [190,34,968,524],
+    holes: [[224,68],[1124,68],[224,524],[1124,524]], title: [256,80,25],
+    hdr: [560,62,34,16], hdrL: ['5V', 'GND', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9'],
+    bat: [236,136,200,68], batP: [452,170], batN: [220,170],
+    r1: [[482,170],[566,170]], r1L: [524,150, 'middle'], u1: [680,218,112,12],
+    disp: [820,124,270,140], dg: [56,92,11], dPads: [[808,200],[1074,278]],
+    leds: [336,[820,875,930,985,1040]], q1: [680,336], c3: [306,290,26],
+    r2: [[392,252],[392,322]], r2L: [410,292, 'start'],
+    padL: [470,400], padR: [600,400], gap: [507,563], anno: [536,330],
+    meter: [994,386,-6,1], tp: [[884,508],[930,530]], tpL: [[-12,4, 'end'],[-12,4, 'end']],
+    cable: { L: 330, rest: [512,612] }, clipS: 1, snap: 56,
+    pours: [[252,424,192,108]], code: [652,470], credit: [714,488], onl: [[506,214],[552,214]],
+    smd: [[578,124,0, 'c', 'C4'],[480,232,0, 'r', 'R3', 'l'],[662,372,90, 'c', 'C1', 'l'],[698,372,90, 'c', 'C2', 'r'],[1000,294,0, 'r', 'R4']],
+    loop: [
+      { p: [[452,170],[482,170]] }, { p: [[482,170],[566,170]], res: 1 }, { p: [[566,170],[582,170],[600,188],[612,188]] }, { j: 'u1' },
+      { p: [[748,200],[808,200]] }, { j: 'disp' }, { p: [[1074,278],[1074,336],[790,336],[764,362],[764,436],[636,436],[600,400]] },
+      { c: 1 }, { p: [[470,400],[250,400],[220,370],[220,170]] }
+    ],
+    deco: () => [r45(594,70,638,150), r45(628,70,650,150), [[662,70],[662,150]], r45(696,70,674,150),
+      r45(730,70,698,150), r45(764,70,710,150), r45(798,70,722,150), [[560,70],[560,96]],[[612,236],[530,236],[514,252],[392,252]],[[612,248],[540,248],[520,268],[440,268]],[[612,212],[590,212]],[[612,224],[582,224]],
+      r45(674,286,662,326), r45(686,286,698,326), ...vert([662,698],346,362), ...vert([662,698],382,394),
+      [[638,286],[638,306]],[[650,286],[650,318]],[[722,286],[722,300],[744,322],[744,408]],[[748,236],[784,236],[800,252],[800,290]],[[748,248],[778,248],[790,260],[790,308]],[[748,212],[792,212]],[[306,262],[306,222]],[[306,318],[306,344],[370,344],[392,322]],[[1110,104],[1110,300]],[[884,508],[884,474]], ...vert([832,866,900,934,968,1002,1036,1070],70,132)],
+    vias: [[560,96],[440,268],[590,212],[582,224],[638,306],[650,318],[744,408],[800,290],[790,308],[792,212],[306,222],[1110,104],[1110,300],[884,474],[662,394],[698,394]]
+  };
+  const LM = {
+    w: 600, h: 880, board: [28,16,544,712],
+    holes: [[58,46],[542,46],[58,698],[542,698]], title: [86,52,19],
+    hdr: [318,44,26,8], hdrL: ['5V', 'GND', 'A0', 'A1', 'A2', 'A3', 'D2', 'D3'],
+    bat: [66,372,180,64], batP: [262,404], batN: [50,404],
+    r1: [[284,404],[352,404]], r1L: [318,386, 'middle'], u1: [450,431.5,104,11], u1L: 1,
+    disp: [88,100,424,164], dg: [86,120,15], dPads: [[76,182],[524,182]],
+    leds: [318,[160,230,300,370,440]], q1: [450,536], c3: [172,500,24],
+    r2: [[236,474],[236,534]], r2L: [252,508, 'start'],
+    padL: [252,610], padR: [382,610], gap: [289,345], anno: [318,552],
+    meter: [446,668,-6,0.8], tp: [[410,666],[416,700]], tpL: [[0,-12, 'middle'],[11,4, 'start']],
+    cable: { L: 290, rest: [318,800] }, clipS: 1.15, snap: 62,
+    pours: [[88,634,158,78]], code: null, credit: null, onl: null, smd: [[130,460,0, 'r', 'R3']],
+    loop: [
+      { p: [[262,404],[284,404]] }, { p: [[284,404],[352,404]], res: 1 }, { p: [[352,404],[388,404]] }, { j: 'u1' },
+      { p: [[477.5,370],[477.5,330],[465.5,318],[96,318],[76,298],[76,182]] }, { j: 'disp' },
+      { p: [[524,182],[546,182],[546,580],[516,610],[382,610]] }, { c: 1 }, { p: [[252,610],[84,610],[50,576],[50,404]] }
+    ],
+    deco: () => [[[388,448],[282,448],[256,474],[236,474]],[[388,459],[318,459],[304,473],[304,492]],[[512,415],[530,415]],[[512,437],[530,437]],[[512,459],[530,459]],
+      r45(444.5,494,431,526), r45(455.5,494,469,526), [[411.5,494],[411.5,516]],[[172,472],[172,446]],[[172,528],[172,548],[222,548],[236,534]], ...vert([318,344,370,396,422,448,474,500],52,106)],
+    vias: [[530,415],[530,437],[530,459],[304,492],[411.5,516],[172,446]]
+  };
 
-    /* ================= подсказки к деталям ================= */
-    var on = false;
-    var TIPS = {
-      bat: ['BAT1 · батарейка', 'Источник питания: даёт 5 вольт. Без неё схема спит.'],
-      r1: ['R1 · резистор', 'Ограничивает ток, чтобы светодиоды не перегорели.'],
-      r2: ['R2 · резистор', 'Цветные полоски — это код его сопротивления.'],
-      r: ['Резистор', 'Крошечный «тормоз» для тока.'],
-      c: ['Конденсатор', 'Маленький запас энергии на всякий случай.'],
-      c3: ['C3 · конденсатор', 'Копит заряд и сглаживает скачки напряжения.'],
-      u1: ['U1 · микроконтроллер', 'Мозг платы: выполняет программу, которую написал ученик.'],
-      q1: ['Q1 · кварц', 'Тикает 16 миллионов раз в секунду и задаёт ритм «мозгу».'],
-      disp: ['DISP1 · индикатор', 'Рисует цифры из семи светящихся палочек-сегментов.'],
-      led: ['D1–D5 · светодиоды', 'Загораются, когда через них бежит ток.'],
-      on: ['ON · огонёк питания', 'Горит, когда на плату пришло питание.'],
-      l: ['L · огонёк-мигалка', 'Мигает, когда микроконтроллер работает.'],
-      hdr: ['Разъёмы', 'Сюда подключают датчики, моторчики и кнопки.'],
-      hole: ['Крепёжное отверстие', 'Сюда вкручивают винтик, чтобы плата не болталась.'],
-      tp: ['TP1, TP2 · контрольные точки', 'К ним цепляют щупы мультиметра.'],
-      title: ['TEACHNET UNO', 'Учебная плата, на которой дети собирают первые схемы.'],
-      code: ['Код платы', 'Серийный номер. Читать его умеют только роботы.'],
-      j1: ['J1 · контакт', 'Здесь припаян провод-перемычка.'],
-      gap: function () { return on ? ['Обрыв починен', 'Ток бежит в обход — по проводу-перемычке.'] : ['Обрыв дорожки', 'Ток не умеет прыгать через щель. Нужна перемычка!']; },
-      j2: function () { return on ? ['J2 · контакт', '«Крокодил» на месте — контакт есть!'] : ['J2 · контакт', 'Сюда нужно прицепить «крокодил». Можно просто нажать.']; },
-      wire: function () { return on ? ['Провод-перемычка', 'Потяните «крокодил» — и цепь разомкнётся.'] : ['Провод-перемычка', 'Возьмите «крокодил» и протяните к контакту J2.']; },
-      meter: function () { return on ? ['Мультиметр', 'Показывает 5 вольт и 20 миллиампер — ток идёт!'] : ['Мультиметр', 'Измеряет напряжение и ток. Сейчас ноль — цепь разорвана.']; },
-      tich: function () { return on ? ['Тич', 'Робот-помощник TEACHNET. Доволен: схема работает!'] : ['Тич', 'Робот-помощник TEACHNET. Показывает, где обрыв.']; }
-    };
+  /* — подсказки к деталям — */
+  let on = false;
+  const TIPS = {
+    bat: ['BAT1 · батарейка', 'Источник питания: даёт 5 вольт. Без неё схема спит.'],
+    r1: ['R1 · резистор', 'Ограничивает ток, чтобы светодиоды не перегорели.'],
+    r2: ['R2 · резистор', 'Цветные полоски — это код его сопротивления.'],
+    r: ['Резистор', 'Крошечный «тормоз» для тока.'],
+    c: ['Конденсатор', 'Маленький запас энергии на всякий случай.'],
+    c3: ['C3 · конденсатор', 'Копит заряд и сглаживает скачки напряжения.'],
+    u1: ['U1 · микроконтроллер', 'Мозг платы: выполняет программу, которую написал ученик.'],
+    q1: ['Q1 · кварц', 'Тикает 16 миллионов раз в секунду и задаёт ритм «мозгу».'],
+    disp: ['DISP1 · индикатор', 'Рисует цифры из семи светящихся палочек-сегментов.'],
+    led: ['D1–D5 · светодиоды', 'Загораются, когда через них бежит ток.'],
+    on: ['ON · огонёк питания', 'Горит, когда на плату пришло питание.'],
+    l: ['L · огонёк-мигалка', 'Мигает, когда микроконтроллер работает.'],
+    hdr: ['Разъёмы', 'Сюда подключают датчики, моторчики и кнопки.'],
+    hole: ['Крепёжное отверстие', 'Сюда вкручивают винтик, чтобы плата не болталась.'],
+    tp: ['TP1, TP2 · контрольные точки', 'К ним цепляют щупы мультиметра.'],
+    title: ['TEACHNET UNO', 'Учебная плата, на которой дети собирают первые схемы.'],
+    code: ['Код платы', 'Серийный номер. Читать его умеют только роботы.'],
+    j1: ['J1 · контакт', 'Здесь припаян провод-перемычка.'],
+    gap: () => on ? ['Обрыв починен', 'Ток бежит в обход — по проводу-перемычке.'] : ['Обрыв дорожки', 'Ток не умеет прыгать через щель. Нужна перемычка!'],
+    j2: () => on ? ['J2 · контакт', '«Крокодил» на месте — контакт есть!'] : ['J2 · контакт', 'Сюда нужно прицепить «крокодил». Можно просто нажать.'],
+    wire: () => on ? ['Провод-перемычка', 'Потяните «крокодил» — и цепь разомкнётся.'] : ['Провод-перемычка', 'Возьмите «крокодил» и протяните к контакту J2.'],
+    meter: () => on ? ['Мультиметр', 'Показывает 5 вольт и 20 миллиампер — ток идёт!'] : ['Мультиметр', 'Измеряет напряжение и ток. Сейчас ноль — цепь разорвана.'],
+    tich: () => on ? ['Тич', 'Робот-помощник TEACHNET. Доволен: схема работает!'] : ['Тич', 'Робот-помощник TEACHNET. Показывает, где обрыв.']
+  };
 
-    /* ================= сборка SVG ================= */
-    var LEDC = [['#ff4a4a', '#3a1212'], ['#ff9a2e', '#3a2410'], ['#ffe14a', '#36300f'], ['#46ff7a', '#0f361b'], ['#5fd4ff', '#0e2d3b']];
-    var SEG = ['abcdef', 'bc', 'abdeg', 'abcdg', 'bcfg', 'acdfg', 'acdefg', 'abc', 'abcdefg', 'abcdfg'];
-    var CL = 80; // длина «крокодила» от зубов до хвоста
+  /* — сборка SVG из строк — */
+  const LEDC = [['#ff4a4a', '#3a1212'], ['#ff9a2e', '#3a2410'], ['#ffe14a', '#36300f'], ['#46ff7a', '#0f361b'], ['#5fd4ff', '#0e2d3b']];
+  const SEG = ['abcdef', 'bc', 'abdeg', 'abcdg', 'bcfg', 'acdfg', 'acdefg', 'abc', 'abcdefg', 'abcdfg'];
+  const CL = 80; // длина «крокодила» от зубов до хвоста
+  const f1 = v => +(+v).toFixed(1), A = a => a ? ' ' + a : '';
+  const R = (x, y, w, h, a) => `<rect x="${f1(x)}" y="${f1(y)}" width="${f1(w)}" height="${f1(h)}"${A(a)}/>`;
+  const O = (x, y, r, a) => `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r)}"${A(a)}/>`;
+  const D = (d, a) => `<path d="${d}"${A(a)}/>`;
+  const tx = (x, y, s, t, an = 'middle', cls = 'sk', a = '') => `<text class="${cls}" x="${f1(x)}" y="${f1(y)}" font-size="${f1(s)}" text-anchor="${an}"${A(a)}>${t}</text>`;
+  const P = p => p.map((q, i) => (i ? 'L' : 'M') + f1(q[0]) + ' ' + f1(q[1])).join('');
+  const plen = p => p.reduce((l, q, i) => i ? l + hyp(q[0] - p[i - 1][0], q[1] - p[i - 1][1]) : 0, 0);
+  const GP = 'fill="url(#gP)"';
+  const gpad = (x, y, r, sq) => (sq ? R(x - r, y - r, 2 * r, 2 * r, 'rx="2" ' + GP) : O(x, y, r, GP)) + O(x, y, r * 0.42, 'class="vh"');
+  const via = (x, y) => O(x, y, 4.6, 'class="via"') + O(x, y, 1.9, 'class="vh"');
+  const grad = (id, t, a, st) => `<${t}Gradient id="${id}" ${a}>` + st.map(s => { const [o, c, op] = s.split(' '); return `<stop offset="${o}" stop-color="${c}"${op ? ` stop-opacity="${op}"` : ''}/>`; }).join('') + `</${t}Gradient>`;
+  const VG = 'x1="0" y1="0" x2="0" y2="1"', DG = 'x1="0" y1="0" x2="1" y2="1"', RC = 'cx=".38" cy=".32" r=".75"', RC2 = 'cx=".4" cy=".35" r=".7"';
+  const DEFS = '<defs>' + [
+    grad('gB', 'linear', DG, ['0 #135d47', '.5 #0b3d2f', '1 #062318']),
+    grad('gSh', 'radial', 'cx=".22" cy=".06" r=".9"', ['0 #c8ffe9 .11', '.7 #c8ffe9 0']),
+    grad('gP', 'radial', RC, ['0 #fff1c6', '.42 #e3b052', '1 #875a19']),
+    grad('gM', 'linear', VG, ['0 #f5f7f9', '.5 #a9b1ba', '1 #5e6771']),
+    grad('gCell', 'linear', VG, ['0 #081638', '.22 #5a8ff5', '.42 #1d52c4', '.85 #0a2468', '1 #050f30']),
+    grad('gCellG', 'linear', VG, ['0 #4a3006', '.22 #ffe5a3', '.45 #d89c33', '.85 #784d0f', '1 #3a2504']),
+    grad('gU', 'linear', DG, ['0 #2e353e', '1 #0a0d11']),
+    grad('gCore', 'radial', '', ['0 #46ff7a .42', '1 #46ff7a 0']),
+    grad('gR', 'linear', VG, ['0 #f7e5c2', '.55 #d6b178', '1 #94703c']),
+    grad('gC', 'radial', RC2, ['0 #4170d6', '1 #0c1f52']),
+    grad('gAl', 'radial', 'cx=".38" cy=".32" r=".8"', ['0 #f4f7fa', '1 #848e9a']),
+    grad('gX', 'linear', VG, ['0 #f6f8fa', '.5 #b2bac3', '1 #69727c']),
+    grad('gDm', 'linear', VG, ['0 #262a30', '1 #0f1114']),
+    grad('gBr', 'radial', '', ['0 #ff4040 .2', '1 #ff4040 0']),
+    grad('gBg', 'radial', '', ['0 #46ff7a .32', '1 #46ff7a 0']),
+    grad('gSc', 'radial', '', ['0 #000 .62', '.55 #1e0e02 .32', '1 #1e0e02 0']),
+    grad('gY', 'linear', DG, ['0 #ffe46e', '.5 #f7b91f', '1 #c48407']),
+    grad('gLcd', 'linear', VG, ['0 #c1d2b4', '1 #94aa8b']),
+    grad('gK', 'radial', RC2, ['0 #5d6875', '1 #181e26']),
+    ...LEDC.map(([c], i) => grad('gL' + i, 'radial', 'cx=".4" cy=".36" r=".7"', ['0 #fff', '.42 ' + c, '1 ' + c + ' .8']) + grad('gH' + i, 'radial', '', ['0 ' + c + ' .55', '.35 ' + c + ' .2', '1 ' + c + ' 0']))
+  ].join('') + '<pattern id="gHt" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#0c4031"/><rect width="2.2" height="7" fill="#1a6b50"/></pattern></defs>';
 
-    function P(p) { var s = ''; for (var i = 0; i < p.length; i++) s += (i ? 'L' : 'M') + (+p[i][0].toFixed(1)) + ' ' + (+p[i][1].toFixed(1)); return s; }
-    function plen(p) { var l = 0; for (var i = 1; i < p.length; i++) l += Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]); return l; }
-    function tx(x, y, size, txt, anchor, cls, extra) {
-      return '<text class="' + (cls || 'sk') + '" x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '"' + (extra || '') + '>' + txt + '</text>';
+  // цифра семисегментного индикатора: 7 шестиугольных «палочек» с наклоном, как у настоящих
+  function digit(x, y, w, h, t) {
+    const g = Math.max(1, t * 0.1), ht = t / 2, l = ht, r = w - ht, m = h / 2, b = h - ht;
+    const H = (x1, x2, yy) => [x1, yy, x1 + ht, yy - ht, x2 - ht, yy - ht, x2, yy, x2 - ht, yy + ht, x1 + ht, yy + ht].map(f1).join(' ');
+    const V = (xx, y1, y2) => [xx, y1, xx + ht, y1 + ht, xx + ht, y2 - ht, xx, y2, xx - ht, y2 - ht, xx - ht, y1 + ht].map(f1).join(' ');
+    const S = { a: H(l + g, r - g, ht), b: V(r, ht + g, m - g), c: V(r, m + g, b - g), d: H(l + g, r - g, b), e: V(l, m + g, b - g), f: V(l, ht + g, m - g), g: H(l + g, r - g, m) };
+    return `<g class="dg" transform="translate(${f1(x + h * 0.05)} ${f1(y)}) skewX(-6)">` + Object.keys(S).map(k => `<polygon class="s" data-s="${k}" points="${S[k]}"/>`).join('') + '</g>';
+  }
+  function battery(L) {
+    const [x, y, w, h] = L.bat, cy = y + h / 2, c0 = x + 14, c1 = x + w - 18, ct = y + 8, ch = h - 16, gw = (c1 - c0) * 0.32;
+    return '<g class="cmp" data-tip="bat">' + gpad(...L.batP, 9) + gpad(...L.batN, 9, 1) +
+      R(x, y, w, h, 'rx="9" fill="#15181d" stroke="#2c3139" stroke-width="2"') +
+      R(x + 4, cy - 15, 7, 30, 'rx="2" fill="url(#gM)"') + R(x + w - 11, cy - 15, 7, 30, 'rx="2" fill="url(#gM)"') +
+      R(c0, ct, c1 - c0, ch, 'rx="7" fill="url(#gCell)"') +
+      D(`M${f1(c1 - gw)} ${ct}H${c1 - 7}Q${c1} ${ct} ${c1} ${ct + 7}V${ct + ch - 7}Q${c1} ${ct + ch} ${c1 - 7} ${ct + ch}H${f1(c1 - gw)}Z`, 'fill="url(#gCellG)"') +
+      R(c1, cy - 9, 7, 18, 'rx="2.5" fill="url(#gM)"') +
+      tx(c0 + (c1 - c0 - gw) / 2, cy + 9, 25, '5V', 'middle', 'sk-t') +
+      tx(c1 - gw / 2, cy + 6, 18, '+', 'middle', 'sk-t', 'style="fill:#4a2f05"') + tx(c0 + 12, cy + 5, 14, '−', 'middle', 'sk-t', 'style="fill:#9fbdf7"') +
+      tx(x, y - 9, 12, 'BAT1', 'start') + tx(L.batP[0], L.batP[1] - 15, 14, '+') + tx(L.batN[0], L.batN[1] - 15, 14, '−') + '</g>';
+  }
+  function resistor([a, b], key, lab, bands) {
+    const cx = (a[0] + b[0]) / 2, cy = (a[1] + b[1]) / 2, len = hyp(b[0] - a[0], b[1] - a[1]), ang = Math.atan2(b[1] - a[1], b[0] - a[0]) * 57.2958;
+    const bw = Math.min(58, len - 24), bh = 18;
+    return `<g class="cmp" data-tip="${key}">` + gpad(...a, 8) + gpad(...b, 8) + `<g transform="translate(${cx} ${cy}) rotate(${f1(ang)})">` +
+      D(`M${-len / 2} 0H${len / 2}`, 'stroke="#c6ccd3" stroke-width="2.6"') + R(-bw / 2, -bh / 2, bw, bh, 'rx="8" fill="url(#gR)"') +
+      [-0.3, -0.15, 0, 0.3].map((k, i) => R(k * bw - 2.4, -bh / 2, 4.8, bh, `fill="${bands[i]}"`)).join('') +
+      R(-bw / 2 + 5, -bh / 2 + 3, bw - 10, 3, 'rx="1.5" fill="#fff" opacity=".35"') + '</g>' + tx(lab[0], lab[1], 12, key.toUpperCase(), lab[2]) + '</g>';
+  }
+  function ecap([x, y, r]) {
+    const q = r + 5, k = v => f1(v);
+    return '<g class="cmp" data-tip="c3">' + O(x, y, q, 'class="skl"') +
+      D(`M${x} ${y - q}A${q} ${q} 0 0 0 ${x} ${y + q}Z`, 'fill="#e9f0ea" opacity=".16"') + O(x, y, r, 'fill="url(#gC)"') +
+      D(`M${k(x - r * .5)} ${k(y - r * .866)}A${r} ${r} 0 0 0 ${k(x - r * .5)} ${k(y + r * .866)}L${k(x - r * .38)} ${k(y + r * .66)}A${k(r * .76)} ${k(r * .76)} 0 0 1 ${k(x - r * .38)} ${k(y - r * .66)}Z`, 'fill="#cfe0ff" opacity=".4"') +
+      O(x, y, r * 0.7, 'fill="url(#gAl)"') + D(`M${k(x - r * .4)} ${y}H${k(x + r * .4)}M${x} ${k(y - r * .4)}V${k(y + r * .4)}`, 'stroke="#76808c" stroke-width="2"') +
+      tx(x + q + 4, y - q + 8, 13, '+', 'start') + tx(x, y + q + 17, 12, 'C3') + '</g>';
+  }
+  const crystal = ([x, y]) => '<g class="cmp" data-tip="q1">' + R(x - 34, y - 16, 68, 32, 'class="skl" rx="16"') + R(x - 29, y - 11, 58, 22, 'rx="11" fill="url(#gX)" stroke="#5f6872"') +
+    R(x - 24, y - 7, 48, 14, 'rx="7" fill="none" stroke="#fff" stroke-opacity=".5"') + tx(x, y + 3, 8, '16.000', 'middle', 'eng') + tx(x - 42, y + 4, 12, 'Q1', 'end') + '</g>';
+  function chip([cx, cy, S, pitch], tr) {
+    const h = S / 2, pl = 12, pw = 5, n = 8, o = h + 20, c = 16;
+    let s = '<g class="cmp" data-tip="u1">', i = 0;
+    [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(([qx, qy]) => { const X = cx + qx * o, Y = cy + qy * o; s += D(`M${X - qx * c} ${Y}H${X}V${Y - qy * c}`, 'class="skl"'); });
+    const pin = (x, y, w, hh) => R(x, y, w, hh, `class="pin" style="--i:${i++}"`);
+    // выводы по кругу (сверху слева направо, справа сверху вниз…) — так «бегущий огонёк» обходит микросхему
+    for (let sd = 0; sd < 4; sd++) for (let k = 0; k < n; k++) {
+      const off = (sd < 2 ? k - (n - 1) / 2 : (n - 1) / 2 - k) * pitch;
+      s += sd % 2 ? pin(sd === 1 ? cx + h : cx - h - pl, cy + off - pw / 2, pl, pw) : pin(cx + off - pw / 2, sd ? cy + h : cy - h - pl, pw, pl);
     }
-    function gpad(x, y, r, sq) {
-      return (sq ? '<rect x="' + (x - r) + '" y="' + (y - r) + '" width="' + 2 * r + '" height="' + 2 * r + '" rx="2" fill="url(#gP)"/>' : '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="url(#gP)"/>') +
-        '<circle class="vh" cx="' + x + '" cy="' + y + '" r="' + (r * 0.42).toFixed(1) + '"/>';
+    s += R(cx - h, cy - h, S, S, 'rx="7" fill="url(#gU)"') + R(cx - h + 5, cy - h + 5, S - 10, S - 10, 'rx="4" fill="none" stroke="#fff" stroke-opacity=".06"') +
+      R(cx - h + 6, cy - h + 6, S - 12, S - 12, 'class="core" rx="5" fill="url(#gCore)"') + O(cx - h + 14, cy - h + 14, 4.5, 'fill="#06080b" stroke="#fff" stroke-opacity=".08"') +
+      tx(cx, cy + 2, S * 0.15, 'TN-404', 'middle', 'eng') + tx(cx, cy + S * 0.16, S * 0.075, 'TEACHNET · 2026', 'middle', 'eng');
+    return s + (tr ? tx(cx + o, cy - o - 7, 12, 'U1', 'end') : tx(cx - o, cy - o - 7, 12, 'U1', 'start')) + '</g>';
+  }
+  function display(L) {
+    const [x, y, w, h] = L.disp, [dw, dh, dt] = L.dg, gw = w - 24, gap = (gw - 3 * dw) / 4;
+    let s = '<g class="cmp disp" id="disp" data-tip="disp">' + gpad(...L.dPads[0], 8) + gpad(...L.dPads[1], 8) +
+      R(x - 6, y - 6, w + 12, h + 12, 'class="skl" rx="10"') + R(x, y, w, h, 'rx="8" fill="url(#gDm)"') + R(x + 12, y + 12, gw, h - 24, 'rx="5" fill="#0a0808"') +
+      R(x + 6, y + 6, w - 12, h - 12, 'class="bloom"') + '<g class="digits">';
+    for (let i = 0; i < 3; i++) {
+      const dx = x + 12 + gap + i * (dw + gap), dy = y + (h - dh) / 2;
+      s += digit(dx, dy, dw, dh, dt) + O(dx + dw + gap * 0.42, dy + dh - dt / 2, dt * 0.45, 'class="s"');
     }
-    function via(x, y) { return '<circle class="via" cx="' + x + '" cy="' + y + '" r="4.6"/><circle class="vh" cx="' + x + '" cy="' + y + '" r="1.9"/>'; }
-
-    var DEFS = '<defs>' +
-      '<linearGradient id="gB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#135d47"/><stop offset=".5" stop-color="#0b3d2f"/><stop offset="1" stop-color="#062318"/></linearGradient>' +
-      '<radialGradient id="gSh" cx=".22" cy=".06" r=".9"><stop offset="0" stop-color="#c8ffe9" stop-opacity=".11"/><stop offset=".7" stop-color="#c8ffe9" stop-opacity="0"/></radialGradient>' +
-      '<pattern id="gHt" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#0c4031"/><rect width="2.2" height="7" fill="#1a6b50"/></pattern>' +
-      '<radialGradient id="gP" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#fff1c6"/><stop offset=".42" stop-color="#e3b052"/><stop offset="1" stop-color="#875a19"/></radialGradient>' +
-      '<linearGradient id="gM" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5f7f9"/><stop offset=".5" stop-color="#a9b1ba"/><stop offset="1" stop-color="#5e6771"/></linearGradient>' +
-      '<linearGradient id="gCell" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#081638"/><stop offset=".22" stop-color="#5a8ff5"/><stop offset=".42" stop-color="#1d52c4"/><stop offset=".85" stop-color="#0a2468"/><stop offset="1" stop-color="#050f30"/></linearGradient>' +
-      '<linearGradient id="gCellG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3006"/><stop offset=".22" stop-color="#ffe5a3"/><stop offset=".45" stop-color="#d89c33"/><stop offset=".85" stop-color="#784d0f"/><stop offset="1" stop-color="#3a2504"/></linearGradient>' +
-      '<linearGradient id="gU" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2e353e"/><stop offset="1" stop-color="#0a0d11"/></linearGradient>' +
-      '<radialGradient id="gCore"><stop offset="0" stop-color="#46ff7a" stop-opacity=".42"/><stop offset="1" stop-color="#46ff7a" stop-opacity="0"/></radialGradient>' +
-      '<linearGradient id="gR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e5c2"/><stop offset=".55" stop-color="#d6b178"/><stop offset="1" stop-color="#94703c"/></linearGradient>' +
-      '<radialGradient id="gC" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#4170d6"/><stop offset="1" stop-color="#0c1f52"/></radialGradient>' +
-      '<radialGradient id="gAl" cx=".38" cy=".32" r=".8"><stop offset="0" stop-color="#f4f7fa"/><stop offset="1" stop-color="#848e9a"/></radialGradient>' +
-      '<linearGradient id="gX" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f8fa"/><stop offset=".5" stop-color="#b2bac3"/><stop offset="1" stop-color="#69727c"/></linearGradient>' +
-      '<linearGradient id="gDm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262a30"/><stop offset="1" stop-color="#0f1114"/></linearGradient>' +
-      '<radialGradient id="gBr"><stop offset="0" stop-color="#ff4040" stop-opacity=".2"/><stop offset="1" stop-color="#ff4040" stop-opacity="0"/></radialGradient>' +
-      '<radialGradient id="gBg"><stop offset="0" stop-color="#46ff7a" stop-opacity=".32"/><stop offset="1" stop-color="#46ff7a" stop-opacity="0"/></radialGradient>' +
-      '<radialGradient id="gSc"><stop offset="0" stop-color="#000" stop-opacity=".62"/><stop offset=".55" stop-color="#1e0e02" stop-opacity=".32"/><stop offset="1" stop-color="#1e0e02" stop-opacity="0"/></radialGradient>' +
-      '<linearGradient id="gY" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe46e"/><stop offset=".5" stop-color="#f7b91f"/><stop offset="1" stop-color="#c48407"/></linearGradient>' +
-      '<linearGradient id="gLcd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c1d2b4"/><stop offset="1" stop-color="#94aa8b"/></linearGradient>' +
-      '<radialGradient id="gK" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#5d6875"/><stop offset="1" stop-color="#181e26"/></radialGradient>' +
-      LEDC.map(function (c, i) {
-        return '<radialGradient id="gL' + i + '" cx=".4" cy=".36" r=".7"><stop offset="0" stop-color="#fff"/><stop offset=".42" stop-color="' + c[0] + '"/><stop offset="1" stop-color="' + c[0] + '" stop-opacity=".8"/></radialGradient>' +
-          '<radialGradient id="gH' + i + '"><stop offset="0" stop-color="' + c[0] + '" stop-opacity=".55"/><stop offset=".35" stop-color="' + c[0] + '" stop-opacity=".2"/><stop offset="1" stop-color="' + c[0] + '" stop-opacity="0"/></radialGradient>';
-      }).join('') + '</defs>';
-
-    // цифра семисегментного индикатора: 7 шестиугольных «палочек», наклон как у настоящих
-    function digit(x, y, w, h, t) {
-      var g = Math.max(1, t * 0.1), ht = t / 2, l = ht, r = w - ht, m = h / 2, b = h - ht;
-      function H(x1, x2, yy) { return [x1, yy, x1 + ht, yy - ht, x2 - ht, yy - ht, x2, yy, x2 - ht, yy + ht, x1 + ht, yy + ht].join(' '); }
-      function V(xx, y1, y2) { return [xx, y1, xx + ht, y1 + ht, xx + ht, y2 - ht, xx, y2, xx - ht, y2 - ht, xx - ht, y1 + ht].join(' '); }
-      var S = { a: H(l + g, r - g, ht), b: V(r, ht + g, m - g), c: V(r, m + g, b - g), d: H(l + g, r - g, b), e: V(l, m + g, b - g), f: V(l, ht + g, m - g), g: H(l + g, r - g, m) };
-      var s = '<g class="dg" transform="translate(' + (x + h * 0.05).toFixed(1) + ' ' + y + ') skewX(-6)">';
-      for (var k in S) s += '<polygon class="s" data-s="' + k + '" points="' + S[k] + '"/>';
-      return s + '</g>';
-    }
-
-    function battery(L) {
-      var b = L.bat, x = b[0], y = b[1], w = b[2], h = b[3], cy = y + h / 2, c0 = x + 14, c1 = x + w - 18, ct = y + 8, ch = h - 16, gw = (c1 - c0) * 0.32;
-      var s = '<g class="cmp" data-tip="bat">' + gpad(L.batP[0], L.batP[1], 9) + gpad(L.batN[0], L.batN[1], 9, 1);
-      s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="9" fill="#15181d" stroke="#2c3139" stroke-width="2"/>';
-      s += '<rect x="' + (x + 4) + '" y="' + (cy - 15) + '" width="7" height="30" rx="2" fill="url(#gM)"/><rect x="' + (x + w - 11) + '" y="' + (cy - 15) + '" width="7" height="30" rx="2" fill="url(#gM)"/>';
-      s += '<rect x="' + c0 + '" y="' + ct + '" width="' + (c1 - c0) + '" height="' + ch + '" rx="7" fill="url(#gCell)"/>';
-      s += '<path d="M' + (c1 - gw) + ' ' + ct + 'H' + (c1 - 7) + 'Q' + c1 + ' ' + ct + ' ' + c1 + ' ' + (ct + 7) + 'V' + (ct + ch - 7) + 'Q' + c1 + ' ' + (ct + ch) + ' ' + (c1 - 7) + ' ' + (ct + ch) + 'H' + (c1 - gw) + 'Z" fill="url(#gCellG)"/>';
-      s += '<rect x="' + c1 + '" y="' + (cy - 9) + '" width="7" height="18" rx="2.5" fill="url(#gM)"/>';
-      s += tx(c0 + (c1 - c0 - gw) / 2, cy + 9, 25, '5V', 'middle', 'sk-t', ' fill-opacity="1"');
-      s += tx(c1 - gw / 2, cy + 6, 18, '+', 'middle', 'sk-t', ' style="fill:#4a2f05"');
-      s += tx(c0 + 12, cy + 5, 14, '−', 'middle', 'sk-t', ' style="fill:#9fbdf7"');
-      s += tx(x, y - 9, 12, 'BAT1', 'start') + tx(L.batP[0], L.batP[1] - 15, 14, '+') + tx(L.batN[0], L.batN[1] - 15, 14, '−');
-      return s + '</g>';
-    }
-    function resistor(a, b, key, label, bands) {
-      var cx = (a[0] + b[0]) / 2, cy = (a[1] + b[1]) / 2, len = Math.hypot(b[0] - a[0], b[1] - a[1]), ang = Math.atan2(b[1] - a[1], b[0] - a[0]) * 57.2958;
-      var bw = Math.min(58, len - 24), bh = 18, s = '<g class="cmp" data-tip="' + key + '">' + gpad(a[0], a[1], 8) + gpad(b[0], b[1], 8);
-      s += '<g transform="translate(' + cx + ' ' + cy + ') rotate(' + ang.toFixed(1) + ')">';
-      s += '<path d="M' + (-len / 2) + ' 0H' + (len / 2) + '" stroke="#c6ccd3" stroke-width="2.6"/>';
-      s += '<rect x="' + (-bw / 2) + '" y="' + (-bh / 2) + '" width="' + bw + '" height="' + bh + '" rx="8" fill="url(#gR)"/>';
-      [-0.3, -0.15, 0, 0.3].forEach(function (k, i) { s += '<rect x="' + (k * bw - 2.4).toFixed(1) + '" y="' + (-bh / 2) + '" width="4.8" height="' + bh + '" fill="' + bands[i] + '"/>'; });
-      s += '<rect x="' + (-bw / 2 + 5) + '" y="' + (-bh / 2 + 3) + '" width="' + (bw - 10) + '" height="3" rx="1.5" fill="#fff" opacity=".35"/>';
-      return s + '</g>' + tx(label[0], label[1], 12, key.toUpperCase(), label[2]) + '</g>';
-    }
-    function ecap(c) {
-      var x = c[0], y = c[1], r = c[2], R = r + 5;
-      var s = '<g class="cmp" data-tip="c3"><circle class="skl" cx="' + x + '" cy="' + y + '" r="' + R + '"/>';
-      s += '<path d="M' + x + ' ' + (y - R) + 'A' + R + ' ' + R + ' 0 0 0 ' + x + ' ' + (y + R) + 'Z" fill="#e9f0ea" opacity=".16"/>';
-      s += '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="url(#gC)"/>';
-      s += '<path d="M' + (x - r * 0.5) + ' ' + (y - r * 0.866) + 'A' + r + ' ' + r + ' 0 0 0 ' + (x - r * 0.5) + ' ' + (y + r * 0.866) + 'L' + (x - r * 0.38) + ' ' + (y + r * 0.66) + 'A' + r * 0.76 + ' ' + r * 0.76 + ' 0 0 1 ' + (x - r * 0.38) + ' ' + (y - r * 0.66) + 'Z" fill="#cfe0ff" opacity=".4"/>';
-      s += '<circle cx="' + x + '" cy="' + y + '" r="' + (r * 0.7).toFixed(1) + '" fill="url(#gAl)"/>';
-      s += '<path d="M' + (x - r * 0.4) + ' ' + y + 'H' + (x + r * 0.4) + 'M' + x + ' ' + (y - r * 0.4) + 'V' + (y + r * 0.4) + '" stroke="#76808c" stroke-width="2"/>';
-      return s + tx(x + R + 4, y - R + 8, 13, '+', 'start') + tx(x, y + R + 17, 12, 'C3') + '</g>';
-    }
-    function crystal(q) {
-      var x = q[0], y = q[1];
-      return '<g class="cmp" data-tip="q1"><rect class="skl" x="' + (x - 34) + '" y="' + (y - 16) + '" width="68" height="32" rx="16"/>' +
-        '<rect x="' + (x - 29) + '" y="' + (y - 11) + '" width="58" height="22" rx="11" fill="url(#gX)" stroke="#5f6872"/>' +
-        '<rect x="' + (x - 24) + '" y="' + (y - 7) + '" width="48" height="14" rx="7" fill="none" stroke="#fff" stroke-opacity=".5"/>' +
-        tx(x, y + 3, 8, '16.000', 'middle', 'eng') + tx(x - 42, y + 4, 12, 'Q1', 'end') + '</g>';
-    }
-    function chip(u) {
-      var cx = u[0], cy = u[1], S = u[2], pitch = u[3], h = S / 2, pl = 12, pw = 5, n = 8, i = 0, k, off;
-      var s = '<g class="cmp" data-tip="u1">';
-      var o = h + 20, c = 16; // уголки шелкографии
-      [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(function (q) {
-        var X = cx + q[0] * o, Y = cy + q[1] * o;
-        s += '<path class="skl" d="M' + (X - q[0] * c) + ' ' + Y + 'H' + X + 'V' + (Y - q[1] * c) + '"/>';
-      });
-      for (k = 0; k < n; k++) { off = (k - (n - 1) / 2) * pitch; s += '<rect class="pin" x="' + (cx + off - pw / 2) + '" y="' + (cy - h - pl) + '" width="' + pw + '" height="' + pl + '" style="--i:' + i++ + '"/>'; }
-      for (k = 0; k < n; k++) { off = (k - (n - 1) / 2) * pitch; s += '<rect class="pin" x="' + (cx + h) + '" y="' + (cy + off - pw / 2) + '" width="' + pl + '" height="' + pw + '" style="--i:' + i++ + '"/>'; }
-      for (k = 0; k < n; k++) { off = ((n - 1) / 2 - k) * pitch; s += '<rect class="pin" x="' + (cx + off - pw / 2) + '" y="' + (cy + h) + '" width="' + pw + '" height="' + pl + '" style="--i:' + i++ + '"/>'; }
-      for (k = 0; k < n; k++) { off = ((n - 1) / 2 - k) * pitch; s += '<rect class="pin" x="' + (cx - h - pl) + '" y="' + (cy + off - pw / 2) + '" width="' + pl + '" height="' + pw + '" style="--i:' + i++ + '"/>'; }
-      s += '<rect x="' + (cx - h) + '" y="' + (cy - h) + '" width="' + S + '" height="' + S + '" rx="7" fill="url(#gU)"/>';
-      s += '<rect x="' + (cx - h + 5) + '" y="' + (cy - h + 5) + '" width="' + (S - 10) + '" height="' + (S - 10) + '" rx="4" fill="none" stroke="#fff" stroke-opacity=".06"/>';
-      s += '<rect class="core" x="' + (cx - h + 6) + '" y="' + (cy - h + 6) + '" width="' + (S - 12) + '" height="' + (S - 12) + '" rx="5" fill="url(#gCore)"/>';
-      s += '<circle cx="' + (cx - h + 14) + '" cy="' + (cy - h + 14) + '" r="4.5" fill="#06080b" stroke="#fff" stroke-opacity=".08"/>';
-      s += tx(cx, cy + 2, S * 0.15, 'TN-404', 'middle', 'eng') + tx(cx, cy + S * 0.16, S * 0.075, 'TEACHNET · 2026', 'middle', 'eng');
-      return s + (u[4] ? tx(cx + o, cy - o - 7, 12, 'U1', 'end') : tx(cx - o, cy - o - 7, 12, 'U1', 'start')) + '</g>';
-    }
-    function display(L) {
-      var d = L.disp, x = d[0], y = d[1], w = d[2], h = d[3], g = L.dg, gw = w - 24, gap = (gw - 3 * g[0]) / 4;
-      var s = '<g class="cmp disp" id="disp" data-tip="disp">' + gpad(L.dPads[0][0], L.dPads[0][1], 8) + gpad(L.dPads[1][0], L.dPads[1][1], 8);
-      s += '<rect class="skl" x="' + (x - 6) + '" y="' + (y - 6) + '" width="' + (w + 12) + '" height="' + (h + 12) + '" rx="10"/>';
-      s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8" fill="url(#gDm)"/>';
-      s += '<rect x="' + (x + 12) + '" y="' + (y + 12) + '" width="' + gw + '" height="' + (h - 24) + '" rx="5" fill="#0a0808"/>';
-      s += '<rect class="bloom" x="' + (x + 6) + '" y="' + (y + 6) + '" width="' + (w - 12) + '" height="' + (h - 12) + '"/>';
-      s += '<g class="digits">';
-      for (var i = 0; i < 3; i++) {
-        var dx = x + 12 + gap + i * (g[0] + gap), dy = y + (h - g[1]) / 2;
-        s += digit(dx, dy, g[0], g[1], g[2]) + '<circle class="s" cx="' + (dx + g[0] + gap * 0.42) + '" cy="' + (dy + g[1] - g[2] / 2) + '" r="' + g[2] * 0.45 + '"/>';
+    return s + '</g>' + D(`M${x + 12} ${y + 12}h${f1(gw * .42)}l${f1(-(h - 24) * .45)} ${h - 24}h${f1(-gw * .42 + (h - 24) * .45)}Z`, 'fill="#fff" opacity=".045"') + tx(x - 6, y - 12, 12, 'DISP1', 'start') + '</g>';
+  }
+  function led(cx, cy, i, d) {
+    const [c, dim] = LEDC[i];
+    return `<g class="cmp led" data-tip="led" style="--d:${d.toFixed(2)}s">` + O(cx, cy, 46, `class="led-halo" fill="url(#gH${i})"`) +
+      R(cx - 28, cy - 6, 12, 12, 'rx="2" ' + GP) + O(cx + 22, cy, 6, GP) + D(`M${cx - 14} ${cy - 12.6}A19 19 0 1 1 ${cx - 14} ${cy + 12.6}Z`, 'class="skl"') +
+      O(cx, cy, 14.5, `fill="${dim}" stroke="${c}" stroke-opacity=".35" stroke-width="1.5"`) +
+      D(`M${cx - 5} ${cy - 4}h4v8h-4zM${cx + 2} ${cy - 5}h4l-1 4h-3z`, 'fill="#000" opacity=".35"') + O(cx, cy, 14.5, `class="led-hi" fill="url(#gL${i})"`) +
+      `<ellipse cx="${cx - 5}" cy="${cy - 6}" rx="5.5" ry="3" fill="#fff" opacity=".42" transform="rotate(-30 ${cx - 5} ${cy - 6})"/>` + tx(cx, cy + 36, 11, 'D' + (i + 1)) + '</g>';
+  }
+  const smd = ([x, y, rot, type, label, sd = 't']) => `<g class="cmp" data-tip="${type}"><g transform="translate(${x} ${y}) rotate(${rot})">` +
+    R(-9, -4.5, 18, 9, `rx="1" fill="${type === 'r' ? '#16181b' : '#c9a777'}"`) + R(-9, -4.5, 4, 9, 'fill="#cfd3d8"') + R(5, -4.5, 4, 9, 'fill="#cfd3d8"') + '</g>' +
+    (sd === 't' ? tx(x, y - 9, 10, label) : tx(x + (sd === 'l' ? -10 : 10), y + 4, 10, label, sd === 'l' ? 'end' : 'start')) + '</g>';
+  const smdLed = ([x, y], key, label, col) => `<g class="cmp smd-${key}" data-tip="${key}">` + O(x, y, 18, `class="sl-halo" fill="url(#gH${col})"`) +
+    R(x - 8, y - 4.5, 16, 9, 'rx="1" fill="#e9e3d0"') + R(x - 5, y - 3, 10, 6, `fill="${LEDC[col][1]}"`) + R(x - 5, y - 3, 10, 6, `class="sl-hi" fill="${LEDC[col][0]}"`) + tx(x, y - 10, 10, label) + '</g>';
+  function code2d([x, y]) {
+    const n = 13, c = 3.6;
+    let seed = 11, s = '<g class="cmp" data-tip="code" fill="#e9f0ea" opacity=".82">';
+    const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+    for (let r = 0; r < n; r++) for (let q = 0; q < n; q++)
+      if (q === 0 || r === n - 1 || (r === 0 && q % 2 === 0) || (q === n - 1 && r % 2 === 1) || (r > 0 && q > 0 && r < n - 1 && q < n - 1 && rnd() > 0.5)) s += R(x + q * c, y + r * c, c, c);
+    return s + '</g>';
+  }
+  function meter(L) {
+    const [mx, my, mr, ms] = L.meter, T9 = (t, x, y, sz, fill) => `<text x="${x}" y="${y}" font-size="${sz}" text-anchor="middle" fill="${fill}">${t}</text>`;
+    let s = `<g class="cmp" data-tip="meter"><g transform="translate(${mx} ${my}) rotate(${mr}) scale(${ms})">` +
+      R(9, 14, 150, 232, 'rx="22" fill="#000" opacity=".22"') + R(5, 8, 150, 232, 'rx="22" fill="#000" opacity=".28"') +
+      R(0, 0, 150, 232, 'rx="22" fill="url(#gY)" stroke="#8e6006" stroke-width="2"') + R(10, 10, 130, 212, 'rx="15" fill="#1b222c" stroke="#0c1117" stroke-width="2"') +
+      R(19, 19, 112, 62, 'rx="7" fill="#0d1218"') + R(24, 24, 102, 52, 'rx="3" fill="url(#gLcd)"') + '<g class="lcd">';
+    for (let i = 0; i < 3; i++) s += digit(36 + i * 23 + (i ? 6 : 0), 31, 17, 30, 4);
+    s += O(59, 59, 2.3, 'class="s on"') + '</g>' +
+      '<text class="lcd-i" x="120" y="59" font-size="13" text-anchor="end">V</text><text class="lcd-i" x="30" y="72" font-size="7.5" id="mI">I = 0 мА</text><text class="lcd-i" x="120" y="35" font-size="7" text-anchor="end">DC</text>' +
+      O(75, 140, 38, 'fill="#2a333f"') + O(75, 140, 27, 'fill="url(#gK)" stroke="#0b0f14" stroke-width="2"') +
+      '<g transform="rotate(-50 75 140)">' + R(71.5, 108, 7, 26, 'rx="3.5" fill="#e9eef3"') + '</g>' +
+      [['OFF', 75, 96], ['V=', 33, 115], ['A', 118, 115], ['Ω', 121, 165], ['V~', 30, 165]].map(([t, x, y]) => T9(t, x, y, 9, '#cfd8e3')).join('') +
+      [[40, '#d8352a', '10A'], [75, '#59626d', 'COM'], [110, '#d8352a', 'VΩ']].map(([x, c, t]) => O(x, 200, 9, `fill="#0b0e12" stroke="${c}" stroke-width="3"`) + T9(t, x, 217, 7, '#9aa6b4')).join('') + '</g>';
+    // щупы: из гнёзд VΩ и COM к контрольным точкам TP1 и TP2
+    const rad = mr * Math.PI / 180, co = Math.cos(rad), si = Math.sin(rad), G = (lx, ly) => [mx + (lx * co - ly * si) * ms, my + (lx * si + ly * co) * ms];
+    [[110, L.tp[0], '#d8352a', '#7a120b'], [75, L.tp[1], '#22272e', '#000']].forEach(([lx, t, c, c2], j) => {
+      const a = G(lx, 200), dn = 64 * ms + j * 6, w = 'fill="none" stroke-linecap="round" stroke=';
+      const d = `M${f1(a[0])} ${f1(a[1])}C${f1(a[0] + 4)} ${f1(a[1] + dn)} ${t[0] - 10} ${f1(t[1] + 70 * ms + 30)} ${t[0]} ${t[1]}`;
+      s += D(d, w + '"#000" stroke-opacity=".3" stroke-width="6" transform="translate(4 7)"') + D(d, w + `"${c2}" stroke-width="6.5"`) + D(d, w + `"${c}" stroke-width="4"`) +
+        O(a[0], a[1], 7 * ms, `fill="${c}" stroke="#000" stroke-opacity=".4"`) + O(t[0], t[1], 5, 'fill="none" stroke="#d9dee4" stroke-width="2.4"');
+    });
+    return s + '</g>';
+  }
+  function header(L) {
+    const [x0, y, st, n] = L.hdr;
+    let s = '<g class="cmp" data-tip="hdr">' + R(x0 - 14, y - 14, st * (n - 1) + 28, 28, 'class="skl" rx="3"');
+    for (let i = 0; i < n; i++) s += gpad(x0 + i * st, y, 7.5, i === 0) + tx(x0 + i * st, y + 26, 8.5, L.hdrL[i]);
+    return s + '</g>';
+  }
+  // когда «фронт тока» доходит до светодиода: проекция на дорожку контура
+  function ledDelay(L, x, y) {
+    let best = 1e9, res = 0;
+    L.loop.forEach(it => {
+      if (!it.p || it.res) return;
+      let acc = 0;
+      for (let i = 1; i < it.p.length; i++) {
+        const a = it.p[i - 1], b = it.p[i], dx = b[0] - a[0], dy = b[1] - a[1], l = hyp(dx, dy) || 1;
+        const u = clamp(((x - a[0]) * dx + (y - a[1]) * dy) / (l * l), 0, 1), d = hyp(a[0] + dx * u - x, a[1] + dy * u - y);
+        if (d < best) { best = d; res = it.t0 + it.dur * (acc + u * l) / it.len; }
+        acc += l;
       }
-      s += '</g><path d="M' + (x + 12) + ' ' + (y + 12) + 'h' + gw * 0.42 + 'l' + (-(h - 24) * 0.45) + ' ' + (h - 24) + 'h' + (-gw * 0.42 + (h - 24) * 0.45) + 'Z" fill="#fff" opacity=".045"/>';
-      return s + tx(x - 6, y - 12, 12, 'DISP1', 'start') + '</g>';
-    }
-    function led(cx, cy, i, d) {
-      var c = LEDC[i], s = '<g class="cmp led" data-tip="led" style="--d:' + d.toFixed(2) + 's">';
-      s += '<circle class="led-halo" cx="' + cx + '" cy="' + cy + '" r="46" fill="url(#gH' + i + ')"/>';
-      s += '<rect x="' + (cx - 28) + '" y="' + (cy - 6) + '" width="12" height="12" rx="2" fill="url(#gP)"/><circle cx="' + (cx + 22) + '" cy="' + cy + '" r="6" fill="url(#gP)"/>';
-      s += '<path class="skl" d="M' + (cx - 14) + ' ' + (cy - 12.6) + 'A19 19 0 1 1 ' + (cx - 14) + ' ' + (cy + 12.6) + 'Z"/>';
-      s += '<circle cx="' + cx + '" cy="' + cy + '" r="14.5" fill="' + c[1] + '" stroke="' + c[0] + '" stroke-opacity=".35" stroke-width="1.5"/>';
-      s += '<path d="M' + (cx - 5) + ' ' + (cy - 4) + 'h4v8h-4zM' + (cx + 2) + ' ' + (cy - 5) + 'h4l-1 4h-3z" fill="#000" opacity=".35"/>';
-      s += '<circle class="led-hi" cx="' + cx + '" cy="' + cy + '" r="14.5" fill="url(#gL' + i + ')"/>';
-      s += '<ellipse cx="' + (cx - 5) + '" cy="' + (cy - 6) + '" rx="5.5" ry="3" fill="#fff" opacity=".42" transform="rotate(-30 ' + (cx - 5) + ' ' + (cy - 6) + ')"/>';
-      return s + tx(cx, cy + 36, 11, 'D' + (i + 1)) + '</g>';
-    }
-    function smd(a) {
-      var x = a[0], y = a[1], rot = a[2], body = a[3] === 'r' ? '#16181b' : '#c9a777';
-      var s = '<g class="cmp" data-tip="' + a[3] + '"><g transform="translate(' + x + ' ' + y + ') rotate(' + rot + ')"><rect x="-9" y="-4.5" width="18" height="9" rx="1" fill="' + body + '"/><rect x="-9" y="-4.5" width="4" height="9" fill="#cfd3d8"/><rect x="5" y="-4.5" width="4" height="9" fill="#cfd3d8"/></g>';
-      var sd = a[5] || 't';
-      return s + (sd === 't' ? tx(x, y - 9, 10, a[4]) : tx(x + (sd === 'l' ? -10 : 10), y + 4, 10, a[4], sd === 'l' ? 'end' : 'start')) + '</g>';
-    }
-    function smdLed(p, key, label, col) {
-      var x = p[0], y = p[1];
-      return '<g class="cmp smd-' + key + '" data-tip="' + key + '"><circle class="sl-halo" cx="' + x + '" cy="' + y + '" r="18" fill="url(#gH' + col + ')"/>' +
-        '<rect x="' + (x - 8) + '" y="' + (y - 4.5) + '" width="16" height="9" rx="1" fill="#e9e3d0"/><rect x="' + (x - 5) + '" y="' + (y - 3) + '" width="10" height="6" fill="' + LEDC[col][1] + '"/>' +
-        '<rect class="sl-hi" x="' + (x - 5) + '" y="' + (y - 3) + '" width="10" height="6" fill="' + LEDC[col][0] + '"/>' + tx(x, y - 10, 10, label) + '</g>';
-    }
-    function code2d(x, y) {
-      var n = 13, c = 3.6, seed = 11, s = '<g class="cmp" data-tip="code" fill="#e9f0ea" opacity=".82">';
-      function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
-      for (var r = 0; r < n; r++) for (var q = 0; q < n; q++) {
-        var fill = q === 0 || r === n - 1 || (r === 0 && q % 2 === 0) || (q === n - 1 && r % 2 === 1) || (r > 0 && q > 0 && r < n - 1 && q < n - 1 && rnd() > 0.5);
-        if (fill) s += '<rect x="' + (x + q * c).toFixed(1) + '" y="' + (y + r * c).toFixed(1) + '" width="' + c + '" height="' + c + '"/>';
-      }
-      return s + '</g>';
-    }
-    function meter(L) {
-      var m = L.meter, s = '<g class="cmp" data-tip="meter"><g transform="translate(' + m[0] + ' ' + m[1] + ') rotate(' + m[2] + ') scale(' + m[3] + ')">';
-      s += '<rect x="9" y="14" width="150" height="232" rx="22" fill="#000" opacity=".22"/><rect x="5" y="8" width="150" height="232" rx="22" fill="#000" opacity=".28"/>';
-      s += '<rect width="150" height="232" rx="22" fill="url(#gY)" stroke="#8e6006" stroke-width="2"/>';
-      s += '<rect x="10" y="10" width="130" height="212" rx="15" fill="#1b222c" stroke="#0c1117" stroke-width="2"/>';
-      s += '<rect x="19" y="19" width="112" height="62" rx="7" fill="#0d1218"/><rect x="24" y="24" width="102" height="52" rx="3" fill="url(#gLcd)"/>';
-      s += '<g class="lcd">';
-      for (var i = 0; i < 3; i++) s += digit(36 + i * 23 + (i ? 6 : 0), 31, 17, 30, 4);
-      s += '<circle class="s on" cx="' + (36 + 17 + 6) + '" cy="59" r="2.3"/></g>';
-      s += '<text class="lcd-i" x="120" y="59" font-size="13" text-anchor="end">V</text><text class="lcd-i" x="30" y="72" font-size="7.5" id="mI">I = 0 мА</text><text class="lcd-i" x="120" y="35" font-size="7" text-anchor="end">DC</text>';
-      s += '<circle cx="75" cy="140" r="38" fill="#2a333f"/><circle cx="75" cy="140" r="27" fill="url(#gK)" stroke="#0b0f14" stroke-width="2"/>';
-      s += '<g transform="rotate(-50 75 140)"><rect x="71.5" y="108" width="7" height="26" rx="3.5" fill="#e9eef3"/></g>';
-      [['OFF', 75, 96], ['V=', 33, 115], ['A', 118, 115], ['Ω', 121, 165], ['V~', 30, 165]].forEach(function (t) { s += '<text x="' + t[1] + '" y="' + t[2] + '" font-size="9" text-anchor="middle" fill="#cfd8e3">' + t[0] + '</text>'; });
-      [[40, '#d8352a', '10A'], [75, '#0b0e12', 'COM'], [110, '#d8352a', 'VΩ']].forEach(function (k) {
-        s += '<circle cx="' + k[0] + '" cy="200" r="9" fill="#0b0e12" stroke="' + (k[1] === '#0b0e12' ? '#59626d' : k[1]) + '" stroke-width="3"/><text x="' + k[0] + '" y="217" font-size="7" text-anchor="middle" fill="#9aa6b4">' + k[2] + '</text>';
-      });
-      s += '</g>';
-      // щупы: из гнёзд COM и VΩ к контрольным точкам TP2 и TP1
-      var rad = m[2] * Math.PI / 180, co = Math.cos(rad), si = Math.sin(rad);
-      function G(lx, ly) { lx *= m[3]; ly *= m[3]; return [m[0] + lx * co - ly * si, m[1] + lx * si + ly * co]; }
-      [[110, L.tp[0], '#d8352a', '#7a120b'], [75, L.tp[1], '#22272e', '#000']].forEach(function (k, j) {
-        var a = G(k[0], 200), t = k[1], dn = 64 * m[3] + j * 6;
-        var d = 'M' + a[0].toFixed(1) + ' ' + a[1].toFixed(1) + 'C' + (a[0] + 4).toFixed(1) + ' ' + (a[1] + dn).toFixed(1) + ' ' + (t[0] - 10) + ' ' + (t[1] + 70 * m[3] + 30) + ' ' + t[0] + ' ' + t[1];
-        s += '<path d="' + d + '" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="6" transform="translate(4 7)"/><path d="' + d + '" fill="none" stroke="' + k[3] + '" stroke-width="6.5" stroke-linecap="round"/><path d="' + d + '" fill="none" stroke="' + k[2] + '" stroke-width="4" stroke-linecap="round"/>';
-        s += '<circle cx="' + a[0].toFixed(1) + '" cy="' + a[1].toFixed(1) + '" r="' + 7 * m[3] + '" fill="' + k[2] + '" stroke="#000" stroke-opacity=".4"/>';
-        s += '<circle cx="' + t[0] + '" cy="' + t[1] + '" r="5" fill="none" stroke="#d9dee4" stroke-width="2.4"/>';
-      });
-      return s + '</g>';
-    }
+    });
+    return res;
+  }
 
-    var T = {}, flat = null;
-    function buildBoard(L) {
-      var b = L.board, s = DEFS, i;
-      s += '<rect x="' + (b[0] + 12) + '" y="' + (b[1] + 22) + '" width="' + b[2] + '" height="' + b[3] + '" rx="30" fill="#000" opacity=".28"/>';
-      s += '<rect x="' + (b[0] + 4) + '" y="' + (b[1] + 9) + '" width="' + b[2] + '" height="' + b[3] + '" rx="27" fill="#000" opacity=".35"/>';
-      s += '<rect x="' + b[0] + '" y="' + b[1] + '" width="' + b[2] + '" height="' + b[3] + '" rx="26" fill="url(#gB)" stroke="#03150e" stroke-width="2"/>';
-      s += '<rect x="' + b[0] + '" y="' + b[1] + '" width="' + b[2] + '" height="' + b[3] + '" rx="26" fill="url(#gSh)"/>';
-      s += '<rect x="' + (b[0] + 2.5) + '" y="' + (b[1] + 2.5) + '" width="' + (b[2] - 5) + '" height="' + (b[3] - 5) + '" rx="24" fill="none" stroke="#5fd0a2" stroke-opacity=".16" stroke-width="1.5"/>';
-      L.pours.forEach(function (p) {
-        s += '<rect x="' + p[0] + '" y="' + p[1] + '" width="' + p[2] + '" height="' + p[3] + '" rx="10" fill="url(#gHt)" stroke="#1d7254" stroke-width="1.5"/>';
-        for (var y = p[1] + 16; y < p[1] + p[3] - 8; y += 28) for (var x = p[0] + 16; x < p[0] + p[2] - 8; x += 28) s += via(x, y);
-      });
-      L.deco().forEach(function (p) { s += '<path class="dt" d="' + P(p) + '"/>'; });
-      L.vias.forEach(function (v) { s += via(v[0], v[1]); });
+  let T = {};
+  function buildBoard(L) {
+    const [bx, by, bw, bh] = L.board;
+    let s = DEFS + R(bx + 12, by + 22, bw, bh, 'rx="30" fill="#000" opacity=".28"') + R(bx + 4, by + 9, bw, bh, 'rx="27" fill="#000" opacity=".35"') +
+      R(bx, by, bw, bh, 'rx="26" fill="url(#gB)" stroke="#03150e" stroke-width="2"') + R(bx, by, bw, bh, 'rx="26" fill="url(#gSh)"') +
+      R(bx + 2.5, by + 2.5, bw - 5, bh - 5, 'rx="24" fill="none" stroke="#5fd0a2" stroke-opacity=".16" stroke-width="1.5"');
+    L.pours.forEach(([x, y, w, h]) => {
+      s += R(x, y, w, h, 'rx="10" fill="url(#gHt)" stroke="#1d7254" stroke-width="1.5"');
+      for (let yy = y + 16; yy < y + h - 8; yy += 28) for (let xx = x + 16; xx < x + w - 8; xx += 28) s += via(xx, yy);
+    });
+    L.deco().forEach(p => { s += D(P(p), 'class="dt"'); });
+    L.vias.forEach(v => { s += via(...v); });
+    // главный контур: золотые дорожки + «свечение», которое прорисовывается вслед за фронтом тока
+    let t = 0, lit = '';
+    T = {};
+    L.loop.forEach(it => {
+      if (it.j) { it.t0 = t; it.dur = 0.12; T[it.j] = t + 0.06; t += 0.12; return; }
+      it.len = it.c ? L.cable.L * 0.75 : plen(it.p); it.t0 = t; it.dur = it.len / 2100; t += it.dur;
+    });
+    T.total = t;
+    L.loop.forEach(it => {
+      if (!it.p || it.res) return;
+      const d = P(it.p), st = `pathLength="1" d="${d}" style="--d:${it.t0.toFixed(3)}s;--dur:${it.dur.toFixed(3)}s"`;
+      s += D(d, 'class="tr"') + D(d, 'class="trh"');
+      lit += `<path class="lit-g" ${st}/><path class="lit" ${st}/>`;
+    });
+    const gy = L.padL[1], [g0, g1] = L.gap, gc = (g0 + g1) / 2;
+    s += `<ellipse cx="${gc}" cy="${gy}" rx="${f1((g1 - g0) * 0.85)}" ry="17" fill="url(#gSc)"/>`;
+    [[L.padL[0], g0, 1], [L.padR[0], g1, -1]].forEach(([x, e, k]) => {
+      const d = P([[x, gy], [e, gy]]);
+      s += D(d, 'class="tr"') + D(d, 'class="trh"') + D(`M${e - k * 2} ${gy - 3.6}L${e + k * 3} ${gy - 1.8}L${e} ${gy}L${e + k * 4} ${gy + 1.6}L${e - k} ${gy + 3.6}Z`, 'fill="#7a5320"');
+    });
+    s += lit + header(L);
+    L.holes.forEach(([x, y]) => { s += '<g class="cmp" data-tip="hole">' + O(x, y, 21, 'class="skl" stroke-dasharray="3 4"') + O(x, y, 15, GP) + O(x, y, 8.5, 'fill="#030b07"') + '</g>'; });
+    const [t0, t1, ts] = L.title;
+    s += tx(t0, t1, ts, 'TEACHNET UNO', 'start', 'sk-t cmp', 'data-tip="title"') + tx(t0 + 1, t1 + ts * 0.8, ts * 0.42, 'rev 4.04 · учебная плата', 'start') +
+      battery(L) + resistor(L.r1, 'r1', L.r1L, ['#d9312b', '#d9312b', '#7a4a22', '#d6b13c']) + resistor(L.r2, 'r2', L.r2L, ['#7a4a22', '#1b1b1b', '#f08a24', '#d6b13c']) +
+      ecap(L.c3) + crystal(L.q1) + chip(L.u1, L.u1L) + display(L) + L.smd.map(smd).join('');
+    if (L.onl) s += smdLed(L.onl[0], 'on', 'ON', 3) + smdLed(L.onl[1], 'l', 'L', 1);
+    L.leds[1].forEach((x, i) => { s += led(x, L.leds[0], i, ledDelay(L, x, L.leds[0])); });
+    if (L.code) s += code2d(L.code);
+    if (L.credit) { const [cx, cy] = L.credit; s += tx(cx, cy, 11, 'Собрано Тичем', 'start') + D(`M${cx + 104} ${cy - 2}c-3-3-7-1-5 2l5 5 5-5c2-3-2-5-5-2z`, 'fill="#ff6b8a" opacity=".9"') + tx(cx, cy + 16, 10, 'Казань · 2026', 'start'); }
+    s += '<g class="cmp" data-tip="tp">' + L.tp.map((p, i) => { const q = L.tpL[i]; return gpad(p[0], p[1], 7) + tx(p[0] + q[0], p[1] + q[1], 10, 'TP' + (i + 1), q[2]); }).join('') + '</g>';
+    // обрыв: контакты J1/J2, значок искры для режима без анимации, подпись красным маркером
+    s += '<g class="cmp" data-tip="j2">' + gpad(L.padL[0], gy, 12) + tx(L.padL[0], gy - 19, 12, 'J2') + '</g>' +
+      '<g class="cmp" data-tip="j1">' + gpad(L.padR[0], gy, 12) + tx(L.padR[0], gy - 19, 12, 'J1') + '</g>' +
+      R(g0 - 4, gy - 18, g1 - g0 + 8, 36, 'class="cmp" data-tip="gap" fill="transparent"') + D(`M${gc - 4} ${gy - 14}l9 9-6 2 7 10-12-8 6-2-8-8z`, 'class="rm-spark" fill="#ffcb6b"');
+    const [ax, ay] = L.anno, rt = `font-size="18" text-anchor="middle" transform="rotate(-5 ${ax} ${ay})"`;
+    s += '<g class="anno anno-bad">' + D(`M${gc - 44} ${gy - 9}C${gc - 38} ${gy - 27} ${gc + 30} ${gy - 29} ${gc + 46} ${gy - 11}C${gc + 58} ${gy + 5} ${gc + 30} ${gy + 24} ${gc - 6} ${gy + 23}C${gc - 40} ${gy + 22} ${gc - 56} ${gy + 6} ${gc - 40} ${gy - 16}`, 'pathLength="1"') +
+      D(`M${ax + 26} ${ay + 7}Q${ax + 38} ${ay + 22} ${gc + 14} ${gy - 27}M${gc + 9} ${gy - 36}L${gc + 14} ${gy - 27}L${gc + 24} ${gy - 31}`, 'pathLength="1"') +
+      `<text x="${ax}" y="${ay}" ${rt}>Нет контакта</text></g><g class="anno anno-ok"><text x="${ax}" y="${ay}" ${rt}>Есть контакт!</text>` + D(`M${ax - 72} ${ay - 6}l6 6 11-13`) + '</g>';
+    return s + meter(L);
+  }
 
-      // главный контур: золотые дорожки + слой «свечения», который прорисовывается при замыкании
-      var SPEED = 2100, t = 0;
-      L.loop.forEach(function (it) {
-        if (it.j) { it.t0 = t; it.dur = 0.12; T[it.j] = t + 0.06; t += 0.12; return; }
-        it.len = it.c ? L.cable.L * 0.75 : plen(it.p);
-        it.t0 = t; it.dur = it.len / SPEED; t += it.dur;
-      });
-      T.total = t;
-      var lit = '';
-      L.loop.forEach(function (it) {
-        if (!it.p || it.res) return;
-        var d = P(it.p), st = ' style="--d:' + it.t0.toFixed(3) + 's;--dur:' + it.dur.toFixed(3) + 's"';
-        s += '<path class="tr" d="' + d + '"/><path class="trh" d="' + d + '"/>';
-        lit += '<path class="lit-g" pathLength="1" d="' + d + '"' + st + '/><path class="lit" pathLength="1" d="' + d + '"' + st + '/>';
-      });
-      var gy = L.padL[1], g0 = L.gap[0], g1 = L.gap[1], gc = (g0 + g1) / 2;
-      s += '<ellipse cx="' + gc + '" cy="' + gy + '" rx="' + (g1 - g0) * 0.85 + '" ry="17" fill="url(#gSc)"/>';
-      [[L.padL[0], g0, 1], [L.padR[0], g1, -1]].forEach(function (q) {
-        var d = P([[q[0], gy], [q[1], gy]]), e = q[1], k = q[2];
-        s += '<path class="tr" d="' + d + '"/><path class="trh" d="' + d + '"/>';
-        s += '<path d="M' + (e - k * 2) + ' ' + (gy - 3.6) + 'L' + (e + k * 3) + ' ' + (gy - 1.8) + 'L' + e + ' ' + gy + 'L' + (e + k * 4) + ' ' + (gy + 1.6) + 'L' + (e - k * 1) + ' ' + (gy + 3.6) + 'Z" fill="#7a5320"/>';
-      });
-      s += lit;
+  function buildWire(L) {
+    const [lx, ly] = L.padL, [ax, ay] = L.padR, r = L.cable.rest, M = 'fill="url(#wM)" stroke="#4f5862" stroke-width=".8"';
+    let s = '<defs>' + grad('wM', 'linear', VG, ['0 #f7f9fb', '.45 #b4bcc5', '1 #58616b']) + grad('wB', 'linear', VG, ['0 #ff7466', '.45 #df3326', '1 #7a120b']) +
+      grad('wS', 'radial', RC, ['0 #fff', '.4 #c3cad2', '1 #626b75']) + '<path id="clipSil" d="M-80 -8Q-80 -12 -76 -12L-34 -14L-8 -6Q0 -4 0 0Q0 4 -8 6L-34 14L-76 12Q-80 12 -80 8Z"/></defs>';
+    // подсказка «тяни!»: пунктирная стрелка от «крокодила» к J2 и пульсирующие кольца цели
+    const sx = r[0] - 30, sy = r[1] - 36, qx = r[0] - 112, qy = (r[1] + ly) / 2 + 10, ex = lx - 16, ey = ly + 30;
+    const dl = hyp(ex - qx, ey - qy), ux = (ex - qx) / dl, uy = (ey - qy) / dl;
+    const hd = a => [f1(ex - (ux * Math.cos(a) - uy * Math.sin(a)) * 11), f1(ey - (ux * Math.sin(a) + uy * Math.cos(a)) * 11)].join(' ');
+    s += '<g class="aff">' + O(lx, ly, 17, 'class="target"') + O(lx, ly, 17, 'class="target t2"') + '<g class="aff-x">' +
+      D(`M${sx} ${sy}Q${qx} ${qy} ${ex} ${ey}`, 'class="aff-a"') + D(`M${hd(0.5)}L${ex} ${ey}L${hd(-0.5)}`, 'class="aff-h"') +
+      `<text x="${qx + 4}" y="${qy + 6}" text-anchor="end" transform="rotate(-8 ${qx} ${qy})">тяни!</text></g></g>` +
+      '<path id="wSh" class="w-sh" transform="translate(6 10)"/><use id="cSh" href="#clipSil" class="c-sh"/>' +
+      '<path id="wO" class="w-o"/><path id="wB_" class="w-b"/><path id="wH" class="w-h" transform="translate(-1.3 -2.2)"/><path id="wL" class="w-l"/>' +
+      D(`M${ax} ${ay + 2}V${ay + 20}`, 'class="w-hs"') + D(`M${ax - 4} ${ay + 6}V${ay + 18}`, 'stroke="#fff" stroke-opacity=".18" stroke-width="3" stroke-linecap="round"') +
+      `<ellipse cx="${ax}" cy="${ay}" rx="13" ry="12" fill="url(#wS)"/><ellipse cx="${ax - 4}" cy="${ay - 4}" rx="4" ry="2.6" fill="#fff" opacity=".8"/>` +
+      '<g id="clip">' + D('M-80 -8Q-80 -12 -76 -12L-36 -14Q-30 -14 -30 -9V9Q-30 14 -36 14L-76 12Q-80 12 -80 8Z', 'fill="url(#wB)"') +
+      D('M-70 -12.4V12.4M-63 -12.8V12.8M-56 -13.2V13.2M-49 -13.5V13.5', 'stroke="#000" stroke-opacity=".22" stroke-width="1.6"') +
+      D('M-75 -8L-37 -10', 'stroke="#fff" stroke-opacity=".4" stroke-width="2.4" stroke-linecap="round"') +
+      D('M-34 -11L-8 -6Q-2 -5 0 -1.5L-3 -1L-5 -3L-8 -1L-10.5 -3.4L-13 -1.2L-15.5 -3.6L-18.5 -1.4L-21 -3.8L-34 -3Z', M) +
+      D('M-34 11L-8 6Q-2 5 0 1.5L-3 1L-5 3L-8 1L-10.5 3.4L-13 1.2L-15.5 3.6L-18.5 1.4L-21 3.8L-34 3Z', M) + O(-27, 0, 3.8, 'fill="#9aa3ad" stroke="#4f5862"') + '</g>' +
+      O(lx, ly, 22 * L.clipS, 'id="padHit" class="padhit" data-tip="j2"') + '<path id="wHit" class="grab" data-tip="wire"/>' +
+      O(-38, 0, 46, 'id="cHit" class="grab" data-tip="wire"') + '<rect id="hl" class="hl" rx="8"/>';
+    return s;
+  }
 
-      // детали
-      s += header(L);
-      L.holes.forEach(function (h) {
-        s += '<g class="cmp" data-tip="hole"><circle class="skl" cx="' + h[0] + '" cy="' + h[1] + '" r="21" stroke-dasharray="3 4"/>' + '<circle cx="' + h[0] + '" cy="' + h[1] + '" r="15" fill="url(#gP)"/><circle cx="' + h[0] + '" cy="' + h[1] + '" r="8.5" fill="#030b07"/></g>';
-      });
-      s += tx(L.title[0], L.title[1], L.title[2], 'TEACHNET UNO', 'start', 'sk-t cmp', ' data-tip="title"');
-      s += tx(L.title[0] + 1, L.title[1] + L.title[2] * 0.8, L.title[2] * 0.42, 'rev 4.04 · учебная плата', 'start');
-      s += battery(L);
-      s += resistor(L.r1[0], L.r1[1], 'r1', L.r1L, ['#d9312b', '#d9312b', '#7a4a22', '#d6b13c']);
-      s += resistor(L.r2[0], L.r2[1], 'r2', L.r2L, ['#7a4a22', '#1b1b1b', '#f08a24', '#d6b13c']);
-      s += ecap(L.c3) + crystal(L.q1) + chip(L.u1.concat(L.u1L ? [1] : [])) + display(L);
-      L.smd.forEach(function (a) { s += smd(a); });
-      if (L.onl) s += smdLed(L.onl[0], 'on', 'ON', 3) + smdLed(L.onl[1], 'l', 'L', 1);
-      var xs = L.leds[1];
-      xs.forEach(function (x, i) { s += led(x, L.leds[0], i, ledDelay(L, x, L.leds[0])); });
-      if (L.code) s += code2d(L.code[0], L.code[1]);
-      if (L.credit) s += tx(L.credit[0], L.credit[1], 11, 'Собрано Тичем', 'start') + '<path d="M' + (L.credit[0] + 104) + ' ' + (L.credit[1] - 2) + 'c-3-3-7-1-5 2l5 5 5-5c2-3-2-5-5-2z" fill="#ff6b8a" opacity=".9"/>';
-      if (L.credit) s += tx(L.credit[0], L.credit[1] + 16, 10, 'Казань · 2026', 'start');
-      s += '<g class="cmp" data-tip="tp">' + gpad(L.tp[0][0], L.tp[0][1], 7) + gpad(L.tp[1][0], L.tp[1][1], 7) +
-        L.tp.map(function (p, i) { var q = L.tpL[i]; return tx(p[0] + q[0], p[1] + q[1], 10, 'TP' + (i + 1), q[2]); }).join('') + '</g>';
+  /* — состояние и сборка — */
+  let L, curM = null, digs = [], lcd = [], flat = [], shownV = -1, scale = 1, timers = [], tOn = 0;
+  const els = {};
+  const C = { E: [0, 0], V: [0, 0], th: 0, c1: null, c2: null, v1: [0, 0], v2: [0, 0], mode: 'rest', tgt: [0, 0], grab: 0, lastP: [0, 0], fly: null, G: null, near: false };
+  function build() {
+    curM = mqM.matches; L = curM ? LM : LD;
+    const vb = `0 0 ${L.w} ${L.h}`;
+    pcb.setAttribute('viewBox', vb); wire.setAttribute('viewBox', vb);
+    pcb.innerHTML = buildBoard(L); wire.innerHTML = buildWire(L);
+    ['wSh', 'cSh', 'wO', 'wB_', 'wH', 'wL', 'clip', 'wHit', 'cHit', 'hl', 'disp', 'mI', 'sheen'].forEach(id => { els[id] = $(id); });
+    const groups = list => [...list].map(g => [...g.querySelectorAll('.s')]);
+    digs = groups(els.disp.querySelectorAll('.digits .dg')); lcd = groups(pcb.querySelectorAll('.lcd .dg'));
+    els.wL.style.setProperty('--d', L.loop[7].t0.toFixed(2) + 's');
+    flat = L.loop.filter(it => it.p || it.c);
+    C.E = (on ? L.padL : L.cable.rest).slice(); C.V = [0, 0]; C.mode = on ? 'snap' : 'rest'; C.th = thTarget(C.E); C.c1 = null;
+    pcb.classList.toggle('on', on); pcb.classList.toggle('alive', on); els.disp.classList.toggle('ok', on);
+    setNum(digs, on ? '200' : '404'); shownV = -1; meterSet(on ? 5 : 0);
+    const [bx, by, bw, bh] = L.board, sh = els.sheen.style;
+    sh.left = bx / L.w * 100 + '%'; sh.top = by / L.h * 100 + '%'; sh.width = bw / L.w * 100 + '%'; sh.height = bh / L.h * 100 + '%';
+    sizeCanvas();
+    stepCable(0, 1, true);
+  }
+  const setNum = (groups, str) => groups.forEach((segs, i) => { const lit = SEG[+str[i]] || ''; segs.forEach(p => p.classList.toggle('on', lit.includes(p.getAttribute('data-s')))); });
+  function meterSet(v) {
+    const c = Math.round(v * 100);
+    if (c === shownV) return;
+    shownV = c;
+    const s = (c / 100).toFixed(2);
+    setNum(lcd, s[0] + s[2] + s[3]);
+    if (els.mI) els.mI.textContent = `I = ${Math.round(v * 4)} мА`;
+  }
 
-      // обрыв: контакты J1/J2, искра-значок для «без анимации», подпись маркером
-      s += '<g class="cmp" data-tip="j2">' + gpad(L.padL[0], gy, 12) + tx(L.padL[0], gy - 19, 12, 'J2') + '</g>';
-      s += '<g class="cmp" data-tip="j1">' + gpad(L.padR[0], gy, 12) + tx(L.padR[0], gy - 19, 12, 'J1') + '</g>';
-      s += '<rect class="cmp" data-tip="gap" x="' + (g0 - 4) + '" y="' + (gy - 18) + '" width="' + (g1 - g0 + 8) + '" height="36" fill="transparent"/>';
-      s += '<path class="rm-spark" d="M' + (gc - 4) + ' ' + (gy - 14) + 'l9 9-6 2 7 10-12-8 6-2-8-8z" fill="#ffcb6b"/>';
-      var a = L.anno, ax = a[0], ay = a[1];
-      s += '<g class="anno anno-bad"><path pathLength="1" d="M' + (gc - 44) + ' ' + (gy - 9) + 'C' + (gc - 38) + ' ' + (gy - 27) + ' ' + (gc + 30) + ' ' + (gy - 29) + ' ' + (gc + 46) + ' ' + (gy - 11) + 'C' + (gc + 58) + ' ' + (gy + 5) + ' ' + (gc + 30) + ' ' + (gy + 24) + ' ' + (gc - 6) + ' ' + (gy + 23) + 'C' + (gc - 40) + ' ' + (gy + 22) + ' ' + (gc - 56) + ' ' + (gy + 6) + ' ' + (gc - 40) + ' ' + (gy - 16) + '"/>';
-      s += '<path pathLength="1" d="M' + (ax + 26) + ' ' + (ay + 7) + 'Q' + (ax + 38) + ' ' + (ay + 22) + ' ' + (gc + 14) + ' ' + (gy - 27) + 'M' + (gc + 9) + ' ' + (gy - 36) + 'L' + (gc + 14) + ' ' + (gy - 27) + 'L' + (gc + 24) + ' ' + (gy - 31) + '"/>';
-      s += '<text x="' + ax + '" y="' + ay + '" font-size="18" text-anchor="middle" transform="rotate(-5 ' + ax + ' ' + ay + ')">Нет контакта</text></g>';
-      s += '<g class="anno anno-ok"><text x="' + ax + '" y="' + ay + '" font-size="18" text-anchor="middle" transform="rotate(-5 ' + ax + ' ' + ay + ')">Есть контакт!</text>' +
-        '<path d="M' + (ax - 72) + ' ' + (ay - 6) + 'l6 6 11-13"/></g>';
-      s += meter(L);
-      return s;
+  /* — физика провода: конец — пружина к цели, середина (точки Безье) догоняет с запаздыванием — */
+  const anchorS = () => [L.padR[0], L.padR[1] + 20];
+  // «крокодил» смотрит зубами от точки пайки и чуть вверх — как если держать его за хвост
+  const thTarget = E => Math.atan2(E[1] - L.padR[1] - 120, E[0] - L.padR[0]);
+  function geom() {
+    const S = anchorS(), u = [Math.cos(C.th), Math.sin(C.th)], cl = CL * L.clipS, B = [C.E[0] - u[0] * cl, C.E[1] - u[1] * cl];
+    const slack = Math.max(0, L.cable.L - hyp(B[0] - S[0], B[1] - S[1])), sag = slack * 0.55 + 8, k = 26 + slack * 0.25;
+    return { S, B, t1: [S[0], S[1] + k + sag * 0.6], t2: [B[0] - u[0] * k, B[1] - u[1] * k + sag * 0.6] };
+  }
+  const easeIO = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  function stepCable(now, f, force) {
+    let T0;
+    if (C.mode === 'drag') T0 = C.tgt;
+    else if (C.mode === 'fly') {
+      const F = C.fly, p = Math.min(1, (now - F.t0) / F.dur), e = easeIO(p), u = 1 - e, mx = (F.a[0] + F.b[0]) / 2, my = Math.min(F.a[1], F.b[1]) - 90;
+      T0 = [u * u * F.a[0] + 2 * u * e * mx + e * e * F.b[0], u * u * F.a[1] + 2 * u * e * my + e * e * F.b[1]];
+      if (p >= 1) { C.mode = 'snap'; connect(); }
+    } else T0 = C.mode === 'snap' ? L.padL : L.cable.rest;
+    const [ox, oy] = C.E;
+    if (C.mode === 'drag' || C.mode === 'fly' || reduce) {
+      const kk = C.mode === 'drag' && !reduce ? 1 - Math.pow(0.35, f) : 1;
+      C.E = [ox + (T0[0] - ox) * kk, oy + (T0[1] - oy) * kk];
+      C.V = [(C.E[0] - ox) / f, (C.E[1] - oy) / f];
+    } else {
+      const dm = Math.pow(0.8, f), ks = 0.085 * f;
+      C.V = [C.V[0] * dm + (T0[0] - ox) * ks, C.V[1] * dm + (T0[1] - oy) * ks];
+      C.E = [ox + C.V[0] * f, oy + C.V[1] * f];
+      // не улетать за край сцены: мягкий отскок
+      if (C.E[1] > L.h - 8) { C.E[1] = L.h - 8; C.V[1] *= -0.35; }
+      if (C.E[0] < 8 || C.E[0] > L.w - 8) { C.E[0] = clamp(C.E[0], 8, L.w - 8); C.V[0] *= -0.35; }
     }
-    function header(L) {
-      var h = L.hdr, x0 = h[0], y = h[1], st = h[2], n = h[3];
-      var s = '<g class="cmp" data-tip="hdr"><rect class="skl" x="' + (x0 - 14) + '" y="' + (y - 14) + '" width="' + (st * (n - 1) + 28) + '" height="28" rx="3"/>';
-      for (var i = 0; i < n; i++) s += gpad(x0 + i * st, y, 7.5, i === 0) + tx(x0 + i * st, y + 26, 8.5, L.hdrL[i]);
-      return s + '</g>';
+    const tt = thTarget(C.E), dth = Math.atan2(Math.sin(tt - C.th), Math.cos(tt - C.th));
+    C.th += reduce ? dth : dth * (1 - Math.pow(0.8, f));
+    const G = geom();
+    if (!C.c1 || reduce) { C.c1 = G.t1.slice(); C.c2 = G.t2.slice(); C.v1 = [0, 0]; C.v2 = [0, 0]; }
+    else {
+      const dm = Math.pow(0.78, f), ks = 0.11 * f;
+      C.v1 = [C.v1[0] * dm + (G.t1[0] - C.c1[0]) * ks, C.v1[1] * dm + (G.t1[1] - C.c1[1]) * ks];
+      C.v2 = [C.v2[0] * dm + (G.t2[0] - C.c2[0]) * ks, C.v2[1] * dm + (G.t2[1] - C.c2[1]) * ks];
+      C.c1 = [C.c1[0] + C.v1[0] * f, C.c1[1] + C.v1[1] * f]; C.c2 = [C.c2[0] + C.v2[0] * f, C.c2[1] + C.v2[1] * f];
     }
-    // момент, когда «фронт тока» доходит до светодиода: проекция на дорожку контура
-    function ledDelay(L, x, y) {
-      var best = 1e9, res = 0;
-      L.loop.forEach(function (it) {
-        if (!it.p || it.res) return;
-        var acc = 0;
-        for (var i = 1; i < it.p.length; i++) {
-          var a = it.p[i - 1], b = it.p[i], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
-          var u = Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / (l * l)));
-          var d = Math.hypot(a[0] + dx * u - x, a[1] + dy * u - y);
-          if (d < best) { best = d; res = it.t0 + it.dur * (acc + u * l) / it.len; }
-          acc += l;
-        }
-      });
-      return res;
-    }
+    const sum = a => Math.abs(a[0]) + Math.abs(a[1]);
+    const moving = sum(C.V) + sum(C.v1) + sum(C.v2) + Math.abs(dth) * 40 > 0.02 || Math.abs(T0[0] - C.E[0]) + Math.abs(T0[1] - C.E[1]) > 0.05;
+    if (moving || force || C.mode === 'drag') render(G);
+    return moving || C.mode === 'drag' || C.mode === 'fly';
+  }
+  function render(G) {
+    const d = `M${f1(G.S[0])} ${f1(G.S[1])}C${f1(C.c1[0])} ${f1(C.c1[1])} ${f1(C.c2[0])} ${f1(C.c2[1])} ${f1(G.B[0])} ${f1(G.B[1])}`;
+    ['wSh', 'wO', 'wB_', 'wH', 'wL', 'wHit'].forEach(id => els[id].setAttribute('d', d));
+    const rot = ` rotate(${f1(C.th * 57.2958)}) scale(${L.clipS})`, tr = `translate(${f1(C.E[0])} ${f1(C.E[1])})` + rot;
+    els.clip.setAttribute('transform', tr); els.cHit.setAttribute('transform', tr);
+    els.cSh.setAttribute('transform', `translate(${f1(C.E[0] + 6)} ${f1(C.E[1] + 10)})` + rot);
+    C.G = G;
+  }
+  const bez = (G, t) => { const u = 1 - t, a = u * u * u, b = 3 * u * u * t, c = 3 * u * t * t, d = t * t * t; return [a * G.S[0] + b * C.c1[0] + c * C.c2[0] + d * G.B[0], a * G.S[1] + b * C.c1[1] + c * C.c2[1] + d * G.B[1]]; };
 
-    function buildWire(L) {
-      var lx = L.padL[0], ly = L.padL[1], ax = L.padR[0], ay = L.padR[1], r = L.cable.rest, k = L.clipS;
-      var s = '<defs><linearGradient id="wM" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f9fb"/><stop offset=".45" stop-color="#b4bcc5"/><stop offset="1" stop-color="#58616b"/></linearGradient>' +
-        '<linearGradient id="wB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7466"/><stop offset=".45" stop-color="#df3326"/><stop offset="1" stop-color="#7a120b"/></linearGradient>' +
-        '<radialGradient id="wS" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#ffffff"/><stop offset=".4" stop-color="#c3cad2"/><stop offset="1" stop-color="#626b75"/></radialGradient>' +
-        '<path id="clipSil" d="M-80 -8Q-80 -12 -76 -12L-34 -14L-8 -6Q0 -4 0 0Q0 4 -8 6L-34 14L-76 12Q-80 12 -80 8Z"/></defs>';
-      // подсказка-стрелка «тяни!» от «крокодила» к J2 и пульсирующее кольцо цели
-      var sx = r[0] - 30, sy = r[1] - 36, qx = r[0] - 112, qy = (r[1] + ly) / 2 + 10, ex = lx - 16, ey = ly + 30;
-      var dl = Math.hypot(ex - qx, ey - qy), ux = (ex - qx) / dl, uy = (ey - qy) / dl;
-      function rot(a) { var c = Math.cos(a), si = Math.sin(a); return [ex - (ux * c - uy * si) * 11, ey - (ux * si + uy * c) * 11]; }
-      var h1 = rot(0.5), h2 = rot(-0.5);
-      s += '<g class="aff"><circle class="target" cx="' + lx + '" cy="' + ly + '" r="17"/><circle class="target t2" cx="' + lx + '" cy="' + ly + '" r="17"/>' +
-        '<g class="aff-x"><path class="aff-a" d="M' + sx + ' ' + sy + 'Q' + qx + ' ' + qy + ' ' + ex + ' ' + ey + '"/><path class="aff-h" d="M' + h1[0].toFixed(1) + ' ' + h1[1].toFixed(1) + 'L' + ex + ' ' + ey + 'L' + h2[0].toFixed(1) + ' ' + h2[1].toFixed(1) + '"/>' +
-        '<text x="' + (qx + 4) + '" y="' + (qy + 6) + '" text-anchor="end" transform="rotate(-8 ' + qx + ' ' + qy + ')">тяни!</text></g></g>';
-      s += '<path id="wSh" class="w-sh" transform="translate(6 10)"/><use id="cSh" href="#clipSil" class="c-sh"/>';
-      s += '<path id="wO" class="w-o"/><path id="wB_" class="w-b"/><path id="wH" class="w-h" transform="translate(-1.3 -2.2)"/><path id="wL" class="w-l"/>';
-      s += '<path class="w-hs" d="M' + ax + ' ' + (ay + 2) + 'V' + (ay + 20) + '"/><path d="M' + (ax - 4) + ' ' + (ay + 6) + 'V' + (ay + 18) + '" stroke="#fff" stroke-opacity=".18" stroke-width="3" stroke-linecap="round"/>';
-      s += '<ellipse cx="' + ax + '" cy="' + ay + '" rx="13" ry="12" fill="url(#wS)"/><ellipse cx="' + (ax - 4) + '" cy="' + (ay - 4) + '" rx="4" ry="2.6" fill="#fff" opacity=".8"/>';
-      s += '<g id="clip"><path d="M-80 -8Q-80 -12 -76 -12L-36 -14Q-30 -14 -30 -9V9Q-30 14 -36 14L-76 12Q-80 12 -80 8Z" fill="url(#wB)"/>' +
-        '<path d="M-70 -12.4V12.4M-63 -12.8V12.8M-56 -13.2V13.2M-49 -13.5V13.5" stroke="#000" stroke-opacity=".22" stroke-width="1.6"/>' +
-        '<path d="M-75 -8L-37 -10" stroke="#fff" stroke-opacity=".4" stroke-width="2.4" stroke-linecap="round"/>' +
-        '<path d="M-34 -11L-8 -6Q-2 -5 0 -1.5L-3 -1L-5 -3L-8 -1L-10.5 -3.4L-13 -1.2L-15.5 -3.6L-18.5 -1.4L-21 -3.8L-34 -3Z" fill="url(#wM)" stroke="#4f5862" stroke-width=".8"/>' +
-        '<path d="M-34 11L-8 6Q-2 5 0 1.5L-3 1L-5 3L-8 1L-10.5 3.4L-13 1.2L-15.5 3.6L-18.5 1.4L-21 3.8L-34 3Z" fill="url(#wM)" stroke="#4f5862" stroke-width=".8"/>' +
-        '<circle cx="-27" cy="0" r="3.8" fill="#9aa3ad" stroke="#4f5862"/></g>';
-      s += '<circle id="padHit" class="padhit" data-tip="j2" cx="' + lx + '" cy="' + ly + '" r="' + 22 * k + '"/>';
-      s += '<path id="wHit" class="grab" data-tip="wire"/><circle id="cHit" class="grab" data-tip="wire" cx="-38" cy="0" r="46"/>';
-      s += '<rect id="hl" class="hl" rx="8"/>';
-      return s;
-    }
-
-    /* ================= состояние, сборка, физика провода ================= */
-    var L, els = {}, digs = [], lcd = [];
-    var C = { E: [0, 0], V: [0, 0], th: 0, c1: null, c2: null, v1: [0, 0], v2: [0, 0], mode: 'rest', tgt: [0, 0], grab: 0, lastP: [0, 0], fly: null, still: 0 };
-    var curM = null;
-
-    function build() {
-      curM = mqM.matches;
-      L = curM ? LM : LD;
-      var vb = '0 0 ' + L.w + ' ' + L.h;
-      pcb.setAttribute('viewBox', vb); wire.setAttribute('viewBox', vb);
-      pcb.innerHTML = buildBoard(L);
-      wire.innerHTML = buildWire(L);
-      ['wSh', 'cSh', 'wO', 'wB_', 'wH', 'wL', 'clip', 'wHit', 'cHit', 'hl', 'disp', 'mI'].forEach(function (id) { els[id] = document.getElementById(id); });
-      digs = segGroups(els.disp.querySelectorAll('.digits .dg'));
-      lcd = segGroups(pcb.querySelectorAll('.lcd .dg'));
-      els.wL.style.setProperty('--d', (L.loop[7].t0 || 0).toFixed(2) + 's');
-      // флаттен контура для импульсов: статичные отрезки + место под провод
-      flat = L.loop.filter(function (it) { return it.p || it.c; });
-      C.E = (on ? L.padL : L.cable.rest).slice(); C.V = [0, 0]; C.mode = on ? 'snap' : 'rest';
-      C.th = thTarget(C.E); C.c1 = null;
-      pcb.classList.toggle('on', on); pcb.classList.toggle('alive', on);
-      els.disp.classList.toggle('ok', on);
-      setNum(digs, on ? '200' : '404'); meterSet(on ? 5 : 0);
-      var b = L.board, sh = $('sheen').style;
-      sh.left = b[0] / L.w * 100 + '%'; sh.top = b[1] / L.h * 100 + '%'; sh.width = b[2] / L.w * 100 + '%'; sh.height = b[3] / L.h * 100 + '%';
-      sizeCanvas();
-      sh.borderRadius = (26 * scale).toFixed(1) + 'px';
-      stepCable(0, 1, true);
-    }
-    function segGroups(list) {
-      return Array.prototype.map.call(list, function (g) { return Array.prototype.slice.call(g.querySelectorAll('.s')); });
-    }
-    function setNum(groups, str) {
-      groups.forEach(function (segs, i) {
-        var on = SEG[+str.charAt(i)] || '';
-        segs.forEach(function (p) { p.classList.toggle('on', on.indexOf(p.getAttribute('data-s')) >= 0); });
-      });
-    }
-    var shownV = -1;
-    function meterSet(v) {
-      var c = Math.round(v * 100);
-      if (c === shownV) return;
-      shownV = c;
-      var str = (c / 100).toFixed(2);
-      setNum(lcd, str.charAt(0) + str.charAt(2) + str.charAt(3));
-      if (els.mI) els.mI.textContent = 'I = ' + Math.round(v * 4) + ' мА';
-    }
-
-    function anchorS() { return [L.padR[0], L.padR[1] + 20]; }
-    // «крокодил» смотрит зубами от точки пайки, чуть вверх — как если бы его держали за хвост
-    function thTarget(E) { return Math.atan2(E[1] - L.padR[1] - 120, E[0] - L.padR[0]); }
-    function geom() {
-      var S = anchorS(), u = [Math.cos(C.th), Math.sin(C.th)], cl = CL * L.clipS;
-      var B = [C.E[0] - u[0] * cl, C.E[1] - u[1] * cl];
-      var d = Math.hypot(B[0] - S[0], B[1] - S[1]), slack = Math.max(0, L.cable.L - d);
-      var sag = slack * 0.55 + 8, k = 26 + slack * 0.25;
-      return { S: S, B: B, t1: [S[0], S[1] + k + sag * 0.6], t2: [B[0] - u[0] * k, B[1] - u[1] * k + sag * 0.6] };
-    }
-    function easeIO(x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
-
-    // шаг физики провода: конец — пружина к цели, середина (контрольные точки Безье) догоняет с запаздыванием → провод качается
-    function stepCable(now, f, force) {
-      var T0;
-      if (C.mode === 'drag') T0 = C.tgt;
-      else if (C.mode === 'fly') {
-        var F = C.fly, p = Math.min(1, (now - F.t0) / F.dur), e = easeIO(p), mx = (F.a[0] + F.b[0]) / 2, my = Math.min(F.a[1], F.b[1]) - 90;
-        T0 = [(1 - e) * (1 - e) * F.a[0] + 2 * (1 - e) * e * mx + e * e * F.b[0], (1 - e) * (1 - e) * F.a[1] + 2 * (1 - e) * e * my + e * e * F.b[1]];
-        if (p >= 1) { C.mode = 'snap'; connect(); }
-      } else T0 = (C.mode === 'snap') ? L.padL : L.cable.rest;
-      var ox = C.E[0], oy = C.E[1];
-      if (C.mode === 'drag' || C.mode === 'fly' || reduce) {
-        var kk = (C.mode === 'drag' && !reduce) ? 1 - Math.pow(0.35, f) : 1;
-        C.E = [ox + (T0[0] - ox) * kk, oy + (T0[1] - oy) * kk];
-        C.V = [(C.E[0] - ox) / f, (C.E[1] - oy) / f];
-      } else {
-        var dmp = Math.pow(0.8, f), kS = 0.085 * f;
-        C.V = [C.V[0] * dmp + (T0[0] - ox) * kS, C.V[1] * dmp + (T0[1] - oy) * kS];
-        C.E = [ox + C.V[0] * f, oy + C.V[1] * f];
-        // не улетать за край сцены: мягкий отскок
-        if (C.E[1] > L.h - 8) { C.E[1] = L.h - 8; C.V[1] *= -0.35; }
-        if (C.E[0] < 8 || C.E[0] > L.w - 8) { C.E[0] = Math.max(8, Math.min(L.w - 8, C.E[0])); C.V[0] *= -0.35; }
-      }
-      var thT = thTarget(C.E), dth = Math.atan2(Math.sin(thT - C.th), Math.cos(thT - C.th));
-      C.th += reduce ? dth : dth * (1 - Math.pow(0.8, f));
-      var G = geom();
-      if (!C.c1 || reduce) { C.c1 = G.t1.slice(); C.c2 = G.t2.slice(); C.v1 = [0, 0]; C.v2 = [0, 0]; }
-      else {
-        var dm = Math.pow(0.78, f), ks = 0.11 * f;
-        C.v1 = [C.v1[0] * dm + (G.t1[0] - C.c1[0]) * ks, C.v1[1] * dm + (G.t1[1] - C.c1[1]) * ks];
-        C.v2 = [C.v2[0] * dm + (G.t2[0] - C.c2[0]) * ks, C.v2[1] * dm + (G.t2[1] - C.c2[1]) * ks];
-        C.c1 = [C.c1[0] + C.v1[0] * f, C.c1[1] + C.v1[1] * f];
-        C.c2 = [C.c2[0] + C.v2[0] * f, C.c2[1] + C.v2[1] * f];
-      }
-      var moving = Math.abs(C.V[0]) + Math.abs(C.V[1]) + Math.abs(C.v1[0]) + Math.abs(C.v1[1]) + Math.abs(C.v2[0]) + Math.abs(C.v2[1]) + Math.abs(dth) * 40 > 0.02 ||
-        Math.abs(T0[0] - C.E[0]) + Math.abs(T0[1] - C.E[1]) > 0.05;
-      if (moving || force || C.mode === 'drag') { C.still = 0; render(G); }
-      return moving || C.mode === 'drag' || C.mode === 'fly';
-    }
-    function n1(v) { return (+v.toFixed(1)); }
-    function render(G) {
-      var d = 'M' + n1(G.S[0]) + ' ' + n1(G.S[1]) + 'C' + n1(C.c1[0]) + ' ' + n1(C.c1[1]) + ' ' + n1(C.c2[0]) + ' ' + n1(C.c2[1]) + ' ' + n1(G.B[0]) + ' ' + n1(G.B[1]);
-      ['wSh', 'wO', 'wB_', 'wH', 'wL', 'wHit'].forEach(function (id) { els[id].setAttribute('d', d); });
-      var deg = (C.th * 57.2958).toFixed(1), sc = ' scale(' + L.clipS + ')';
-      var tr = 'translate(' + n1(C.E[0]) + ' ' + n1(C.E[1]) + ') rotate(' + deg + ')' + sc;
-      els.clip.setAttribute('transform', tr); els.cHit.setAttribute('transform', tr);
-      els.cSh.setAttribute('transform', 'translate(' + n1(C.E[0] + 6) + ' ' + n1(C.E[1] + 10) + ') rotate(' + deg + ')' + sc);
-      C.G = G;
-    }
-    function bez(G, t) {
-      var u = 1 - t, a = u * u * u, b = 3 * u * u * t, c = 3 * u * t * t, d = t * t * t;
-      return [a * G.S[0] + b * C.c1[0] + c * C.c2[0] + d * G.B[0], a * G.S[1] + b * C.c1[1] + c * C.c2[1] + d * G.B[1]];
-    }
-
-    /* ================= замыкание / размыкание ================= */
-    var timers = [], tOn = 0, statusTxt = $('statusTxt'), statusEl = $('status'), toggleTxt = $('toggleTxt'), toggle = $('toggle'), pill = $('pill');
-    var HINT = touch ? 'Протяните провод пальцем к контакту J2' : 'Протяните провод к контакту J2';
-    statusTxt.textContent = HINT;
-    function later(s, fn) { timers.push(setTimeout(fn, reduce ? 0 : s * 1000)); }
-    function connect() {
-      if (on) return;
-      on = true; tOn = performance.now();
-      root.classList.add('is-on'); pcb.classList.add('on');
-      toggle.setAttribute('aria-pressed', 'true'); toggleTxt.textContent = 'Разомкнуть цепь';
-      if (!reduce) { burst(L.padL[0], L.padL[1], 26, 1, 5); rings.push({ x: L.padL[0], y: L.padL[1], r: 8, life: 1, c: '120,255,170' }); }
-      later(T.u1, function () { pcb.classList.add('alive'); });
-      var sc = 0;
-      later(Math.max(0, T.disp - 0.28), function scr() {
-        if (!on) return;
-        if (reduce || sc++ > 5) { els.disp.classList.add('ok'); setNum(digs, '200'); return; }
-        setNum(digs, String(100 + Math.floor(Math.random() * 900)));
-        timers.push(setTimeout(scr, 50));
-      });
-      later(T.total, function () {
-        root.classList.add('is-done');
-        pill.textContent = '5,00 В · 200 OK';
-        statusTxt.textContent = 'Цепь замкнута! Страница нашлась… на главной';
-        statusEl.classList.add('ok');
-        if (!reduce) {
-          var r = els.disp.getBoundingClientRect(), fl = $('flash');
-          fl.style.setProperty('--fx', (r.left + r.width / 2) + 'px'); fl.style.setProperty('--fy', (r.top + r.height / 2) + 'px');
-          fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go');
-          var dd = L.disp; rings.push({ x: dd[0] + dd[2] / 2, y: dd[1] + dd[3] / 2, r: 30, life: 1, c: '120,255,170', big: 1 });
-          burst(dd[0] + dd[2] / 2, dd[1] + dd[3] / 2, 30, 1, 7);
-        }
-      });
-      if (reduce) meterSet(5);
-    }
-    function disconnect() {
+  /* — замыкание / размыкание — */
+  const statusTxt = $('statusTxt'), statusEl = $('status'), toggleTxt = $('toggleTxt'), toggle = $('toggle'), pill = $('pill');
+  const HINT = touch ? 'Протяните провод пальцем к контакту J2' : 'Протяните провод к контакту J2';
+  statusTxt.textContent = HINT;
+  const later = (s, fn) => timers.push(setTimeout(fn, reduce ? 0 : s * 1000));
+  function connect() {
+    if (on) return;
+    on = true; tOn = performance.now();
+    root.classList.add('is-on'); pcb.classList.add('on');
+    toggle.setAttribute('aria-pressed', 'true'); toggleTxt.textContent = 'Разомкнуть цепь';
+    if (!reduce) { burst(...L.padL, 26, 1, 5); rings.push({ x: L.padL[0], y: L.padL[1], r: 8, life: 1 }); }
+    later(T.u1, () => pcb.classList.add('alive'));
+    let sc = 0;
+    // индикатор перещёлкивается: пара «случайных» чисел — и зелёные 200
+    const scr = () => {
       if (!on) return;
-      on = false;
-      timers.forEach(clearTimeout); timers = [];
-      root.classList.remove('is-on', 'is-done'); pcb.classList.remove('on', 'alive'); els.disp.classList.remove('ok');
-      setNum(digs, '404'); meterSet(0);
-      toggle.setAttribute('aria-pressed', 'false'); toggleTxt.textContent = 'Замкнуть цепь';
-      pill.textContent = '0,00 В · ток не идёт';
-      statusTxt.textContent = HINT; statusEl.classList.remove('ok');
-      if (!reduce) burst(L.padL[0], L.padL[1], 14, 0, 4);
-    }
-    function fly() {
-      if (on || C.mode === 'fly') return;
-      stage.classList.add('touched');
-      if (reduce) { C.mode = 'snap'; connect(); wake(); return; }
-      C.fly = { a: C.E.slice(), b: L.padL.slice(), t0: performance.now(), dur: 700 };
-      C.mode = 'fly';
-      wake();
-    }
-    toggle.addEventListener('click', function () {
-      if (on || C.mode === 'snap') { C.mode = 'rest'; disconnect(); wake(); } else fly();
+      if (reduce || sc++ > 5) { els.disp.classList.add('ok'); setNum(digs, '200'); return; }
+      setNum(digs, String(100 + Math.floor(Math.random() * 900)));
+      timers.push(setTimeout(scr, 50));
+    };
+    later(Math.max(0, T.disp - 0.28), scr);
+    later(T.total, () => {
+      root.classList.add('is-done');
+      pill.textContent = '5,00 В · 200 OK';
+      statusTxt.textContent = 'Цепь замкнута! Страница нашлась… на главной';
+      statusEl.classList.add('ok');
+      if (reduce) return;
+      const r = els.disp.getBoundingClientRect(), fl = $('flash'), [dx, dy, dw, dh] = L.disp, cx = dx + dw / 2, cy = dy + dh / 2;
+      fl.style.setProperty('--fx', r.left + r.width / 2 + 'px'); fl.style.setProperty('--fy', r.top + r.height / 2 + 'px');
+      fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go');
+      rings.push({ x: cx, y: cy, r: 30, life: 1, big: 1 });
+      burst(cx, cy, 30, 1, 7);
     });
+    if (reduce) meterSet(5);
+  }
+  function disconnect() {
+    if (!on) return;
+    on = false;
+    timers.forEach(clearTimeout); timers = [];
+    root.classList.remove('is-on', 'is-done'); pcb.classList.remove('on', 'alive'); els.disp.classList.remove('ok');
+    setNum(digs, '404'); meterSet(0);
+    toggle.setAttribute('aria-pressed', 'false'); toggleTxt.textContent = 'Замкнуть цепь';
+    pill.textContent = '0,00 В · ток не идёт';
+    statusTxt.textContent = HINT; statusEl.classList.remove('ok');
+    if (!reduce) burst(...L.padL, 14, 0, 4);
+  }
+  function fly() {
+    if (on || C.mode === 'fly') return;
+    stage.classList.add('touched');
+    if (reduce) { C.mode = 'snap'; connect(); wake(); return; }
+    C.fly = { a: C.E.slice(), b: L.padL.slice(), t0: performance.now(), dur: 700 };
+    C.mode = 'fly';
+    wake();
+  }
+  toggle.addEventListener('click', () => { if (on || C.mode === 'snap') { C.mode = 'rest'; disconnect(); wake(); } else fly(); });
 
-    /* ================= перетаскивание ================= */
-    var pid = null, downAt = null, moved = 0, wasOn = false;
-    function toVB(e) {
-      var r = stage.getBoundingClientRect();
-      return [(e.clientX - r.left) * L.w / r.width, (e.clientY - r.top) * L.h / r.height];
-    }
-    function setTarget(p) {
-      // «крокодил» держат за хвост: зубы всегда впереди руки по оси зажима
-      var A = L.padR, t = [p[0] + Math.cos(C.th) * C.grab, p[1] + Math.sin(C.th) * C.grab];
-      C.lastP = p;
-      // провод не резиновый: дальше длины тянется туго и чуть-чуть
-      var dx = t[0] - A[0], dy = t[1] - A[1], dd = Math.hypot(dx, dy), lim = L.cable.L + CL * L.clipS * 0.6;
-      if (dd > lim) { var kk = (lim + (dd - lim) * 0.2) / dd; t = [A[0] + dx * kk, A[1] + dy * kk]; }
-      t[0] = Math.max(10, Math.min(L.w - 10, t[0])); t[1] = Math.max(10, Math.min(L.h - 6, t[1]));
-      // у контакта J2 — магнит (срабатывает и от зубов, и от самого курсора/пальца)
-      var d = Math.min(Math.hypot(t[0] - L.padL[0], t[1] - L.padL[1]), Math.hypot(p[0] - L.padL[0], p[1] - L.padL[1])), m = Math.max(0, Math.min(1, (1 - d / L.snap) * 1.9));
-      if (d < L.snap) t = [t[0] + (L.padL[0] - t[0]) * m, t[1] + (L.padL[1] - t[1]) * m];
-      wire.classList.toggle('near', d < L.snap * 1.5 && !on);
-      if (on && d > L.snap * 1.1) disconnect();
-      C.near = d < L.snap * 1.6;
-      C.tgt = t;
-    }
-    wire.addEventListener('pointerdown', function (e) {
-      var t = e.target;
-      if (t.id === 'padHit') { e.preventDefault(); fly(); return; }
-      if (!t.classList || !t.classList.contains('grab') || C.mode === 'fly') return;
-      e.preventDefault();
-      var p = toVB(e);
-      pid = e.pointerId; downAt = [e.clientX, e.clientY, performance.now()]; moved = 0; wasOn = on;
-      try { stage.setPointerCapture(pid); } catch (err) { /* не критично */ }
-      C.grab = t.id === 'cHit' ? Math.max(0, Math.min(70, (C.E[0] - p[0]) * Math.cos(C.th) + (C.E[1] - p[1]) * Math.sin(C.th))) : CL * L.clipS * 0.5;
-      C.mode = 'drag'; C.tgt = C.E.slice(); C.lastP = p;
-      stage.classList.add('dragging', 'touched'); hideTip();
-      wake();
-    });
-    stage.addEventListener('pointermove', function (e) {
-      if (pid !== null && e.pointerId === pid) {
-        moved = Math.max(moved, Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]));
-        setTarget(toVB(e));
-      } else if (pid === null && e.pointerType === 'mouse') hoverTip(e);
-    });
-    function endDrag(e) {
-      if (pid === null || (e && e.pointerId !== pid)) return;
-      try { stage.releasePointerCapture(pid); } catch (err) { /* уже отпущен */ }
-      pid = null;
-      stage.classList.remove('dragging'); wire.classList.remove('near'); C.near = false;
-      var d = Math.min(Math.hypot(C.E[0] - L.padL[0], C.E[1] - L.padL[1]), Math.hypot(C.lastP[0] - L.padL[0], C.lastP[1] - L.padL[1]) * 1.25);
-      if (moved < 6 && performance.now() - downAt[2] < 450) {
-        // просто нажали на провод — подсказка, а если провод на месте, он там и остаётся
-        C.mode = wasOn ? 'snap' : 'rest';
-        if (e && e.pointerType !== 'mouse') showTip('wire', e.clientX, e.clientY, 2600);
-      } else if (d < L.snap * 0.75) { C.mode = 'snap'; connect(); }
-      else { C.mode = 'rest'; disconnect(); }
-      wake();
-    }
-    stage.addEventListener('pointerup', endDrag);
-    stage.addEventListener('pointercancel', endDrag);
-    stage.addEventListener('lostpointercapture', endDrag);
-    pcb.addEventListener('click', function (e) {
-      var el = e.target.closest && e.target.closest('[data-tip]');
-      if (el && el.getAttribute('data-tip') === 'j2' && !on) fly();
-    });
+  /* — перетаскивание мышью и пальцем — */
+  let pid = null, downAt = null, moved = 0, wasOn = false;
+  const toVB = e => { const r = stage.getBoundingClientRect(); return [(e.clientX - r.left) * L.w / r.width, (e.clientY - r.top) * L.h / r.height]; };
+  function setTarget(p) {
+    // «крокодил» держат за хвост: зубы всегда впереди руки по оси зажима
+    const A0 = L.padR, pad = L.padL;
+    let t = [p[0] + Math.cos(C.th) * C.grab, p[1] + Math.sin(C.th) * C.grab];
+    C.lastP = p;
+    // провод не резиновый: дальше своей длины тянется туго и чуть-чуть
+    const dx = t[0] - A0[0], dy = t[1] - A0[1], dd = hyp(dx, dy), lim = L.cable.L + CL * L.clipS * 0.6;
+    if (dd > lim) { const kk = (lim + (dd - lim) * 0.2) / dd; t = [A0[0] + dx * kk, A0[1] + dy * kk]; }
+    t = [clamp(t[0], 10, L.w - 10), clamp(t[1], 10, L.h - 6)];
+    // у контакта J2 — магнит (срабатывает и от зубов, и от самого курсора/пальца)
+    const d = Math.min(hyp(t[0] - pad[0], t[1] - pad[1]), hyp(p[0] - pad[0], p[1] - pad[1])), m = clamp((1 - d / L.snap) * 1.9, 0, 1);
+    if (d < L.snap) t = [t[0] + (pad[0] - t[0]) * m, t[1] + (pad[1] - t[1]) * m];
+    wire.classList.toggle('near', d < L.snap * 1.5 && !on);
+    if (on && d > L.snap * 1.1) disconnect();
+    C.near = d < L.snap * 1.6;
+    C.tgt = t;
+  }
+  wire.addEventListener('pointerdown', e => {
+    const t = e.target;
+    if (t.id === 'padHit') { e.preventDefault(); fly(); return; }
+    if (!t.classList || !t.classList.contains('grab') || C.mode === 'fly') return;
+    e.preventDefault();
+    const p = toVB(e);
+    pid = e.pointerId; downAt = [e.clientX, e.clientY, performance.now()]; moved = 0; wasOn = on;
+    try { stage.setPointerCapture(pid); } catch (err) { /* не критично */ }
+    C.grab = t.id === 'cHit' ? clamp((C.E[0] - p[0]) * Math.cos(C.th) + (C.E[1] - p[1]) * Math.sin(C.th), 0, 70) : CL * L.clipS * 0.5;
+    C.mode = 'drag'; C.tgt = C.E.slice(); C.lastP = p;
+    stage.classList.add('dragging', 'touched'); hideTip();
+    wake();
+  });
+  stage.addEventListener('pointermove', e => {
+    if (pid !== null && e.pointerId === pid) { moved = Math.max(moved, hyp(e.clientX - downAt[0], e.clientY - downAt[1])); setTarget(toVB(e)); }
+    else if (pid === null && e.pointerType === 'mouse') hoverTip(e);
+  });
+  function endDrag(e) {
+    if (pid === null || (e && e.pointerId !== pid)) return;
+    try { stage.releasePointerCapture(pid); } catch (err) { /* уже отпущен */ }
+    pid = null;
+    stage.classList.remove('dragging'); wire.classList.remove('near'); C.near = false;
+    const pad = L.padL, d = Math.min(hyp(C.E[0] - pad[0], C.E[1] - pad[1]), hyp(C.lastP[0] - pad[0], C.lastP[1] - pad[1]) * 1.25);
+    if (moved < 6 && performance.now() - downAt[2] < 450) {
+      // просто нажали на провод — подсказка; если провод был на месте, он там и остаётся
+      C.mode = wasOn ? 'snap' : 'rest';
+      if (e && e.pointerType !== 'mouse') showTip('wire', e.clientX, e.clientY, 2600);
+    } else if (d < L.snap * 0.75) { C.mode = 'snap'; connect(); }
+    else { C.mode = 'rest'; disconnect(); }
+    wake();
+  }
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(n => stage.addEventListener(n, endDrag));
+  pcb.addEventListener('click', e => { const el = e.target.closest && e.target.closest('[data-tip]'); if (el && el.getAttribute('data-tip') === 'j2' && !on) fly(); });
 
-    /* ================= подсказки ================= */
-    var tipKey = null, tipTO = 0, tipT = $('tipT'), tipD = $('tipD');
-    function showTip(key, cx, cy, ms, el) {
-      var d = TIPS[key];
-      if (!d) return hideTip();
-      if (typeof d === 'function') d = d();
-      tipT.textContent = d[0]; tipD.textContent = d[1];
-      tip.hidden = false; tipKey = key;
-      var r = stage.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
-      var x = Math.max(4, Math.min(r.width - tw - 4, cx - r.left - tw / 2)), y = cy - r.top - th - 18;
-      if (y < -40) y = cy - r.top + 24;
-      tip.style.transform = 'translate(' + Math.round(x) + 'px,' + Math.round(y) + 'px)';
-      if (el) highlight(el);
-      clearTimeout(tipTO);
-      if (ms) tipTO = setTimeout(hideTip, ms);
+  /* — подсказки-шелкография — */
+  let tipKey = null, tipTO = 0;
+  const tipT = $('tipT'), tipD = $('tipD');
+  function showTip(key, cx, cy, ms, el) {
+    let d = TIPS[key];
+    if (!d) return hideTip();
+    if (typeof d === 'function') d = d();
+    tipT.textContent = d[0]; tipD.textContent = d[1];
+    tip.hidden = false; tipKey = key;
+    const r = stage.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
+    let x = clamp(cx - r.left - tw / 2, 4, r.width - tw - 4), y = cy - r.top - th - 18;
+    if (y < -40) y = cy - r.top + 24;
+    tip.style.transform = `translate(${Math.round(x)}px,${Math.round(y)}px)`;
+    if (el) highlight(el);
+    clearTimeout(tipTO);
+    if (ms) tipTO = setTimeout(hideTip, ms);
+  }
+  function hideTip() { tip.hidden = true; tipKey = null; if (els.hl) els.hl.classList.remove('show'); }
+  function highlight(el) {
+    if (el.tagName === 'IMG') return els.hl.classList.remove('show');
+    const r = stage.getBoundingClientRect(), b = el.getBoundingClientRect(), k = L.w / r.width, pd = 7, hl = els.hl;
+    hl.setAttribute('x', f1((b.left - r.left) * k - pd)); hl.setAttribute('y', f1((b.top - r.top) * k - pd));
+    hl.setAttribute('width', f1(b.width * k + pd * 2)); hl.setAttribute('height', f1(b.height * k + pd * 2));
+    hl.classList.add('show');
+  }
+  function hoverTip(e) {
+    const el = e.target.closest && e.target.closest('[data-tip]');
+    if (!el) { if (tipKey) hideTip(); return; }
+    const key = el.getAttribute('data-tip');
+    showTip(key, e.clientX, e.clientY, 0, key !== tipKey || key === 'wire' ? el : null);
+  }
+  stage.addEventListener('pointerleave', () => { if (pid === null) hideTip(); });
+  stage.addEventListener('click', e => {
+    if (!touch || e.target.closest('.grab') || e.target.id === 'padHit') return;
+    const el = e.target.closest('[data-tip]');
+    if (el) showTip(el.getAttribute('data-tip'), e.clientX, e.clientY, 2600, el); else hideTip();
+  });
+
+  /* — canvas: искры в обрыве, фронт тока и импульсы — */
+  let sparks = [], rings = [], arc = null, nextArc = 0, fxDirty = false, segs = [], segTot = 0;
+  function sprite(stops) {
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const g = c.getContext('2d'), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    stops.forEach(s => gr.addColorStop(s[0], s[1]));
+    g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+    return c;
+  }
+  // светящиеся точки — заранее отрисованные спрайты: 0 — искра, 1 — ток, 2 — дуга
+  const SPR = ctx ? [
+    sprite([[0, '#fff'], [0.18, 'rgba(255,236,170,.95)'], [0.5, 'rgba(255,160,50,.3)'], [1, 'rgba(255,140,40,0)']]),
+    sprite([[0, '#fff'], [0.2, 'rgba(190,255,215,.95)'], [0.5, 'rgba(70,255,122,.32)'], [1, 'rgba(70,255,122,0)']]),
+    sprite([[0, '#fff'], [0.2, 'rgba(190,235,255,.9)'], [0.55, 'rgba(95,212,255,.25)'], [1, 'rgba(95,212,255,0)']])
+  ] : [];
+  const COL = ['255,214,140', '170,255,200', '180,230,255'];
+  function sizeCanvas() {
+    const r = stage.getBoundingClientRect();
+    scale = r.width / L.w;
+    els.sheen.style.borderRadius = f1(26 * scale) + 'px';
+    if (!ctx) return;
+    fx.width = Math.max(1, Math.round(r.width * DPR)); fx.height = Math.max(1, Math.round(r.height * DPR)); fxDirty = true;
+  }
+  function burst(x, y, n, c, sp) {
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.283, v = (0.4 + Math.random()) * sp;
+      sparks.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 0.6, life: 1, dec: 0.025 + Math.random() * 0.03, c });
     }
-    function hideTip() { tip.hidden = true; tipKey = null; if (els.hl) els.hl.classList.remove('show'); }
-    function highlight(el) {
-      if (!els.hl || el.tagName === 'IMG') { if (els.hl) els.hl.classList.remove('show'); return; }
-      var r = stage.getBoundingClientRect(), b = el.getBoundingClientRect(), k = L.w / r.width, pad = 7;
-      els.hl.setAttribute('x', ((b.left - r.left) * k - pad).toFixed(1)); els.hl.setAttribute('y', ((b.top - r.top) * k - pad).toFixed(1));
-      els.hl.setAttribute('width', (b.width * k + pad * 2).toFixed(1)); els.hl.setAttribute('height', (b.height * k + pad * 2).toFixed(1));
-      els.hl.classList.add('show');
-    }
-    function hoverTip(e) {
-      var el = e.target.closest && e.target.closest('[data-tip]');
-      if (!el) { if (tipKey) hideTip(); return; }
-      var key = el.getAttribute('data-tip');
-      showTip(key, e.clientX, e.clientY, 0, key !== tipKey || key === 'wire' ? el : null);
-    }
-    stage.addEventListener('pointerleave', function () { if (pid === null) hideTip(); });
-    stage.addEventListener('click', function (e) {
-      if (!touch || e.target.closest('.grab') || e.target.id === 'padHit') return;
-      var el = e.target.closest && e.target.closest('[data-tip]');
-      if (el) showTip(el.getAttribute('data-tip'), e.clientX, e.clientY, 2600, el); else hideTip();
+    if (sparks.length > 260) sparks.splice(0, sparks.length - 260);
+  }
+  const glow = (img, x, y, size, a) => { ctx.globalAlpha = a; ctx.drawImage(img, x - size / 2, y - size / 2, size, size); };
+  // точка на контуре по пройденной длине: статичные дорожки + провод, сэмплированный каждый кадр
+  function buildSegs() {
+    segs = []; segTot = 0;
+    flat.forEach(it => {
+      let p = it.p;
+      if (it.c) { p = []; for (let i = 0; i <= 14; i++) p.push(bez(C.G, i / 14)); p.push(C.E); }
+      for (let k = 1; k < p.length; k++) {
+        const l = hyp(p[k][0] - p[k - 1][0], p[k][1] - p[k - 1][1]);
+        if (l > 0.01) { segs.push([p[k - 1][0], p[k - 1][1], p[k][0], p[k][1], segTot, l]); segTot += l; }
+      }
     });
+  }
+  function posAt(u) {
+    let lo = 0, hi = segs.length - 1;
+    while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (segs[mid][4] <= u) lo = mid; else hi = mid - 1; }
+    const s = segs[lo], k = clamp((u - s[4]) / s[5], 0, 1);
+    return [s[0] + (s[2] - s[0]) * k, s[1] + (s[3] - s[1]) * k];
+  }
+  function timePos(t) {
+    for (const it of L.loop) {
+      if (t < it.t0 || t >= it.t0 + it.dur) continue;
+      if (it.j) return null;
+      if (it.c) return bez(C.G, (t - it.t0) / it.dur);
+      const p = it.p, want = (t - it.t0) / it.dur * it.len;
+      let acc = 0;
+      for (let k = 1; k < p.length; k++) {
+        const l = hyp(p[k][0] - p[k - 1][0], p[k][1] - p[k - 1][1]);
+        if (acc + l >= want) { const q = (want - acc) / l; return [p[k - 1][0] + (p[k][0] - p[k - 1][0]) * q, p[k - 1][1] + (p[k][1] - p[k - 1][1]) * q]; }
+        acc += l;
+      }
+    }
+    return null;
+  }
+  function drawFx(now, f) {
+    const busy = sparks.length || rings.length || on || !reduce;
+    if (!busy && !fxDirty) return;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, fx.width, fx.height);
+    fxDirty = false;
+    if (!busy) return;
+    ctx.setTransform(scale * DPR, 0, 0, scale * DPR, 0, 0);
+    ctx.globalCompositeOperation = 'lighter';
+    const gy = L.padL[1], [g0, g1] = L.gap;
+    if (!on) {
+      // угольки на концах оборванной дорожки, а время от времени — дуга и сноп искр
+      glow(SPR[0], g0, gy, 16 + Math.random() * 10, 0.25 + Math.random() * 0.35);
+      glow(SPR[0], g1, gy, 16 + Math.random() * 10, 0.25 + Math.random() * 0.35);
+      if (now > nextArc) {
+        arc = 3 + (Math.random() * 3 | 0);
+        nextArc = now + 280 + Math.random() * 1100;
+        burst(Math.random() < 0.5 ? g0 : g1, gy, 6 + (Math.random() * 10 | 0), 0, 2.6);
+      }
+      if (arc) {
+        const pts = [[g0, gy]];
+        for (let i = 1; i < 6; i++) pts.push([g0 + (g1 - g0) * i / 6, gy + (Math.random() - 0.5) * 16]);
+        pts.push([g1, gy]);
+        ctx.globalAlpha = 1; ctx.lineJoin = ctx.lineCap = 'round';
+        [[7, 'rgba(120,190,255,.22)'], [3, 'rgba(170,220,255,.55)'], [1.3, 'rgba(255,255,255,.95)']].forEach(([w, c]) => {
+          ctx.lineWidth = w; ctx.strokeStyle = c; ctx.beginPath();
+          pts.forEach((p, k) => k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]));
+          ctx.stroke();
+        });
+        glow(SPR[2], (g0 + g1) / 2, gy, 60, 0.5);
+        arc--;
+      }
+      if (C.near && C.mode === 'drag' && Math.random() < 0.35 * f) burst(C.E[0], C.E[1], 2, 0, 2);
+    } else if (C.G) {
+      buildSegs();
+      const el = (now - tOn) / 1000;
+      if (el < T.total + 0.1) {
+        // фронт тока: яркая «комета» один раз обегает весь контур
+        for (let k = 0; k < 9; k++) { const q = timePos(el - k * 0.012); if (q) glow(SPR[1], q[0], q[1], 40 - k * 3.5, 1 - k * 0.1); }
+        [['u1', L.u1[0], L.u1[1]], ['disp', L.disp[0] + L.disp[2] / 2, L.disp[1] + L.disp[3] / 2]].forEach(([j, x, y]) => {
+          const dt = el - T[j];
+          if (dt > -0.1 && dt < 0.5) glow(SPR[1], x, y, 170, Math.max(0, 0.55 - Math.abs(dt - 0.05) * 1.3));
+        });
+      }
+      // постоянный ток: бусины-импульсы бегут по всему контуру, включая провод
+      const a = clamp((el - T.total * 0.6) / 0.6, 0, 1);
+      if (a > 0 && segTot > 0) {
+        for (let u = (now / 1000 * 170) % 62; u < segTot; u += 62)
+          for (let tl = 0; tl < 4; tl++) { const pp = posAt(Math.max(0, u - tl * 7)); glow(SPR[1], pp[0], pp[1], 17 - tl * 3, a * (1 - tl * 0.22)); }
+      }
+    }
+    ctx.lineCap = 'round';
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const S = sparks[i];
+      S.x += S.vx * f; S.y += S.vy * f; S.vx *= Math.pow(0.95, f); S.vy = S.vy * Math.pow(0.95, f) + 0.12 * f; S.life -= S.dec * f;
+      if (S.life <= 0) { sparks.splice(i, 1); continue; }
+      ctx.globalAlpha = S.life; ctx.strokeStyle = `rgb(${COL[S.c]})`; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(S.x, S.y); ctx.lineTo(S.x - S.vx * 2.2, S.y - S.vy * 2.2); ctx.stroke();
+      glow(SPR[S.c], S.x, S.y, 9, S.life);
+    }
+    for (let i = rings.length - 1; i >= 0; i--) {
+      const G = rings[i];
+      G.r += (G.big ? 7 : 4) * f; G.life -= (G.big ? 0.034 : 0.04) * f;
+      if (G.life <= 0) { rings.splice(i, 1); continue; }
+      ctx.globalAlpha = G.life * 0.8; ctx.strokeStyle = 'rgb(120,255,170)'; ctx.lineWidth = 2 + G.life * 4;
+      ctx.beginPath(); ctx.arc(G.x, G.y, G.r, 0, 6.283); ctx.stroke();
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+    fxDirty = true;
+  }
 
-    /* ================= эффекты на canvas: искры в обрыве, импульсы тока ================= */
-    var SW = 0, scale = 1, sparks = [], rings = [], arc = null, nextArc = 0, fxDirty = false;
-    function sprite(stops) {
-      var c = document.createElement('canvas'); c.width = c.height = 64;
-      var g = c.getContext('2d'), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
-      stops.forEach(function (s) { gr.addColorStop(s[0], s[1]); });
-      g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
-      return c;
+  /* — главный цикл (requestAnimationFrame сам встаёт на паузу в скрытой вкладке) — */
+  let running = false, last = 0, nextWiggle = 0;
+  function loop(now) {
+    const f = last ? Math.min(3, (now - last) / 16.667) : 1;
+    last = now;
+    if (!reduce && !on && C.mode === 'rest' && !stage.classList.contains('touched') && now > nextWiggle) {
+      // «крокодил» иногда сам подёргивается — зовёт поиграть
+      if (nextWiggle) { C.V[0] += (Math.random() - 0.5) * 3; C.V[1] -= 2.2 + Math.random() * 1.5; }
+      nextWiggle = now + 2600 + Math.random() * 1800;
     }
-    var SPR = ctx ? [
-      sprite([[0, 'rgba(255,255,255,1)'], [0.18, 'rgba(255,236,170,.95)'], [0.5, 'rgba(255,160,50,.3)'], [1, 'rgba(255,140,40,0)']]),
-      sprite([[0, 'rgba(255,255,255,1)'], [0.2, 'rgba(190,255,215,.95)'], [0.5, 'rgba(70,255,122,.32)'], [1, 'rgba(70,255,122,0)']]),
-      sprite([[0, 'rgba(255,255,255,1)'], [0.2, 'rgba(190,235,255,.9)'], [0.55, 'rgba(95,212,255,.25)'], [1, 'rgba(95,212,255,0)']])
-    ] : [];
-    var COL = ['255,214,140', '170,255,200', '180,230,255'];
-    function sizeCanvas() {
-      if (!ctx) return;
-      var r = stage.getBoundingClientRect();
-      SW = r.width;
-      fx.width = Math.max(1, Math.round(r.width * DPR)); fx.height = Math.max(1, Math.round(r.height * DPR));
-      scale = r.width / L.w; fxDirty = true;
+    const active = stepCable(now, f);
+    if (on) {
+      const el = (now - tOn) / 1000;
+      // мультиметр «добегает» до 5 В, потом изредка дрожит последний знак — как настоящий
+      if (el < T.total) meterSet(5 * (1 - Math.pow(1 - el / T.total, 3)));
+      else if (!reduce) meterSet(Math.random() < 0.012 ? 5 + (Math.random() < 0.5 ? -0.01 : 0.01) : shownV !== 500 && Math.random() < 0.08 ? 5 : shownV / 100);
     }
-    function burst(x, y, n, c, sp) {
-      for (var i = 0; i < n; i++) {
-        var a = Math.random() * 6.283, v = (0.4 + Math.random()) * sp;
-        sparks.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 0.6, life: 1, dec: 0.025 + Math.random() * 0.03, c: c });
-      }
-      if (sparks.length > 260) sparks.splice(0, sparks.length - 260);
-    }
-    function glow(img, x, y, size, a) { ctx.globalAlpha = a; ctx.drawImage(img, x - size / 2, y - size / 2, size, size); }
-    // точка на контуре по «пройденной длине»: статичные дорожки + провод, сэмплированный каждый кадр
-    var segs = [], segTot = 0;
-    function buildSegs() {
-      segs = []; segTot = 0;
-      flat.forEach(function (it) {
-        var p = it.p;
-        if (it.c) { p = []; for (var i = 0; i <= 14; i++) p.push(bez(C.G, i / 14)); p.push(C.E); }
-        for (var k = 1; k < p.length; k++) {
-          var l = Math.hypot(p[k][0] - p[k - 1][0], p[k][1] - p[k - 1][1]);
-          if (l > 0.01) { segs.push([p[k - 1][0], p[k - 1][1], p[k][0], p[k][1], segTot, l]); segTot += l; }
-        }
-      });
-    }
-    function at(u) {
-      var lo = 0, hi = segs.length - 1;
-      while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (segs[mid][4] <= u) lo = mid; else hi = mid - 1; }
-      var s = segs[lo], k = Math.max(0, Math.min(1, (u - s[4]) / s[5]));
-      return [s[0] + (s[2] - s[0]) * k, s[1] + (s[3] - s[1]) * k];
-    }
-    function timePos(t) {
-      for (var i = 0; i < L.loop.length; i++) {
-        var it = L.loop[i];
-        if (t >= it.t0 && t < it.t0 + it.dur) {
-          if (it.j) return null;
-          var p = it.p;
-          if (it.c) { var q = bez(C.G, (t - it.t0) / it.dur); return q; }
-          var want = (t - it.t0) / it.dur * it.len, acc = 0;
-          for (var k = 1; k < p.length; k++) {
-            var l = Math.hypot(p[k][0] - p[k - 1][0], p[k][1] - p[k - 1][1]);
-            if (acc + l >= want) { var f = (want - acc) / l; return [p[k - 1][0] + (p[k][0] - p[k - 1][0]) * f, p[k - 1][1] + (p[k][1] - p[k - 1][1]) * f]; }
-            acc += l;
-          }
-        }
-      }
-      return null;
-    }
-    function drawFx(now, f) {
-      var busy = sparks.length || rings.length || on || !reduce;
-      if (!busy && !fxDirty) return;
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.clearRect(0, 0, fx.width, fx.height);
-      fxDirty = false;
-      if (!busy) return;
-      ctx.setTransform(scale * DPR, 0, 0, scale * DPR, 0, 0);
-      ctx.globalCompositeOperation = 'lighter';
-      var gy = L.padL[1], g0 = L.gap[0], g1 = L.gap[1], i;
-      if (!on) {
-        // угольки на концах оборванной дорожки + дуга и искры время от времени
-        glow(SPR[0], g0, gy, 16 + Math.random() * 10, 0.25 + Math.random() * 0.35);
-        glow(SPR[0], g1, gy, 16 + Math.random() * 10, 0.25 + Math.random() * 0.35);
-        if (now > nextArc) {
-          arc = { life: 3 + (Math.random() * 3 | 0) };
-          nextArc = now + 280 + Math.random() * 1100;
-          burst(Math.random() < 0.5 ? g0 : g1, gy, 6 + (Math.random() * 10 | 0), 0, 2.6);
-        }
-        if (arc) {
-          var pts = [[g0, gy]], n = 6;
-          for (i = 1; i < n; i++) pts.push([g0 + (g1 - g0) * i / n, gy + (Math.random() - 0.5) * 16]);
-          pts.push([g1, gy]);
-          ctx.globalAlpha = 1; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-          [[7, 'rgba(120,190,255,.22)'], [3, 'rgba(170,220,255,.55)'], [1.3, 'rgba(255,255,255,.95)']].forEach(function (w) {
-            ctx.lineWidth = w[0]; ctx.strokeStyle = w[1]; ctx.beginPath();
-            pts.forEach(function (p, k) { if (k) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); });
-            ctx.stroke();
-          });
-          glow(SPR[2], (g0 + g1) / 2, gy, 60, 0.5);
-          if (--arc.life <= 0) arc = null;
-        }
-        if (C.near && C.mode === 'drag' && Math.random() < 0.35 * f) burst(C.E[0], C.E[1], 2, 0, 2);
-      } else if (C.G) {
-        buildSegs();
-        var el = (now - tOn) / 1000;
-        if (el < T.total + 0.1) {
-          // фронт тока: яркая «комета» обегает контур один раз
-          for (var k2 = 0; k2 < 9; k2++) {
-            var q = timePos(el - k2 * 0.012);
-            if (q) glow(SPR[1], q[0], q[1], 40 - k2 * 3.5, 1 - k2 * 0.1);
-          }
-          [['u1', L.u1[0], L.u1[1]], ['disp', L.disp[0] + L.disp[2] / 2, L.disp[1] + L.disp[3] / 2]].forEach(function (j) {
-            var dt = el - T[j[0]];
-            if (dt > -0.1 && dt < 0.5) glow(SPR[1], j[1], j[2], 170, Math.max(0, 0.55 - Math.abs(dt - 0.05) * 1.3));
-          });
-        }
-        // постоянный ток: бусины-импульсы бегут по всему контуру
-        var a = Math.max(0, Math.min(1, (el - T.total * 0.6) / 0.6));
-        if (a > 0 && segTot > 0) {
-          var gapU = 62, off = (now / 1000 * 170) % gapU;
-          for (var u = off; u < segTot; u += gapU) {
-            for (var tl = 0; tl < 4; tl++) {
-              var pp = at(Math.max(0, u - tl * 7));
-              glow(SPR[1], pp[0], pp[1], 17 - tl * 3, a * (1 - tl * 0.22));
-            }
-          }
-        }
-      }
-      // искры
-      ctx.lineCap = 'round';
-      for (i = sparks.length - 1; i >= 0; i--) {
-        var S = sparks[i];
-        S.x += S.vx * f; S.y += S.vy * f; S.vx *= Math.pow(0.95, f); S.vy = S.vy * Math.pow(0.95, f) + 0.12 * f; S.life -= S.dec * f;
-        if (S.life <= 0) { sparks.splice(i, 1); continue; }
-        ctx.globalAlpha = S.life; ctx.strokeStyle = 'rgba(' + COL[S.c] + ',1)'; ctx.lineWidth = 1.6;
-        ctx.beginPath(); ctx.moveTo(S.x, S.y); ctx.lineTo(S.x - S.vx * 2.2, S.y - S.vy * 2.2); ctx.stroke();
-        glow(SPR[S.c], S.x, S.y, 9, S.life);
-      }
-      for (i = rings.length - 1; i >= 0; i--) {
-        var R = rings[i];
-        R.r += (R.big ? 7 : 4) * f; R.life -= (R.big ? 0.034 : 0.04) * f;
-        if (R.life <= 0) { rings.splice(i, 1); continue; }
-        ctx.globalAlpha = R.life * 0.8; ctx.strokeStyle = 'rgba(' + R.c + ',1)'; ctx.lineWidth = 2 + R.life * 4;
-        ctx.beginPath(); ctx.arc(R.x, R.y, R.r, 0, 6.283); ctx.stroke();
-      }
-      ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
-      fxDirty = true;
-    }
+    if (ctx) drawFx(now, f);
+    if (!reduce || active || pid !== null) requestAnimationFrame(loop);
+    else { running = false; last = 0; }
+  }
+  function wake() { if (!running) { running = true; last = 0; requestAnimationFrame(loop); } }
 
-    /* ================= главный цикл ================= */
-    var running = false, last = 0, nextWiggle = 0;
-    function loop(now) {
-      var f = last ? Math.min(3, (now - last) / 16.667) : 1;
-      last = now;
-      if (!reduce && !on && C.mode === 'rest' && !stage.classList.contains('touched') && now > nextWiggle) {
-        // «крокодил» иногда сам подёргивается — зовёт поиграть
-        if (nextWiggle) { C.V[0] += (Math.random() - 0.5) * 3; C.V[1] -= 2.2 + Math.random() * 1.5; }
-        nextWiggle = now + 2600 + Math.random() * 1800;
-      }
-      var active = stepCable(now, f);
-      if (on) {
-        var el = (now - tOn) / 1000;
-        if (el < T.total) meterSet(5 * (1 - Math.pow(1 - el / T.total, 3)));
-        else meterSet(Math.random() < 0.012 ? (Math.random() < 0.5 ? 4.99 : 5.01) : (shownV !== 500 && Math.random() < 0.08 ? 5 : shownV / 100));
-      }
-      if (ctx) drawFx(now, f);
-      if (!reduce || active || pid !== null) requestAnimationFrame(loop);
-      else { running = false; last = 0; }
-    }
-    function wake() { if (!running) { running = true; last = 0; requestAnimationFrame(loop); } }
-
-    build();
-    if (!reduce) wake();
-    var rto = 0;
-    window.addEventListener('resize', function () {
-      clearTimeout(rto);
-      rto = setTimeout(function () {
-        if (mqM.matches !== curM) { hideTip(); build(); } else { sizeCanvas(); $('sheen').style.borderRadius = (26 * scale).toFixed(1) + 'px'; }
-        wake();
-      }, 120);
-    });
-  })();
+  build();
+  if (!reduce) wake();
+  let rto = 0;
+  window.addEventListener('resize', () => {
+    clearTimeout(rto);
+    rto = setTimeout(() => { if (mqM.matches !== curM) { hideTip(); build(); } else sizeCanvas(); wake(); }, 120);
+  });
+})();
   </script>
 </body>
 </html>

@@ -323,7 +323,7 @@
   // фирменные цвета кирпичиков и их доля в кладке
   var COL = [['#1055cb', 25], ['#8fb4ff', 19], ['#eef3ff', 15], ['#ffcb6b', 15], ['#ff5a5a', 13], ['#3ddc84', 13]];
   var W = 0, H = 0, FLOOR = 0, C = 20, HB = 24, STUD = 4, G = 2400, ROWS = 10, PAD = 2;
-  var POP = 280, REST = 0.24, REST_V = 110, MU = 0.3, MU_F = 0.55, VMAX = 2600, SLEEP_V = 16, WAKE_V = 40;
+  var POP = 280, REST = 0.24, REST_V = 110, MU = 0.3, MU_F = 0.55, VMAX = 2600, WAKE_V = 40;
   var B = [], homes = [], order = [], sap = [], pa = [], pb = [];
   var parts = [], SPR = [], WHITE = [], SHD = [], DUST = null, SPARK = null;
   var glyph = { l: 0, w: 1, cx: 0, t: 0 }, tichBox = { l: 0, r: 0, t: 0 };
@@ -742,8 +742,10 @@
     for (i = 0; i < B.length; i++) {
       b = B[i];
       if (b.st !== FREE || b.sl) continue;
-      var has = b.supR > b.supL, tip = 0, spd = Math.abs(b.vx) + Math.abs(b.vy);
+      var has = b.supR > b.supL, tip = 0;
       if (has) {
+        // стопка давит вниз общей скоростью, а опора её держит: скорость вниз — не больше реального сдвига за шаг
+        if (b.vy > 0) { var dv = (b.y - b.py) / h; if (dv < b.vy) b.vy = dv > 0 ? dv : 0; }
         var off = b.x + b.w / 2 - (b.supL + b.supR) / 2, lim = Math.max(0, (b.supR - b.supL) / 2 - b.w * 0.15);
         if (off < -lim - 0.3) tip = -1; else if (off > lim + 0.3) tip = 1;
         if (tip) b.vx += tip * G * 0.85 * h;
@@ -753,11 +755,11 @@
           if (dl > HB * 1.5 || dr > HB * 1.5) { tip = dl > dr ? -1 : 1; b.vx += tip * G * 0.6 * h; }
         }
       }
-      // покой: почти не движется (если «соскальзывает», но зажат соседями — тоже засыпает, чуть позже)
-      if (has && spd < SLEEP_V) {
+      // покой: лежит на опоре и за 0,3 с сдвинулся меньше чем на полпикселя (зажатый соседями «соскальзывающий» — чуть позже)
+      if (has && Math.abs(b.x - b.ax) < 0.5 && Math.abs(b.y - b.ay) < 0.5) {
         b.calm += h;
         if (b.calm > (tip ? 0.5 : 0.3)) { b.sl = true; b.soft = false; b.vx = b.vy = 0; b.calm = 0; }
-      } else b.calm = 0;
+      } else { b.ax = b.x; b.ay = b.y; b.calm = 0; }
     }
   }
 

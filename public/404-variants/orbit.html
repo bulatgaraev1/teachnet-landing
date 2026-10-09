@@ -26,12 +26,11 @@
 html, body { margin: 0; }
 body { min-height: 100vh; min-height: 100svh; background: var(--bg); color: var(--ink); font: 17px/1.55 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 a { color: inherit; }
-/* фон: туманности — неподвижные градиенты, звёзды — холст, нарисованный один раз */
 .sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; background: radial-gradient(120% 70% at 50% 0%, #0e1a28, var(--bg) 62%); }
 .neb { position: absolute; border-radius: 50%; }
-.neb--a { width: 80vmax; height: 80vmax; left: -32vmax; top: -36vmax; background: radial-gradient(circle, rgba(37, 82, 170, 0.5), rgba(29, 63, 138, 0.2) 32%, rgba(29, 63, 138, 0.05) 54%, transparent 70%); }
-.neb--b { width: 72vmax; height: 72vmax; right: -30vmax; top: -14vmax; background: radial-gradient(circle, rgba(92, 52, 170, 0.42), rgba(75, 42, 143, 0.16) 34%, transparent 68%); }
-.neb--c { width: 62vmax; height: 62vmax; left: 26vw; bottom: -38vmax; background: radial-gradient(circle, rgba(18, 120, 160, 0.38), rgba(14, 106, 143, 0.13) 34%, transparent 68%); }
+.neb--a { width: 80vmax; height: 80vmax; left: -32vmax; top: -36vmax; background: radial-gradient(circle, rgba(37,82,170,.5), rgba(29,63,138,.2) 32%, rgba(29,63,138,.05) 54%, transparent 70%); }
+.neb--b { width: 72vmax; height: 72vmax; right: -30vmax; top: -14vmax; background: radial-gradient(circle, rgba(92,52,170,.42), rgba(75,42,143,.16) 34%, transparent 68%); }
+.neb--c { width: 62vmax; height: 62vmax; left: 26vw; bottom: -38vmax; background: radial-gradient(circle, rgba(18,120,160,.38), rgba(14,106,143,.13) 34%, transparent 68%); }
 .stars { position: absolute; left: -20px; top: -20px; width: calc(100% + 40px); height: calc(100% + 40px); will-change: transform; }
 .page { position: relative; z-index: 1; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; }
 .top { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px max(var(--gut), env(safe-area-inset-right)) 0 max(var(--gut), env(safe-area-inset-left)); }
@@ -39,68 +38,66 @@ a { color: inherit; }
 .top__phone { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px; white-space: nowrap; }
 .top__phone:hover { color: var(--ink); }
 main { flex: 1 0 auto; display: flex; flex-direction: column; }
-/* игровое поле: touch-action только здесь, страница вокруг прокручивается как обычно */
 .field { position: relative; flex: none; margin-top: -6px; height: clamp(300px, 65vh, 1000px); height: clamp(300px, 65svh, 1000px); touch-action: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; outline: none; cursor: grab; }
 .field.is-aiming { cursor: grabbing; }
 .field__cv, .field__cv canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.field:focus-visible::before { content: ''; position: absolute; z-index: 4; inset: 4px max(4px, calc(var(--gut) - 12px)); border-radius: 22px; pointer-events: none; box-shadow: inset 0 0 0 2px var(--cyan), 0 0 0 5px rgba(95, 212, 255, 0.16); }
+.field:focus-visible::before { content: ''; position: absolute; z-index: 4; inset: 4px max(4px, calc(var(--gut) - 12px)); border-radius: 22px; pointer-events: none; box-shadow: inset 0 0 0 2px var(--cyan), 0 0 0 5px rgba(95,212,255,.16); }
 .nojs { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between; padding: 4% 14% 8%; }
-.nojs__tich { height: 44%; width: auto; filter: drop-shadow(0 0 30px rgba(63, 125, 255, 0.45)); }
-.nojs__home { position: relative; width: clamp(90px, 13vw, 170px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 34% 30%, #d4f1ff, #4aa3ff 26%, #1055cb 64%, #04123a); box-shadow: 0 0 70px rgba(95, 212, 255, 0.45); }
+.nojs__tich { height: 44%; width: auto; filter: drop-shadow(0 0 30px rgba(63,125,255,.45)); }
+.nojs__home { position: relative; width: clamp(90px, 13vw, 170px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 34% 30%, #d4f1ff, #4aa3ff 26%, #1055cb 64%, #04123a); box-shadow: 0 0 70px rgba(95,212,255,.45); }
 .nojs__home span { position: absolute; left: 50%; top: calc(100% + 14px); transform: translateX(-50%); font: 700 15px/1 var(--head); color: var(--cyan); }
 .js-ok .nojs, .hud, .help, .msg { display: none; }
 .js-ok .hud { display: flex; }
 .js-ok .help, .js-ok .msg { display: block; }
 .hud { position: absolute; z-index: 2; left: var(--gut); top: 14px; gap: 8px; flex-wrap: wrap; pointer-events: none; }
-.pill { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px 6px 11px; border-radius: 999px; font-size: 13px; font-weight: 500; line-height: 1.2; color: #bcd0f2; background: rgba(9, 18, 36, 0.66); border: 1px solid rgba(143, 180, 255, 0.26); }
+.pill { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px 6px 11px; border-radius: 999px; font-size: 13px; font-weight: 500; line-height: 1.2; color: #bcd0f2; background: rgba(9,18,36,.66); border: 1px solid rgba(143,180,255,.26); }
 .pill b { font: 700 15px/1 var(--head); color: var(--ink); font-variant-numeric: tabular-nums; }
 .pill svg { color: var(--cyan); }
-.pill--gold { color: #f3dfb0; border-color: rgba(255, 203, 107, 0.4); }
+.pill--gold { color: #f3dfb0; border-color: rgba(255,203,107,.4); }
 .pill--gold svg { color: var(--gold); }
 .pill[hidden] { display: none; }
-.pill.is-bump b { animation: bump 0.45s ease; }
+.pill.is-bump b { animation: bump .45s ease; }
 @keyframes bump { 40% { transform: scale(1.45); color: var(--gold); } }
-.help { position: absolute; z-index: 2; left: var(--gut); bottom: 18px; margin: 0; max-width: calc(100% - 2 * var(--gut)); font-size: 13.5px; color: #8ea3c4; pointer-events: none; transition: opacity 0.4s; }
+.help { position: absolute; z-index: 2; left: var(--gut); bottom: 18px; margin: 0; max-width: calc(100% - 2 * var(--gut)); font-size: 13.5px; color: #8ea3c4; pointer-events: none; transition: opacity .4s; }
 .help.is-off { opacity: 0; }
-kbd { display: inline-block; min-width: 22px; padding: 0 6px; margin: 0 1px; border-radius: 6px; text-align: center; border: 1px solid rgba(143, 180, 255, 0.34); border-bottom-width: 2px; background: rgba(18, 34, 62, 0.72); font: 600 12px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace; color: #dfe9ff; }
+kbd { display: inline-block; min-width: 22px; padding: 0 6px; margin: 0 1px; border-radius: 6px; text-align: center; border: 1px solid rgba(143,180,255,.34); border-bottom-width: 2px; background: rgba(18,34,62,.72); font: 600 12px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace; color: #dfe9ff; }
 .is-touch .help__keys { display: none; }
-.msg { position: absolute; z-index: 2; left: 50%; top: 14px; margin: 0; width: max-content; max-width: min(620px, calc(100% - 2 * var(--gut))); padding: 9px 18px; border-radius: 16px; text-align: center; pointer-events: none; font-size: 14.5px; line-height: 1.4; background: rgba(9, 18, 36, 0.78); border: 1px solid rgba(143, 180, 255, 0.3); opacity: 0; transform: translate(-50%, -8px); transition: opacity 0.3s, transform 0.3s; }
+.msg { position: absolute; z-index: 2; left: 50%; top: 14px; margin: 0; width: max-content; max-width: min(620px, calc(100% - 2 * var(--gut))); padding: 9px 18px; border-radius: 16px; text-align: center; pointer-events: none; font-size: 14.5px; line-height: 1.4; background: rgba(9,18,36,.78); border: 1px solid rgba(143,180,255,.3); opacity: 0; transform: translate(-50%, -8px); transition: opacity .3s, transform .3s; }
 .msg.is-on { opacity: 1; transform: translate(-50%, 0); }
-.msg--bad { border-color: rgba(255, 130, 90, 0.5); }
-.msg--hint { border-color: rgba(255, 203, 107, 0.55); }
-.win { position: absolute; z-index: 3; left: 50%; bottom: 20px; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; width: max-content; max-width: calc(100% - 2 * var(--gut)); padding: 12px 12px 12px 22px; border-radius: 20px; background: rgba(7, 18, 34, 0.86); border: 1px solid rgba(70, 255, 122, 0.45); box-shadow: 0 0 0 6px rgba(70, 255, 122, 0.06), 0 18px 50px rgba(0, 0, 0, 0.45), 0 0 50px rgba(70, 255, 122, 0.18); animation: win-in 0.6s cubic-bezier(0.2, 1.3, 0.4, 1) both; }
+.msg--bad { border-color: rgba(255,130,90,.5); }
+.msg--hint { border-color: rgba(255,203,107,.55); }
+.win { position: absolute; z-index: 3; left: 50%; bottom: 20px; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; width: max-content; max-width: calc(100% - 2 * var(--gut)); padding: 12px 12px 12px 22px; border-radius: 20px; background: rgba(7,18,34,.86); border: 1px solid rgba(70,255,122,.45); box-shadow: 0 0 0 6px rgba(70,255,122,.06), 0 18px 50px rgba(0,0,0,.45), 0 0 50px rgba(70,255,122,.18); animation: win-in .6s cubic-bezier(.2, 1.3, .4, 1) both; }
 .win[hidden] { display: none; }
-@keyframes win-in { from { opacity: 0; transform: translate(-50%, 24px) scale(0.9); } }
+@keyframes win-in { from { opacity: 0; transform: translate(-50%, 24px) scale(.9); } }
 .win__title { margin: 0; font: 700 clamp(17px, 1.6vw, 21px)/1.2 var(--head); }
 .win__title em { font-style: normal; color: var(--green); }
 .win__sub { margin: 3px 0 0; font-size: 13.5px; color: var(--muted); }
-.again { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 11px 16px; border-radius: 12px; cursor: pointer; font: 700 15px/1.2 var(--head); color: var(--ink); background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.24); transition: background 0.2s, border-color 0.2s; }
-.again:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.45); }
-/* текст и кнопки */
+.again { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 11px 16px; border-radius: 12px; cursor: pointer; font: 700 15px/1.2 var(--head); color: var(--ink); background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.24); transition: background .2s, border-color .2s; }
+.again:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.45); }
 .copy { position: relative; z-index: 2; flex: 1 0 auto; width: 100%; max-width: 1320px; margin: 0 auto; padding: 4px max(var(--gut), env(safe-area-inset-right)) 26px max(var(--gut), env(safe-area-inset-left)); display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 18px 56px; align-items: end; align-content: center; }
-h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--head); letter-spacing: -0.02em; text-wrap: balance; text-shadow: 0 0 40px rgba(60, 120, 255, 0.3); }
+h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--head); letter-spacing: -0.02em; text-wrap: balance; text-shadow: 0 0 40px rgba(60,120,255,.3); }
 .h1__code { background: linear-gradient(100deg, var(--cyan), var(--glow) 50%, var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .lead { margin: 12px 0 0; max-width: 600px; color: var(--muted); font-size: clamp(16px, 1.3vw, 19px); text-wrap: pretty; }
 .act { display: flex; flex-direction: column; align-items: flex-end; gap: 18px; }
 .actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px 14px; }
-.btn { position: relative; display: inline-flex; align-items: center; gap: 10px; overflow: hidden; padding: 16px 26px; border-radius: 14px; text-decoration: none; font: 700 17px/1.2 var(--head); color: #fff; background: var(--brand); box-shadow: 0 0 0 1px rgba(143, 180, 255, 0.35) inset, 0 12px 36px rgba(16, 85, 203, 0.55); transition: transform 0.2s ease, box-shadow 0.2s ease; }
-.btn::after { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 40%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent); transform: translateX(-160%) skewX(-20deg); animation: shine 3.6s ease-in-out infinite; }
+.btn { position: relative; display: inline-flex; align-items: center; gap: 10px; overflow: hidden; padding: 16px 26px; border-radius: 14px; text-decoration: none; font: 700 17px/1.2 var(--head); color: #fff; background: var(--brand); box-shadow: 0 0 0 1px rgba(143,180,255,.35) inset, 0 12px 36px rgba(16,85,203,.55); transition: transform .2s ease, box-shadow .2s ease; }
+.btn::after { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 40%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent); transform: translateX(-160%) skewX(-20deg); animation: shine 3.6s ease-in-out infinite; }
 @keyframes shine { 0%, 55% { transform: translateX(-160%) skewX(-20deg); } 100% { transform: translateX(330%) skewX(-20deg); } }
-.btn:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(143, 180, 255, 0.6) inset, 0 16px 44px rgba(16, 85, 203, 0.75); }
-.btn--ghost { background: rgba(255, 255, 255, 0.06); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22) inset; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(143,180,255,.6) inset, 0 16px 44px rgba(16,85,203,.75); }
+.btn--ghost { background: rgba(255,255,255,.06); box-shadow: 0 0 0 1px rgba(255,255,255,.22) inset; }
 .btn--ghost::after { display: none; }
-.btn--ghost:hover { background: rgba(255, 255, 255, 0.12); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4) inset; }
+.btn--ghost:hover { background: rgba(255,255,255,.12); box-shadow: 0 0 0 1px rgba(255,255,255,.4) inset; }
 .btn svg { flex: 0 0 auto; }
-/* после победы главная кнопка зовёт: от неё расходятся зелёные волны (только transform/opacity — без перерисовки) */
+/* после победы от главной кнопки расходятся волны (transform/opacity) */
 .call { position: relative; display: inline-flex; border-radius: 14px; }
 .call::before, .call::after { content: ''; position: absolute; inset: 0; border-radius: 14px; pointer-events: none; opacity: 0; }
-.call.is-on .btn { background: linear-gradient(100deg, #1055cb, #1b7fe6); box-shadow: 0 0 0 2px rgba(110, 255, 160, 0.85) inset, 0 12px 40px rgba(16, 85, 203, 0.6), 0 0 30px rgba(70, 255, 122, 0.35); }
-.call.is-on::before, .call.is-on::after { box-shadow: 0 0 0 3px rgba(70, 255, 122, 0.85), 0 0 22px rgba(70, 255, 122, 0.5); animation: call 1.8s cubic-bezier(0.2, 0.6, 0.3, 1) infinite; will-change: transform, opacity; }
-.call.is-on::after { animation-delay: 0.9s; }
-@keyframes call { 0% { opacity: 0.9; transform: scale(1); } 100% { opacity: 0; transform: scale(1.18, 1.5); } }
+.call.is-on .btn { background: linear-gradient(100deg, #1055cb, #1b7fe6); box-shadow: 0 0 0 2px rgba(110,255,160,.85) inset, 0 12px 40px rgba(16,85,203,.6), 0 0 30px rgba(70,255,122,.35); }
+.call.is-on::before, .call.is-on::after { box-shadow: 0 0 0 3px rgba(70,255,122,.85), 0 0 22px rgba(70,255,122,.5); animation: call 1.8s cubic-bezier(.2, .6, .3, 1) infinite; will-change: transform, opacity; }
+.call.is-on::after { animation-delay: .9s; }
+@keyframes call { 0% { opacity: .9; transform: scale(1); } 100% { opacity: 0; transform: scale(1.18, 1.5); } }
 .btn:focus-visible, .links a:focus-visible, .top a:focus-visible, .again:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
 .links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 22px; font-size: 14px; }
-.links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid rgba(163, 179, 204, 0.3); }
+.links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid rgba(163,179,204,.3); }
 .links a:hover { color: var(--ink); border-color: var(--ink); }
 @media (max-width: 880px) {
   .copy { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 22px; }
@@ -200,8 +197,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   var elTries = $('tries'), elPill = $('tries-pill'), elBest = $('best'), elBestT = $('best-t'), elMsg = $('msg'), elHelp = $('help');
   var elWin = $('win'), elWinT = $('win-t'), elWinS = $('win-s'), elCall = $('call');
 
-  /* Физика в единицах мира: высота поля ≈ 760 (на телефоне ширина ≈ 640). Шаг фиксированный — полёт,
-     пунктир прицела и проверка уровня считаются одинаково. GM = GK·r³, EPS2 — смягчение на малых расстояниях. */
+  // мир: высота ≈ 760 ед. (телефон: ширина ≈ 640); шаг DT один для полёта, пунктира и проверки уровня; GM = GK·r³, EPS2 — смягчение
   var DT = 1 / 120, EPS2 = 576, GK = 55, TR = 17, MAXT = 9, VMAX = 1150, GRAB = 100, MARGIN = 380, PULL = 170;
   var H_PAD = 128, H_FLY = 68, H_HOME = 132, H_SC = 140, LAND_DUR = reduce ? 0.35 : 0.85, OOPS_DUR = reduce ? 1.2 : 1.6;
   var DPR = 1, U = 1, FW = 0, FH = 0, W = 1000, H = 1000, L = null, seed = 404;
@@ -227,7 +223,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   function canvas(w, h) { var c = doc.createElement('canvas'); c.width = w; c.height = h || w; return c; }
   function rrect(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
 
-  /* ---------- Тич: уменьшаем заранее по шагам вдвое — так он чёткий ---------- */
+  // Тич уменьшается заранее, по шагам вдвое — так чётче
   var IMG = {}, cache = {};
   ['idea', 'thumb', 'scared'].forEach(function (n) { var im = IMG[n] = new Image(); im.onload = function () { if (L && !raf) render(); }; im.src = '/images/tich-' + n + '.webp'; });
   function spr(n, h) {
@@ -241,7 +237,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   }
   function drawSpr(c, s, x, y, h, r) { if (!s) return; var w = h * s.width / s.height; c.save(); c.translate(x, y); if (r) c.rotate(r); c.drawImage(s, -w / 2, -h / 2, w, h); c.restore(); }
 
-  /* ---------- спрайты: светящиеся точки (вместо градиента на каждую частицу), камни, луна ---------- */
+  // готовые спрайты: свечение частиц, камни, луна
   var COL = { cyan: '95,212,255', blue: '120,170,255', violet: '155,140,255', gold: '255,203,107', green: '70,255,122', red: '255,72,72', orange: '255,140,60', white: '255,255,255', pink: '255,120,190' }, GS = {};
   Object.keys(COL).forEach(function (k) {
     var c = canvas(64), x = c.getContext('2d');
@@ -269,7 +265,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     if (parts.length > 800 * quality) parts.splice(0, parts.length - round(800 * quality));
   }
 
-  /* ---------- уровень: случайные планеты + проверка, что попасть можно ---------- */
+  /* ---------- уровень ---------- */
   var KIND = {
     violet: { c: ['#f1ecff', '#a796ff', '#4e38be', '#130a3a'], atm: '155,140,255', dark: '36,18,104', ring: '200,190,255', bands: 1 },
     rose: { c: ['#fff1f7', '#ff9cc4', '#b03a72', '#290617'], atm: '255,130,180', dark: '104,18,58', ring: '255,214,150', bands: 1 },
@@ -279,7 +275,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   };
   function landscape() { return W / H >= 1.12; }
   function segDist(p, a, b) { var dx = b.x - a.x, dy = b.y - a.y, t = clamp(((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy), 0, 1); return hyp(p.x - a.x - dx * t, p.y - a.y - dy * t); }
-  // площадка слева (на телефоне — снизу), «Главная» справа (сверху), между ними 2–3 планеты
+  // площадка слева/снизу, «Главная» справа/сверху, между ними 2–3 планеты
   function layout(R) {
     var land = landscape(), pl = [], i, k, x, y, r, pad, tgt, n, cl, xa, xb, ya, yb;
     if (land) {
@@ -304,12 +300,12 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
       else { r = 40 + R() * 30; x = r + 30 + R() * (W - 2 * r - 60); y = ya + R() * (yb - ya); }
       if (fits()) { pl.push({ x: x, y: y, r: r }); break; }
     }
-    // хотя бы одна планета мешает лететь по прямой
+    // одна из планет должна мешать прямому выстрелу
     var A = { x: pad.x, y: pad.y - 76 };
     if (pl.length < 2 || !pl.some(function (p) { return segDist(p, A, tgt) < p.r + 70; })) return null;
     return build(pad, tgt, pl, R);
   }
-  // вид планет и украшения: газовой — кольцо, другой — пояс астероидов, третьей — луна
+  // украшения: кольцо, пояс астероидов, луна
   function build(pad, tgt, pl, R) {
     var kinds = ['violet', 'ice', 'lava', 'teal', 'rose'], i, j, t, belt = null;
     for (i = 4; i > 0; i--) { j = (R() * (i + 1)) | 0; t = kinds[i]; kinds[i] = kinds[j]; kinds[j] = t; }
@@ -324,7 +320,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     tgt.home = true; tgt.gm = GK * tgt.r * tgt.r * tgt.r * 0.85; tgt.sd = (R() * 1e9) | 0;
     return { pad: pad, tgt: tgt, planets: pl, bodies: pl.concat(tgt), A: { x: pad.x, y: pad.y - 76 }, tipL: { x: pad.x - 42, y: pad.y - 40 }, tipR: { x: pad.x + 42, y: pad.y - 40 }, base: atan2(tgt.y - pad.y + 76, tgt.x - pad.x) };
   }
-  // шаг полёта: 0 — летим, 1 — врезался, 2 — дома, 3 — улетел за край, 4 — вышло время
+  // 0 летим, 1 врезался, 2 дома, 3 за краем, 4 время вышло
   function step(s, b, maxT) {
     var ax = 0, ay = 0, i, B, dx, dy, q;
     for (i = 0; i < b.length; i++) { B = b[i]; dx = B.x - s.x; dy = B.y - s.y; q = dx * dx + dy * dy + EPS2; q = B.gm / (q * M.sqrt(q)); ax += dx * q; ay += dy * q; }
@@ -340,8 +336,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     if (pts) pts.push(s.x, s.y);
     return code;
   }
-  // уровень годится, если из 81×15 выстрелов (угол шагом 2°, сила шагом 5 %) в цель попадают от 4 до 30 %;
-  // «решение» — попадание с наибольшим числом попавших соседей, то есть с запасом по точности
+  // уровень годен, если из 81×15 выстрелов (2°, 5 %) попадают от 4 до 30 %; решение — попадание с запасом точности
   function solve(Lv, relaxed) {
     var NA = 81, NP = 15, grid = [], hits = 0, i, j, a, b, bi = 0, bj = 0, bs = -1e9, sc;
     for (i = 0; i < NA; i++) for (j = 0; j < NP; j++) hits += grid[i * NP + j] = shoot(Lv, Lv.base + (i - 40) * PI / 90, 0.3 + j * 0.05, MAXT) === 2 ? 1 : 0;
@@ -357,7 +352,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     var R = rng(sd), Lv = null, t = 0, c;
     while (!Lv && t++ < 60) if ((c = layout(R)) && (c.sol = solve(c))) Lv = c;
     if (!Lv) {
-      // запасной вариант: планеты в стороне от прямой; убираем по одной, пока проход не найдётся
+      // запасной вариант: убираем планеты, пока проход не найдётся
       var land = landscape(), pad = land ? { x: 240, y: H * 0.55 } : { x: clamp(W * 0.26, 150, 240), y: H - 220 }, tgt = land ? { x: W - 190, y: H * 0.4, r: 66 } : { x: W - 150, y: 230, r: 56 };
       var pl = [{ x: (pad.x + tgt.x) / 2, y: H * 0.18, r: 50 }, { x: (pad.x * 2 + tgt.x) / 3, y: H * 0.85, r: 46 }];
       do { Lv = build(pad, tgt, pl.slice(), R); Lv.sol = solve(Lv, 1); } while (!Lv.sol && pl.pop());
@@ -367,9 +362,8 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     return Lv;
   }
 
-  /* ---------- статичный слой (рисуется раз на уровень): сетка пространства, планеты, «Главная», площадка ---------- */
+  /* ---------- статичный слой: рисуется раз на уровень ---------- */
   function halo(c, x, y, r, rgb, a, k) { c.fillStyle = stops(c.createRadialGradient(x, y, r * 0.8, x, y, r * k), [0, rgba(rgb, a), 0.32, rgba(rgb, a / 3), 1, rgba(rgb, 0)]); circle(c, x, y, r * k); c.fill(); }
-  // сфера: свет слева сверху, текстура, тень терминатора и светящийся ободок атмосферы
   function sphere(c, x, y, r, cols, rim, tex) {
     c.save(); circle(c, x, y, r); c.clip();
     c.fillStyle = stops(c.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.05, x, y, r * 1.05), [0, cols[0], 0.3, cols[1], 0.72, cols[2], 1, cols[3]]);
@@ -381,7 +375,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     c.strokeStyle = stops(c.createLinearGradient(x - r, y - r, x + r * 0.35, y + r * 0.35), [0, rgba(rim, 0.95), 1, rgba(rim, 0)]);
     c.lineWidth = max(2.5, r * 0.05); circle(c, x, y, r - c.lineWidth / 2); c.stroke();
   }
-  // кольцо в два приёма: задняя половина до планеты, передняя — после
+  // кольцо: задняя половина до планеты, передняя — после
   function ring(c, P, front) {
     c.save(); c.translate(P.x, P.y); c.rotate(P.tilt);
     c.beginPath(); c.rect(-P.r * 3, front ? 0 : -P.r * 3, P.r * 6, P.r * 3); c.clip();
@@ -443,10 +437,8 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
       c.fillStyle = 'rgba(255,255,255,0.4)';
       for (i = 0; i < 6; i++) { c.beginPath(); c.ellipse(x + (R() - 0.5) * r * 1.5, y + (R() - 0.5) * r * 1.5, r * (0.18 + R() * 0.25), r * 0.045, -0.25, 0, TAU); c.fill(); }
     });
-    // мачта маяка; огонёк и радиоволны — в живом слое
     c.lineCap = 'round'; path(c, [b.x, b.y, m.x, m.y]);
     c.strokeStyle = '#0b1a36'; c.lineWidth = 9; c.stroke(); c.strokeStyle = '#c9d8f2'; c.lineWidth = 4; c.stroke();
-    // подпись с домиком
     var text = won ? 'Тич дома' : 'Главная', col = won ? '70,255,122' : '95,212,255', ly = y + r + 46, w, x0, hx;
     font(c, 26); w = c.measureText(text).width + 70; x0 = x - w / 2; hx = x0 + 22;
     rrect(c, x0, ly - 22, w, 44, 22); c.fillStyle = 'rgba(6,14,30,0.82)'; c.fill();
@@ -459,7 +451,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   function paintPad(c) {
     var x = L.pad.x, y = L.pad.y, R = rng(L.seed ^ 0x9e37), i, cy = y + 96, p = [];
     halo(c, x, y - 30, 60, '95,212,255', 0.26, 2.8);
-    // летающий камень-площадка
     for (i = 0; i < 16; i++) { var a = i / 16 * TAU; p.push([x + cos(a) * 112 * (0.86 + R() * 0.16), cy + sin(a) * (sin(a) < 0 ? 24 : 46) * (0.8 + R() * 0.3)]); }
     smooth(c, p);
     c.fillStyle = stops(c.createLinearGradient(0, cy - 28, 0, cy + 50), [0, '#41629a', 0.35, '#1b2d50', 1, '#070d1a']); c.fill();
@@ -470,7 +461,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     [-60, 6, 52, 10, 74, -2].forEach(function (v, i, a) { if (!(i % 2)) c.drawImage(GS.cyan, x + v - 7, cy + a[i + 1] - 7, 14, 14); });
     fork(c, function () { c.beginPath(); c.moveTo(x, cy - 14); c.lineTo(x, y + 22); c.quadraticCurveTo(x - 4, y - 6, L.tipL.x, L.tipL.y); c.moveTo(x, y + 22); c.quadraticCurveTo(x + 4, y - 6, L.tipR.x, L.tipR.y); }, [L.tipL, L.tipR]);
   }
-  // вилка рогатки; правый рог рисуется ещё раз в живом слое поверх Тича — так он «сидит» в рогатке
+  // правый рог вилки ещё раз рисуется поверх Тича — он «сидит» в рогатке
   function fork(c, shape, tips) {
     c.lineCap = c.lineJoin = 'round';
     shape(); c.strokeStyle = '#0a1226'; c.lineWidth = 15; c.stroke();
@@ -478,7 +469,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     c.save(); c.translate(-2, -1); shape(); c.strokeStyle = 'rgba(255,255,255,0.6)'; c.lineWidth = 2; c.stroke(); c.restore();
     tips.forEach(function (t) { c.drawImage(GS.cyan, t.x - 16, t.y - 16, 32, 32); c.fillStyle = '#e6f8ff'; circle(c, t.x, t.y, 5); c.fill(); });
   }
-  // сетка пространства прогибается к планетам — видно, где тянет сильнее
+  // сетка прогибается к планетам
   function warp(x, y) {
     for (var i = 0, ox = 0, oy = 0, b = L.bodies; i < b.length; i++) {
       var B = b[i], dx = B.x - x, dy = B.y - y, d = M.sqrt(dx * dx + dy * dy) + 1e-3, m = min(d * 0.6, B.r * B.r * 1.5 / (d + B.r * 0.3));
@@ -496,7 +487,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     c.strokeStyle = stops(c.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, max(W, H) * 0.7), [0, 'rgba(120,170,255,0.11)', 1, 'rgba(120,170,255,0.03)']);
     c.lineWidth = 1.3; c.stroke();
   }
-  // верх и низ холстов гаснут — поле растворяется в фоне страницы
   var fades = {};
   function fadeEdges(c, key) {
     var top = 26, bot = touch ? 40 : 64, f = fades[key] || (fades[key] = [stops(c.createLinearGradient(0, 0, 0, top), [0, '#000', 1, 'rgba(0,0,0,0)']), stops(c.createLinearGradient(0, FH - bot, 0, FH), [0, 'rgba(0,0,0,0)', 1, '#000'])]);
@@ -523,7 +513,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
       c.lineWidth = 3; c.lineCap = 'round'; path(c, [m.x, m.y, ex, ey]); c.stroke();
     }
   }
-  // спутник на наклонной орбите; за диском планеты не рисуется
   function orbiter(c, P, o, tilt, front) {
     var a = o.a + decoT * o.w, ex = cos(a) * o.d, ey = sin(a) * o.d * 0.3, x = ex * cos(tilt) - ey * sin(tilt), y = ex * sin(tilt) + ey * cos(tilt);
     if ((sin(a) > 0) !== front || (!front && x * x + y * y < P.r * P.r * 1.1)) return;
@@ -540,7 +529,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
       if (P.belt) P.belt.forEach(function (o) { orbiter(c, P, o, P.tilt + 0.25, !!f); });
       if (P.moon) orbiter(c, P, P.moon, P.tilt, !!f);
     });
-    // «Главная»: расходящиеся кольца, зона посадки, маяк с радиоволнами
     for (i = 0; i < 3; i++) {
       ph = reduce ? 0.25 + i * 0.3 : (t * 0.42 + i / 3) % 1;
       c.strokeStyle = rgba(rc, 0.55 * (1 - ph)); c.lineWidth = 1 + 3 * (1 - ph); circle(c, T.x, T.y, T.r * (1.12 + ph * 1.3)); c.stroke();
@@ -554,7 +542,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   }
   function drawHints(c) {
     var A = L.A, k, ex, ey;
-    // пока никто не трогал — «призрачный палец» показывает, куда тянуть
+    // «призрачный палец», пока игру не трогали
     if (state === 'ready' && !touched && popT > 0.5) {
       var b = L.base - 0.25, bx = -cos(b), by = -sin(b), tt = decoT % 2.4;
       k = reduce ? 0.8 : easeOut(tt / 1.6); ex = A.x + bx * (40 + 70 * k); ey = A.y + by * (40 + 70 * k);
@@ -562,10 +550,10 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
       c.setLineDash([4, 9]); c.lineWidth = 3; c.strokeStyle = '#8fdcff'; path(c, [A.x + bx * 40, A.y + by * 40, ex, ey]); c.stroke(); c.setLineDash([]);
       c.strokeStyle = '#fff'; circle(c, ex, ey, 17); c.stroke();
       c.fillStyle = 'rgba(255,255,255,0.25)'; circle(c, ex, ey, 11); c.fill();
-      font(c, 22); c.fillStyle = '#dff3ff'; c.fillText('тяни', ex, ey - 34);
+      font(c, 22); c.fillStyle = '#dff3ff'; c.fillText('тяни', clamp(A.x + bx * 152, 40, W - 40), A.y + by * 146 - 4);
       c.globalAlpha = 1;
     }
-    // после пяти промахов — кружок «тяни сюда» в точке верного выстрела
+    // после 5 промахов — «тяни сюда»
     if (misses >= 5 && (state === 'ready' || state === 'aim')) {
       ex = A.x - cos(L.sol.ang) * L.sol.p * PULL; ey = A.y - sin(L.sol.ang) * L.sol.p * PULL;
       c.strokeStyle = c.fillStyle = 'rgba(255,203,107,0.9)'; c.lineWidth = 3; c.setLineDash([6, 6]);
@@ -575,7 +563,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     }
   }
   function pullInfo() { return { ang: atan2(-pull.y, -pull.x), p: min(1, hyp(pull.x, pull.y) / PULL) }; }
-  // пунктир: тот же расчёт, что и полёт, на ~1,3 с вперёд (после трёх промахов — на 3,2 с)
+  // пунктир: та же физика на 1–1,3 с вперёд, после 3 промахов — 3,2 с
   function drawPreview(c) {
     var pi = pullInfo(), p = prev.pts, i, n, x, y, key = pi.ang.toFixed(5) + pi.p.toFixed(5) + (misses >= 3);
     if (pi.p < 0.14) return;
@@ -592,7 +580,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     if (pi.p < 0.02) return;
     col = pi.p < 0.14 ? '163,179,204' : pi.p < 0.75 ? '95,212,255' : pi.p < 0.95 ? '255,203,107' : '255,110,90';
     c.strokeStyle = rgba(col, 0.95); c.lineWidth = 6; c.lineCap = 'round'; c.beginPath(); c.arc(A.x, A.y, PULL, back - 0.5 * pi.p, back + 0.5 * pi.p); c.stroke();
-    // сила — табличкой над головой Тича
     x = clamp(A.x + pull.x, 50, W - 50); y = clamp(A.y + pull.y - H_PAD * 0.62, 30, H - 30); txt = pi.p < 0.14 ? 'слабо' : round(pi.p * 100) + '%';
     font(c, 24); w = c.measureText(txt).width + 24;
     rrect(c, x - w / 2, y - 17, w, 34, 17); c.fillStyle = 'rgba(6,14,30,0.82)'; c.fill();
@@ -612,19 +599,17 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
         if (d > 0.5) { ux = pull.x / d; uy = pull.y / d; }
         px += pull.x; py += pull.y; sc = 1 - 0.06 * k; r = clamp(atan2(-pull.y, -pull.x) + PI / 2, -1.2, 1.2) * 0.4 * k;
       }
-      // задняя резинка — за Тичем, передняя — перед ним; карман держит за спину (в покое — под ногами)
       var ax = px + ux * 22, ay = py + uy * 22 + 44 * (1 - k), nx = d > 0.5 ? uy * 16 : 16, ny = d > 0.5 ? -ux * 16 : 0;
       band(c, [TL.x, TL.y, ax, ay], k);
       c.strokeStyle = '#163a6e'; c.lineWidth = 10; path(c, [ax - nx, ay - ny, ax + nx, ay + ny]); c.stroke();
       drawSpr(c, spr('idea', H_PAD), px, py, H_PAD * sc, r);
       band(c, [ax, ay, TP.x, TP.y], k);
     } else {
-      // после выстрела резинка дрожит и затихает
       var tw = reduce ? 0 : sin(twang * 42) * M.exp(-twang * 6) * 26;
       band(c, [TL.x, TL.y, A.x + cos(twAng) * tw, A.y + 50 + sin(twAng) * tw, TP.x, TP.y], 0);
     }
     fork(c, function () { c.beginPath(); c.moveTo(x + 3, y + 12); c.quadraticCurveTo(x + 4, y - 6, TP.x, TP.y); }, [TP]);
-    // промах: испуганный Тич выглядывает из-за камня площадки
+    // промах: испуганный Тич выглядывает из-за камня
     if (state === 'oops') {
       var cy = y + 74, up = stT < 0.24 ? easeOut(stT / 0.24) : stT > 1.2 ? 1 - easeOut((stT - 1.2) / 0.25) : 1, sx = x - 70 + (reduce || stT < 0.2 || stT > 1 ? 0 : sin(stT * 46) * 1.6);
       c.save(); c.beginPath(); c.rect(sx - 120, cy - 400, 240, 400); c.clip();
@@ -642,7 +627,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     var T = L.tgt, k, a, h;
     if (state === 'fly') { h = H_PAD + (H_FLY - H_PAD) * easeOut(stT / 0.2); drawSpr(c, spr('idea', h > H_FLY + 1 ? H_PAD : H_FLY), fl.x, fl.y, h, rot); }
     else if (state === 'land') {
-      // приземлился — бежит по поверхности на макушку планеты
       k = easeOut(stT / LAND_DUR); a = -PI / 2 - landFrom; a = landFrom + atan2(sin(a), cos(a)) * k; h = T.r + H_FLY * 0.42;
       drawSpr(c, spr('idea', H_FLY), T.x + cos(a) * h, T.y + sin(a) * h, H_FLY, a + PI / 2 + (1 - k) * sin(stT * 30) * 0.1);
     } else if (state === 'won') {
@@ -666,7 +650,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
       c.restore();
     });
   }
-  // Тич за краем поля — стрелка у края показывает, где он
   function drawOffscreen(c) {
     if (state !== 'fly' || (fl.x > 0 && fl.x < W && fl.y > 0 && fl.y < H)) return;
     var x = clamp(fl.x, 40, W - 40), y = clamp(fl.y, 40, H - 40);
@@ -683,7 +666,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     if (state === 'aim') drawPreview(c);
     drawTrail(c); drawPad(c); drawFlyer(c); drawFx(c); drawOffscreen(c);
     if (state === 'aim') drawPower(c);
-    fadeEdges(c, 'g');
+    if (state === 'aim' || state === 'fly' || parts.length || debris.length || words.length) fadeEdges(c, 'g'); // у краёв бывает только Тич и частицы
   }
 
   /* ---------- события игры ---------- */
@@ -693,7 +676,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     addRing(x, y, 8, 620, 2.4, '255,203,107', 7); addRing(x, y, 4, 300, 1.6, '255,120,80', 4);
     emit(x, y, 70, { sp: 560, min: 60, col: ['gold', 'orange', 'red', 'white', 'gold'], life: 0.9, size: 30, drag: 0.92 });
     emit(x, y, 18, { sp: 180, col: ['cyan', 'blue'], life: 1.2, size: 22, drag: 0.95 });
-    // разлетаются «детальки» — кусочки синего худи и белого корпуса
     for (var i = 0; i < (reduce ? 6 : 14); i++) {
       var a = rnd() * TAU, v = 120 + rnd() * 380;
       debris.push({ x: x, y: y, vx: cos(a) * v, vy: sin(a) * v, r: rnd() * TAU, vr: (rnd() - 0.5) * 16, life: 1, w: 6 + rnd() * 10, h: 4 + rnd() * 6, col: ['#1055cb', '#eef3ff', '#5fd4ff', '#2a6ae0', '#fff'][i % 5] });
@@ -729,7 +711,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   function toReady(pop) { state = 'ready'; stT = 0; popT = pop ? 0 : 9; grab = null; field.classList.remove('is-aiming'); }
   function fire() {
     var pi = pullInfo();
-    if (pi.p < 0.14) { toReady(); kick(); return; } // слишком слабо — не считается
+    if (pi.p < 0.14) { toReady(); kick(); return; }
     field.classList.remove('is-aiming');
     kAng = pi.ang; kP = round(pi.p * 40) / 40; lastShot = pi;
     tries++; elTries.textContent = tries; elPill.classList.remove('is-bump'); void elPill.offsetWidth; elPill.classList.add('is-bump');
@@ -760,7 +742,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
       cx = clamp(fl.x, 60, W - 60); cy = clamp(fl.y, 60, H - 60);
       emit(cx, cy, 30, { sp: 260, col: ['cyan', 'white', 'violet'], life: 0.8, size: 22 }); word('МИМО!', cx, cy, '#9fe8ff', '#5f7dff'); txt = pick(LOST);
     } else { boom(fl.x, fl.y, 'ВЖУХ!'); txt = 'Тич закружился на орбите и забыл, куда летел. Возвращаем на старт!'; }
-    // с третьего промаха — подсказка: пунктир длиннее и куда поправить прицел
     if (misses >= 3) {
       dA = atan2(sin(L.sol.ang - lastShot.ang), cos(L.sol.ang - lastShot.ang));
       tip = abs(dA) > 0.05 ? (dA < 0 ? 'целься выше ↑' : 'целься ниже ↓') : abs(L.sol.p - lastShot.p) > 0.05 ? (L.sol.p > lastShot.p ? 'тяни сильнее' : 'тяни слабее') : 'почти! ещё чуть-чуть точнее';
@@ -786,7 +767,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     if (state !== 'fly' && trail.length) trail.splice(0, 6);
     if (state === 'fly') updFly(dt);
     else if (state === 'land' && stT >= LAND_DUR) {
-      // Тич дома: салют, «Тич дома!», главная кнопка зовёт (без автоматического перехода)
+      // победа: салют, главная кнопка зовёт (без автоперехода)
       state = 'won'; stT = 0; nextFw = decoT + 3; fireworks(reduce ? 2 : 6);
       emit(L.tgt.x, L.tgt.y - L.tgt.r - 50, 30, { sp: 260, col: ['green', 'gold', 'white'], life: 0.9, size: 22 });
       elWin.hidden = false; elWinT.innerHTML = 'Тич дома! <em>Теперь ваша очередь →</em>';
@@ -808,7 +789,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     if (!reduce) {
       if (!meteor && decoT > nextMeteor) { meteor = { x: W * (0.3 + rnd() * 0.7), y: -20, vx: -700 - rnd() * 400, vy: 380 + rnd() * 200, life: 1 }; nextMeteor = decoT + 5 + rnd() * 7; }
       if (meteor) { meteor.x += meteor.vx * dt; meteor.y += meteor.vy * dt; if ((meteor.life -= dt * 0.9) <= 0) meteor = null; }
-      // параллакс звёзд за курсором — сдвигом готового слоя
       if (abs(par.x - par.tx) + abs(par.y - par.ty) > 0.002) { par.x += (par.tx - par.x) * 0.06; par.y += (par.ty - par.y) * 0.06; cvS.style.transform = 'translate3d(' + (-par.x * 14).toFixed(1) + 'px,' + (-par.y * 10).toFixed(1) + 'px,0)'; }
     }
   }
@@ -818,23 +798,23 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     var dt = min(0.05, max(0, (now - lastT) / 1000)); lastT = now;
     if (!reduce) {
       decoT += dt;
-      // устройство не успевает (кадр дольше 26 мс) — частиц и мерцающих звёзд меньше, один-два раза
+      // кадр дольше 26 мс — частиц меньше
       if (cuts < 2 && dt > 0 && ++fN && (fSum += dt) && fN >= 90) { if (fSum / fN > 0.026) { cuts++; quality *= 0.6; twinkles.length = round(twinkles.length / 2); } fN = fSum = 0; }
     }
     update(dt); render();
-    // reduced motion: кадры идут, только пока что-то происходит после действия пользователя
+    // reduced motion: кадры — только пока идёт действие
     if (visible && !doc.hidden && (!reduce || busy())) raf = requestAnimationFrame(frame);
   }
   function kick() { if (raf || !L) return; lastT = performance.now(); raf = requestAnimationFrame(frame); }
 
-  /* ---------- управление: мышь и палец (за Тича — как рогатку; в любом месте поля — относительным жестом) ---------- */
+  /* ---------- мышь и палец: за Тича или жестом в любом месте поля ---------- */
   function toWorld(e) { var r = field.getBoundingClientRect(); return { x: (e.clientX - r.left) / U, y: (e.clientY - r.top) / U }; }
   function setPull(x, y) { var d = hyp(x, y), k = d > PULL ? PULL / d : 1; pull.x = x * k; pull.y = y * k; }
   field.addEventListener('pointerdown', function (e) {
     if (e.button > 0 || !L || (e.target.closest && e.target.closest('a, button'))) return;
     var w = toWorld(e), dx = w.x - L.A.x, dy = w.y - L.A.y, abs0 = dx * dx + dy * dy < GRAB * GRAB;
     touched = true;
-    if (state === 'won') { burst(w.x, w.y); kick(); return; } // после победы — салют по касанию
+    if (state === 'won') { burst(w.x, w.y); kick(); return; }
     if (state !== 'ready' && !(state === 'aim' && aimMode === 'key')) return;
     grab = { id: e.pointerId, abs: abs0, sx: w.x, sy: w.y };
     try { field.setPointerCapture(e.pointerId); } catch (er) { }
@@ -852,7 +832,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   field.addEventListener('pointercancel', function (e) { if (grab && e.pointerId === grab.id) { toReady(); kick(); } });
   window.addEventListener('pointermove', function (e) { if (!touch && !reduce) { par.tx = (e.clientX / innerWidth - 0.5) * 2; par.ty = (e.clientY / innerHeight - 0.5) * 2; } }, { passive: true });
 
-  /* ---------- клавиатура: ←/→ угол, ↑/↓ сила, Пробел — пуск, Esc — отмена ---------- */
+  /* ---------- клавиатура ---------- */
   function keyAim(dA, dP) {
     if (state === 'ready') { state = 'aim'; aimMode = 'key'; stT = 0; }
     if (state !== 'aim' || aimMode !== 'key') return;
@@ -872,14 +852,14 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     } else if (k === 'Escape' && state === 'aim') { toReady(); kick(); }
   });
 
-  /* ---------- «Ещё раз»: планеты переставляются, новая карта снова проверяется на проходимость ---------- */
+  /* ---------- «Ещё раз»: новая проверенная карта ---------- */
   $('again').addEventListener('click', function (e) {
     seed = (rnd() * 1e9) | 0; toReady(1); tries = misses = 0; lastShot = null;
     parts.length = debris.length = rings.length = words.length = rockets.length = 0;
     L = makeLevel(seed); onLevel();
     elTries.textContent = '0'; elWin.hidden = true; elCall.classList.remove('is-on');
     say('Планеты переставлены — новый маршрут для Тича!');
-    if (!e.detail) try { field.focus({ preventScroll: true }); } catch (er) { } // с клавиатуры — сразу целиться стрелками
+    if (!e.detail) try { field.focus({ preventScroll: true }); } catch (er) { }
     render(); kick();
   });
 
@@ -898,11 +878,11 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     while (n--) twinkles.push({ x: R() * W, y: R() * H, r: (5 + R() * 6) / (U * 2), ph: R() * TAU, sp: 0.6 + R() * 1.8 });
     paintStatic();
   }
-  // мир масштабируется под поле: площадка и цель всегда видны
+  // мир масштабируется под поле
   function setup() {
     var r = field.getBoundingClientRect();
     FW = r.width; FH = r.height; U = min(FH / 760, FW / 640); W = FW / U; H = FH / U;
-    PULL = landscape() ? 170 : 132; // на телефоне тянуть ближе — под палец
+    PULL = landscape() ? 170 : 132;
     DPR = min(devicePixelRatio || 1, touch ? 1.5 : 2);
     cvB.width = cvG.width = round(FW * DPR); cvB.height = cvG.height = round(FH * DPR);
     cache = {}; fades = {};
@@ -924,9 +904,8 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   doc.addEventListener('visibilitychange', function () { if (!doc.hidden) kick(); });
   setBest(); setup(); lastW = FW; lastH = FH;
   if (!reduce) kick();
-  // подписи на холсте — шрифтом Onest, как только он загрузится
   if (doc.fonts && doc.fonts.load) doc.fonts.load('700 26px Onest', 'Главная Тич дома БУМ').then(function () { if (L) { paintStatic(); if (!raf) render(); } }, function () { });
-  // для автопроверки: ?debug открывает состояние игры и расчёт выстрела
+  // ?debug — для автопроверки
   if (/[?&]debug\b/.test(location.search)) window.__orbit = {
     info: function () { return { state: state, tries: tries, misses: misses, U: U, W: W, H: H, A: L.A, tgt: { x: L.tgt.x, y: L.tgt.y, r: L.tgt.r }, planets: L.planets.length, sol: L.sol, PULL: PULL, base: L.base, seed: L.seed }; },
     test: function (a, p) { return shoot(L, a, p, MAXT); },

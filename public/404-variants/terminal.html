@@ -155,7 +155,7 @@
   .field input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; opacity: 0; font: inherit; font-size: 16px; cursor: text; }
   .mirror { display: block; white-space: pre-wrap; word-break: break-all; color: var(--hi); }
   .cur { display: inline-block; min-width: 0.62em; line-height: 1.25; background: var(--c); color: var(--bg0); text-shadow: none; box-shadow: 0 0 10px rgba(var(--rgb), 0.75); animation: blink 1.06s steps(1) infinite; }
-  .ph { color: var(--dim); margin-left: 1ch; }
+  .ph { color: var(--dim); margin-left: 1ch; word-break: normal; }
   .away .cur { background: transparent; color: inherit; box-shadow: inset 0 0 0 1px var(--c); animation: none; }
   .prompt:focus-within .field { box-shadow: 0 2px 0 -1px rgba(var(--rgb), 0.55); }
   .touch .prompt:focus-within { border-color: var(--c); box-shadow: 0 0 18px rgba(var(--rgb), 0.25); }
@@ -529,7 +529,7 @@
     }
 
     /* ---------- строка ввода ---------- */
-    var PH = touch ? 'нажмите, чтобы печатать' : 'наберите help и нажмите Enter';
+    var PH = touch ? 'нажмите и печатайте' : 'наберите help и нажмите Enter';
     function render() {
       var v = cmd.value, f = D.activeElement === cmd;
       var s = f && cmd.selectionStart != null ? cmd.selectionStart : v.length;
@@ -1009,17 +1009,17 @@
         g.setTransform(dpr, 0, 0, dpr, 0, 0);
         var cs = getComputedStyle(html), col = cs.getPropertyValue('--c').trim() || '#7fe3ff', hi = cs.getPropertyValue('--hi').trim() || '#fff';
         var fs = w < 640 ? 14 : 17, n = Math.ceil(w / fs), R = Math.ceil(h / fs), y = [], sp = [], acc = [], last = [];
-        for (var i = 0; i < n; i++) { y[i] = -Math.floor(Math.random() * R * 0.4); sp[i] = 0.5 + Math.random() * 0.7; acc[i] = 0; last[i] = ''; }
+        for (var i = 0; i < n; i++) { y[i] = -Math.floor(Math.random() * R * 0.4); sp[i] = 0.6 + Math.random() * 0.7; acc[i] = 0; last[i] = ''; }
         g.font = fs + 'px ' + MONO; g.textBaseline = 'top'; g.textAlign = 'center';
         cv.style.display = 'block'; void cv.offsetWidth;
         cv.classList.add('on'); glass.classList.add('matrixing');
         var t0 = performance.now(), prev = 0, raf = 0, ending = false;
         function frame(now) {
           raf = requestAnimationFrame(frame);
-          if (now - prev < 48) return;
+          if (now - prev < 62) return;
           prev = now;
           g.globalCompositeOperation = 'destination-out';
-          g.fillStyle = 'rgba(0,0,0,0.09)'; g.fillRect(0, 0, w, h);
+          g.fillStyle = 'rgba(0,0,0,0.11)'; g.fillRect(0, 0, w, h);
           g.globalCompositeOperation = 'source-over';
           for (var i = 0; i < n; i++) {
             acc[i] += sp[i];
