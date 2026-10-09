@@ -1,0 +1,1144 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#060b14" />
+  <title>Страница не найдена — TEACHNET</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <!-- 404 «Терминал Тича»: ретро-ЭЛТ TEACHNET OS v4.04 с живой командной строкой и видеосвязью с Тичем.
+       Всё встроено (CSP), пути абсолютные. Без JS — заголовок, текст и кнопки; reduced motion — без анимации. -->
+  <script>
+    (function (h) {
+      h.className += ' js';
+      try { var t = localStorage.getItem('tn404-theme'); if (t === 'amber' || t === 'green') h.setAttribute('data-theme', t); } catch (e) {}
+    })(document.documentElement);
+  </script>
+  <style>
+  @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-latin-700.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-2199, U+2713; }
+  @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-cyrillic-700.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+  @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-latin-400.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-cyrillic-400.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+  @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-latin-500.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-cyrillic-500.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+
+  /* три «люминофора»: циан (по умолчанию), янтарь, зелёный — команда color */
+  :root {
+    --c: #7fe3ff; --rgb: 127, 227, 255; --hi: #e4faff; --txt: #b2e9f8; --dim: #5fa6bd;
+    --bg0: #02080c; --bg1: #071820; --err: #ff6b7d;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+  html[data-theme="amber"] { --c: #ffc46b; --rgb: 255, 196, 107; --hi: #fff1d9; --txt: #f3d3a1; --dim: #c08b48; --bg0: #0b0702; --bg1: #1b1106; }
+  html[data-theme="green"] { --c: #5dff8f; --rgb: 93, 255, 143; --hi: #ddffe7; --txt: #aef5c4; --dim: #46ad69; --bg0: #020904; --bg1: #06190c; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  html { background: #020408; -webkit-text-size-adjust: 100%; }
+  body {
+    min-height: 100vh; min-height: 100svh;
+    color: var(--c);
+    font: 15px/1.6 var(--mono);
+    background: radial-gradient(90% 70% at 50% 45%, rgba(var(--rgb), 0.09), transparent 70%), #020408;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; }
+  ::selection { background: var(--c); color: var(--bg0); text-shadow: none; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+  :focus-visible { outline: 2px solid var(--hi); outline-offset: 3px; }
+
+  /* ---------- корпус монитора ---------- */
+  .room { min-height: 100vh; min-height: 100svh; display: flex; justify-content: center; padding: clamp(6px, 1.5vw, 22px); }
+  .monitor {
+    position: relative; flex: 1; min-width: 0; max-width: 1880px;
+    display: flex; flex-direction: column;
+    padding: clamp(7px, 1.3vw, 20px) clamp(7px, 1.3vw, 20px) 0;
+    border-radius: clamp(20px, 2.6vw, 38px);
+    background: linear-gradient(165deg, #1c2636 0%, #121b28 40%, #0b111b 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), inset 0 0 0 1px rgba(255, 255, 255, 0.03), inset 0 -3px 0 rgba(0, 0, 0, 0.45),
+      0 40px 90px -20px rgba(0, 0, 0, 0.85), 0 0 160px -30px rgba(var(--rgb), 0.28);
+  }
+  .glass {
+    position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column;
+    border-radius: clamp(14px, 2vw, 30px); overflow: hidden; isolation: isolate;
+    background: radial-gradient(120% 95% at 50% 42%, var(--bg1) 0%, var(--bg0) 72%);
+    box-shadow: 0 0 0 2px #03060a, 0 0 0 6px #0a0f17, 0 0 0 7px rgba(255, 255, 255, 0.05);
+  }
+  .chin { display: flex; align-items: center; gap: 14px; height: clamp(34px, 6vh, 56px); padding: 0 clamp(6px, 1vw, 16px); }
+  .chin__brand { font: 700 13px/1 'Onest', system-ui, sans-serif; letter-spacing: 0.34em; color: #2c3c54; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.06), 0 -1px 0 rgba(0, 0, 0, 0.7); white-space: nowrap; }
+  .chin__brand small { font-size: 10px; letter-spacing: 0.2em; margin-left: 0.5em; color: #27354b; }
+  .chin__vents { flex: 1; max-width: 170px; height: 8px; margin-left: auto; border-radius: 2px; background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0 3px, transparent 3px 7px); }
+  .chin__led { width: 8px; height: 8px; border-radius: 50%; background: #46ff7a; box-shadow: 0 0 6px #46ff7a, 0 0 14px rgba(70, 255, 122, 0.55); transition: background 0.1s, box-shadow 0.1s; }
+  .chin__led.busy { background: #ffcb6b; box-shadow: 0 0 6px #ffcb6b, 0 0 14px rgba(255, 203, 107, 0.6); }
+  .chin__pwr { width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #2a3648, #0d131d); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.6); }
+
+  /* ---------- экран ---------- */
+  .screen {
+    position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; min-height: 0;
+    font-size: clamp(14px, 0.42vw + 0.55vh + 4px, 23px);
+    text-shadow: 0 0 1px rgba(var(--rgb), 0.8), 0 0 9px rgba(var(--rgb), 0.4);
+    transform-origin: 50% min(50%, 45vh);
+  }
+  .bar {
+    display: flex; align-items: center; gap: 18px;
+    padding: 9px clamp(14px, 2.2vw, 32px);
+    border-bottom: 1px solid rgba(var(--rgb), 0.22);
+    background: linear-gradient(rgba(var(--rgb), 0.08), rgba(var(--rgb), 0.02));
+  }
+  .bar img { display: block; height: 2em; width: auto; filter: drop-shadow(0 0 6px rgba(var(--rgb), 0.45)); }
+  .bar__title { flex: 1; text-align: center; font-size: 0.8em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar__right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+  .bar__phone { text-decoration: none; font-size: 0.93em; white-space: nowrap; }
+  .bar__phone:hover { color: var(--hi); }
+  .bar__clock { font-size: 0.87em; color: var(--dim); padding-left: 16px; border-left: 1px solid rgba(var(--rgb), 0.25); }
+
+  .main { flex: 1; display: flex; flex-direction: column; gap: 16px; min-height: 0; padding: 16px clamp(14px, 2.2vw, 32px) 12px; }
+  .pane { min-width: 0; position: relative; }
+
+  /* лог загрузки */
+  .boot { margin: 0; font-size: 0.9em; color: var(--txt); }
+  .boot p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .boot .os { color: var(--dim); }
+  .tag { color: var(--c); white-space: pre; }
+  .tag--wait { color: var(--dim); }
+  .tag--fail { background: var(--err); color: #1c0307; text-shadow: none; box-shadow: 0 0 14px rgba(255, 90, 110, 0.55); }
+  .boot .err { color: var(--err); text-shadow: 0 0 1px rgba(255, 107, 125, 0.8), 0 0 10px rgba(255, 90, 110, 0.5); }
+
+  /* «404» из блочных символов + RGB-копии для глитча */
+  .art { position: relative; width: max-content; max-width: 100%; margin: clamp(10px, 2.4vh, 28px) 0 clamp(12px, 2.4vh, 26px); font-size: clamp(12px, min(2.5vw, 3.5vh), 64px); cursor: crosshair; }
+  .big { margin: 0; font: inherit; line-height: 1; font-family: var(--mono); white-space: pre; color: var(--c);
+    text-shadow: 0.3em 0.24em 0 rgba(var(--rgb), 0.12), 0 0 0.3em rgba(var(--rgb), 0.6), 0 0 1.1em rgba(var(--rgb), 0.28); }
+  .big--r, .big--b { position: absolute; left: 0; top: 0; opacity: 0; pointer-events: none; text-shadow: none; }
+  .big--r { color: #ff2d55; }
+  .big--b { color: #2f7dff; }
+  .art.glitch .big--r, .art.glitch .big--b { opacity: 0.7; }
+  .art.glitch .big { text-shadow: 0.3em 0.24em 0 rgba(var(--rgb), 0.12), 0 0 0.3em rgba(var(--rgb), 0.6); }
+
+  .title { margin: 0; font: 700 clamp(21px, 2.2vw, 2.1em)/1.2 var(--mono); letter-spacing: -0.01em; color: var(--hi);
+    text-shadow: -1.5px 0 rgba(255, 45, 85, 0.45), 1.5px 0 rgba(47, 125, 255, 0.45), 0 0 16px rgba(var(--rgb), 0.6); }
+  .title__mark { color: var(--c); }
+  .title.typing .title__vis::after { content: '█'; margin-left: 2px; animation: blink 0.5s steps(1) infinite; }
+  .lead { margin: 12px 0 0; max-width: 74ch; color: var(--txt); text-wrap: pretty; }
+
+  /* терминальные кнопки [ … ] с пиксельной тенью */
+  .actions { display: flex; flex-wrap: wrap; gap: 14px 20px; margin-top: 24px; }
+  .btn {
+    position: relative; display: inline-flex; align-items: center; gap: 0.8ch;
+    padding: 13px 18px; text-decoration: none;
+    font: 700 0.95em/1.2 var(--mono); letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--c); background: rgba(var(--rgb), 0.06); border: 1px solid rgba(var(--rgb), 0.65);
+    box-shadow: 6px 6px 0 rgba(var(--rgb), 0.14);
+    transition: transform 0.12s, box-shadow 0.12s, background-color 0.12s;
+  }
+  .btn::before { content: '['; opacity: 0.55; }
+  .btn::after { content: ']'; opacity: 0.55; }
+  .btn:hover { transform: translate(2px, 2px); box-shadow: 4px 4px 0 rgba(var(--rgb), 0.22); background-color: rgba(var(--rgb), 0.14); }
+  .btn:active { transform: translate(6px, 6px); box-shadow: 0 0 0 rgba(var(--rgb), 0); }
+  .btn--pri { background: var(--c); color: #03121a; border-color: var(--c); text-shadow: none; box-shadow: 6px 6px 0 rgba(var(--rgb), 0.3), 0 0 28px rgba(var(--rgb), 0.45); }
+  .btn--pri:hover { background-color: var(--hi); box-shadow: 4px 4px 0 rgba(var(--rgb), 0.35), 0 0 34px rgba(var(--rgb), 0.55); }
+  .btn__k { font-size: 0.78em; padding: 1px 6px; border: 1px solid currentColor; border-radius: 3px; opacity: 0.7; letter-spacing: 0; }
+
+  /* командная строка: настоящий input прозрачный, видна «зеркальная» строка с блочным курсором */
+  .hint { margin: 26px 0 6px; color: var(--dim); font-size: 0.9em; }
+  .hint b { color: var(--c); font-weight: 400; }
+  .out { font-size: 0.95em; }
+  .blk { margin: 0 0 12px; }
+  .ln { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.6em; color: var(--txt); }
+  .echo { color: var(--hi); margin-top: 4px; }
+  .ps1 { white-space: nowrap; color: var(--c); }
+  .ps1 b { color: var(--hi); font-weight: 400; }
+  .ps1 i { font-style: normal; color: var(--dim); }
+  .prompt { display: flex; align-items: baseline; gap: 1ch; margin: 2px 0 6px; cursor: text; }
+  .field { position: relative; flex: 1; min-width: 0; }
+  .field input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; opacity: 0; font: inherit; font-size: 16px; cursor: text; }
+  .mirror { display: block; white-space: pre-wrap; word-break: break-all; color: var(--hi); }
+  .cur { display: inline-block; min-width: 0.62em; line-height: 1.25; background: var(--c); color: var(--bg0); text-shadow: none; box-shadow: 0 0 10px rgba(var(--rgb), 0.75); animation: blink 1.06s steps(1) infinite; }
+  .ph { color: var(--dim); margin-left: 1ch; word-break: normal; }
+  .away .cur { background: transparent; color: inherit; box-shadow: inset 0 0 0 1px var(--c); animation: none; }
+  .prompt:focus-within .field { box-shadow: 0 2px 0 -1px rgba(var(--rgb), 0.55); }
+  .touch .prompt:focus-within { border-color: var(--c); box-shadow: 0 0 18px rgba(var(--rgb), 0.25); }
+  .dimc { color: var(--dim); }
+  .errc { color: var(--err); text-shadow: 0 0 8px rgba(255, 90, 110, 0.5); }
+  .hic { color: var(--hi); }
+  .k { padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: var(--hi); text-decoration: underline dotted rgba(var(--rgb), 0.7); text-underline-offset: 3px; }
+  .k:hover { background: var(--c); color: var(--bg0); text-shadow: none; text-decoration: none; }
+  .two { display: grid; grid-template-columns: 24ch minmax(0, 1fr); gap: 0 1ch; }
+  .crs { display: flex; align-items: baseline; gap: 1ch; max-width: 60ch; }
+  .crs .dots { flex: 1; min-width: 2ch; border-bottom: 1px dotted rgba(var(--rgb), 0.45); transform: translateY(-0.3em); }
+  .tichart { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 3ch; margin: 6px 0; }
+  .tichart pre { margin: 0; font: 1em/1 var(--mono); text-shadow: 0 0 8px rgba(var(--rgb), 0.35); }
+  .tichart .ant { animation: led 1.2s steps(1) infinite; }
+  .tichart .say { flex: 1 1 26ch; color: var(--hi); }
+
+  /* ---------- видеосвязь с Тичем ---------- */
+  .call { display: flex; flex-direction: column; gap: 12px; min-height: 0; order: -1; }
+  .call__win {
+    display: grid; grid-template-columns: clamp(86px, 24vw, 150px) minmax(0, 1fr); grid-template-rows: auto auto 1fr;
+    border: 1px solid rgba(var(--rgb), 0.4); background: rgba(var(--rgb), 0.035);
+    box-shadow: 0 0 0 4px rgba(var(--rgb), 0.05), inset 0 0 30px rgba(var(--rgb), 0.08);
+  }
+  .call__head { display: flex; align-items: center; gap: 8px; padding: 0.4em 0.7em; font-size: 0.73em; letter-spacing: 0.16em; text-transform: uppercase; color: var(--txt); border-bottom: 1px solid rgba(var(--rgb), 0.28); background: rgba(var(--rgb), 0.08); }
+  .rec { width: 8px; height: 8px; flex: 0 0 auto; border-radius: 50%; background: #ff4d5e; box-shadow: 0 0 8px #ff4d5e; animation: blink 1.4s steps(1) infinite; }
+  .call__time { margin-left: auto; color: var(--dim); letter-spacing: 0.08em; }
+  .call__vid {
+    position: relative; grid-row: 1 / 4; display: block; width: 100%; min-height: calc(clamp(86px, 24vw, 150px) * 1.2); padding: 0; border: 0; border-right: 1px solid rgba(var(--rgb), 0.3);
+    overflow: hidden; cursor: pointer; background: radial-gradient(80% 70% at 50% 35%, #24497f 0%, #0d1a33 62%, #060c18 100%);
+  }
+  .cam { position: absolute; inset: 0; }
+  .cam img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; animation: breathe 5s ease-in-out infinite; }
+  .call__vid::after { /* видоискатель: уголки рамки */
+    content: ''; position: absolute; inset: 8px; pointer-events: none; opacity: 0.8;
+    background:
+      linear-gradient(var(--c), var(--c)) left top / 12px 1px, linear-gradient(var(--c), var(--c)) left top / 1px 12px,
+      linear-gradient(var(--c), var(--c)) right top / 12px 1px, linear-gradient(var(--c), var(--c)) right top / 1px 12px,
+      linear-gradient(var(--c), var(--c)) left bottom / 12px 1px, linear-gradient(var(--c), var(--c)) left bottom / 1px 12px,
+      linear-gradient(var(--c), var(--c)) right bottom / 12px 1px, linear-gradient(var(--c), var(--c)) right bottom / 1px 12px;
+    background-repeat: no-repeat;
+  }
+  .call__vid canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; opacity: 0; transition: opacity 0.15s; }
+  .call.is-noise .call__vid canvas, .js .call:not(.live) .call__vid canvas { opacity: 0.88; }
+  .js .call:not(.live) .cam { opacity: 0; }
+  .bars { position: absolute; right: 12px; top: 12px; display: flex; align-items: flex-end; gap: 2px; z-index: 1; }
+  .bars i { width: 3px; background: var(--c); box-shadow: 0 0 6px rgba(var(--rgb), 0.8); }
+  .bars i:nth-child(1) { height: 4px; } .bars i:nth-child(2) { height: 7px; } .bars i:nth-child(3) { height: 10px; } .bars i:nth-child(4) { height: 13px; }
+  .call.is-noise .bars i:nth-child(n+2), .js .call:not(.live) .bars i:nth-child(n+2) { opacity: 0.2; }
+  .call__cap { display: flex; align-items: center; gap: 8px; padding: 7px 10px 2px; font-size: 0.87em; color: var(--hi); }
+  .call__cap::before { content: ''; width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; background: #46ff7a; box-shadow: 0 0 8px #46ff7a; }
+  .js .call:not(.live) .call__cap::before, .call.is-noise .call__cap::before { background: #ffcb6b; box-shadow: 0 0 8px #ffcb6b; }
+  .call__say { margin: 0; padding: 4px 10px 10px; font-size: 0.87em; line-height: 1.5; color: var(--txt); }
+  .call__say b { color: var(--c); font-weight: 400; }
+  .tips { display: none; padding: 14px 14px 10px; border: 1px dashed rgba(var(--rgb), 0.35); font-size: 0.87em; color: var(--txt); position: relative; }
+  .tips__t { position: absolute; top: -0.8em; left: 10px; margin: 0; padding: 0 6px; background: var(--bg0); color: var(--dim); font-size: 0.8em; letter-spacing: 0.16em; text-transform: uppercase; }
+  .tips p { margin: 0 0 4px; }
+  kbd { display: inline-block; min-width: 2.2em; margin-right: 6px; padding: 0 5px; font: inherit; text-align: center; border: 1px solid rgba(var(--rgb), 0.5); border-bottom-width: 2px; border-radius: 4px; color: var(--hi); }
+
+  /* ---------- нижняя панель: клавиши-команды и разделы сайта ---------- */
+  .dock { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; padding: 12px clamp(14px, 2.2vw, 32px) 14px; border-top: 1px solid rgba(var(--rgb), 0.22); background: rgba(var(--rgb), 0.03); }
+  .keys { display: flex; flex-wrap: wrap; gap: 10px 8px; }
+  .key {
+    min-width: 4em; padding: 0.6em 0.8em; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+    font: 500 0.87em/1.1 var(--mono); letter-spacing: 0.03em; color: var(--c); text-shadow: inherit;
+    background: linear-gradient(180deg, rgba(var(--rgb), 0.14), rgba(var(--rgb), 0.04));
+    border: 1px solid rgba(var(--rgb), 0.5); border-radius: 6px;
+    box-shadow: 0 3px 0 rgba(var(--rgb), 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 0.08s, box-shadow 0.08s, background-color 0.12s;
+  }
+  .key:hover { background-color: rgba(var(--rgb), 0.16); }
+  .key:active, .key.is-down { transform: translateY(3px); box-shadow: 0 0 0 rgba(var(--rgb), 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08); background-color: rgba(var(--rgb), 0.24); }
+  .key--warn { color: var(--err); border-color: rgba(255, 107, 125, 0.55); box-shadow: 0 3px 0 rgba(255, 107, 125, 0.35); }
+  .links { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 0.9em; }
+  .links a { color: var(--txt); text-decoration: none; border-bottom: 1px dashed rgba(var(--rgb), 0.4); }
+  .links a:hover { color: var(--hi); border-bottom-color: var(--hi); }
+
+  /* ---------- стекло: сканлайны, виньетка, блик; мерцание — только opacity ---------- */
+  .fx {
+    position: absolute; inset: 0; z-index: 5; pointer-events: none;
+    background:
+      radial-gradient(130% 100% at 50% 50%, transparent 56%, rgba(0, 0, 0, 0.55) 100%),
+      linear-gradient(155deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.012) 24%, transparent 42%),
+      repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.26) 0 1px, transparent 1px 3px);
+    box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.6), inset 0 0 22px rgba(var(--rgb), 0.1);
+    animation: flick 4.3s steps(1) infinite;
+  }
+  .roll { display: none; position: absolute; left: 0; right: 0; top: 0; height: 170px; z-index: 4; pointer-events: none; background: linear-gradient(180deg, transparent, rgba(var(--rgb), 0.045) 55%, rgba(var(--rgb), 0.07) 62%, transparent); animation: roll 9s linear infinite; }
+  .flash { position: absolute; inset: 0; z-index: 6; pointer-events: none; opacity: 0; background: radial-gradient(closest-side, rgba(var(--rgb), 0.55), rgba(var(--rgb), 0.12)); }
+  .flash.on { animation: flash 0.6s ease-out; }
+  .tears { position: absolute; inset: 0; z-index: 3; pointer-events: none; display: none; }
+  .tears.on { display: block; }
+  .tears i { position: absolute; left: 0; top: 0; width: 100%; height: 1px; transform-origin: 0 0; background: rgba(var(--rgb), 0.32); }
+  .tears i:nth-child(3n) { background: rgba(255, 45, 85, 0.3); }
+  .tears i:nth-child(4n) { background: rgba(47, 125, 255, 0.28); }
+  .mx { position: absolute; left: 0; top: 0; width: 100%; z-index: 2; pointer-events: none; display: none; opacity: 0; transition: opacity 0.5s; }
+  .mx.on { opacity: 1; }
+  .screen { transition: opacity 0.5s; }
+  .matrixing .screen { opacity: 0.14; }
+  /* пока идёт дождь, декоративные анимации под ним спят — меньше работы для видеокарты */
+  .matrixing .fx, .matrixing .roll, .matrixing .cam img, .matrixing .rec, .matrixing .cur { animation-play-state: paused; }
+
+  /* включение ЭЛТ и тряска при глитч-взрыве */
+  .pwr .screen { animation: pwr 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .pwr .flash { animation: flash 0.9s ease-out; }
+  .quake .screen { animation: quake 0.42s steps(2) 3; }
+
+  /* появление элементов при загрузке (если JS упадёт — всё равно покажутся через 7 с) */
+  .js .bt:not(.on) { visibility: hidden; animation: failsafe 0s 7s forwards; }
+  .art.on { animation: scan 0.42s steps(6) both; }
+  .lead.on, .hint.on { animation: steps-in 0.4s steps(4) both; }
+  .actions.on .btn { animation: steps-in 0.32s steps(3) both; }
+  .actions.on .btn + .btn { animation-delay: 0.12s; }
+  html:not(.js) .needs-js { display: none !important; }
+
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes led { 50% { opacity: 0.35; } }
+  @keyframes breathe { 50% { transform: translateY(-3px) scale(1.015); } }
+  @keyframes flick { 0% { opacity: 1; } 7% { opacity: 0.86; } 8% { opacity: 1; } 31% { opacity: 0.93; } 32% { opacity: 1; } 54% { opacity: 0.84; } 55% { opacity: 0.96; } 56% { opacity: 1; } 82% { opacity: 0.92; } 83% { opacity: 1; } }
+  @keyframes roll { from { transform: translateY(-170px); } to { transform: translateY(110vh); } }
+  @keyframes flash { 0% { opacity: 0.75; } 100% { opacity: 0; } }
+  @keyframes pwr { 0% { transform: scale(0.02, 0.004); opacity: 0.4; } 40% { transform: scale(1, 0.004); opacity: 1; } 100% { transform: none; } }
+  @keyframes quake { 0% { transform: translate(-8px, 2px); } 50% { transform: translate(7px, -2px); } 100% { transform: none; } } /* только сдвиг: перекос заставил бы перерисовывать весь экран */
+  @keyframes scan { from { clip-path: inset(-60px -60px 100% -60px); } to { clip-path: inset(-60px); } }
+  @keyframes steps-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes failsafe { to { visibility: visible; } }
+
+  /* ---------- компьютер: монитор во весь экран, лента терминала прокручивается внутри ---------- */
+  @media (min-width: 960px) and (min-height: 600px) {
+    .room { height: 100vh; height: 100svh; }
+    .glass { display: block; }
+    .screen { position: absolute; inset: 0; }
+    .main { display: grid; grid-template-columns: minmax(0, 1fr) clamp(250px, 21vw, 440px); gap: clamp(24px, 2.8vw, 48px); padding-top: clamp(16px, 2.6vh, 26px); }
+    .pane { overflow-y: auto; overscroll-behavior: contain; padding-right: 12px; scrollbar-width: thin; scrollbar-color: rgba(var(--rgb), 0.35) transparent; }
+    .call { order: 0; }
+    .call__win { display: flex; flex-direction: column; min-height: 0; flex: 0 1 auto; }
+    .call__vid { flex: 0 1 auto; min-height: 140px; aspect-ratio: 5 / 6; width: 100%; border-right: 0; border-bottom: 1px solid rgba(var(--rgb), 0.3); }
+    .call__head { order: -1; }
+    .call__cap { padding-top: 9px; }
+    .call__say { min-height: 6.6em; }
+    html:not(.touch) .tips { display: block; }
+    .roll { display: block; }
+  }
+  @media (min-width: 960px) and (max-height: 820px) { .tips { display: none !important; } }
+  @media (min-width: 960px) and (max-height: 700px) { .call__say { min-height: 0; } .boot .os { display: none; } }
+
+  /* ---------- телефон / планшет: обычная прокрутка страницы, клавиатура ничего не ломает ---------- */
+  @media (max-width: 959px), (max-height: 599px) {
+    .art { font-size: min(calc((100vw - 64px) / 20.6), 30px); }
+    .actions { flex-direction: column; align-items: stretch; max-width: 460px; }
+    .btn { justify-content: center; text-align: center; }
+    .touch .prompt { padding: 10px 12px; margin-top: 4px; border: 1px solid rgba(var(--rgb), 0.5); background: rgba(var(--rgb), 0.05); }
+    .two { grid-template-columns: 15ch minmax(0, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .bar__title { display: none; }
+  }
+  @media (max-width: 640px) {
+    .bar { gap: 10px; padding-top: 7px; padding-bottom: 7px; }
+    .bar img { height: 26px; }
+    .bar__title, .bar__clock { display: none; }
+    .bar__phone { font-size: 13px; }
+    .main { padding-top: 12px; gap: 14px; }
+    .ps1 i:first-of-type { display: none; }
+    .keys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; }
+    .key { min-width: 0; padding: 11px 4px; }
+    .links { font-size: 13px; gap: 6px 16px; }
+    .chin__brand { font-size: 11px; }
+    .chin__vents { max-width: 70px; }
+    .tichart pre { font-size: 13px; }
+    .alt { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .roll { display: none !important; }
+  }
+  </style>
+</head>
+<body>
+  <div class="room">
+    <div class="monitor">
+      <div class="glass" id="glass">
+        <div class="screen" id="screen">
+          <header class="bar">
+            <a href="/" aria-label="TEACHNET — на главную"><img src="/images/logo-white.svg" width="102" height="32" alt="TEACHNET" /></a>
+            <span class="bar__title" aria-hidden="true">TEACHNET OS v4.04 · терминал Тича · сеанс гостя</span>
+            <span class="bar__right">
+              <a class="bar__phone" href="tel:+79934151434">+7 (993) 415-14-34</a>
+              <span class="bar__clock needs-js" id="clock" aria-hidden="true">--:--</span>
+            </span>
+          </header>
+
+          <div class="main">
+            <main class="pane" id="pane">
+              <div class="boot bt" id="boot" aria-hidden="true">
+                <p class="os">TEACHNET OS v4.04 · школа инженерии и робототехники · Казань</p>
+                <p><span class="tag">[  OK  ]</span> Загрузка модулей… ✓</p>
+                <p><span class="tag">[  OK  ]</span> Связь с Тичем… ✓</p>
+                <p><span class="tag tag--wait">[  ..  ]</span> Проверка маршрута…</p>
+                <p class="err"><span class="tag tag--fail">[ СБОЙ ]</span> ОШИБКА 404: маршрут не найден</p>
+              </div>
+
+              <div class="art bt" id="art" aria-hidden="true"><pre class="big" id="big">     ▄██     ▄█▀▀▀▀█▄        ▄██
+   ▄█▀██    ██    ▄███     ▄█▀██
+ ▄█▀  ██    ██  ▄█▀ ██   ▄█▀  ██
+██    ██    ██▄█▀   ██  ██    ██
+██████████  ██▀     ██  ██████████
+      ██     ▀█▄▄▄▄█▀         ██</pre></div>
+
+              <h1 class="title bt" id="title"><span class="sr">Ошибка 404: маршрут не найден</span><span class="title__vis" id="tvis" aria-hidden="true"><span class="title__mark">&gt; </span>Ошибка 404: маршрут не&nbsp;найден</span></h1>
+              <p class="lead bt">Ссылка устарела или в&nbsp;адресе закралась опечатка. Тич проверил все провода: такой страницы нет&nbsp;— зато на&nbsp;главной есть всё остальное.</p>
+
+              <div class="actions bt">
+                <a class="btn btn--pri" href="/"><span class="btn__k" aria-hidden="true">↵</span>Вернуться на главную</a>
+                <a class="btn" href="/#lead">Записаться на пробный урок</a>
+              </div>
+
+              <p class="hint bt needs-js" id="hint">Терминал живой: наберите <b>help</b> или нажмите клавишу внизу.</p>
+              <div class="out needs-js" id="out" role="log" aria-live="polite" aria-label="Ответы терминала"></div>
+              <form class="prompt bt needs-js" id="prompt" autocomplete="off">
+                <label class="ps1" for="cmd"><b>гость</b><i>@teachnet</i>:<i>~</i>$</label>
+                <span class="field">
+                  <input id="cmd" name="cmd" type="text" aria-label="Команда терминала" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go" maxlength="80" />
+                  <span class="mirror" id="mirror" aria-hidden="true"></span>
+                </span>
+              </form>
+            </main>
+
+            <aside class="call" id="call" aria-label="Видеосвязь с Тичем">
+              <div class="call__win">
+                <div class="call__head"><span class="rec" aria-hidden="true"></span>Видеосвязь<span class="call__time needs-js" id="ctime" aria-hidden="true">00:00</span></div>
+                <button class="call__vid" id="cvid" type="button" aria-label="Помахать Тичу">
+                  <span class="cam" id="cam"><img id="cimg" src="/images/tich-wink.webp" width="320" height="830" alt="" decoding="async" /></span>
+                  <canvas id="noise" width="64" height="80" aria-hidden="true"></canvas>
+                  <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                </button>
+                <div class="call__cap" id="ccap">Тич на связи</div>
+                <p class="call__say"><b>Тич:</b> <span id="sayt">Привет! Я&nbsp;обыскал все провода&nbsp;— такой страницы нет. Но&nbsp;я&nbsp;знаю дорогу домой!</span></p>
+              </div>
+              <div class="tips needs-js">
+                <p class="tips__t">Подсказка</p>
+                <p><kbd>Tab</kbd>дополнить команду</p>
+                <p><kbd>↑↓</kbd>история команд</p>
+                <p><kbd>Esc</kbd>стереть строку</p>
+              </div>
+            </aside>
+          </div>
+
+          <footer class="dock">
+            <div class="keys needs-js" id="keys" role="group" aria-label="Быстрые команды">
+              <button class="key" type="button" data-cmd="help">help</button>
+              <button class="key" type="button" data-cmd="курсы">курсы</button>
+              <button class="key" type="button" data-cmd="шутка">шутка</button>
+              <button class="key" type="button" data-cmd="тич">тич</button>
+              <button class="key" type="button" data-cmd="matrix">matrix</button>
+              <button class="key key--warn" type="button" data-cmd="404">404</button>
+              <button class="key" type="button" data-cmd="цвет">цвет</button>
+              <button class="key" type="button" data-cmd="главная">главная</button>
+            </div>
+            <nav class="links" aria-label="Разделы сайта">
+              <a href="/#programs">Программы</a>
+              <a href="/electronics">Электроника, 10–15 лет</a>
+              <a href="/tech">Учебная плата TEACHNET UNO</a>
+            </nav>
+          </footer>
+        </div>
+
+        <canvas class="mx" id="mx" aria-hidden="true"></canvas>
+        <div class="tears" id="tears" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="roll" aria-hidden="true"></div>
+        <div class="fx" aria-hidden="true"></div>
+        <div class="flash" id="flash" aria-hidden="true"></div>
+      </div>
+      <div class="chin" aria-hidden="true">
+        <span class="chin__brand">TEACHNET<small>OS v4.04</small></span>
+        <span class="chin__vents"></span>
+        <span class="chin__led" id="led"></span>
+        <span class="chin__pwr"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  'use strict';
+  var D = document, html = D.documentElement;
+  try { main(); } catch (err) { html.classList.remove('js'); if (window.console) console.warn(err); }
+
+  function main() {
+    var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+    var touch = !!(window.matchMedia && matchMedia('(hover: none), (pointer: coarse)').matches);
+    var mqDesk = window.matchMedia ? matchMedia('(min-width: 960px) and (min-height: 600px)') : { matches: true };
+    if (touch) html.classList.add('touch');
+    function $(id) { return D.getElementById(id); }
+    var glass = $('glass'), pane = $('pane'), out = $('out'), form = $('prompt'), cmd = $('cmd'), mirror = $('mirror');
+    var art = $('art'), big = $('big'), bootEl = $('boot'), title = $('title'), tvis = $('tvis');
+    var call = $('call'), cimg = $('cimg'), cam = $('cam'), noise = $('noise'), ccap = $('ccap'), sayt = $('sayt');
+    var ctime = $('ctime'), clock = $('clock'), led = $('led'), keys = $('keys'), tears = $('tears'), flashEl = $('flash');
+    var MONO = getComputedStyle(D.body).fontFamily;
+    var ART = big.textContent;
+    var TITLE = 'Ошибка 404: маршрут не найден';
+
+    /* ---------- мелочи ---------- */
+    function el(tag, cls, txt) { var e = D.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+    function wait(ms) { return new Promise(function (r) { setTimeout(r, ms || 0); }); }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function rnd(a) { return a[(Math.random() * a.length) | 0]; }
+    function desk() { return mqDesk.matches; }
+    function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+    /* RGB-копии большого «404» */
+    var bigR = big.cloneNode(true), bigB = big.cloneNode(true);
+    bigR.removeAttribute('id'); bigB.removeAttribute('id');
+    bigR.className = 'big big--r'; bigB.className = 'big big--b';
+    art.appendChild(bigR); art.appendChild(bigB);
+    function setArt(t) { big.textContent = bigR.textContent = bigB.textContent = t; }
+
+    /* ---------- строки вывода ---------- */
+    // строка: текст или массив частей; часть: 'текст' | узел | {t, c, href, cmd}
+    function part(p) {
+      if (p == null) return null;
+      if (typeof p === 'string') return D.createTextNode(p);
+      if (p.nodeType) return p;
+      var n;
+      if (p.href) { n = el('a', 'k', p.t); n.href = p.href; }
+      else if (p.cmd) { n = el('button', 'k', p.t); n.type = 'button'; n.setAttribute('data-cmd', p.cmd); }
+      else n = el('span', '', p.t);
+      if (p.c) n.className += (n.className ? ' ' : '') + p.c;
+      return n;
+    }
+    function line(row, cls) {
+      var ln = el('div', 'ln' + (cls ? ' ' + cls : ''));
+      (Array.isArray(row) ? row : [row]).forEach(function (p) { var n = part(p); if (n) ln.appendChild(n); });
+      return ln;
+    }
+    function ps1() {
+      var s = el('span', 'ps1');
+      s.appendChild(el('b', '', 'гость')); s.appendChild(el('i', '', '@teachnet')); s.appendChild(D.createTextNode(':'));
+      s.appendChild(el('i', '', '~')); s.appendChild(D.createTextNode('$'));
+      return s;
+    }
+    var blk = null;
+    function block() { blk = el('div', 'blk'); out.appendChild(blk); return blk; }
+    function put(row, cls) { var ln = line(row, cls); (blk || block()).appendChild(ln); follow(); return ln; }
+    // вывод по строке — как у настоящего терминала
+    function rows(list, gap) {
+      var p = Promise.resolve();
+      list.forEach(function (r) {
+        p = p.then(function () {
+          if (r && r.l !== undefined) put(r.l, r.c); else put(r);
+          return reduce ? null : wait(gap || 26);
+        });
+      });
+      return p;
+    }
+
+    // прокрутка: новый ответ должен быть виден целиком, а строка ввода — по возможности тоже
+    var userAct = false;
+    function follow() {
+      if (!userAct) return;
+      var top = blk ? blk.getBoundingClientRect().top : 1e9;
+      if (desk()) {
+        var pr = pane.getBoundingClientRect();
+        var d = form.getBoundingClientRect().bottom + 8 - pr.bottom;
+        if (d > 0) pane.scrollTop += Math.max(0, Math.min(d, top - pr.top - 8));
+      } else {
+        var vh = window.visualViewport ? visualViewport.height : window.innerHeight;
+        var end = (touch ? keys : form).getBoundingClientRect().bottom + 10;
+        var d2 = end - vh;
+        if (d2 > 0) window.scrollBy(0, Math.max(0, Math.min(d2, top - 12)));
+      }
+    }
+
+    /* ---------- строка ввода ---------- */
+    var PH = touch ? 'нажмите и печатайте' : 'наберите help и нажмите Enter';
+    function render() {
+      var v = cmd.value, f = D.activeElement === cmd;
+      var s = f && cmd.selectionStart != null ? cmd.selectionStart : v.length;
+      mirror.textContent = '';
+      mirror.appendChild(D.createTextNode(v.slice(0, s)));
+      mirror.appendChild(el('span', 'cur', v.charAt(s) || ' '));
+      mirror.appendChild(D.createTextNode(v.slice(s + 1)));
+      if (!v) mirror.appendChild(el('span', 'ph', PH));
+    }
+    function updAway() {
+      var a = D.activeElement, away;
+      if (touch) away = a !== cmd;
+      else away = !D.hasFocus() || (a && a !== cmd && a !== D.body && /^(A|BUTTON|INPUT)$/.test(a.tagName));
+      form.classList.toggle('away', !!away);
+    }
+    D.addEventListener('focusin', function () { updAway(); render(); });
+    D.addEventListener('focusout', function () { setTimeout(function () { updAway(); render(); }, 0); });
+    window.addEventListener('blur', updAway);
+    window.addEventListener('focus', updAway);
+    ['input', 'select', 'click', 'keyup'].forEach(function (ev) { cmd.addEventListener(ev, render); });
+    form.addEventListener('click', function (e) { if (e.target !== cmd) cmd.focus(); });
+
+    var hist = [], hIdx = 0, lastTab = '';
+    var WORDS = ['help', 'помощь', 'home', 'главная', 'courses', 'курсы', 'signup', 'записаться', 'about', 'о-нас', 'joke', 'шутка',
+      'tich', 'тич', 'matrix', 'матрица', 'sudo', 'color', 'цвет', '404', 'clear', 'очистить', 'history', 'история', 'whoami', 'echo', 'pwd', 'date'];
+    var THEMES = { cyan: 'циан', amber: 'янтарь', green: 'зелёный' };
+
+    function setVal(v) { cmd.value = v; try { cmd.setSelectionRange(v.length, v.length); } catch (e) {} render(); }
+    function complete() {
+      var v = cmd.value.toLowerCase().replace(/^\s+/, ''), m;
+      if (!v) return false;
+      var mc = /^(color|цвет) (\S*)$/.exec(v);
+      if (mc) {
+        m = ['циан', 'янтарь', 'зелёный'].filter(function (w) { return w.indexOf(mc[2]) === 0; });
+        if (m.length === 1 && m[0] !== mc[2]) { setVal(mc[1] + ' ' + m[0]); return true; }
+        return false;
+      }
+      m = WORDS.filter(function (w) { return w.indexOf(v) === 0; });
+      if (!m.length || (m.length === 1 && m[0] === v)) return false;
+      if (m.length === 1) { setVal(m[0]); return true; }
+      var pre = m[0];
+      m.forEach(function (w) { while (w.indexOf(pre) !== 0) pre = pre.slice(0, -1); });
+      if (pre.length > v.length) { setVal(pre); return true; }
+      if (lastTab === v) return false; // повторный Tab отпускает фокус дальше — без ловушки
+      lastTab = v;
+      userAct = true;
+      block(); put([ps1(), ' ' + cmd.value], 'echo'); put(m.join('   '), 'dimc');
+      return true;
+    }
+    cmd.addEventListener('keydown', function (e) {
+      if (booting) skipBoot();
+      if (e.key === 'Tab' && !e.shiftKey) { if (complete()) e.preventDefault(); }
+      else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        if (!hist.length) return;
+        e.preventDefault();
+        hIdx = Math.max(0, Math.min(hist.length, hIdx + (e.key === 'ArrowUp' ? -1 : 1)));
+        setVal(hist[hIdx] || '');
+      } else if (e.key === 'Escape') {
+        if (mxStop) mxStop(); else setVal('');
+      } else if ((e.key === 'c' || e.key === 'с') && e.ctrlKey && cmd.selectionStart === cmd.selectionEnd) {
+        e.preventDefault(); userAct = true; block(); put([ps1(), ' ' + cmd.value + '^C'], 'echo'); setVal('');
+      }
+      if (e.key !== 'Tab') lastTab = '';
+      setTimeout(render, 0);
+    });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (booting) skipBoot();
+      var v = cmd.value;
+      setVal('');
+      enqueue(function () { return exec(v); });
+    });
+
+    // печать с клавиатуры, даже если строка не в фокусе (на компьютере)
+    D.addEventListener('keydown', function (e) {
+      if (e.target === cmd) return;
+      if (booting) { skipBoot(); return; }
+      if (e.key === 'Escape' && mxStop) { mxStop(); return; }
+      if (e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+      var t = e.target, tag = t && t.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (t && t.isContentEditable)) return;
+      var onCtl = t && t.closest && t.closest('a, button');
+      if (e.key.length === 1 && !(onCtl && e.key === ' ')) {
+        e.preventDefault();
+        cmd.focus({ preventScroll: true });
+        setVal(cmd.value + e.key);
+        userAct = true; follow();
+      } else if (e.key === 'Enter' && !onCtl) {
+        cmd.focus({ preventScroll: true });
+      }
+    });
+    // клик или касание во время загрузки — досмотреть её сразу
+    D.addEventListener('pointerdown', function () { if (booting) skipBoot(); });
+    // клик по экрану (не по ссылке/кнопке и не при выделении текста) — фокус в строку
+    $('screen').addEventListener('click', function (e) {
+      if (touch || booting) return;
+      if (e.target.closest('a, button, input, label')) return;
+      var sel = window.getSelection && getSelection();
+      if (sel && String(sel).length) return;
+      cmd.focus({ preventScroll: true });
+    });
+
+    /* ---------- очередь команд ---------- */
+    var chain = Promise.resolve(), busy = 0;
+    function enqueue(fn) {
+      busy++; led.classList.add('busy'); userAct = true;
+      chain = chain.then(fn).catch(function (e) { if (window.console) console.warn(e); }).then(function () {
+        busy--; if (!busy) led.classList.remove('busy');
+        render(); follow();
+      });
+      return chain;
+    }
+    // команда «печатается» в строку сама — для клавиш и ссылок в ответах
+    function typeRun(text) {
+      if (booting) skipBoot();
+      enqueue(function () {
+        var p;
+        if (reduce) { setVal(text); p = wait(120); }
+        else {
+          p = Array.from(text).reduce(function (pr, ch, i) {
+            return pr.then(function () { setVal(text.slice(0, i) + ch); follow(); return wait(42 + Math.random() * 46); });
+          }, Promise.resolve()).then(function () { return wait(150); });
+        }
+        return p.then(function () { var v = cmd.value; setVal(''); return exec(v); });
+      });
+    }
+    function press(btn) { btn.classList.add('is-down'); setTimeout(function () { btn.classList.remove('is-down'); }, 140); }
+    keys.addEventListener('click', function (e) { var b = e.target.closest('[data-cmd]'); if (b) { press(b); typeRun(b.getAttribute('data-cmd')); } });
+    out.addEventListener('click', function (e) { var b = e.target.closest('button[data-cmd]'); if (b) typeRun(b.getAttribute('data-cmd')); });
+
+    /* ---------- команды ---------- */
+    var C = {};
+    function alias(names, fn) { names.split(' ').forEach(function (n) { C[n.replace(/_/g, ' ')] = fn; }); }
+
+    function exec(raw) {
+      var text = raw.replace(/\s+/g, ' ').trim();
+      block();
+      put([ps1(), ' ' + text], 'echo');
+      if (!text) return;
+      if (hist[hist.length - 1] !== text) hist.push(text);
+      hIdx = hist.length;
+      var low = text.toLowerCase(), w = low.split(' ')[0];
+      var fn = C[low] || (w === 'sudo' ? cSudo : w === 'cd' ? cCd : w === 'echo' ? cEcho : (C[w] && C[w].args) ? C[w] : cUnknown);
+      return fn(text, low);
+    }
+
+    alias('help помощь справка ? команды хелп man', function () {
+      say('Это все мои команды. Нажимайте прямо на них — я сам напечатаю!', 'idea');
+      var H = [['help', 'помощь', 'этот список'], ['курсы', 'ls', 'программы школы'], ['записаться', 'signup', 'на пробный урок'],
+        ['о-нас', 'about', 'пара слов о школе'], ['шутка', 'joke', 'добрая инженерная шутка'], ['тич', 'tich', 'поздороваться с Тичем'],
+        ['matrix', '', 'цифровой дождь'], ['цвет', 'color', 'сменить цвет экрана'], ['404', '', 'лучше не нажимать…'],
+        ['история', 'history', 'что вы уже набирали'], ['очистить', 'clear', 'очистить экран'], ['главная', 'cd ~', 'вернуться на главную']];
+      var list = [{ l: 'Команды TEACHNET OS — можно по-русски и по-английски:', c: 'dimc' }];
+      H.forEach(function (h) {
+        var c1 = el('span');
+        c1.appendChild(part({ t: h[0], cmd: h[0] }));
+        if (h[1]) { var al = el('span', 'alt', ', '); al.appendChild(part({ t: h[1], cmd: h[1] })); c1.appendChild(al); }
+        list.push({ l: [c1, { t: h[2], c: 'dimc' }], c: 'two' });
+      });
+      list.push({ l: touch ? 'Нажимайте на команды — или на клавиши внизу.' : 'Tab — дополнить, ↑/↓ — история, Esc — стереть строку.', c: 'dimc' });
+      return rows(list, 22);
+    });
+
+    alias('courses курсы ls ls_-la ls_-l dir программы', function () {
+      say('Электроника — моя любимая: у меня ведь плата прямо на груди!', 'point');
+      var CR = [['Робототехника LEGO', 'с 5 лет', '/#programs'], ['Электроника', 'с 10 лет', '/electronics'], ['Продвинутая электроника', 'с 14 лет', '/#programs']];
+      var list = [{ l: 'Программы TEACHNET:', c: 'hic' }];
+      CR.forEach(function (c) { list.push({ l: ['▸ ', { t: c[0], href: c[2] }, el('span', 'dots'), { t: c[1], c: 'hic' }], c: 'crs' }); });
+      list.push({ l: ['Чтобы прийти на пробный урок, наберите ', { t: 'записаться', cmd: 'записаться' }, '.'], c: 'dimc' });
+      return rows(list, 60);
+    });
+
+    function progress(label, url, poseName, phrase) {
+      say(phrase, poseName, 9000);
+      put(label);
+      var ln = put(''), N = 16, i = 0;
+      return new Promise(function (res) {
+        (function step() {
+          ln.textContent = '[' + '█'.repeat(i) + '░'.repeat(N - i) + '] ' + Math.round((i / N) * 100) + '%';
+          if (i++ < N) return setTimeout(step, reduce ? 0 : 34);
+          setTimeout(function () { nav(url); res(); }, reduce ? 150 : 260);
+        })();
+      });
+    }
+    function nav(url) { var a = el('a'); a.href = url; a.hidden = true; D.body.appendChild(a); a.click(); a.remove(); }
+    alias('home главная домой cd cd_~ cd_/ cd_.. ~ exit выход quit', function () { return progress('Переход на главную…', '/', 'walk', 'Поехали домой — на главную!'); });
+    alias('signup записаться запись урок пробный lead', function () { return progress('Открываю запись на пробный урок…', '/#lead', 'thumb', 'Ура! Буду ждать вас на пробном уроке!'); });
+
+    alias('about о-нас о_нас онас школа teachnet info', function () {
+      say('Группы маленькие — до 6 человек, так что преподаватель успевает к каждому.', 'thumb');
+      return rows([
+        { l: 'TEACHNET — школа инженерии и робототехники для детей 5–15 лет.', c: 'hic' },
+        '▸ робототехника LEGO с 5 лет, электроника с 10, продвинутая электроника с 14;',
+        '▸ группы до 6 человек — преподаватель успевает к каждому;',
+        '▸ Казань: ул. Павлюхина, 108б и ул. Марджани, 28.',
+        ['Позвонить: ', { t: '+7 (993) 415-14-34', href: 'tel:+79934151434' }, ' · или наберите ', { t: 'записаться', cmd: 'записаться' }]
+      ], 50);
+    });
+
+    var JOKES = [
+      'Почему конденсатор не волнуется перед контрольной? Он заранее зарядился!',
+      'Что сказал один провод другому? «Давай держаться вместе — у нас же контакт!»',
+      'Зачем роботу зонтик? Чтобы не случилось короткого замыкания.',
+      'Почему светодиод всегда в хорошем настроении? Он держится за плюс!',
+      'Почему у робота не бывает плохих дней? Его всегда можно перезагрузить.',
+      'Резистор так хорошо учился, что про него говорили: «У него нет сопротивления знаниям!»',
+      '— Тич, сколько будет два плюс два? — Четыре. А если ты про страницы, то 404!'
+    ], lastJoke = -1;
+    alias('joke шутка шутки анекдот', function () {
+      var i; do { i = (Math.random() * JOKES.length) | 0; } while (i === lastJoke);
+      lastJoke = i;
+      say(rnd(['Ха-ха! Записал себе в память 😄', 'Эту я рассказываю всем роботам!', 'Хи-хи, у меня аж антенна замигала!']), 'idea');
+      return rows([{ l: '😄 ' + JOKES[i], c: 'hic' }, { l: ['Ещё? Наберите ', { t: 'шутка', cmd: 'шутка' }], c: 'dimc' }]);
+    });
+
+    // Тич из пиксельных полублоков: цвет верхней половины — текст, нижней — фон символа
+    var PIX = ['.........aa.........', '........aaaa........', '.........aa.........', '..........s.........', '.....hhhhhshhhh.....',
+      '...hhhhhhhhhhhhhh...', '..hhhhffffffffhhhh..', '.hhhffffffffffffhhh.', '.hhffffffffffffffhh.', '.hhfffffffffeeeffhh.',
+      '.hhffeeeefffweeffhh.', '.hhfeffffeffeeeffhh.', '.hhfffffffffeeeffhh.', '.hhffffffffffffffhh.', '.hhhffffeffeffffhhh.',
+      '..hhhffffeeffffhhh..', '...hhhhhhhhhhhhhh...', '....bbbbbffbbbbb....', '...bbbbbfccfbbbbb...', '..bbbbbbfccfbbbbbb..'];
+    var PCOL = { h: 'rgba(var(--rgb),.6)', f: 'var(--hi)', w: 'var(--hi)', e: 'var(--bg0)', a: '#ffb347', s: 'var(--dim)', b: 'rgba(var(--rgb),.38)', c: '#46ff7a' };
+    function pixTich() {
+      var pre = el('pre');
+      for (var y = 0; y < PIX.length; y += 2) {
+        for (var x = 0; x < PIX[y].length; x++) {
+          var t = PIX[y][x], b = PIX[y + 1][x];
+          if (t === '.' && b === '.') { pre.appendChild(D.createTextNode(' ')); continue; }
+          var s = el('span', t === 'a' || b === 'a' ? 'ant' : '');
+          if (t === b) { s.textContent = '█'; s.style.color = PCOL[t]; }
+          else if (b === '.') { s.textContent = '▀'; s.style.color = PCOL[t]; }
+          else if (t === '.') { s.textContent = '▄'; s.style.color = PCOL[b]; }
+          else { s.textContent = '▀'; s.style.color = PCOL[t]; s.style.background = PCOL[b]; }
+          pre.appendChild(s);
+        }
+        if (y < PIX.length - 2) pre.appendChild(D.createTextNode('\n'));
+      }
+      return pre;
+    }
+    alias('tich тич teach привет hi hello хай', function () {
+      say('Это я! Привет-привет! 👋', 'thumb');
+      var box = el('div', 'tichart'), sp = el('div', 'say');
+      box.appendChild(pixTich());
+      ['Привет! Я Тич — робот школы TEACHNET.', 'Эту страницу я не нашёл: её просто нет.', 'Зато знаю, где интересно —'].forEach(function (s) { sp.appendChild(el('div', '', s)); });
+      var l = el('div'); l.appendChild(D.createTextNode('наберите ')); l.appendChild(part({ t: 'курсы', cmd: 'курсы' })); l.appendChild(D.createTextNode('!'));
+      sp.appendChild(l); box.appendChild(sp);
+      put(box);
+    });
+
+    alias('matrix матрица', function () {
+      say('Ого, сколько кода! Кажется, тут зашифровано расписание.', 'idea', 6500);
+      put(['Включаю цифровой дождь на 5 секунд… ', { t: '(Esc — выйти)', c: 'dimc' }]);
+      return matrix(5000).then(function () { put('Дождь закончился. Страницы 404 там тоже нет 🙂', 'dimc'); });
+    });
+
+    function cSudo() {
+      say('Даже у меня нет таких прав. А я тут почти администратор!', 'point');
+      return rows(['[sudo] пароль для гость: ********', { l: 'Отказано: даже sudo не найдёт то, чего нет 🙂', c: 'errc' }], reduce ? 0 : 380);
+    }
+
+    function setTheme(t) {
+      if (t === 'cyan') html.removeAttribute('data-theme'); else html.setAttribute('data-theme', t);
+      store('tn404-theme', t);
+    }
+    function cColor(text, low) {
+      var arg = low.split(' ')[1], order = ['cyan', 'amber', 'green'];
+      var map = { 'циан': 'cyan', cyan: 'cyan', 'голубой': 'cyan', 'янтарь': 'amber', 'янтарный': 'amber', amber: 'amber', 'оранжевый': 'amber', 'зелёный': 'green', 'зеленый': 'green', green: 'green' };
+      var cur = html.getAttribute('data-theme') || 'cyan';
+      var t = arg ? map[arg] : order[(order.indexOf(cur) + 1) % 3];
+      if (!t) return rows([{ l: 'Такого цвета нет. Есть: циан, янтарь, зелёный.', c: 'errc' }]);
+      setTheme(t);
+      var note = { cyan: 'циан — фирменный цвет Тича.', amber: 'янтарь — как у мониторов из 80-х.', green: 'зелёный — как в фильмах про хакеров.' };
+      say('Мне идёт? По-моему, очень!', 'wink');
+      return rows(['Цвет экрана: ' + note[t], { l: 'Ещё раз «цвет» — следующий. Или сразу: цвет циан | янтарь | зелёный', c: 'dimc' }]);
+    }
+    cColor.args = true;
+    alias('color colour цвет тема theme', cColor);
+
+    alias('404', function () {
+      say('Ай! Кто нажал 404?! Мои пиксели!', 'scared', 3200);
+      put('Внимание: глитч-взрыв через 3… 2… 1…', 'errc');
+      return wait(reduce ? 0 : 520).then(explode).then(function () {
+        say('Фух… Пиксели на месте. Больше так не делайте 😅', 'thumb');
+        put('Пиксели пойманы и сложены обратно ✓');
+      });
+    });
+
+    alias('clear очистить cls clean', function () { out.textContent = ''; blk = null; if (desk()) pane.scrollTop = 0; say('Чистота — залог порядка в коде!'); });
+    alias('history история', function () {
+      say('Память у меня отличная — всё записываю.');
+      var h = hist.slice(0, -1);
+      if (!h.length) return rows([{ l: 'История пуста — вы ещё ничего не набирали.', c: 'dimc' }]);
+      return rows(h.slice(-12).map(function (c, i, a) { return '  ' + (hist.length - 1 - a.length + i + 1) + '  ' + c; }), 18);
+    });
+    alias('whoami кто_я', function () { put(['гость — будущий инженер 🙂 Стать учеником: ', { t: 'записаться', cmd: 'записаться' }]); });
+    alias('pwd', function () { put('/404 — где-то между главной и курсами'); });
+    alias('date время дата', function () { put(new Date().toLocaleString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })); });
+    alias('rm rm_-rf rm_-rf_/', function () { say('Эй! Ломать — не строить 🙂', 'scared'); put('rm: Тич спрятал все провода — ломать ничего не будем 🙂', 'errc'); });
+    function cEcho(text) { put(text.slice(5) || ' '); }
+    function cCd(text) { put('cd: ' + text.slice(3) + ': такого маршрута нет. Попробуйте cd ~', 'errc'); }
+
+    // подсказка при опечатке и при «не той» раскладке (рудз → help)
+    var EN = "qwertyuiop[]asdfghjkl;'zxcvbnm,.", RU = 'йцукенгшщзхъфывапролджэячсмитьбю';
+    function swapLayout(s) {
+      return Array.from(s).map(function (ch) { var i = RU.indexOf(ch); if (i >= 0) return EN[i]; i = EN.indexOf(ch); return i >= 0 ? RU[i] : ch; }).join('');
+    }
+    function lev(a, b) {
+      var d = [], i, j;
+      for (i = 0; i <= a.length; i++) d[i] = [i];
+      for (j = 0; j <= b.length; j++) d[0][j] = j;
+      for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      return d[a.length][b.length];
+    }
+    function cUnknown(text, low) {
+      say('Такой команды я не знаю. Может, help?');
+      var list = [{ l: '«' + text + '»: команда не найдена — как и эта страница. Наберите help', c: 'errc' }];
+      var sw = swapLayout(low), guess = C[sw] ? sw : null, best = 3;
+      if (!guess) WORDS.forEach(function (w) { var d = lev(low, w); if (d < best && (d === 1 || w.length > 3) && w !== 'sudo') { best = d; guess = w; } });
+      if (guess) list.push({ l: [C[sw] ? 'Похоже, не та раскладка. Может, ' : 'Может, вы имели в виду ', { t: guess, cmd: guess }, '?'], c: 'dimc' });
+      return rows(list);
+    }
+
+    /* ---------- глитч «404» ---------- */
+    var exploding = false;
+    function glitchStep(pw) {
+      [bigR, bigB].forEach(function (n, i) {
+        var a = Math.random() * 70, b = Math.random() * (90 - a);
+        n.style.clipPath = 'inset(' + a.toFixed(1) + '% -20px ' + b.toFixed(1) + '% -20px)';
+        n.style.transform = 'translate(' + ((i ? 1 : -1) * (2 + Math.random() * 6) * pw).toFixed(1) + 'px,' + ((Math.random() - 0.5) * 3).toFixed(1) + 'px)';
+      });
+      big.style.transform = Math.random() < 0.35 ? 'translateX(' + ((Math.random() - 0.5) * 7 * pw).toFixed(1) + 'px) skewX(' + ((Math.random() - 0.5) * 10).toFixed(1) + 'deg)' : '';
+    }
+    function glitchOff() { art.classList.remove('glitch'); big.style.transform = ''; bigR.style.cssText = ''; bigB.style.cssText = ''; }
+    function burst(ms, pw) {
+      if (reduce || exploding) return;
+      var t0 = performance.now();
+      art.classList.add('glitch');
+      (function step() {
+        if (exploding) return;
+        if (performance.now() - t0 > ms) return glitchOff();
+        glitchStep(pw); setTimeout(step, 46);
+      })();
+    }
+    var SCR = '▓▒░█▀▄#%@&$';
+    function scramble(k) {
+      return ART.replace(/[^\s]/g, function (ch) { return Math.random() < k ? SCR[(Math.random() * SCR.length) | 0] : ch; });
+    }
+    function flash() { flashEl.classList.remove('on'); void flashEl.offsetWidth; flashEl.classList.add('on'); }
+    var TB = tears.children;
+    function tearsStep() {
+      for (var i = 0; i < TB.length; i++) {
+        var s = TB[i].style;
+        // полосы двигаются только transform/opacity — без перерасчёта раскладки
+        var wide = Math.random() < 0.3, W = tears.clientWidth, H = tears.clientHeight;
+        var x = wide ? 0 : Math.random() * W * 0.7, sx = wide ? 1 : 0.06 + Math.random() * 0.4;
+        var sy = wide ? 1 + Math.random() * 3 : 2 + Math.random() * 14;
+        s.transform = 'translate(' + x.toFixed(0) + 'px,' + (Math.random() * H).toFixed(0) + 'px) scale(' + sx.toFixed(2) + ',' + sy.toFixed(0) + ')';
+        s.opacity = (Math.random() < 0.25 ? 0 : 0.4 + Math.random() * 0.6).toFixed(2);
+      }
+    }
+    function explode() {
+      return new Promise(function (res) {
+        exploding = true; glitchOff();
+        var dur = reduce ? 700 : 1400, t0 = performance.now();
+        noiseOn(dur + 300);
+        if (!reduce) { glass.classList.add('quake'); flash(); tears.classList.add('on'); art.classList.add('glitch'); }
+        (function step() {
+          var k = (performance.now() - t0) / dur;
+          if (k >= 1) {
+            setArt(ART); exploding = false; glitchOff();
+            tears.classList.remove('on'); glass.classList.remove('quake');
+            return res();
+          }
+          setArt(scramble(Math.sin(k * Math.PI) * 0.8));
+          if (!reduce) { glitchStep(3.2); tearsStep(); }
+          setTimeout(step, reduce ? 220 : 50);
+        })();
+      });
+    }
+    art.addEventListener('click', function () { if (!booting && !reduce) { burst(420, 2); say(rnd(['Не трогайте мои пиксели! 😄', 'Щекотно! Это же мои блоки!', 'Осторожно, глитч заразный!'])); } });
+
+    /* ---------- видеосвязь: помехи, позы Тича, реплики ---------- */
+    var nctx = noise.getContext && noise.getContext('2d'), NF = [], nIv = 0, nUntil = 0;
+    if (nctx) {
+      for (var f = 0; f < 4; f++) {
+        var id = nctx.createImageData(64, 80), dd = id.data;
+        for (var p = 0; p < dd.length; p += 4) {
+          var row = (p / 256) | 0, v = (Math.random() * 200) | 0;
+          if (row % 7 === f) v = Math.min(255, v + 70);
+          dd[p] = v * 0.75; dd[p + 1] = v * 0.92; dd[p + 2] = v; dd[p + 3] = 255;
+        }
+        NF.push(id);
+      }
+    }
+    function noiseOn(ms) {
+      if (!nctx) return;
+      nUntil = Math.max(nUntil, performance.now() + ms);
+      call.classList.add('is-noise');
+      if (nIv) return;
+      var tick = function () {
+        if (performance.now() > nUntil) { clearInterval(nIv); nIv = 0; call.classList.remove('is-noise'); cam.style.transform = ''; return; }
+        nctx.putImageData(NF[(Math.random() * NF.length) | 0], 0, 0);
+        if (!reduce) cam.style.transform = 'translateX(' + ((Math.random() - 0.5) * 12).toFixed(1) + 'px)';
+      };
+      tick();
+      nIv = setInterval(tick, 60);
+    }
+    var POSES = { wink: 'wink', point: 'point', idea: 'idea', thumb: 'thumb', walk: 'walk', scared: 'scared' }, imgs = {}, poseT = 0, curPose = 'wink';
+    function preload() { Object.keys(POSES).forEach(function (k) { if (!imgs[k]) { var im = new Image(); im.src = '/images/tich-' + k + '.webp'; imgs[k] = im; } }); }
+    function pose(name, ms) {
+      clearTimeout(poseT);
+      if (!name) return;
+      if (name !== curPose) {
+        var im = imgs[name];
+        if (name === 'wink' || (im && im.complete && im.naturalWidth)) {
+          curPose = name;
+          noiseOn(180);
+          setTimeout(function () { cimg.src = '/images/tich-' + name + '.webp'; }, 70);
+        }
+      }
+      if (name !== 'wink') poseT = setTimeout(function () { pose('wink'); }, ms || 4200);
+    }
+    var sayTok = 0;
+    function say(text, poseName, ms) {
+      if (poseName) pose(poseName, ms);
+      var tok = ++sayTok, arr = Array.from(text), i = 0;
+      if (reduce) { sayt.textContent = text; return; }
+      (function step() {
+        if (tok !== sayTok) return;
+        i = Math.min(arr.length, i + 2);
+        sayt.textContent = arr.slice(0, i).join('');
+        if (i < arr.length) setTimeout(step, 22);
+      })();
+    }
+    $('cvid').addEventListener('click', function () {
+      if (booting) return skipBoot();
+      say(rnd(['Я тут! Наберите «шутка» — расскажу смешное.', 'Щекотно! 😄', 'Связь отличная — все четыре палочки!', 'Машу в ответ! 👋 Загляните в «курсы».']), rnd(['thumb', 'idea', 'point']));
+    });
+    var callStart = 0;
+    function connect() {
+      call.classList.add('live');
+      nUntil = performance.now() + 240;
+      ccap.textContent = 'Тич на связи';
+      callStart = Date.now();
+    }
+    function tickClock() {
+      var d = new Date(), s = pad(d.getHours()) + ':' + pad(d.getMinutes());
+      if (clock.textContent !== s) clock.textContent = s;
+      if (callStart) { var c = ((Date.now() - callStart) / 1000) | 0; ctime.textContent = pad((c / 60) | 0) + ':' + pad(c % 60); }
+    }
+    tickClock();
+    setInterval(tickClock, 1000);
+    // иногда — помехи на линии
+    function idleStatic() {
+      if (!reduce && !booting && !D.hidden && !exploding) {
+        noiseOn(380 + Math.random() * 520);
+        ccap.textContent = 'Тич на связи… ш-ш-ш… помехи';
+        setTimeout(function () { ccap.textContent = 'Тич на связи'; }, 1100);
+      }
+      setTimeout(idleStatic, 7000 + Math.random() * 8000);
+    }
+    function idleGlitch() {
+      if (!booting && !D.hidden && !mxStop) burst(220 + Math.random() * 280, 0.8 + Math.random() * 1.2);
+      setTimeout(idleGlitch, 2600 + Math.random() * 4200);
+    }
+
+    /* ---------- matrix: цифровой дождь на canvas ---------- */
+    var mxStop = null, CH = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯ0123456789TEACHNET<>/=+*#404';
+    function matrix(ms) {
+      return new Promise(function (res) {
+        var cv = $('mx'), g = cv.getContext && cv.getContext('2d');
+        if (!g || mxStop) return res();
+        var gr = glass.getBoundingClientRect(), vh = window.innerHeight;
+        var top = Math.max(0, -gr.top), w = gr.width, h = Math.max(100, Math.min(gr.height - top, vh - Math.max(gr.top, 0)));
+        var dpr = Math.min(window.devicePixelRatio || 1, touch ? 1.5 : 2);
+        cv.style.top = top + 'px'; cv.style.height = h + 'px';
+        cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+        g.setTransform(dpr, 0, 0, dpr, 0, 0);
+        var cs = getComputedStyle(html), col = cs.getPropertyValue('--c').trim() || '#7fe3ff', hi = cs.getPropertyValue('--hi').trim() || '#fff';
+        var fs = w < 640 ? 14 : 17, n = Math.ceil(w / fs), R = Math.ceil(h / fs), y = [], sp = [], acc = [], last = [];
+        for (var i = 0; i < n; i++) { y[i] = -Math.floor(Math.random() * R * 0.4); sp[i] = 0.6 + Math.random() * 0.7; acc[i] = 0; last[i] = ''; }
+        g.font = fs + 'px ' + MONO; g.textBaseline = 'top'; g.textAlign = 'center';
+        cv.style.display = 'block'; void cv.offsetWidth;
+        cv.classList.add('on'); glass.classList.add('matrixing');
+        var t0 = performance.now(), prev = 0, raf = 0, ending = false;
+        function frame(now) {
+          raf = requestAnimationFrame(frame);
+          if (now - prev < 62) return;
+          prev = now;
+          g.globalCompositeOperation = 'destination-out';
+          g.fillStyle = 'rgba(0,0,0,0.11)'; g.fillRect(0, 0, w, h);
+          g.globalCompositeOperation = 'source-over';
+          for (var i = 0; i < n; i++) {
+            acc[i] += sp[i];
+            if (acc[i] < 1) continue;
+            acc[i] -= 1;
+            var x = i * fs + fs / 2, yy = y[i] * fs;
+            if (last[i] && yy > 0) { g.fillStyle = col; g.fillText(last[i], x, yy - fs); }
+            var ch = CH[(Math.random() * CH.length) | 0];
+            last[i] = ch;
+            if (yy >= 0) { g.fillStyle = hi; g.fillText(ch, x, yy); }
+            y[i]++;
+            if (yy > h && Math.random() > 0.9) { y[i] = -Math.floor(Math.random() * 10); last[i] = ''; }
+          }
+          if (!ending && now - t0 > ms) end();
+        }
+        function end() { ending = true; cv.classList.remove('on'); glass.classList.remove('matrixing'); setTimeout(fin, reduce ? 0 : 560); }
+        function fin() { cancelAnimationFrame(raf); g.clearRect(0, 0, w, h); cv.style.display = 'none'; mxStop = null; res(); }
+        mxStop = function () { if (!ending) end(); };
+        raf = requestAnimationFrame(frame);
+      });
+    }
+
+    /* ---------- загрузка ---------- */
+    var booting = true, skipping = reduce;
+    function skipBoot() { skipping = true; }
+    function bw(ms) { return skipping ? Promise.resolve() : wait(ms); }
+    // печать: total — сколько примерно длится вся строка (мс), шаг кадра ~16 мс
+    function typeText(node, text, total) {
+      var arr = Array.from(text), i = 0, per = Math.max(1, Math.round(arr.length / Math.max(1, total / 18)));
+      return new Promise(function (res) {
+        (function step() {
+          if (skipping) { node.textContent = text; return res(); }
+          i = Math.min(arr.length, i + per);
+          node.textContent = arr.slice(0, i).join('');
+          if (i >= arr.length) return res();
+          setTimeout(step, 10 + Math.random() * 16);
+        })();
+      });
+    }
+    function bootLine(tagText, tagCls) {
+      var p = el('p'), t = null;
+      if (tagText) { t = el('span', 'tag' + (tagCls ? ' ' + tagCls : ''), tagText); p.appendChild(t); p.appendChild(D.createTextNode(' ')); }
+      var s = el('span'); p.appendChild(s); bootEl.appendChild(p);
+      return { p: p, tag: t, txt: s };
+    }
+    var SPIN = ['[*     ]', '[**    ]', '[***   ]', '[ ***  ]', '[  *** ]', '[   ***]', '[    **]', '[     *]'];
+    function spin(tag, ms) {
+      var t0 = performance.now(), i = 0;
+      return new Promise(function (res) {
+        (function step() {
+          if (skipping || performance.now() - t0 > ms) return res();
+          tag.textContent = SPIN[i++ % SPIN.length];
+          setTimeout(step, 60);
+        })();
+      });
+    }
+    function show(n) { n.classList.add('on'); }
+    var path = location.pathname + location.search;
+    try { path = decodeURI(path); } catch (e) {}
+    if (path.length > 46) path = path.slice(0, 45) + '…';
+
+    function boot() {
+      bootEl.textContent = '';
+      show(bootEl);
+      if (!reduce) { glass.classList.add('pwr'); setTimeout(function () { glass.classList.remove('pwr'); }, 1000); }
+      call.classList.remove('live');
+      ccap.textContent = 'Входящий видеозвонок…';
+      if (!reduce) { noiseOn(20000); sayt.textContent = 'соединяю…'; }
+      var a, b, c, d, e;
+      return bw(480).then(function () {
+        a = bootLine(); a.p.className = 'os';
+        return typeText(a.txt, 'TEACHNET OS v4.04 · школа инженерии и робототехники · Казань', 220);
+      }).then(function () {
+        b = bootLine('[      ]');
+        return typeText(b.txt, 'Загрузка модулей', 150);
+      }).then(function () { return spin(b.tag, 260); }).then(function () {
+        b.tag.textContent = '[  OK  ]'; b.txt.textContent += '… ✓';
+        c = bootLine('[      ]');
+        return typeText(c.txt, 'Связь с Тичем', 120);
+      }).then(function () { return spin(c.tag, 180); }).then(function () {
+        c.tag.textContent = '[  OK  ]'; c.txt.textContent += '… ✓';
+        d = bootLine('[      ]');
+        return typeText(d.txt, 'Проверка маршрута ' + path, 240);
+      }).then(function () { return spin(d.tag, 340); }).then(function () {
+        d.tag.textContent = '[  ..  ]'; d.tag.className = 'tag tag--wait'; d.txt.textContent += '…';
+        e = bootLine('[ СБОЙ ]', 'tag--fail'); e.p.className = 'err';
+        return typeText(e.txt, 'ОШИБКА 404: маршрут не найден', 220);
+      }).then(function () { return bw(90); }).then(function () {
+        show(art);
+        if (!skipping) setTimeout(function () { burst(360, 1.8); }, 400);
+        return bw(430);
+      }).then(function () {
+        show(title);
+        if (skipping) return;
+        var mark = tvis.firstChild;
+        tvis.textContent = ''; tvis.appendChild(mark);
+        var tn = D.createTextNode(''); tvis.appendChild(tn);
+        title.classList.add('typing');
+        return typeText(tn, TITLE, 380).then(function () { title.classList.remove('typing'); });
+      }).then(function () {
+        show(D.querySelector('.lead'));
+        return bw(170);
+      }).then(function () {
+        show(D.querySelector('.actions')); show($('hint')); show(form);
+        connect();
+        say(touch ? 'Привет! Я Тич. Обыскал все провода — такой страницы нет. Жмите клавиши внизу — покажу, что тут есть!'
+          : 'Привет! Я Тич. Обыскал все провода — такой страницы нет. Наберите help — покажу, что тут есть!');
+        booting = false;
+        render(); updAway();
+        if (desk()) pane.scrollTop = pane.scrollHeight;
+        setTimeout(preload, 1200);
+        if (!reduce) { setTimeout(idleGlitch, 3200); setTimeout(idleStatic, 6500); }
+      });
+    }
+
+    render();
+    boot();
+  }
+})();
+  </script>
+</body>
+</html>

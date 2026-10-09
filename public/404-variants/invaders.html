@@ -1,0 +1,1388 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#060b14" />
+  <title>Страница не найдена — TEACHNET</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="/fonts/onest-latin-700.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/images/tich-idea.webp" as="image" type="image/webp" />
+  <!--
+    Вариант 404 «Захватчики»: строй жучков-багов в форме «404» (клетки сняты с цифр шрифта Onest), Тич стреляет лазером.
+    Всё встроено (CSP сайта), пути абсолютные. Без JS — заголовок и кнопки; при reduced motion — статично, игра по кнопке.
+  -->
+  <script>document.documentElement.className += ' js';</script>
+  <style>
+@font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-latin-700.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-2199, U+2713; }
+@font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-cyrillic-700.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-latin-400.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-cyrillic-400.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-latin-500.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-cyrillic-500.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+
+:root {
+  --bg: #060b14; --ink: #eef3ff; --muted: #a3b3cc; --dim: #7088ab;
+  --brand: #1055cb; --glow: #8fb4ff; --cyan: #5fd4ff; --violet: #9b8cff; --gold: #ffcb6b; --green: #46ff7a; --red: #ff4040;
+  --head: 'Onest', system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  min-height: 100vh; min-height: 100svh;
+  background: var(--bg); color: var(--ink);
+  font: 17px/1.55 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* страница */
+.page {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: 100vh; min-height: 100svh;
+  display: flex; flex-direction: column;
+  padding: 16px max(clamp(16px, 3.4vw, 48px), env(safe-area-inset-right)) 20px max(clamp(16px, 3.4vw, 48px), env(safe-area-inset-left));
+}
+.neb { position: absolute; z-index: -1; border-radius: 50%; pointer-events: none; }
+.neb--a { width: 80vmax; height: 80vmax; left: -34vmax; top: -40vmax; background: radial-gradient(circle, rgba(37,82,170,.5), rgba(29,63,138,.16) 40%, transparent 68%); }
+.neb--b { width: 70vmax; height: 70vmax; right: -34vmax; bottom: -40vmax; background: radial-gradient(circle, rgba(92,52,170,.42), rgba(75,42,143,.12) 42%, transparent 68%); }
+
+.top, .main { width: 100%; max-width: 1320px; margin: 0 auto; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.top img { display: block; height: 32px; width: auto; }
+.top__phone { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px; white-space: nowrap; }
+.top__phone:hover { color: var(--ink); }
+.main { flex: 1; display: flex; flex-direction: column; margin-top: 14px; }
+
+/* игровое поле */
+.game {
+  --gnd: 26px;
+  position: relative; isolation: isolate; overflow: hidden;
+  height: clamp(320px, 63vh, 800px); height: clamp(320px, 63svh, 800px);
+  border-radius: 22px; outline: none;
+  border: 1px solid rgba(143,180,255,.17);
+  box-shadow: 0 0 0 1px rgba(6,11,20,.6), 0 30px 90px -40px rgba(16,85,203,.7), inset 0 0 60px rgba(16,85,203,.14);
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+}
+/* во время игры жесты на поле — управление, а не прокрутка */
+.game.is-play { touch-action: none; cursor: crosshair; }
+.game__bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(55% 60% at 14% 0%, rgba(37,82,170,.45), transparent 70%),
+    radial-gradient(45% 55% at 92% 26%, rgba(92,52,170,.34), transparent 70%),
+    radial-gradient(70% 45% at 50% 108%, rgba(18,120,160,.5), transparent 70%),
+    linear-gradient(180deg, #0a1424 0%, #070d19 58%, #0a1727 100%);
+}
+.game__bg::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(143,180,255,.05) 0 1px, transparent 1px 56px),
+    repeating-linear-gradient(0deg, rgba(143,180,255,.05) 0 1px, transparent 1px 56px);
+  -webkit-mask-image: radial-gradient(80% 70% at 50% 40%, #000, transparent 85%); mask-image: radial-gradient(80% 70% at 50% 40%, #000, transparent 85%);
+}
+/* звёзды нарисованы один раз; полёт и параллакс — transform слоя */
+.game__stars { position: absolute; left: -40px; top: 0; z-index: 1; pointer-events: none; image-rendering: pixelated; will-change: transform; }
+/* пол — статичная перспективная сетка */
+.game__ground { position: absolute; left: 0; right: 0; bottom: 0; height: var(--gnd); z-index: 2; pointer-events: none; overflow: hidden; }
+.game__ground::before {
+  content: ''; position: absolute; left: -60%; right: -60%; top: 0; bottom: -60%;
+  transform-origin: 50% 0; transform: perspective(90px) rotateX(58deg);
+  background:
+    repeating-linear-gradient(90deg, rgba(95,212,255,.4) 0 1px, transparent 1px 46px),
+    repeating-linear-gradient(180deg, rgba(95,212,255,.32) 0 1px, transparent 1px 12px);
+  -webkit-mask-image: linear-gradient(#000 10%, transparent 75%); mask-image: linear-gradient(#000 10%, transparent 75%);
+}
+.game__ground::after {
+  content: ''; position: absolute; left: 3%; right: 3%; top: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(95,212,255,.85) 20%, rgba(143,180,255,.95) 50%, rgba(95,212,255,.85) 80%, transparent);
+  box-shadow: 0 0 12px 1px rgba(95,212,255,.55);
+}
+.game__cvs { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; display: block; }
+/* без JS — «404» и Тич картинкой */
+.game__fb { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 60px; }
+.game__fb404 {
+  font: 700 clamp(110px, 24vh, 260px)/1 var(--head); letter-spacing: -0.04em;
+  background: linear-gradient(180deg, var(--violet), var(--glow) 50%, var(--cyan));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.game__fb img { position: absolute; left: 50%; bottom: var(--gnd); width: 40px; height: auto; transform: translateX(-50%); }
+.js .game__fb { display: none; }
+.game__frame {
+  --c: rgba(95,212,255,.5);
+  position: absolute; inset: 9px; z-index: 4; pointer-events: none;
+  background:
+    linear-gradient(var(--c), var(--c)) 0 0 / 18px 2px no-repeat, linear-gradient(var(--c), var(--c)) 0 0 / 2px 18px no-repeat,
+    linear-gradient(var(--c), var(--c)) 100% 0 / 18px 2px no-repeat, linear-gradient(var(--c), var(--c)) 100% 0 / 2px 18px no-repeat,
+    linear-gradient(var(--c), var(--c)) 0 100% / 18px 2px no-repeat, linear-gradient(var(--c), var(--c)) 0 100% / 2px 18px no-repeat,
+    linear-gradient(var(--c), var(--c)) 100% 100% / 18px 2px no-repeat, linear-gradient(var(--c), var(--c)) 100% 100% / 2px 18px no-repeat;
+}
+.game__frame::after { content: ''; position: absolute; inset: -9px; background: repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 1px, transparent 1px 3px); }
+.game__flash { position: absolute; inset: 0; z-index: 5; pointer-events: none; opacity: 0; border-radius: inherit; box-shadow: inset 0 0 90px 12px rgba(255,64,64,.75); }
+.game__flash.is-on { animation: flash .55s ease-out; }
+@keyframes flash { from { opacity: 1; } to { opacity: 0; } }
+
+/* HUD */
+.hud {
+  position: absolute; z-index: 6; left: 0; right: 0; top: 0;
+  display: flex; align-items: flex-start; gap: 20px;
+  padding: 15px 64px 0 22px; pointer-events: none;
+}
+.hud__cell { display: flex; flex-direction: column; line-height: 1; }
+.hud__lbl { font: 500 10px/1 'Golos Text', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); }
+.hud__val { margin-top: 6px; font: 700 20px/1 var(--head); font-variant-numeric: tabular-nums; letter-spacing: .05em; text-shadow: 0 0 14px rgba(95,212,255,.5); }
+.hud__val.is-rec { color: var(--gold); text-shadow: 0 0 14px rgba(255,203,107,.6); }
+.hud__right { margin-left: auto; display: flex; gap: 22px; }
+.hud__lives { display: flex; gap: 5px; margin-top: 6px; }
+.hud__lives svg { width: 21px; height: 18px; display: block; fill: #ff4d5e; filter: drop-shadow(0 0 5px rgba(255,77,94,.65)); transition: transform .25s, opacity .25s; }
+.hud__lives svg.is-off { fill: rgba(143,180,255,.16); filter: none; transform: scale(.84); }
+.hud__lives svg.is-off rect { display: none; }
+.hud__combo {
+  position: absolute; left: 50%; top: 12px; text-align: center;
+  opacity: 0; transform: translateX(-50%) scale(.7); transition: opacity .2s, transform .25s cubic-bezier(.3, 1.6, .5, 1);
+}
+.hud__combo.is-on { opacity: 1; transform: translateX(-50%) scale(1); }
+.hud__combo b { display: block; margin-top: 3px; font: 700 24px/1 var(--head); color: var(--gold); text-shadow: 0 0 16px rgba(255,203,107,.7); }
+.hud__bar { display: block; width: 66px; height: 3px; margin: 5px auto 0; border-radius: 2px; background: rgba(255,203,107,.18); overflow: hidden; }
+.hud__bar i { display: block; height: 100%; background: var(--gold); transform-origin: 0 50%; }
+.pause {
+  position: absolute; z-index: 7; right: 14px; top: 13px; width: 38px; height: 38px;
+  display: grid; place-items: center; padding: 0; border-radius: 11px; cursor: pointer;
+  color: var(--ink); background: rgba(16,40,80,.55); border: 1px solid rgba(143,180,255,.3);
+}
+.pause:hover { background: rgba(16,85,203,.55); }
+
+/* экраны поверх поля: без backdrop-filter — под ними анимированный холст */
+.ov {
+  position: absolute; z-index: 8; left: 0; right: 0; top: 0; bottom: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 70px 20px 28px; text-align: center;
+}
+.ov:not([hidden]) { animation: ov-in .45s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes ov-in { from { opacity: 0; transform: translateY(12px); } }
+.ov--start { top: var(--ov-top, 46%); bottom: var(--ov-bot, 20%); padding: 0 20px; }
+.ov--dim { background: radial-gradient(60% 62% at 50% 52%, rgba(6,11,20,.9), rgba(6,11,20,.62) 62%, rgba(6,11,20,.28)); }
+.ov__chip {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 12px;
+  font: 500 12px/1 'Golos Text', system-ui, sans-serif; letter-spacing: .16em; text-transform: uppercase; color: #ffc2c2;
+  border: 1px solid rgba(255,64,64,.45); background: rgba(80,10,20,.45); padding: 7px 13px; border-radius: 999px;
+}
+.ov__chip i { width: 8px; height: 8px; border-radius: 50%; background: #ff5a5a; box-shadow: 0 0 10px #ff5a5a; animation: blink 1.1s steps(1) infinite; }
+.ov__chip--ok { color: #c4ffd6; border-color: rgba(70,255,122,.45); background: rgba(10,60,30,.45); }
+.ov__chip--ok i { background: var(--green); box-shadow: 0 0 10px var(--green); }
+@keyframes blink { 50% { opacity: .2; } }
+.ov__title {
+  margin: 0; max-width: 860px;
+  font: 700 clamp(26px, 3.4vw, 46px)/1.06 var(--head); letter-spacing: -0.02em; text-wrap: balance;
+  text-shadow: 0 0 34px rgba(60,120,255,.5), 2px 0 0 rgba(255,64,64,.55), -2px 0 0 rgba(95,212,255,.55);
+}
+.ov--start .ov__title { animation: glitch 4.2s steps(1) infinite; }
+@keyframes glitch {
+  0%, 91%, 100% { transform: none; }
+  92% { transform: translate(3px, -1px) skewX(-6deg); text-shadow: 0 0 34px rgba(60,120,255,.5), 5px 0 0 rgba(255,64,64,.8), -5px 0 0 rgba(95,212,255,.8); }
+  94% { transform: translate(-3px, 1px); }
+  96% { transform: translate(1px, 0) skewX(4deg); }
+}
+.ov__title--win { background: linear-gradient(90deg, var(--gold), #fff3cf 45%, var(--green)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; filter: drop-shadow(0 0 22px rgba(255,203,107,.45)); }
+.ov__title--lose { color: #ffd9d9; text-shadow: 0 0 30px rgba(255,64,64,.55), 2px 0 0 rgba(255,64,64,.6), -2px 0 0 rgba(155,140,255,.6); }
+.ov__text { margin: 10px 0 0; max-width: 560px; color: #c2d0e6; font-size: clamp(15px, 1.3vw, 18px); line-height: 1.45; text-wrap: balance; text-shadow: 0 1px 12px rgba(6,11,20,.9); }
+.ov__score { margin: 12px 0 0; color: var(--muted); font-size: 15px; }
+.ov__score b { color: var(--ink); font: 700 17px/1 var(--head); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+.ov__rec { display: inline-block; margin-left: 6px; padding: 3px 9px; border-radius: 999px; font: 700 12px/1.3 var(--head); color: #2a1a00; background: var(--gold); box-shadow: 0 0 16px rgba(255,203,107,.6); vertical-align: 1px; }
+.ov__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 18px; margin-top: 18px; }
+.ov__keys { margin: 0; font-size: 13px; color: var(--muted); text-shadow: 0 1px 10px rgba(6,11,20,.9); }
+.ov--start .ov__text { max-width: 860px; }
+html:not(.js) .hud, html:not(.js) .keys { display: none; }
+.ov--start.is-compact .ov__chip, .ov--start.is-compact2 .ov__text { display: none; }
+kbd {
+  display: inline-block; min-width: 26px; padding: 3px 6px; margin: 0 1px;
+  border-radius: 6px; border: 1px solid rgba(143,180,255,.4); border-bottom-width: 2px;
+  background: rgba(16,40,80,.6); color: #d8e6ff; font: 600 12px/1.25 var(--mono); text-align: center;
+}
+.touch .kbd-only { display: none; }
+
+/* кнопки */
+.btn {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; overflow: hidden;
+  padding: 16px 26px; border: 0; border-radius: 14px; cursor: pointer; text-decoration: none;
+  font: 700 17px/1.2 var(--head); color: #fff; background: var(--brand);
+  box-shadow: 0 0 0 1px rgba(143,180,255,.35) inset, 0 12px 36px rgba(16,85,203,.55);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s;
+}
+.btn::after {
+  content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: translateX(-160%) skewX(-20deg); animation: shine 3.6s ease-in-out infinite;
+}
+@keyframes shine { 0%, 55% { transform: translateX(-160%) skewX(-20deg); } 100% { transform: translateX(330%) skewX(-20deg); } }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(143,180,255,.6) inset, 0 16px 44px rgba(16,85,203,.75); }
+.btn:active { transform: translateY(0); }
+.btn--ghost { background: rgba(255,255,255,.07); box-shadow: 0 0 0 1px rgba(255,255,255,.24) inset; }
+.btn--ghost::after { display: none; }
+.btn--ghost:hover { background: rgba(255,255,255,.13); box-shadow: 0 0 0 1px rgba(255,255,255,.42) inset; }
+.btn--play { padding: 15px 22px 15px 24px; background: linear-gradient(180deg, #2a78ff, #1055cb); box-shadow: 0 0 0 1px rgba(143,200,255,.55) inset, 0 0 28px rgba(95,212,255,.45), 0 12px 32px rgba(16,85,203,.6); }
+.btn--play kbd { background: rgba(6,11,20,.35); border-color: rgba(255,255,255,.35); color: #fff; }
+.btn svg { flex: 0 0 auto; }
+.btn.is-lit { animation: lit 1.25s ease-in-out infinite; }
+@keyframes lit {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(143,180,255,.6) inset, 0 0 0 0 rgba(95,212,255,.7), 0 12px 36px rgba(16,85,203,.55); }
+  60% { box-shadow: 0 0 0 1px rgba(255,255,255,.9) inset, 0 0 0 14px rgba(95, 212, 255, 0), 0 14px 46px rgba(95,212,255,.65); }
+}
+.btn:focus-visible, .pause:focus-visible, .links a:focus-visible, .top a:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+
+/* текст под полем */
+.info { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'h h' 'l a'; align-items: center; gap: 10px 40px; margin-top: 22px; }
+.info h1 { grid-area: h; }
+.info .lead { grid-area: l; margin: 0; }
+.info .actions { grid-area: a; }
+h1 { margin: 0; font: 700 clamp(27px, 2.9vw, 42px)/1.08 var(--head); letter-spacing: -0.02em; text-wrap: balance; }
+h1 span { color: var(--cyan); text-shadow: 0 0 26px rgba(95,212,255,.45); }
+.lead { margin: 10px 0 0; max-width: 660px; color: var(--muted); font-size: clamp(15px, 1.2vw, 18px); text-wrap: pretty; }
+.actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px 14px; }
+.foot {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 26px;
+  margin-top: 22px; padding-top: 16px; border-top: 1px solid rgba(143,180,255,.12);
+}
+.links { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; }
+.links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid rgba(163,179,204,.3); }
+.links a:hover { color: var(--ink); border-color: var(--ink); }
+.keys { margin: 0; font-size: 13px; color: var(--dim); }
+.keys kbd { font-size: 11px; min-width: 22px; padding: 1px 5px; }
+
+@media (min-width: 1800px) {
+  .top, .main { max-width: 1640px; }
+  .game { height: clamp(320px, 64vh, 1000px); height: clamp(320px, 64svh, 1000px); }
+}
+@media (max-width: 900px) {
+  .info { grid-template-columns: 1fr; grid-template-areas: 'h' 'l' 'a'; justify-items: center; text-align: center; }
+  .info .actions { margin-top: 8px; }
+  .lead { margin-left: auto; margin-right: auto; }
+  .actions, .foot, .links { justify-content: center; }
+  .foot { text-align: center; }
+}
+@media (max-width: 640px) {
+  .top__phone { display: none; }
+  .main { margin-top: 12px; }
+  .game { height: clamp(300px, 55vh, 620px); height: clamp(300px, 55svh, 620px); border-radius: 18px; }
+  .hud { gap: 14px; padding: 12px 54px 0 14px; }
+  .hud__val { font-size: 16px; margin-top: 5px; }
+  .hud__lbl { font-size: 9px; letter-spacing: .12em; }
+  .hud__right { gap: 14px; }
+  .hud__lives { gap: 3px; margin-top: 5px; }
+  .hud__lives svg { width: 16px; height: 14px; }
+  .hud__combo { top: 10px; left: 100px; text-align: left; transform: scale(.7); transform-origin: 0 0; }
+  .hud__combo.is-on { transform: none; }
+  .hud__combo b { font-size: 19px; }
+  .hud__bar { width: 48px; margin-left: 0; }
+  .ov__br { display: block; }
+  .pause { right: 10px; top: 10px; width: 34px; height: 34px; }
+  .ov { padding: 56px 16px 22px; }
+  .ov--start { padding: 0 14px; }
+  .ov__text { font-size: 14px; }
+  .ov__chip { font-size: 11px; margin-bottom: 10px; }
+  .ov__row { margin-top: 14px; gap: 10px; }
+  .ov__row .btn { padding: 14px 20px; font-size: 16px; }
+  .info { margin-top: 20px; gap: 18px; }
+  .btn { width: 100%; }
+  .ov__row .btn { width: auto; }
+  .actions { width: 100%; max-width: 400px; }
+  .keys { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="neb neb--a" aria-hidden="true"></div>
+  <div class="neb neb--b" aria-hidden="true"></div>
+
+  <header class="top">
+    <a href="/" aria-label="TEACHNET — на главную"><img src="/images/logo-white.svg" width="102" height="32" alt="TEACHNET" /></a>
+    <a class="top__phone" href="tel:+79934151434">+7 (993) 415-14-34</a>
+  </header>
+
+  <main class="main">
+    <section class="game" id="game" tabindex="-1" aria-label="Мини-игра «Захватчики 404»: помогите Тичу прогнать багов">
+      <div class="game__bg" aria-hidden="true"></div>
+      <canvas class="game__stars" aria-hidden="true"></canvas>
+      <canvas class="game__stars" aria-hidden="true"></canvas>
+      <div class="game__ground" aria-hidden="true"></div>
+      <canvas class="game__cvs" id="cvs" aria-hidden="true"></canvas>
+      <div class="game__fb" aria-hidden="true"><span class="game__fb404">404</span><img src="/images/tich-idea.webp" width="320" height="658" alt="" /></div>
+      <div class="game__frame" aria-hidden="true"></div>
+      <div class="game__flash" id="flash" aria-hidden="true"></div>
+
+      <div class="hud" id="hud" aria-hidden="true">
+        <div class="hud__cell"><span class="hud__lbl">Очки</span><span class="hud__val" id="hScore">00000</span></div>
+        <div class="hud__combo" id="hCombo"><span class="hud__lbl">Комбо</span><b id="hMult">×2</b><span class="hud__bar"><i id="hBar"></i></span></div>
+        <div class="hud__right">
+          <div class="hud__cell"><span class="hud__lbl">Рекорд</span><span class="hud__val" id="hBest">00000</span></div>
+          <div class="hud__cell"><span class="hud__lbl">Жизни</span>
+<span class="hud__lives" id="hLives"></span>
+          </div>
+        </div>
+      </div>
+      <button class="pause" id="pauseBtn" type="button" aria-label="Пауза" hidden>
+        <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1" width="3.5" height="12" rx="1" fill="currentColor" /><rect x="8.5" y="1" width="3.5" height="12" rx="1" fill="currentColor" /></svg>
+      </button>
+
+      <div class="ov ov--start" id="ovStart" hidden>
+        <p class="ov__chip"><i></i>Тревога · вторжение багов</p>
+        <p class="ov__title">Страницу захватили баги!</p>
+        <p class="ov__text">Съели нужную страницу и построились в «404». Помогите Тичу их прогнать!</p>
+        <div class="ov__row">
+          <button class="btn btn--play" id="startBtn" type="button">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor" /></svg>
+            Освободить <kbd class="kbd-only">Enter</kbd>
+          </button>
+          <p class="ov__keys" data-touch="Ведите пальцем по полю — Тич стреляет сам"><kbd>←</kbd><kbd>→</kbd> или мышь — ходить · <kbd>Пробел</kbd> или клик — лазер</p>
+        </div>
+      </div>
+
+      <div class="ov ov--dim" id="ovWin" hidden>
+        <p class="ov__chip ov__chip--ok"><i></i>Баги выдворены</p>
+        <p class="ov__title ov__title--win">Страница освобождена!</p>
+        <p class="ov__text">Правда, её всё равно нет 🙂 <span class="ov__br">Зато есть главная</span></p>
+        <p class="ov__score">Счёт: <b id="winScore">0</b><span class="ov__rec" id="winRec" hidden>Новый рекорд!</span></p>
+        <div class="ov__row">
+          <a class="btn" href="/">На главную</a>
+          <button class="btn btn--ghost" type="button" data-again>Ещё раз</button>
+        </div>
+      </div>
+
+      <div class="ov ov--dim" id="ovLose" hidden>
+        <p class="ov__title ov__title--lose">Баги победили. Ещё раз?</p>
+        <p class="ov__text" id="loseText">Тич уже протирает антенну для второй попытки.</p>
+        <p class="ov__score">Счёт: <b id="loseScore">0</b> · рекорд: <b id="loseBest">0</b></p>
+        <div class="ov__row">
+          <button class="btn btn--play" type="button" data-again>Ещё раз</button>
+          <a class="btn btn--ghost" href="/">На главную</a>
+        </div>
+      </div>
+
+      <div class="ov ov--dim" id="ovPause" hidden>
+        <p class="ov__title">Пауза</p>
+        <p class="ov__text">Баги замерли и делают вид, что их тут нет.</p>
+        <div class="ov__row"><button class="btn btn--play" id="resumeBtn" type="button">Продолжить <kbd class="kbd-only">Esc</kbd></button></div>
+      </div>
+
+      <p class="sr-only" id="live" aria-live="polite"></p>
+    </section>
+
+    <div class="info">
+      <h1><span>Ошибка 404:</span> страницу захватили баги</h1>
+      <p class="lead">Такой страницы на&nbsp;сайте нет&nbsp;— ссылка устарела или в&nbsp;адресе опечатка. Прогоните багов вместе с&nbsp;Тичем или сразу возвращайтесь на&nbsp;главную.</p>
+      <div class="actions">
+        <a class="btn" id="homeBtn" href="/">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5" /><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5" /></svg>
+          Вернуться на главную
+        </a>
+        <a class="btn btn--ghost" href="/#lead">Записаться на пробный урок</a>
+      </div>
+    </div>
+
+    <div class="foot">
+      <nav class="links" aria-label="Разделы сайта">
+        <a href="/#programs">Программы</a>
+        <a href="/electronics">Электроника, 10–15 лет</a>
+        <a href="/tech">Учебная плата TEACHNET UNO</a>
+      </nav>
+      <p class="keys" id="keys">Как играть: <kbd>←</kbd> <kbd>→</kbd> или <kbd>A</kbd> <kbd>D</kbd> — ходить, <kbd>Пробел</kbd> — лазер, <kbd>Esc</kbd> — пауза</p>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+'use strict';
+var doc = document, root = doc.documentElement;
+function $(id) { return doc.getElementById(id); }
+function mm(q) { return !!(window.matchMedia && matchMedia(q).matches); }
+function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+var rnd = Math.random;
+
+var reduce = mm('(prefers-reduced-motion: reduce)');
+var coarse = mm('(hover: none)') || mm('(pointer: coarse)');
+var game = $('game'), cvs = $('cvs');
+var ctx = cvs && cvs.getContext ? cvs.getContext('2d') : null;
+if (!ctx) { root.classList.remove('js'); return; }
+
+var starEls = game.querySelectorAll('.game__stars');
+var hudEl = $('hud'), hScore = $('hScore'), hBest = $('hBest'), hLives = $('hLives').children;
+$('hLives').innerHTML = new Array(4).join('<svg viewBox="0 0 7 6" shape-rendering="crispEdges"><path d="M1 0h2v1h1V0h2v1h1v2H6v1H5v1H4v1H3V5H2V4H1V3H0V1h1z"/><rect x="1" y="1" width="1" height="1" fill="#fff" opacity=".75"/></svg>');
+var hCombo = $('hCombo'), hMult = $('hMult'), hBar = $('hBar');
+var ovStart = $('ovStart'), ovWin = $('ovWin'), ovLose = $('ovLose'), ovPause = $('ovPause');
+var flashEl = $('flash'), liveEl = $('live'), homeBtn = $('homeBtn'), pauseBtn = $('pauseBtn');
+
+var DPR = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
+
+if (coarse) {
+  root.classList.add('touch');
+  Array.prototype.forEach.call(doc.querySelectorAll('[data-touch]'), function (el) { el.textContent = el.getAttribute('data-touch'); });
+  $('keys').textContent = 'Как играть: ведите пальцем по полю — Тич ходит за пальцем и стреляет сам';
+}
+
+// рекорд: localStorage может быть недоступен — тогда без рекорда
+var BEST_KEY = 'teachnet-404-invaders-best', best = 0;
+try { best = parseInt(localStorage.getItem(BEST_KEY), 10) || 0; } catch (e) { best = 0; }
+function saveBest() { try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) { /* без рекорда */ } }
+
+// пиксель-арт: по 2 кадра
+var TYPES = [
+  { pts: 30, glow: 'rgba(155,140,255,0.85)', spark: 'violet', debris: ['#9b8cff', '#c9c0ff', '#ff8fb8'],
+    pal: { a: '#c9c0ff', b: '#9b8cff', h: '#dcd5ff', d: '#6152d6', w: '#ffffff', k: '#0f1a3a', p: '#ff8fb8' },
+    f: [
+      ['.a.......a.', '..a.....a..', '..hbbbbbb..', '.hbbbbbbbb.', '.bwkbbbwkb.', 'abkkbbbkkba', '.bpbbkbbpb.', 'a.dbbbbbd.a', '...d...d...'],
+      ['..a.....a..', '..a.....a..', '..hbbbbbb..', '.hbbbbbbbb.', '.bwkbbbwkb.', '.bkkbbbkkb.', 'abpbbkbbpba', '..dbbbbbd..', '.a.d...d.a.']
+    ] },
+  { pts: 20, glow: 'rgba(143,180,255,0.75)', spark: 'blue', debris: ['#e6eeff', '#a9c1f2', '#ff4d5e'],
+    pal: { b: '#e6eeff', s: '#a9c1f2', f: '#7f9fe0', k: '#0f1a3a', r: '#ff4d5e', l: '#a9c1f2' },
+    f: [
+      ['.bbbbb.bf..', '.bbbb.bbff.', '.bkbb.bbkb.', '.bbbbb.bbb.', '.bsrb.bsrb.', '.bbbbb.bbb.', '.bbbb.bbbb.', '..l.....l..', '.l.......l.'],
+      ['.bbbb..bbf.', '.bbbbb..bff', '.bkbb..bbkb', '.bbbbb..bbb', '.bsrb..bsrb', '.bbbbb..bbb', '.bbbb..bbbb', '..l.....l..', '...l...l...']
+    ] },
+  { pts: 10, glow: 'rgba(95,212,255,0.85)', spark: 'cyan', debris: ['#5fd4ff', '#9be8ff', '#ffffff'],
+    pal: { a: '#9be8ff', c: '#5fd4ff', w: '#ffffff', k: '#0f1a3a', d: '#2a9fd0' },
+    f: [
+      ['..a.....a..', '...a...a...', '..ccccccc..', '.cwkcccwkc.', 'ccccccccccc', 'c.ccdddcc.c', 'c.c.....c.c', '...cc.cc...', '...........'],
+      ['..a.....a..', 'c..a...a..c', 'c.ccccccc.c', 'ccwkcccwkcc', 'ccccccccccc', '.cccdddccc.', '..c.....c..', '.c.......c.', '...........']
+    ] }
+];
+var UFO = { pts: [100, 150, 200, 300], glow: 'rgba(255,203,107,0.9)',
+  pal: { g: '#ffcb6b', h: '#fff0c4', d: '#d18a1c', w: '#cfe7ff', k: '#3a2400', e: '#ffffff' },
+  f: [
+    ['ww.....g.....ww', 'www...ggg...www', '.wwwhgggggdwww.', '..wgeekgkeegw..', '...ggggggggg...', '....dgdgdgd....', '....g.....g....'],
+    ['...............', '.......g.......', '..wwhgggggdww..', 'wwwgeekgkeegwww', 'ww.ggggggggg.ww', '....dgdgdgd....', '...g.......g...']
+  ] };
+var BOMB = { glow: 'rgba(255,77,94,0.95)', pal: { r: '#ff4d5e', o: '#ffcb6b' },
+  f: [['.r.', 'r..', '.o.', '..r', '.r.', 'r..', '.o.'], ['.r.', '..r', '.o.', 'r..', '.r.', '..r', '.o.']] };
+
+// a — «пиксель» спрайта в CSS px; если он не кратен пикселю экрана — рисуем крупнее и уменьшаем, чтобы пиксели были ровными
+function pixSprite(rows, pal, a, glow) {
+  var w = rows[0].length, h = rows.length, ad = a * DPR, Pi = Math.round(ad), exact = Math.abs(ad - Pi) < 0.12 && Pi >= 1;
+  var P = exact ? Pi : Math.max(2, Math.ceil(ad * 2));
+  var core = doc.createElement('canvas');
+  core.width = w * P; core.height = h * P;
+  var g = core.getContext('2d'), x, y, ch;
+  for (y = 0; y < h; y++) for (x = 0; x < w; x++) {
+    ch = rows[y].charAt(x);
+    if (ch === '.') continue;
+    g.fillStyle = pal[ch];
+    g.fillRect(x * P, y * P, P, P);
+  }
+  var dw = Math.round(w * ad), dh = Math.round(h * ad), pad = Math.ceil(ad * 2.6) + 2;
+  var c = doc.createElement('canvas');
+  c.width = dw + pad * 2; c.height = dh + pad * 2;
+  var o = c.getContext('2d');
+  o.imageSmoothingEnabled = !exact;
+  o.imageSmoothingQuality = 'high';
+  o.shadowColor = glow; o.shadowBlur = ad * 3.2;
+  o.drawImage(core, pad, pad, dw, dh);
+  o.shadowBlur = 0; o.shadowColor = 'rgba(0,0,0,0)';
+  o.drawImage(core, pad, pad, dw, dh);
+  return { c: c, w: c.width / DPR, h: c.height / DPR };
+}
+function dot(rgb) {
+  var c = doc.createElement('canvas'), r = 16;
+  c.width = c.height = r * 2;
+  var g = c.getContext('2d'), gr = g.createRadialGradient(r, r, 0, r, r, r);
+  gr.addColorStop(0, 'rgba(255,255,255,0.95)');
+  gr.addColorStop(0.18, 'rgba(' + rgb + ',0.95)');
+  gr.addColorStop(0.5, 'rgba(' + rgb + ',0.25)');
+  gr.addColorStop(1, 'rgba(' + rgb + ',0)');
+  g.fillStyle = gr; g.fillRect(0, 0, r * 2, r * 2);
+  return c;
+}
+var GLOW = { cyan: dot('95,212,255'), violet: dot('155,140,255'), blue: dot('143,180,255'), gold: dot('255,203,107'), green: dot('70,255,122'), red: dot('255,77,94'), white: dot('255,255,255') };
+var FW_COLORS = ['cyan', 'gold', 'violet', 'green', 'blue', 'red', 'white'];
+function makeLaser() {
+  var w = Math.round(16 * DPR), h = Math.round(34 * DPR), c = doc.createElement('canvas');
+  c.width = w; c.height = h;
+  var g = c.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, h);
+  gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.35, '#9eeaff'); gr.addColorStop(1, 'rgba(95,212,255,0)');
+  g.shadowColor = '#5fd4ff'; g.shadowBlur = 7 * DPR;
+  g.fillStyle = gr;
+  g.fillRect(w / 2 - 1.6 * DPR, 6 * DPR, 3.2 * DPR, h - 10 * DPR);
+  g.shadowBlur = 0;
+  g.fillStyle = 'rgba(255,255,255,0.95)';
+  g.fillRect(w / 2 - 0.6 * DPR, 6 * DPR, 1.2 * DPR, (h - 10 * DPR) * 0.55);
+  return { c: c, w: w / DPR, h: h / DPR };
+}
+var LASER = makeLaser();
+
+// Тич: k — масштаб к позе idea (scared обрезан по пояс — «приседает»), tip — шарик антенны, из него бьёт лазер
+var TICH = {
+  idea: { src: '/images/tich-idea.webp', w: 320, h: 658, k: 1, tip: [236.5, 22] },
+  scared: { src: '/images/tich-scared.webp', w: 320, h: 623, k: 0.92, tip: [211.5, 22] },
+  thumb: { src: '/images/tich-thumb.webp', w: 320, h: 709, k: 0.95, tip: [234, 21] }
+};
+var TS = {}, IMGS = {};
+Object.keys(TICH).forEach(function (n) {
+  var im = new Image();
+  im.decoding = 'async';
+  im.onload = function () { IMGS[n] = im; buildTich(n); if (W && !raf) render(); };
+  im.src = TICH[n].src;
+});
+function buildTich(n) {
+  var im = IMGS[n], d = TICH[n];
+  if (!im || !tich.w) return;
+  var cw = tich.w * d.k, ch = cw * d.h / d.w, tw = Math.max(1, Math.round(cw * DPR)), th = Math.max(1, Math.round(ch * DPR));
+  var src = im, sw = im.naturalWidth || d.w, sh = im.naturalHeight || d.h;
+  while (sw / 2 >= tw * 1.4) {
+    var t = doc.createElement('canvas');
+    t.width = Math.round(sw / 2); t.height = Math.round(sh / 2);
+    var tg = t.getContext('2d');
+    tg.imageSmoothingQuality = 'high';
+    tg.drawImage(src, 0, 0, t.width, t.height);
+    src = t; sw = t.width; sh = t.height;
+  }
+  var c = doc.createElement('canvas');
+  c.width = tw; c.height = th;
+  var g = c.getContext('2d');
+  g.imageSmoothingQuality = 'high';
+  g.drawImage(src, 0, 0, tw, th);
+  TS[n] = { c: c, w: cw, h: ch, tx: cw * (d.tip[0] / d.w) - cw / 2, ty: -ch + ch * (d.tip[1] / d.h) };
+  if (n === 'scared') {
+    var f = doc.createElement('canvas');
+    f.width = tw; f.height = th;
+    var fg = f.getContext('2d');
+    fg.drawImage(c, 0, 0);
+    fg.globalCompositeOperation = 'source-atop';
+    fg.fillStyle = 'rgba(255,240,240,0.92)';
+    fg.fillRect(0, 0, tw, th);
+    TS.flash = { c: f, w: cw, h: ch, tx: TS.scared.tx, ty: TS.scared.ty };
+  }
+}
+
+var W = 0, H = 0, gLeft = 0, narrow = false, hudB = 0, floorY = 0, loseY = 0, margin = 12;
+var cols = 0, rows = 0, G = [], BUGS = [], s = 20, art = 1.5, bugW = 16, bugH = 13;
+var SPR = [], USPR = [], BSPR = [];
+var F = { x: 0, y: 0, rx: 0, ry: 0, dir: 1, acc: 0, frame: 0, dx: 6, dy: 10, T0: 0.22, minC: 0, maxC: 0, maxR: 0, total: 0, alive: 0, top0: 0 };
+var tich = { x: 0, vx: 0, w: 0, h: 0, vmax: 600, hurt: 0, inv: 0, muz: 0 };
+var lasers = [], bombs = [], parts = [], pops = [], rockets = [], ufo = null;
+var state = 'intro', T = 0, last = 0, raf = 0, visible = true, endT = 0, endShown = false, readyT = 0, pausedFrom = 'play', invaded = false;
+var score = 0, lives = 3, chain = 0, chainT = 0, mult = 1, CHAIN_WIN = 1.5, cool = 0, bombT = 1.2, ufoT = 14, newRecord = false;
+var shake = 0, asmT0 = -100, starY = 0, starSpd = 1, stars = [], fwT = 0, fwN = 0, goT = -10;
+var keys = { l: false, r: false, fire: false }, ptr = { on: false, down: false, x: 0, id: -1 };
+
+/* строй «404»: цифры рисуются шрифтом Onest на невидимом холсте, закрашенные клетки становятся жучками */
+function buildGrid(R) {
+  var K = 16, gap = 1, chars = ['4', '0', '4'], cells = [], off = 0;
+  var c = doc.createElement('canvas'), g = c.getContext('2d');
+  var FONT = '700 200px Onest, system-ui, sans-serif';
+  g.font = FONT;
+  var mAll = g.measureText('404'), asc = mAll.actualBoundingBoxAscent || 145, inkH = asc + (mAll.actualBoundingBoxDescent || 0);
+  chars.forEach(function (ch) {
+    g.font = FONT;
+    var m = g.measureText(ch), l = m.actualBoundingBoxLeft || 0, inkW = (m.actualBoundingBoxRight || m.width) + l;
+    var C = Math.max(3, Math.round(R * inkW / inkH));
+    c.width = C * K; c.height = R * K;
+    var sc = (R * K) / inkH, sx = (C * K) / (inkW * sc);
+    g.setTransform(sc * sx, 0, 0, sc, 0, 0);
+    g.font = FONT; g.fillStyle = '#fff'; g.textBaseline = 'alphabetic';
+    g.fillText(ch, l, asc);
+    var d = g.getImageData(0, 0, c.width, c.height).data;
+    for (var y = 0; y < R; y++) for (var x = 0; x < C; x++) {
+      var cov = 0, n = 0;
+      for (var yy = 2; yy < K; yy += 4) for (var xx = 2; xx < K; xx += 4) { n++; if (d[((y * K + yy) * c.width + x * K + xx) * 4 + 3] > 127) cov++; }
+      if (cov / n >= 0.42) cells.push([off + x, y]);
+    }
+    off += C + gap;
+  });
+  cols = off - gap; rows = R;
+  BUGS = cells.map(function (q) {
+    var r = q[1];
+    return { c: q[0], r: r, t: r < R * 0.34 ? 0 : r < R * 0.67 ? 1 : 2, alive: true, d: 0, fy: 0 };
+  });
+  F.total = BUGS.length;
+}
+function resetBugs() {
+  G = new Array(cols * rows);
+  for (var i = 0; i < BUGS.length; i++) { var b = BUGS[i]; b.alive = true; G[b.r * cols + b.c] = b; }
+  F.alive = BUGS.length;
+  bounds();
+}
+function bounds() {
+  var minC = 1e9, maxC = -1, maxR = -1;
+  for (var i = 0; i < BUGS.length; i++) {
+    var b = BUGS[i];
+    if (!b.alive) continue;
+    if (b.c < minC) minC = b.c;
+    if (b.c > maxC) maxC = b.c;
+    if (b.r > maxR) maxR = b.r;
+  }
+  F.minC = minC; F.maxC = maxC; F.maxR = maxR;
+}
+function placeFormation() {
+  F.x = F.rx = Math.round((W - cols * s) / 2);
+  F.y = F.ry = F.top0;
+  F.dir = rnd() < 0.5 ? 1 : -1; F.acc = 0; F.frame = 0;
+}
+// жучки слетаются в «404» сверху (при загрузке и перед новой игрой)
+function assemble() {
+  if (reduce) { asmT0 = -100; return 0.35; }
+  asmT0 = T;
+  var mx = 0;
+  for (var i = 0; i < BUGS.length; i++) {
+    var b = BUGS[i];
+    b.d = (b.c / cols) * 0.55 + (1 - b.r / rows) * 0.22 + rnd() * 0.22;
+    b.fy = H * 0.5 + rnd() * H * 0.35;
+    if (b.d > mx) mx = b.d;
+  }
+  return mx + 0.65;
+}
+function landedK(b) { return (T - asmT0 - b.d) / 0.62; }
+
+/* размеры */
+function layout() {
+  var rect = game.getBoundingClientRect();
+  var oW = W, oTop = F.top0, oLose = loseY;
+  W = rect.width; H = rect.height; gLeft = rect.left;
+  narrow = W < 620;
+  cvs.width = Math.round(W * DPR); cvs.height = Math.round(H * DPR);
+  hudB = Math.round(hudEl.getBoundingClientRect().bottom - rect.top);
+  var gnd = Math.round(clamp(H * 0.055, 16, 36));
+  game.style.setProperty('--gnd', gnd + 'px');
+  floorY = H - gnd + 1;
+  tich.h = narrow ? clamp(H * 0.115, 46, 54) : clamp(H * 0.135, 60, 80);
+  tich.w = tich.h * 320 / 658;
+  tich.vmax = Math.max(W * 0.62, 380);
+  loseY = floorY - tich.h * 0.92;
+  if (!rows) buildGrid(narrow ? 7 : 8);
+
+  // клетка строя по ширине и высоте поля; всё движение пропорционально ей
+  var availW = W * (narrow ? 0.9 : 0.6), availH = (loseY - hudB) * (narrow ? 0.4 : 0.47);
+  s = Math.max(10, Math.min(availW / cols, availH / rows, 42));
+  art = s * 0.8 / 11;
+  bugW = 11 * art; bugH = 9 * art;
+  margin = Math.max(10, s * 0.5);
+  F.top0 = hudB + Math.max(s * 1.1, 20);
+  SPR = TYPES.map(function (t) { return [pixSprite(t.f[0], t.pal, art, t.glow), pixSprite(t.f[1], t.pal, art, t.glow)]; });
+  USPR = [pixSprite(UFO.f[0], UFO.pal, art * 1.05, UFO.glow), pixSprite(UFO.f[1], UFO.pal, art * 1.05, UFO.glow)];
+  var ba = Math.max(art * 1.25, 1.6);
+  BSPR = [pixSprite(BOMB.f[0], BOMB.pal, ba, BOMB.glow), pixSprite(BOMB.f[1], BOMB.pal, ba, BOMB.glow)];
+  Object.keys(IMGS).forEach(buildTich);
+
+  // марш: время пересечения поля и спуска к Тичу почти одинаково на любой ширине
+  var formW = cols * s, span = Math.max(s, W - margin * 2 - formW);
+  F.T0 = narrow ? 0.3 : 0.2;
+  F.dx = clamp(span / 26, s * 0.18, s * 0.7);
+  var trav = span / (F.dx / F.T0), dist = loseY - (F.top0 + rows * s);
+  F.dy = clamp(dist * trav / 70, 3, s * 0.85);
+
+  if (!oW) { resetBugs(); tich.x = W / 2; }
+  if (!oW || state === 'intro') placeFormation();
+  else {
+    // размер поля поменялся посреди игры — переносим всё пропорционально
+    var fy = (F.y - oTop) / Math.max(1, oLose - oTop);
+    F.x = F.rx = F.x / oW * W;
+    if (F.x + (F.maxC + 1) * s > W - margin) F.x = F.rx = W - margin - (F.maxC + 1) * s;
+    if (F.x + F.minC * s < margin) F.x = F.rx = margin - F.minC * s;
+    F.y = F.ry = F.top0 + fy * (loseY - F.top0);
+  }
+  if (oW) {
+    tich.x = tich.x / oW * W;
+    lasers.length = bombs.length = 0; ufo = null;
+  }
+  tich.x = clamp(tich.x, tich.w / 2 + 6, W - tich.w / 2 - 6);
+  makeStars();
+  placeStartOverlay();
+}
+function placeStartOverlay() {
+  var top = F.top0 + rows * s + 10, bot = H - (floorY - tich.h) + 8;
+  game.style.setProperty('--ov-top', Math.round(top) + 'px');
+  game.style.setProperty('--ov-bot', Math.round(bot) + 'px');
+  if (!ovStart.hidden) {
+    ovStart.classList.remove('is-compact', 'is-compact2');
+    if (ovStart.scrollHeight > ovStart.clientHeight + 2) ovStart.classList.add('is-compact');
+    if (ovStart.scrollHeight > ovStart.clientHeight + 2) ovStart.classList.add('is-compact2');
+  }
+}
+
+// звёзды: два слоя, нарисованы один раз и дважды по высоте — «полёт» сдвигает слой по кругу
+var SP = 40;
+function makeStars() {
+  stars = [];
+  var hh = Math.round(H);
+  for (var l = 0; l < 2; l++) {
+    var el = starEls[l], cw = Math.round(W + SP * 2);
+    el.width = cw; el.height = hh * 2;
+    el.style.width = cw + 'px'; el.style.height = hh * 2 + 'px';
+    var g = el.getContext('2d'), n = Math.round(Math.min(l ? 240 : 760, (W * H) / (l ? 7000 : 1900)));
+    for (var i = 0; i < n; i++) {
+      var x = (rnd() * cw) | 0, y = (rnd() * hh) | 0, r = rnd();
+      var sz = l && r > 0.8 ? 2 : 1;
+      g.globalAlpha = l ? 0.5 + r * 0.5 : 0.16 + r * 0.42;
+      g.fillStyle = r > 0.93 ? '#ffe2a8' : r > 0.6 ? '#cfe0ff' : '#ffffff';
+      g.fillRect(x, y, sz, sz); g.fillRect(x, y + hh, sz, sz);
+      if (l && r > 0.95) {
+        g.globalAlpha = 0.35;
+        g.fillRect(x - 2, y, 2, 2); g.fillRect(x + 2, y, 2, 2); g.fillRect(x, y - 2, 2, 2); g.fillRect(x, y + 2, 2, 2);
+        g.fillRect(x - 2, y + hh, 2, 2); g.fillRect(x + 2, y + hh, 2, 2); g.fillRect(x, y + hh - 2, 2, 2); g.fillRect(x, y + hh + 2, 2, 2);
+      }
+    }
+    stars.push({ el: el, z: l ? 1 : 0.4, sp: l ? 15 : 5, h: hh, tx: 1e9, ty: 1e9 });
+  }
+  moveStars(true);
+}
+function moveStars(force) {
+  for (var i = 0; i < stars.length; i++) {
+    var L = stars[i];
+    var tx = reduce ? 0 : clamp(-(tich.x - W / 2) / (W / 2) * SP * 0.9 * L.z, -SP, SP);
+    var ty = reduce ? -L.h : ((starY * L.sp) % L.h) - L.h;
+    if (force || Math.abs(tx - L.tx) > 0.2 || Math.abs(ty - L.ty) > 0.2) {
+      L.tx = tx; L.ty = ty;
+      L.el.style.transform = 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,0)';
+    }
+  }
+}
+
+/* HUD */
+function fmt(n) { return n < 100000 ? ('0000' + n).slice(-5) : String(n); }
+var shownScore = -1, shownBest = -1;
+function hud() {
+  if (score !== shownScore) { shownScore = score; hScore.textContent = fmt(score); }
+  var b = Math.max(best, score);
+  if (b !== shownBest) { shownBest = b; hBest.textContent = fmt(b); }
+  hBest.classList.toggle('is-rec', score > 0 && score >= best && best > 0 || newRecord);
+  for (var i = 0; i < hLives.length; i++) hLives[i].classList.toggle('is-off', i >= lives);
+}
+function setMult(m) {
+  if (m === mult) return;
+  mult = m;
+  hCombo.classList.toggle('is-on', m > 1);
+  if (m > 1) hMult.textContent = '×' + m;
+}
+function announce(t) { liveEl.textContent = t; }
+
+/* игра */
+function showOv(el) {
+  [ovStart, ovWin, ovLose, ovPause].forEach(function (o) { o.hidden = o !== el; });
+  if (el === ovStart) placeStartOverlay();
+}
+function start() {
+  if (state === 'play' || state === 'ready') return;
+  if (state === 'pause') return resume();
+  var fresh = state !== 'intro';
+  if (fresh) {
+    resetBugs(); placeFormation();
+    readyT = assemble();
+  } else {
+    var left = 0;
+    for (var i = 0; i < BUGS.length; i++) left = Math.max(left, -landedK(BUGS[i]) * 0.62 + 0.62);
+    readyT = Math.max(0.55, left);
+  }
+  score = 0; lives = 3; chain = 0; chainT = 0; setMult(1); cool = 0.15; newRecord = false;
+  bombT = 1.4; ufoT = 12 + rnd() * 8;
+  lasers.length = bombs.length = rockets.length = pops.length = 0; ufo = null;
+  tich.hurt = tich.inv = 0;
+  state = 'ready'; goT = T;
+  showOv(null);
+  pauseBtn.hidden = false;
+  game.classList.add('is-play');
+  homeBtn.classList.remove('is-lit');
+  try { game.focus({ preventScroll: true }); } catch (e) { game.focus(); }
+  hud();
+  announce('Игра началась: прогоните багов!');
+  kick();
+}
+function pause() {
+  if (state !== 'play' && state !== 'ready') return;
+  pausedFrom = state; state = 'pause';
+  keys.l = keys.r = keys.fire = false; ptr.down = false;
+  showOv(ovPause);
+  pauseBtn.hidden = true;
+  game.classList.remove('is-play');
+  render();
+}
+function resume() {
+  if (state !== 'pause') return;
+  state = pausedFrom;
+  showOv(null);
+  pauseBtn.hidden = false;
+  game.classList.add('is-play');
+  try { game.focus({ preventScroll: true }); } catch (e) { game.focus(); }
+  kick();
+}
+function finish(won, inv) {
+  invaded = !!inv;
+  state = won ? 'win' : 'lose';
+  endT = T; endShown = false;
+  keys.fire = false; ptr.down = false;
+  pauseBtn.hidden = true;
+  game.classList.remove('is-play');
+  chainT = 0; setMult(1);
+  if (won) {
+    score += lives * 100;
+    pop(tich.x, floorY - tich.h - 14, '+' + lives * 100 + ' за жизни', 'gold');
+    fwN = reduce ? 0 : 10; fwT = 0.15;
+    homeBtn.classList.add('is-lit');
+  }
+  if (score > best) { best = score; newRecord = true; saveBest(); }
+  hud();
+  kick();
+}
+function showEnd() {
+  endShown = true;
+  if (state === 'win') {
+    $('winScore').textContent = fmt(score);
+    $('winRec').hidden = !newRecord;
+    showOv(ovWin);
+    announce('Победа! Страница освобождена. Счёт: ' + score + '. Кнопка «Вернуться на главную» ждёт.');
+  } else {
+    $('loseScore').textContent = fmt(score);
+    $('loseBest').textContent = fmt(best);
+    $('loseText').textContent = invaded ? 'Строй дошёл до самого Тича. Он уже протирает антенну для второй попытки.' : 'Тич уже протирает антенну для второй попытки.';
+    showOv(ovLose);
+    announce('Баги победили. Счёт: ' + score + '. Можно сыграть ещё раз.');
+  }
+}
+
+function fire() {
+  var spr = TS.idea;
+  var tx = spr ? spr.tx : tich.w * 0.24, ty = spr ? spr.ty : -tich.h;
+  var a = tilt();
+  var x = tich.x + tx * Math.cos(a) - ty * Math.sin(a), y = floorY + tx * Math.sin(a) + ty * Math.cos(a);
+  lasers.push({ x: x, y: y + 4, v: Math.max(H * 2.1, 760) });
+  cool = 0.17; tich.muz = 0.09;
+}
+function tilt() { return reduce ? 0 : clamp(tich.vx / tich.vmax, -1, 1) * 0.14; }
+
+function moveTich(dt) {
+  var target = 0, tipOff = TS.idea ? TS.idea.tx : tich.w * 0.24;
+  if (ptr.on) {
+    // мышь/палец: антенна встаёт под курсор
+    var want = clamp((ptr.x - tipOff - tich.x) * 13, -tich.vmax * 1.7, tich.vmax * 1.7);
+    tich.vx += (want - tich.vx) * Math.min(1, dt * 22);
+  } else {
+    target = (keys.r ? 1 : 0) - (keys.l ? 1 : 0);
+    tich.vx += (target * tich.vmax - tich.vx) * Math.min(1, dt * (target ? 12 : 16));
+  }
+  tich.x += tich.vx * dt;
+  var lo = tich.w / 2 + 6, hi = W - tich.w / 2 - 6;
+  if (tich.x < lo) { tich.x = lo; tich.vx = 0; }
+  if (tich.x > hi) { tich.x = hi; tich.vx = 0; }
+}
+
+function march(dt) {
+  var frac = F.alive / F.total;
+  var T1 = F.T0 * (0.18 + 0.82 * Math.pow(frac, 1.2));
+  var vmax = Math.max(W * 0.13, s * 5.5);
+  var dx = Math.min(F.dx, vmax * T1);
+  F.acc += dt;
+  if (F.acc < T1) return;
+  F.acc = Math.min(F.acc - T1, T1);
+  F.frame ^= 1;
+  var left = F.x + F.minC * s, right = F.x + (F.maxC + 1) * s;
+  if ((F.dir > 0 && right + dx > W - margin) || (F.dir < 0 && left - dx < margin)) {
+    // чем быстрее марш, тем короче спуск
+    F.y += F.dy * (0.3 + 0.7 * T1 / F.T0); F.dir = -F.dir;
+    if (F.y + (F.maxR + 1) * s >= loseY) { F.y = loseY - (F.maxR + 1) * s; shakeAdd(6); finish(false, true); }
+  } else {
+    F.x += F.dir * dx;
+  }
+}
+
+function bottomBug(c) {
+  for (var r = rows - 1; r >= 0; r--) { var b = G[r * cols + c]; if (b && b.alive) return b; }
+  return null;
+}
+function spawnBombs(dt) {
+  var frac = F.alive / F.total, maxB = 2 + (frac < 0.5 && !narrow ? 1 : 0);
+  bombT -= dt;
+  if (bombT > 0 || bombs.length >= maxB) return;
+  bombT = (0.8 + rnd() * 1.0) * (coarse ? 1.2 : 1) * (0.75 + 0.25 * frac);
+  var c, b = null;
+  if (rnd() < 0.45) c = clamp(Math.floor((tich.x - F.rx) / s), F.minC, F.maxC);
+  else c = F.minC + Math.floor(rnd() * (F.maxC - F.minC + 1));
+  for (var k = 0; k < cols && !b; k++) { b = bottomBug(c); if (!b) c = c + 1 > F.maxC ? F.minC : c + 1; }
+  if (!b) return;
+  bombs.push({ x: F.rx + (b.c + 0.5) * s, y: F.ry + (b.r + 0.5) * s + bugH * 0.5, v: H * (0.25 + 0.05 * (1 - frac)), f: 0, ph: rnd() * 6 });
+}
+function spawnUfo(dt) {
+  if (ufo) return;
+  ufoT -= dt;
+  if (ufoT > 0) return;
+  ufoT = 15 + rnd() * 10;
+  var uh = USPR[0].h, y = hudB + uh * 0.55 + 2;
+  if (F.ry < y + uh * 0.5) { ufoT = 4; return; }
+  var dir = rnd() < 0.5 ? 1 : -1;
+  ufo = { x: dir > 0 ? -USPR[0].w : W + USPR[0].w, y: y, dir: dir, v: Math.max(W / 6.5, 70) };
+}
+
+function shakeAdd(a) { if (!reduce) shake = Math.min(11, shake + a); }
+function pop(x, y, txt, kind) {
+  for (var i = pops.length - 1; i >= 0; i--) { var o = pops[i]; if (o.t < 0.35 && Math.abs(o.x - x) < 30 && Math.abs(o.y - o.t * 26 - y) < 14) { y = o.y - o.t * 26 - 15; } }
+  pops.push({ x: x, y: y, txt: txt, t: 0, life: kind === 'gold' ? 1.1 : 0.85, k: kind || '' });
+  if (pops.length > 14) pops.shift();
+}
+function spawn(p) { if (parts.length < 650) parts.push(p); }
+function sparks(x, y, n, color, sp, life, g, size) {
+  for (var i = 0; i < n; i++) {
+    var a = rnd() * 6.283, v = sp * (0.35 + rnd() * 0.65);
+    spawn({ k: 1, x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, t: 0, life: life * (0.6 + rnd() * 0.5), g: g, dr: 0.94, sz: size * (0.7 + rnd() * 0.6), img: GLOW[color] });
+  }
+}
+function explode(x, y, t) {
+  var D = TYPES[t].debris, n = coarse ? 9 : 14, px = Math.max(1.5, art * 1.15);
+  for (var i = 0; i < n; i++) {
+    var a = rnd() * 6.283, v = 70 + rnd() * 190;
+    spawn({ k: 0, x: x + (rnd() - 0.5) * bugW * 0.6, y: y + (rnd() - 0.5) * bugH * 0.6, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 60, t: 0, life: 0.45 + rnd() * 0.45, g: 380, dr: 0.95, sz: px * (rnd() < 0.3 ? 2 : 1), col: D[i % D.length] });
+  }
+  sparks(x, y, coarse ? 4 : 7, TYPES[t].spark, 150, 0.45, 0, 12);
+  spawn({ k: 2, x: x, y: y, t: 0, life: 0.32, r0: bugW * 0.3, r1: bugW * 1.5, col: TYPES[t].glow });
+}
+
+function killBug(b) {
+  b.alive = false; F.alive--;
+  var x = F.rx + (b.c + 0.5) * s, y = F.ry + (b.r + 0.5) * s;
+  chain = chainT > 0 ? chain + 1 : 1; chainT = CHAIN_WIN;
+  setMult(Math.min(5, 1 + Math.floor((chain - 1) / 3)));
+  var pts = TYPES[b.t].pts * mult;
+  score += pts;
+  pop(x, y - bugH * 0.4, '+' + pts, mult > 1 ? 'gold' : '');
+  explode(x, y, b.t);
+  shakeAdd(1.4);
+  bounds();
+  hud();
+  if (F.alive <= 0) {
+    sparks(x, y, 40, 'gold', 320, 1, 60, 16);
+    shakeAdd(7);
+    finish(true);
+  }
+}
+function hurtTich() {
+  if (tich.inv > 0 || state !== 'play') return;
+  lives--;
+  tich.hurt = 0.7; tich.inv = 1.8;
+  chain = 0; chainT = 0; setMult(1);
+  shakeAdd(9);
+  flashEl.classList.remove('is-on'); void flashEl.offsetWidth; flashEl.classList.add('is-on');
+  sparks(tich.x, floorY - tich.h * 0.5, 22, 'red', 260, 0.6, 120, 14);
+  sparks(tich.x, floorY - tich.h * 0.5, 10, 'white', 200, 0.4, 0, 10);
+  hud();
+  if (lives <= 0) finish(false);
+  else announce('Ой! Осталось жизней: ' + lives);
+}
+
+// луч проверяет все клетки, пройденные за кадр (не «проскакивает»)
+function laserHitsBug(L, y0) {
+  var c = Math.floor((L.x - F.rx) / s);
+  if (c < 0 || c >= cols) return false;
+  var rTop = Math.floor((L.y - F.ry) / s), rBot = Math.floor((y0 - F.ry) / s);
+  if (rBot < 0 || rTop >= rows) return false;
+  rTop = Math.max(0, rTop); rBot = Math.min(rows - 1, rBot);
+  var cx = F.rx + (c + 0.5) * s;
+  if (Math.abs(L.x - cx) > bugW * 0.5 + 1.5) return false;
+  for (var r = rBot; r >= rTop; r--) {
+    var b = G[r * cols + c];
+    if (b && b.alive && landedK(b) >= 1) { killBug(b); return true; }
+  }
+  return false;
+}
+
+function update(dt) {
+  T += dt;
+  var playing = state === 'play', active = playing || state === 'ready';
+  if (!reduce) {
+    starSpd += ((active ? 2.6 : 1) - starSpd) * Math.min(1, dt * 1.5);
+    starY += dt * starSpd;
+  }
+  if (shake > 0) { shake *= Math.exp(-dt * 9); if (shake < 0.15) shake = 0; }
+  if (state === 'pause') return;
+
+  if (active) moveTich(dt);
+  else tich.vx *= Math.exp(-dt * 10);
+  tich.hurt = Math.max(0, tich.hurt - dt);
+  tich.inv = Math.max(0, tich.inv - dt);
+  tich.muz = Math.max(0, tich.muz - dt);
+
+  var k = Math.min(1, dt * 28);
+  F.rx += (F.x - F.rx) * k; F.ry += (F.y - F.ry) * k;
+
+  if (state === 'ready') { readyT -= dt; if (readyT <= 0) state = 'play'; }
+  if (state === 'play') {
+    march(dt);
+    spawnBombs(dt);
+    spawnUfo(dt);
+    if (chainT > 0) { chainT -= dt; if (chainT <= 0) { chain = 0; setMult(1); } }
+  }
+
+  cool -= dt;
+  if (active && (keys.fire || ptr.down) && cool <= 0 && lasers.length < 4) fire();
+
+  var i, L, B, p;
+  for (i = lasers.length - 1; i >= 0; i--) {
+    L = lasers[i];
+    var y0 = L.y;
+    L.y -= L.v * dt;
+    var hit = false;
+    if (state === 'play' || state === 'ready') {
+      hit = laserHitsBug(L, y0);
+      if (!hit && ufo && Math.abs(L.x - ufo.x) < USPR[0].w * 0.36 && L.y < ufo.y + USPR[0].h * 0.3 && y0 > ufo.y - USPR[0].h * 0.4) {
+        var up = UFO.pts[(rnd() * UFO.pts.length) | 0] * mult;
+        score += up;
+        pop(ufo.x, ufo.y + 10, '+' + up, 'gold');
+        sparks(ufo.x, ufo.y, 28, 'gold', 260, 0.8, 80, 15);
+        explode(ufo.x, ufo.y, 0);
+        shakeAdd(3);
+        ufo = null; hit = true; hud();
+      }
+      if (!hit) {
+        for (var j = bombs.length - 1; j >= 0; j--) {
+          B = bombs[j];
+          if (Math.abs(L.x - B.x) < 7 && L.y < B.y + 8 && y0 > B.y - 10) {
+            sparks(B.x, B.y, 8, 'red', 140, 0.35, 0, 10);
+            score += 5; pop(B.x, B.y, '+5', ''); hud();
+            bombs.splice(j, 1); hit = true; break;
+          }
+        }
+      }
+    }
+    if (hit || L.y < -40) lasers.splice(i, 1);
+  }
+
+  if (ufo) {
+    ufo.x += ufo.dir * ufo.v * dt;
+    if ((ufo.dir > 0 && ufo.x > W + USPR[0].w) || (ufo.dir < 0 && ufo.x < -USPR[0].w)) ufo = null;
+  }
+
+  var tx0 = tich.x - tich.w * 0.27, tx1 = tich.x + tich.w * 0.27, ty0 = floorY - tich.h * 0.78;
+  for (i = bombs.length - 1; i >= 0; i--) {
+    B = bombs[i];
+    B.y += B.v * dt; B.f += dt;
+    if (playing && B.y + 6 > ty0 && B.y - 6 < floorY && B.x > tx0 && B.x < tx1 && tich.inv <= 0) {
+      bombs.splice(i, 1); hurtTich(); continue;
+    }
+    if (B.y > floorY - 2) { sparks(B.x, floorY - 2, 5, 'red', 90, 0.3, 0, 9); bombs.splice(i, 1); }
+  }
+  if (!active && state !== 'lose') bombs.length = 0;
+
+  for (i = parts.length - 1; i >= 0; i--) {
+    p = parts[i];
+    p.t += dt;
+    if (p.t >= p.life) { parts[i] = parts[parts.length - 1]; parts.pop(); continue; }
+    if (p.k < 2) {
+      var dr = Math.pow(p.dr, dt * 60);
+      p.vx *= dr; p.vy = p.vy * dr + p.g * dt;
+      p.x += p.vx * dt; p.y += p.vy * dt;
+    }
+  }
+  for (i = pops.length - 1; i >= 0; i--) { pops[i].t += dt; if (pops[i].t >= pops[i].life) pops.splice(i, 1); }
+
+  if (state === 'win' && !reduce) {
+    fwT -= dt;
+    if (fwT <= 0) {
+      fwT = fwN > 0 ? 0.2 + rnd() * 0.25 : 1.2 + rnd() * 1.3;
+      if (fwN > 0) fwN--;
+      var ty = H * (0.12 + rnd() * 0.3);
+      rockets.push({ x: W * (0.1 + rnd() * 0.8), y: floorY, vy: -Math.sqrt(2 * 520 * (floorY - ty)), c: FW_COLORS[(rnd() * FW_COLORS.length) | 0] });
+    }
+  }
+  for (i = rockets.length - 1; i >= 0; i--) {
+    var Rk = rockets[i];
+    Rk.vy += 520 * dt; Rk.y += Rk.vy * dt;
+    if (rnd() < 0.7) spawn({ k: 1, x: Rk.x + (rnd() - 0.5) * 2, y: Rk.y + 4, vx: 0, vy: 30, t: 0, life: 0.35, g: 0, dr: 0.9, sz: 7, img: GLOW.gold });
+    if (Rk.vy > -30) {
+      var n = coarse ? 34 : 54, sp = 140 + rnd() * 90;
+      for (var q = 0; q < n; q++) {
+        var a = (q / n) * 6.283 + rnd() * 0.15, v = sp * (0.82 + rnd() * 0.3);
+        spawn({ k: 1, x: Rk.x, y: Rk.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, t: 0, life: 1.1 + rnd() * 0.6, g: 95, dr: 0.965, sz: 11 + rnd() * 6, img: GLOW[Rk.c] });
+      }
+      sparks(Rk.x, Rk.y, 10, 'white', 90, 0.6, 40, 9);
+      rockets.splice(i, 1);
+    }
+  }
+
+  if ((state === 'win' || state === 'lose') && !endShown && T - endT > (state === 'win' ? 1.0 : 0.9)) showEnd();
+  if (mult > 1) hBar.style.transform = 'scaleX(' + Math.max(0, chainT / CHAIN_WIN).toFixed(3) + ')';
+}
+
+/* кадр */
+function R2(v) { return Math.round(v * DPR) / DPR; }
+function easeBack(k) { var c1 = 1.70158, c3 = c1 + 1, q = k - 1; return 1 + c3 * q * q * q + c1 * q * q; }
+function render() {
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  if (shake > 0) ctx.translate((rnd() - 0.5) * 2 * shake, (rnd() - 0.5) * 2 * shake);
+  var still = reduce && (state === 'intro');
+  var i, p, spr;
+
+  // линия обороны: краснеет, когда строй подбирается к Тичу
+  if (state !== 'intro' && F.alive > 0) {
+    var danger = clamp(1 - (loseY - (F.ry + (F.maxR + 1) * s)) / Math.max(1, loseY - (F.top0 + rows * s)), 0, 1);
+    ctx.globalAlpha = 0.16 + danger * 0.55;
+    ctx.strokeStyle = danger > 0.55 ? '#ff4d5e' : '#5fd4ff';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([6, 8]);
+    ctx.beginPath(); ctx.moveTo(14, R2(loseY) + 0.5); ctx.lineTo(W - 14, R2(loseY) + 0.5); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.globalAlpha = 1;
+  }
+
+  ctx.imageSmoothingEnabled = false;
+  var lost = state === 'lose';
+  for (i = 0; i < BUGS.length; i++) {
+    var b = BUGS[i];
+    if (!b.alive) continue;
+    var x = F.rx + (b.c + 0.5) * s, y = F.ry + (b.r + 0.5) * s, fr = F.frame, al = 1;
+    if (state === 'intro' || state === 'win') {
+      if (!still) { y += Math.sin(T * 2.3 + b.c * 0.45) * s * 0.07; fr = ((T * 1.7 + b.r * 0.22) | 0) & 1; }
+      else fr = 0;
+    } else if (lost) {
+      y -= Math.abs(Math.sin(T * 7 + b.c * 0.5)) * s * 0.16; fr = ((T * 6) | 0) & 1;
+    }
+    var kk = landedK(b);
+    if (kk < 1) {
+      if (kk <= 0) continue;
+      y -= (1 - easeBack(kk)) * b.fy;
+      al = Math.min(1, kk * 2.5);
+    }
+    spr = SPR[b.t][fr];
+    ctx.globalAlpha = al;
+    ctx.drawImage(spr.c, R2(x - spr.w / 2), R2(y - spr.h / 2), spr.w, spr.h);
+  }
+  ctx.globalAlpha = 1;
+  if (ufo) {
+    spr = USPR[((T * 8) | 0) & 1];
+    ctx.drawImage(spr.c, R2(ufo.x - spr.w / 2), R2(ufo.y + Math.sin(T * 7) * 3 - spr.h / 2), spr.w, spr.h);
+  }
+  for (i = 0; i < bombs.length; i++) {
+    var B = bombs[i];
+    spr = BSPR[((B.f * 9) | 0) & 1];
+    ctx.drawImage(spr.c, R2(B.x - spr.w / 2 + Math.sin(B.f * 10 + B.ph) * 1.2), R2(B.y - spr.h / 2), spr.w, spr.h);
+  }
+
+  for (i = 0; i < parts.length; i++) {
+    p = parts[i];
+    if (p.k !== 0) continue;
+    var lf = 1 - p.t / p.life;
+    ctx.globalAlpha = lf < 0.4 ? lf / 0.4 : 1;
+    ctx.fillStyle = p.col;
+    ctx.fillRect(R2(p.x), R2(p.y), p.sz, p.sz);
+  }
+  ctx.globalAlpha = 1;
+  ctx.imageSmoothingEnabled = true;
+
+  drawTich(still);
+
+  ctx.globalCompositeOperation = 'lighter';
+  for (i = 0; i < lasers.length; i++) {
+    var L = lasers[i];
+    ctx.drawImage(LASER.c, L.x - LASER.w / 2, L.y - 6, LASER.w, LASER.h);
+  }
+  if (tich.muz > 0 && TS.idea) {
+    var a = tilt(), sx = tich.x + TS.idea.tx * Math.cos(a) - TS.idea.ty * Math.sin(a), sy = floorY + TS.idea.tx * Math.sin(a) + TS.idea.ty * Math.cos(a);
+    var ms = 26 * (tich.muz / 0.09) + 8;
+    ctx.globalAlpha = 0.9;
+    ctx.drawImage(GLOW.cyan, sx - ms / 2, sy - ms / 2, ms, ms);
+  }
+  for (i = 0; i < parts.length; i++) {
+    p = parts[i];
+    if (p.k === 0) continue;
+    var t = p.t / p.life;
+    if (p.k === 1) {
+      ctx.globalAlpha = 1 - t * t;
+      ctx.drawImage(p.img, p.x - p.sz / 2, p.y - p.sz / 2, p.sz, p.sz);
+    } else {
+      ctx.globalAlpha = (1 - t) * 0.9;
+      ctx.strokeStyle = p.col; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r0 + (p.r1 - p.r0) * Math.sqrt(t), 0, 6.283); ctx.stroke();
+    }
+  }
+  for (i = 0; i < rockets.length; i++) { ctx.globalAlpha = 1; ctx.drawImage(GLOW.white, rockets[i].x - 7, rockets[i].y - 7, 14, 14); }
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+
+  if (pops.length) {
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '700 ' + (narrow ? 12 : 14) + 'px Onest, system-ui, sans-serif';
+    for (i = 0; i < pops.length; i++) {
+      var P = pops[i], pt = P.t / P.life;
+      ctx.globalAlpha = pt < 0.7 ? 1 : (1 - pt) / 0.3;
+      ctx.fillStyle = P.k === 'gold' ? '#ffcb6b' : '#eef3ff';
+      ctx.fillText(P.txt, P.x, P.y - pt * 26);
+    }
+    ctx.globalAlpha = 1;
+  }
+  if (T - goT < 1.1 && (state === 'ready' || state === 'play')) {
+    var gt = (T - goT) / 1.1, gs = clamp(H * 0.085, 30, 60) * (reduce ? 1 : 0.85 + 0.25 * Math.min(1, gt * 5));
+    ctx.globalAlpha = gt < 0.7 ? 1 : (1 - gt) / 0.3;
+    ctx.font = '700 ' + gs.toFixed(0) + 'px Onest, system-ui, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#eef3ff';
+    ctx.shadowColor = 'rgba(95,212,255,0.8)'; ctx.shadowBlur = 24;
+    ctx.fillText('Вперёд!', W / 2, (F.top0 + rows * s + loseY) / 2 + 10);
+    ctx.shadowBlur = 0; ctx.shadowColor = 'rgba(0,0,0,0)';
+    ctx.globalAlpha = 1;
+  }
+}
+function drawTich(still) {
+  var key = state === 'win' ? 'thumb' : (tich.hurt > 0 || state === 'lose') ? 'scared' : 'idea';
+  var spr = TS[key] || TS.idea;
+  if (!spr) return;
+  if (key === 'scared' && tich.hurt > 0.56 && state === 'play' && TS.flash) spr = TS.flash;
+  var bob = 0;
+  if (!still && !reduce) {
+    if (state === 'intro' || state === 'pause') bob = Math.sin(T * 2.2) * 1.6;
+    else if (state === 'win') bob = -Math.abs(Math.sin(T * 5.5)) * 10;
+  }
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.globalAlpha = 0.55;
+  ctx.drawImage(GLOW.cyan, tich.x - tich.w * 1.1, floorY - 9, tich.w * 2.2, 18);
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = (tich.inv > 0 && tich.hurt <= 0 && ((T * 14) | 0) % 2) ? 0.35 : 1;
+  var a = tilt();
+  ctx.save();
+  ctx.translate(R2(tich.x), floorY + bob);
+  if (a) ctx.rotate(a);
+  ctx.drawImage(spr.c, -spr.w / 2, -spr.h, spr.w, spr.h);
+  ctx.restore();
+  ctx.globalAlpha = 1;
+}
+
+// цикл rAF (сам встаёт в скрытой вкладке)
+function needLoop() {
+  if (!visible || doc.hidden) return false;
+  if (state === 'play' || state === 'ready' || state === 'win' && !reduce) return true;
+  if (reduce) return parts.length > 0 || pops.length > 0 || (state === 'lose' && !endShown) || (state === 'win' && !endShown);
+  return true;
+}
+function frame(now) {
+  raf = 0;
+  var dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
+  last = now;
+  update(dt);
+  if (!reduce) moveStars(false);
+  render();
+  if (needLoop()) raf = requestAnimationFrame(frame);
+}
+function kick() {
+  if (raf || !W) return;
+  if (!needLoop()) { render(); return; }
+  last = performance.now();
+  raf = requestAnimationFrame(frame);
+}
+
+/* управление */
+function onControl(el) { return el && el !== doc.body && el !== game && /^(A|BUTTON|INPUT|TEXTAREA|SELECT|SUMMARY)$/.test(el.tagName); }
+function inView() { var r = game.getBoundingClientRect(); return r.bottom > 80 && r.top < window.innerHeight - 80; }
+doc.addEventListener('keydown', function (e) {
+  var k = e.key, code = e.code, ae = doc.activeElement, ctl = onControl(ae);
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (state === 'play' || state === 'ready') {
+    if (k === 'ArrowLeft' || code === 'KeyA') { keys.l = true; ptr.on = false; e.preventDefault(); }
+    else if (k === 'ArrowRight' || code === 'KeyD') { keys.r = true; ptr.on = false; e.preventDefault(); }
+    else if ((k === ' ' || code === 'Space') && !ctl) { keys.fire = true; e.preventDefault(); }
+    else if (k === 'Escape' || code === 'KeyP') { pause(); e.preventDefault(); }
+    return;
+  }
+  if (state === 'pause') {
+    if (k === 'Escape' || code === 'KeyP' || ((k === 'Enter' || k === ' ') && !ctl)) { resume(); e.preventDefault(); }
+    return;
+  }
+  if (ctl || e.repeat) return;
+  var canStart = state === 'intro' || ((state === 'win' || state === 'lose') && endShown && T - endT > 1.4);
+  if (canStart && (k === 'Enter' || ((k === ' ' || code === 'Space') && inView()))) { start(); e.preventDefault(); }
+});
+doc.addEventListener('keyup', function (e) {
+  var k = e.key, code = e.code;
+  if (k === 'ArrowLeft' || code === 'KeyA') keys.l = false;
+  else if (k === 'ArrowRight' || code === 'KeyD') keys.r = false;
+  else if (k === ' ' || code === 'Space') keys.fire = false;
+});
+window.addEventListener('blur', function () { keys.l = keys.r = keys.fire = false; ptr.down = false; });
+
+function localX(e) { return e.clientX - gLeft; }
+game.addEventListener('pointerdown', function (e) {
+  if (e.target.closest && e.target.closest('button, a')) return;
+  if (state !== 'play' && state !== 'ready') return;
+  if (e.pointerType === 'mouse' && e.button !== 0) return;
+  gLeft = game.getBoundingClientRect().left;
+  ptr.on = true; ptr.down = true; ptr.id = e.pointerId; ptr.x = localX(e);
+  if (e.pointerType !== 'mouse') { try { game.setPointerCapture(e.pointerId); } catch (er) { /* не важно */ } }
+  if (cool <= 0 && lasers.length < 4) fire();
+  e.preventDefault();
+});
+game.addEventListener('pointermove', function (e) {
+  if (state !== 'play' && state !== 'ready') return;
+  if (e.pointerType === 'mouse' || (ptr.down && e.pointerId === ptr.id)) { ptr.on = true; ptr.x = localX(e); }
+}, { passive: true });
+function up(e) { if (e.pointerId === ptr.id || e.pointerType === 'mouse') ptr.down = false; }
+window.addEventListener('pointerup', up);
+window.addEventListener('pointercancel', up);
+game.addEventListener('contextmenu', function (e) { if (state === 'play' || state === 'ready') e.preventDefault(); });
+
+$('startBtn').addEventListener('click', start);
+$('resumeBtn').addEventListener('click', resume);
+pauseBtn.addEventListener('click', pause);
+Array.prototype.forEach.call(doc.querySelectorAll('[data-again]'), function (b) { b.addEventListener('click', start); });
+
+// вкладка скрыта или поле ушло из вида — пауза
+doc.addEventListener('visibilitychange', function () {
+  if (doc.hidden) { if (state === 'play' || state === 'ready') pause(); }
+  else kick();
+});
+if ('IntersectionObserver' in window) {
+  new IntersectionObserver(function (en) {
+    var r = en[en.length - 1];
+    visible = r.isIntersecting && r.intersectionRatio > 0.2;
+    if (!visible && (state === 'play' || state === 'ready')) pause();
+    if (visible) kick();
+  }, { threshold: [0, 0.2, 0.4] }).observe(game);
+}
+
+// снимок состояния для автотестов — только чтение
+window.__nf404 = Object.freeze({
+  snapshot: function () {
+    var list = [];
+    for (var i = 0; i < BUGS.length; i++) if (BUGS[i].alive) list.push([F.rx + (BUGS[i].c + 0.5) * s, F.ry + (BUGS[i].r + 0.5) * s]);
+    return { state: state, score: score, lives: lives, best: best, mult: mult, alive: F.alive, total: F.total, W: W, H: H, s: s, tichX: tich.x, tipX: tich.x + (TS.idea ? TS.idea.tx : 0), floorY: floorY, loseY: loseY, bugs: list, bombs: bombs.map(function (b) { return [b.x, b.y]; }), ufo: ufo ? [ufo.x, ufo.y, ufo.dir * ufo.v] : null, cols: cols, rows: rows };
+  }
+});
+
+// ждём Onest (не дольше 1,2 с), чтобы «404» собрался его начертанием
+var rto = 0, lastW = 0, lastH = 0;
+function init() {
+  layout();
+  lastW = W; lastH = H;
+  root.classList.add('js-ok');
+  showOv(ovStart);
+  hud();
+  assemble();
+  kick();
+  if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(placeStartOverlay);
+  window.addEventListener('resize', function () {
+    clearTimeout(rto);
+    rto = setTimeout(function () {
+      var r = game.getBoundingClientRect();
+      gLeft = r.left;
+      if (Math.abs(r.width - lastW) < 1 && Math.abs(r.height - lastH) < 1) return;
+      lastW = r.width; lastH = r.height;
+      layout();
+      kick();
+      if (!raf) render();
+    }, 140);
+  });
+}
+var started = false;
+function go() { if (!started) { started = true; init(); } }
+if (doc.fonts && doc.fonts.load) {
+  Promise.race([
+    doc.fonts.load('700 100px Onest', '404'),
+    new Promise(function (res) { setTimeout(res, 1200); })
+  ]).then(go, go);
+} else {
+  go();
+}
+})();
+</script>
+</body>
+</html>
