@@ -17,8 +17,8 @@ export interface LeadFormOptions {
   submitLabel?: string;
   /** id формы: если на странице несколько форм, у каждой свой (по умолчанию lead-form) */
   id?: string;
-  /** варианты возраста для ageType: 'select' */
-  ageOptions?: string[];
+  /** варианты возраста для ageType: 'select' (строка — значение и подпись, либо { value, label }) */
+  ageOptions?: (string | { value: string; label: string })[];
   /** подпись поля телефона (placeholder и aria-label); по умолчанию маска «+7 (___) ___-__-__» */
   phoneLabel?: string;
   /** обязательный выпадающий список «Филиал» (name="branch"); по умолчанию не выводится */
@@ -30,6 +30,10 @@ export interface LeadFormOptions {
   /** экран после отправки: заголовок и текст (по умолчанию «Спасибо, перезвоним») */
   successTitle?: string;
   successText?: string;
+  /** подписи над полями («Имя», «Номер телефона»…); по умолчанию — только placeholder */
+  labels?: boolean;
+  /** placeholder поля «Имя» */
+  namePlaceholder?: string;
 }
 
 export function leadForm(opts: LeadFormOptions = {}): string {
@@ -46,12 +50,20 @@ export function leadForm(opts: LeadFormOptions = {}): string {
     footText = 'Перезвоним в течение 15 минут в рабочее время. Только чтобы согласовать время.',
     successTitle = 'Спасибо, перезвоним',
     successText = 'Заявка принята. Свяжемся с вами, чтобы согласовать удобное время бесплатного урока.',
+    labels = false,
+    namePlaceholder = 'Имя',
   } = opts;
+
+  // с подписями над полями поле связано с <label for>, без них — aria-label
+  const label = (f: string, text: string): string =>
+    labels ? `<label class="field-label" for="${id}-${f}">${text}</label>\n        ` : '';
+  const named = (f: string, text: string): string => (labels ? `id="${id}-${f}"` : `aria-label="${text}"`);
+  const choose = (text: string): string => (labels ? 'Выберите' : text);
 
   const branchField = branches.length
     ? `<div class="field-row">
-        <select class="field field--select" name="branch" autocomplete="off" aria-label="${branchLabel}">
-          <option value="" disabled selected>${branchLabel}</option>
+        ${label('branch', branchLabel)}<select class="field field--select" name="branch" autocomplete="off" ${named('branch', branchLabel)}>
+          <option value="" disabled selected>${choose(branchLabel)}</option>
 ${branches.map((b) => `          <option value="${b.value}">${b.label}</option>`).join('\n')}
         </select>
         <span class="field-error">${branchError}</span>
@@ -60,12 +72,15 @@ ${branches.map((b) => `          <option value="${b.value}">${b.label}</option>`
 
   const ageField =
     ageType === 'select'
-      ? `<select class="field field--select" name="age" autocomplete="off" aria-label="Сколько лет ребёнку">
-          <option value="" disabled selected>Сколько лет ребёнку</option>
-${ageOptions.map((o) => `          <option value="${o}">${o}</option>`).join('\n')}
+      ? `${label('age', 'Возраст ребёнка')}<select class="field field--select" name="age" autocomplete="off" ${named('age', 'Сколько лет ребёнку')}>
+          <option value="" disabled selected>${choose('Сколько лет ребёнку')}</option>
+${ageOptions
+  .map((o) => (typeof o === 'string' ? { value: o, label: o } : o))
+  .map((o) => `          <option value="${o.value}">${o.label}</option>`)
+  .join('\n')}
         </select>
         <span class="field-error">Выберите возраст ребёнка</span>`
-      : `<input class="field" type="text" name="age" placeholder="Возраст ребёнка" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="Возраст ребёнка" />
+      : `${label('age', 'Возраст ребёнка')}<input class="field" type="text" name="age" placeholder="Возраст ребёнка" inputmode="numeric" maxlength="2" autocomplete="off" ${named('age', 'Возраст ребёнка')} />
         <span class="field-error">Укажите возраст ребёнка</span>`;
 
   const sourceField = source
@@ -75,11 +90,11 @@ ${ageOptions.map((o) => `          <option value="${o}">${o}</option>`).join('\n
   return `<form class="lead-form" id="${id}" novalidate>
     <div class="form-grid">
       <div class="field-row">
-        <input class="field" type="text" name="name" placeholder="Имя" autocomplete="name" aria-label="Имя" />
+        ${label('name', 'Имя')}<input class="field" type="text" name="name" placeholder="${namePlaceholder}" autocomplete="name" ${named('name', 'Имя')} />
         <span class="field-error">Напишите, как вас зовут</span>
       </div>
       <div class="field-row">
-        <input class="field" type="tel" name="phone" placeholder="${phoneLabel || '+7 (___) ___-__-__'}" inputmode="tel" autocomplete="tel" aria-label="${phoneLabel || 'Телефон'}" />
+        ${label('phone', 'Номер телефона')}<input class="field" type="tel" name="phone" placeholder="${phoneLabel || '+7 (___) ___-__-__'}" inputmode="tel" autocomplete="tel" ${named('phone', phoneLabel || 'Телефон')} />
         <span class="field-error">Введите номер телефона полностью</span>
       </div>
       <div class="field-row">${ageField}</div>${branchField ? `

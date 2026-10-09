@@ -247,7 +247,7 @@
 .ab-dark :focus-visible { outline-color: #fff; }
 .ab-dark .ph { background: rgba(255, 255, 255, 0.06); }
 
-/* светлые блоки: правила, программы, цена, форма, вопросы */
+/* светлые блоки по макету: «Правила» и «Стоимость» с формой */
 .ab-dark .ab-light { background: var(--bg); color: var(--text); }
 .ab-dark .ab-light h1,
 .ab-dark .ab-light h2,
@@ -354,6 +354,45 @@
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
+
+/* C: «Стоимость» и форма — один светлый блок, как в макете */
+.ab-mprice__grid { display: grid; gap: clamp(28px, 4vw, 56px); align-items: start; }
+@media (min-width: 960px) {
+  .ab-mprice__grid { grid-template-columns: 1fr 1fr; }
+}
+.ab-mprice__info { display: flex; flex-direction: column; gap: 22px; }
+.ab-mprice__info .ab-eyebrow,
+.ab-mprice__info .h2 { margin: 0; }
+.ab-dark .ab-mprice .h2 { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.05; }
+.ab-mprice__list { display: flex; flex-direction: column; gap: 12px; font-size: 17px; color: color-mix(in srgb, var(--text) 82%, #fff); }
+.ab-mprice__list li { display: flex; gap: 12px; align-items: flex-start; }
+.ab-mprice__list .icon { width: 22px; height: 22px; margin-top: 2px; color: var(--brand); stroke-width: 2.4; }
+.ab-mprice__free { font-size: 17px; font-weight: 500; color: var(--text); }
+.ab-mprice__card {
+  padding: clamp(22px, 3vw, 36px);
+  border: 1px solid var(--field-border);
+  border-radius: var(--r-card);
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+}
+.ab-mprice__title {
+  margin-bottom: 18px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(22px, 2.4vw, 26px);
+  line-height: 1.2;
+}
+.ab-mprice .form-grid { gap: 16px; }
+/* подписи над полями (опция labels формы) */
+.ab-mprice .field-label { font-size: 14px; font-weight: 500; color: var(--text); }
+/* возраст и филиал — в одну строку, как в макете */
+@media (min-width: 560px) {
+  .ab-mprice .form-grid { grid-template-columns: 1fr 1fr; }
+  .ab-mprice .form-grid > * { grid-column: 1 / -1; }
+  .ab-mprice .form-grid > div.field-row:nth-of-type(3),
+  .ab-mprice .form-grid > div.field-row:nth-of-type(4) { grid-column: auto; }
+}
+.ab-mprice .form-foot { text-align: center; font-size: 13px; }
 
 /* C: правила (светлый блок) */
 .ab-rule {
