@@ -23,7 +23,7 @@ const NAV: NavItem[] = [
 
 export function renderEducation2Page(): string {
   return [
-    abHeader({ nav: NAV, dark: true, ctaHref: SIGNUP, menu: 'dropdown' }),
+    abHeader({ nav: NAV, dark: true, ctaHref: SIGNUP }),
     '<main id="main" class="ab-main">',
     heroC(),
     photosC(),
