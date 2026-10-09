@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#060b14" />
+  <title>Варианты страницы 404 — TEACHNET</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <!-- Витрина вариантов страницы «не найдено»: открыть, сравнить, выбрать. Не для поиска (noindex). -->
+  <style>
+    @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-latin-700.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-2199, U+2713; }
+    @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-cyrillic-700.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-latin-400.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-cyrillic-400.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-latin-500.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-cyrillic-500.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    :root { --bg: #060b14; --card: #0f1b2c; --line: #1f3147; --ink: #eef3ff; --muted: #a3b3cc; --brand: #1055cb; --glow: #8fb4ff; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; color: var(--ink);
+      font: 17px/1.55 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(900px 600px at 85% -10%, rgba(37, 82, 170, 0.45), transparent 60%),
+        radial-gradient(700px 500px at -10% 30%, rgba(92, 52, 170, 0.3), transparent 60%),
+        var(--bg);
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 20px clamp(16px, 4vw, 48px) 48px; }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .top img { display: block; height: 32px; width: auto; }
+    .top span { color: var(--muted); font-size: 14px; }
+    h1 { margin: 36px 0 10px; font: 700 clamp(30px, 4.4vw, 52px)/1.06 'Onest', system-ui, sans-serif; letter-spacing: -0.02em; text-wrap: balance; }
+    .lead { margin: 0 0 30px; max-width: 720px; color: var(--muted); font-size: clamp(16px, 1.5vw, 19px); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 18px; }
+    .card {
+      display: flex; flex-direction: column; overflow: hidden; border-radius: 22px;
+      background: var(--card); border: 1px solid var(--line); text-decoration: none;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover, .card:focus-visible { transform: translateY(-4px); border-color: #3b5f95; box-shadow: 0 18px 40px rgba(16, 85, 203, 0.35); outline: none; }
+    .card__shot { position: relative; aspect-ratio: 16 / 10; background: #0a1424; overflow: hidden; }
+    .card__shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+    .card__num {
+      position: absolute; left: 12px; top: 12px; padding: 4px 10px; border-radius: 999px;
+      font: 700 13px/1.4 'Onest', sans-serif; background: rgba(6, 11, 20, 0.75); border: 1px solid rgba(143, 180, 255, 0.4);
+    }
+    .card__live { left: auto; right: 12px; background: #1055cb; border-color: #1055cb; }
+    .card__body { display: flex; flex-direction: column; gap: 8px; padding: 18px 20px 20px; flex: 1; }
+    .card__title { font: 700 21px/1.2 'Onest', system-ui, sans-serif; }
+    .card__text { color: var(--muted); font-size: 15px; line-height: 1.5; }
+    .card__how { margin-top: auto; padding-top: 8px; color: #7fe3ff; font-size: 13px; }
+    .note { margin: 30px 0 0; color: var(--muted); font-size: 14px; }
+    .note a { color: var(--glow); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a href="/" aria-label="TEACHNET — на главную"><img src="/images/logo-white.svg" width="102" height="32" alt="TEACHNET" /></a>
+      <span>служебная страница</span>
+    </header>
+    <h1>Варианты страницы «не найдено»</h1>
+    <p class="lead">Шесть вариантов страницы 404 с Тичем. Откройте каждый, поиграйте — и выберите, какой поставить на сайт (можно и показывать их по очереди, случайным образом).</p>
+
+    <div class="grid">
+      <a class="card" href="/404.html">
+        <div class="card__shot"><img src="/404-variants/previews/space.webp" alt="" loading="lazy" /><span class="card__num">1</span><span class="card__num card__live">сейчас на сайте</span></div>
+        <div class="card__body">
+          <span class="card__title">Космос</span>
+          <span class="card__text">«404» из звёздной пыли: частицы слетаются, разлетаются от курсора, по клику — взрыв. Тич следит глазами и меняет настроение огоньком антенны.</span>
+          <span class="card__how">Курсор по цифрам · клик — взрыв · три клика — пасхалка</span>
+        </div>
+      </a>
+      <a class="card" href="/404-variants/invaders.html">
+        <div class="card__shot"><img src="/404-variants/previews/invaders.webp" alt="" loading="lazy" /><span class="card__num">2</span></div>
+        <div class="card__body">
+          <span class="card__title">Захватчики 404</span>
+          <span class="card__text">Страницу захватили баги — они выстроились цифрами «404». Тич отстреливается лазером из антенны. Аркада в духе Space Invaders.</span>
+          <span class="card__how">← → и пробел · мышь · пальцем по полю</span>
+        </div>
+      </a>
+      <a class="card" href="/404-variants/circuit.html">
+        <div class="card__shot"><img src="/404-variants/previews/circuit.webp" alt="" loading="lazy" /><span class="card__num">3</span></div>
+        <div class="card__body">
+          <span class="card__title">Обрыв цепи</span>
+          <span class="card__text">Плата с порванной дорожкой. Протяните провод-перемычку — побежит ток, загорятся светодиоды, и «404» сменится на «200».</span>
+          <span class="card__how">Тяните провод к контакту</span>
+        </div>
+      </a>
+      <a class="card" href="/404-variants/lego.html">
+        <div class="card__shot"><img src="/404-variants/previews/lego.webp" alt="" loading="lazy" /><span class="card__num">4</span></div>
+        <div class="card__body">
+          <span class="card__title">Конструктор</span>
+          <span class="card__text">«404» собирается из падающих кирпичиков с физикой. Хватайте и бросайте, рушьте целиком — и собирайте заново.</span>
+          <span class="card__how">Перетащить и бросить · «Разрушить» · «Собрать заново»</span>
+        </div>
+      </a>
+      <a class="card" href="/404-variants/terminal.html">
+        <div class="card__shot"><img src="/404-variants/previews/terminal.webp" alt="" loading="lazy" /><span class="card__num">5</span></div>
+        <div class="card__body">
+          <span class="card__title">Терминал Тича</span>
+          <span class="card__text">Ретро-компьютер TEACHNET OS с глитчем и сканлайнами. Команды: курсы, шутки, «матрица» — и Тич на видеосвязи.</span>
+          <span class="card__how">Наберите help · на телефоне — кнопки-клавиши</span>
+        </div>
+      </a>
+      <a class="card" href="/404-variants/orbit.html">
+        <div class="card__shot"><img src="/404-variants/previews/orbit.webp" alt="" loading="lazy" /><span class="card__num">6</span></div>
+        <div class="card__body">
+          <span class="card__title">Гравитационная праща</span>
+          <span class="card__text">Тич потерялся в космосе. Оттяните его, как из рогатки, и запустите — гравитация планет донесёт его до планеты «Главная».</span>
+          <span class="card__how">Оттянуть и отпустить · клавиши: ← → ↑ ↓ и пробел</span>
+        </div>
+      </a>
+    </div>
+    <p class="note">Настоящая страница «не найдено» на сайте — по любому несуществующему адресу, например <a href="/kosmos">teachnet.ru/kosmos</a>.</p>
+  </div>
+</body>
+</html>
