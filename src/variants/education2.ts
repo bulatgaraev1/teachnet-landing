@@ -1,28 +1,16 @@
 /**
  * Вариант C главной для A/B-теста: /education2 «Манифест», тёмная подача.
- * Самостоятельный лендинг для рекламы: меню, кнопки и логотип — только якоря этой страницы,
- * в подвале нет ссылок на другие страницы сайта. Секции главной переиспользуются,
- * новые блоки — src/variants/sections/. Светлые блоки (правила, программы, цена, форма, вопросы)
- * — в обёртке .ab-light. Стили — src/styles/ab.css (встраиваются в страницу).
+ * Блоки, порядок и компоновка — ровно по утверждённому макету (education2-mockup.html).
+ * С сайта — только независимые блоки: единый подвал, cookie-плашка, а также бургер-меню
+ * и плавающая кнопка записи (решение владельца). Стили — src/styles/ab.css (встраиваются в страницу).
  */
 import type { NavItem } from '../lib/site';
-import { header } from '../sections/header';
-import { programs } from '../sections/programs';
-import { price } from '../sections/price';
-import { conversion } from '../sections/conversion';
-import { faq } from '../sections/faq';
 import { footer } from '../sections/footer';
 import { stickyBar } from '../components/sticky-bar';
 import { cookieBanner } from '../components/cookie-banner';
 import { mobileMenu } from '../components/mobile-menu';
-import { heroC } from './sections/hero-c';
-import { photosC } from './sections/photos-c';
-import { seen } from './sections/seen';
-import { rules } from './sections/rules';
-import { who } from './sections/who';
-import { dare } from './sections/dare';
-import { finalC } from './sections/final-c';
-import { FAQ_DIFFERENCE } from './shared';
+import { abHeader } from './sections/header';
+import { heroC, photosC, seenC, rulesC, whoC, dareC, priceC, finalC } from './sections/c';
 
 // «Цена» — та же цель, что на главной; новые пункты — свои цели (см. docs/analytics-ab.md)
 const NAV: NavItem[] = [
@@ -34,21 +22,16 @@ const NAV: NavItem[] = [
 
 export function renderEducation2Page(): string {
   return [
-    header({ nav: NAV, logo: '/images/logo-white.svg' }),
+    abHeader({ nav: NAV, dark: true }),
     mobileMenu(NAV),
-    '<main id="main">',
+    '<main id="main" class="ab-main">',
     heroC(),
     photosC(),
-    seen(),
-    rules(),
-    who(),
-    dare(),
-    '<div class="ab-light">',
-    programs({ courseLinks: false }),
-    price(),
-    conversion({ source: 'education2' }),
-    faq({ prepend: [FAQ_DIFFERENCE] }),
-    '</div>',
+    seenC(),
+    rulesC(),
+    whoC(),
+    dareC(),
+    priceC(),
     finalC(),
     '</main>',
     footer(true, { pageLinks: false }),

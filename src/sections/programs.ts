@@ -35,8 +35,7 @@ const STEPS = [
   },
 ];
 
-/** courseLinks: ссылки «Подробнее о курсе» на страницы курсов (на лендингах вариантов главной — без них) */
-export function programs({ courseLinks = true }: { courseLinks?: boolean } = {}): string {
+export function programs(): string {
   const steps = STEPS.map(
     (s) => `<li class="route__step" data-reveal>
       <span class="step-node">${s.n}</span>
@@ -44,7 +43,7 @@ export function programs({ courseLinks = true }: { courseLinks?: boolean } = {})
         <span class="chip" style="margin-bottom:14px">${s.tag}</span>
         <h3 class="h3">${s.title}</h3>
         <p class="muted" style="margin:10px 0 16px">${s.text}</p>
-        <p class="micro">${s.meta}</p>${courseLinks && 'href' in s ? `
+        <p class="micro">${s.meta}</p>${'href' in s ? `
         <a class="route__more" href="${s.href}"${'goal' in s ? ` data-goal="${s.goal}"` : ''}>Подробнее о курсе<span aria-hidden="true"> →</span></a>` : ''}
       </article>
     </li>`,

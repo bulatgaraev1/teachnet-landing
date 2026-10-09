@@ -9,8 +9,7 @@ const POINTS = [
   'Ответим на все ваши вопросы',
 ];
 
-/** source: скрытое поле формы (на вариантах главной — education / education2); по умолчанию без него */
-export function conversion({ source = '' }: { source?: string } = {}): string {
+export function conversion(): string {
   const ticks = POINTS.map(
     (p) => `<li><span class="tick-mark">${icon('check')}</span><span>${p}</span></li>`,
   ).join('');
@@ -24,7 +23,6 @@ export function conversion({ source = '' }: { source?: string } = {}): string {
       </div>
       <div class="conversion__form" style="max-width:560px;margin:0 auto" data-reveal>
         ${leadForm({
-          source,
           // филиал — как в форме /electronics: обязательный выбор из SITE.branches
           branches: SITE.branches.map((b) => ({ value: b.id, label: b.selectLabel })),
           branchLabel: 'Филиал',
