@@ -30,21 +30,15 @@ export const ITEMS: AccItem[] = [
   },
 ];
 
-export interface FaqOptions {
-  /** вопросы перед общими (на вариантах главной — «Чем вы отличаетесь…», раскрыт сразу) */
-  prepend?: AccItem[];
-}
-
-export function faq({ prepend = [] }: FaqOptions = {}): string {
+export function faq(): string {
   // вопрос без ответа (заглушка <!-- TODO -->) на странице не показываем, пока нет текста
-  const items = [...prepend, ...ITEMS.filter((it) => !it.a.includes('<!--'))];
   return `<section class="section" id="faq" aria-labelledby="faq-h" data-scroll-goal="scroll_faq" data-faq-goal="faq_open">
     <div class="blobs"></div>
     <div class="container layer" style="max-width:880px">
       <div class="section-head" data-reveal>
         <h2 class="h2" id="faq-h">Частые вопросы родителей</h2>
       </div>
-      <div data-reveal>${accordion(items, { openFirst: prepend.length > 0 })}</div>
+      <div data-reveal>${accordion(ITEMS.filter((it) => !it.a.includes('<!--')))}</div>
     </div>
   </section>`;
 }

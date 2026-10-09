@@ -34,6 +34,8 @@ export interface LeadFormOptions {
   labels?: boolean;
   /** placeholder поля «Имя» */
   namePlaceholder?: string;
+  /** начало подписи у галочки согласия (дальше — ссылка «персональных данных») */
+  consentLead?: string;
 }
 
 export function leadForm(opts: LeadFormOptions = {}): string {
@@ -52,6 +54,7 @@ export function leadForm(opts: LeadFormOptions = {}): string {
     successText = 'Заявка принята. Свяжемся с вами, чтобы согласовать удобное время бесплатного урока.',
     labels = false,
     namePlaceholder = 'Имя',
+    consentLead = 'Я даю согласие на обработку',
   } = opts;
 
   // с подписями над полями поле связано с <label for>, без них — aria-label
@@ -101,7 +104,7 @@ ${ageOptions
       ${branchField}` : ''}
       <label class="consent">
         <input type="checkbox" name="consent" value="1" />
-        <span>Я даю согласие на обработку <a href="${SITE.legal.consent}" target="_blank" rel="noopener">персональных данных</a></span>
+        <span>${consentLead} <a href="${SITE.legal.consent}" target="_blank" rel="noopener">персональных данных</a></span>
       </label>
       <!-- honeypot: скрытое поле, заполняют только боты -->
       <input class="hp-field" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />

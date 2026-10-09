@@ -13,5 +13,11 @@ export function initFaqGoals(): void {
         if (goal && t.getAttribute('aria-expanded') === 'true') reachGoal(goal, { n: String(i + 1), q: (t.textContent || '').trim() });
       });
     });
+    // вопросы-раскрывашки <details> (варианты главной): цель — по клику, который раскрывает вопрос
+    box.querySelectorAll<HTMLDetailsElement>('details').forEach((d, i) => {
+      d.querySelector('summary')?.addEventListener('click', () => {
+        if (goal && !d.open) reachGoal(goal, { n: String(i + 1), q: (d.querySelector('summary')?.textContent || '').trim() });
+      });
+    });
   });
 }
