@@ -252,11 +252,13 @@ function teachers(): string {
     .join('');
   // кнопки PDF: с файлом — ссылка на скачивание, пока файла нет — неактивная кнопка (без ссылок-заглушек)
   const dl = '<svg class="tc-download__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0l-4-4m4 4l4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const downloads = `<div class="tc-downloads">${TECH_DOWNLOADS.map((d) =>
-    d.href
-      ? `<a class="btn tc-download" href="${d.href}" download data-goal="${d.goal}">${d.label}${dl}</a>`
-      : `<button class="btn tc-download" type="button" disabled title="Файл появится позже" data-goal="${d.goal}">${d.label}${dl}</button>`,
-  ).join('')}</div>`;
+  // download="<имя файла>": файл скачивается с тем же именем (телефон может просто открыть PDF — это нормально)
+  const downloads = `<div class="tc-downloads">${TECH_DOWNLOADS.map((d) => {
+    const btn = d.href
+      ? `<a class="btn tc-download" href="${d.href}" download="${d.href.split('/').pop()}" data-goal="${d.goal}">${d.label}${dl}</a>`
+      : `<button class="btn tc-download" type="button" disabled title="Файл появится позже" data-goal="${d.goal}">${d.label}${dl}</button>`;
+    return `<div class="tc-dl">${btn}<span class="tc-dl__note">${d.note}</span></div>`;
+  }).join('')}</div>`;
   return `<section class="section el-sec--white" id="teachers" aria-labelledby="tc-teachers-h" data-scroll-goal="scroll_tech_teachers">
     <div class="container">
       <div class="tc-teachers" data-reveal>
@@ -323,11 +325,13 @@ function order(): string {
 
 /* ---------- 8. Вопросы ---------- */
 
+const PINS_LINK = 'В блоке «Что на плате», вкладка «Выводы»';
+
 function faq(): string {
   const items = TECH.faq.items.map((it, i) =>
-    // ответ про выводы — со ссылкой на вкладку «Выводы» (текст тот же)
+    // ответ про выводы — ссылка на вкладку «Выводы» только на эти слова, остальной текст как есть
     i === TECH.faq.items.length - 1
-      ? { q: it.q, a: `<a class="el-link" href="#board" data-anchor data-open-tab="pins" data-goal="tech_faq_pins">${it.a.replace(/\.$/, '')}</a>.` }
+      ? { q: it.q, a: it.a.replace(PINS_LINK, `<a class="el-link" href="#board" data-anchor data-open-tab="pins" data-goal="tech_faq_pins">${PINS_LINK}</a>`) }
       : { q: it.q, a: it.a },
   );
   return `<section class="section el-sec--white" id="faq" aria-labelledby="tc-faq-h" data-scroll-goal="scroll_tech_faq" data-faq-goal="tech_faq_open">

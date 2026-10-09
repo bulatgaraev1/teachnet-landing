@@ -68,8 +68,8 @@
 | `tech_pdf_pins` | «Назначение выводов (PDF)» | нет |
 | `tech_faq_open` | раскрыли вопрос (сворачивание не считается) | `n`: 1–7, `q`: текст вопроса |
 
-Кнопки PDF пока неактивны (файлов нет) — цели начнут приходить, когда в `TECH_DOWNLOADS`
-(`src/content/tech.ts`) появятся ссылки.
+Кнопки PDF скачивают файлы `/files/TEACHNET_UNO_opisanie.pdf` и `/files/TEACHNET_UNO_vyvody.pdf`
+(лежат в `public/files/`, ссылки — `TECH_DOWNLOADS` в `src/content/tech.ts`).
 
 ## Форма «Заказать платы»
 

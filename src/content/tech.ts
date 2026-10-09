@@ -12,12 +12,12 @@ export const TERM = '1 ноября';
 export const TERM_DATE = '2026-11-01';
 
 /**
- * Кнопки скачивания в блоке «Педагогам». Пока href пустой, кнопка видна, но неактивна.
- * Когда появится файл, заполните href, например: '/files/teachnet-uno.pdf'.
+ * Кнопки скачивания в блоке «Педагогам». Файлы лежат в public/files/ (на сайте — /files/…).
+ * Пока href пустой, кнопка видна, но неактивна. note — подпись мелко под кнопкой.
  */
-export const TECH_DOWNLOADS: { label: string; href: string; goal: string }[] = [
-  { label: 'Описание платы (PDF)', href: '', goal: 'tech_pdf_board' },
-  { label: 'Назначение выводов (PDF)', href: '', goal: 'tech_pdf_pins' },
+export const TECH_DOWNLOADS: { label: string; href: string; goal: string; note: string }[] = [
+  { label: 'Описание платы (PDF)', href: '/files/TEACHNET_UNO_opisanie.pdf', goal: 'tech_pdf_board', note: 'PDF, 4 стр.' },
+  { label: 'Назначение выводов (PDF)', href: '/files/TEACHNET_UNO_vyvody.pdf', goal: 'tech_pdf_pins', note: 'PDF, 2 стр.' },
 ];
 
 export const TECH = {
@@ -212,7 +212,7 @@ export const TECH = {
       { q: 'Можно работать только от USB?', a: 'Да. Для точных измерений аналоговых датчиков лучше подключить адаптер.' },
       { q: 'Нужен ли драйвер?', a: 'Иногда на Windows — драйвер CH340. Ставится один раз.' },
       { q: 'Что будет, если замкнуть 5V на землю?', a: 'Ничего не сгорит: предохранитель отключит пин, а после устранения замыкания всё заработает само.' },
-      { q: 'Где посмотреть назначение выводов?', a: 'В блоке «Что на плате», вкладка «Выводы».' },
+      { q: 'Где посмотреть назначение выводов?', a: 'В блоке «Что на плате», вкладка «Выводы», и в PDF «Назначение выводов» в разделе «Педагогам».' },
     ],
   },
 
