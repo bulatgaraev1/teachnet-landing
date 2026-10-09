@@ -9,237 +9,233 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preload" href="/fonts/onest-latin-700.woff2" as="font" type="font/woff2" crossorigin />
   <!--
-    Вариант 404 «Конструктор». Отдаётся по любому адресу — все ссылки абсолютные, всё встроено (CSP сайта).
-    Цифры «404» на canvas собраны из кирпичиков: сетка — выборкой пикселей текста Onest 700 на невидимом холсте,
-    кладка со сдвигом из кирпичей 2×1 и 1×1. Своя простая 2D-физика без вращения: гравитация, столкновения
-    прямоугольников, трение, отскок, «засыпание». Кирпич можно схватить и бросить, клик по пустому месту — удар,
-    кнопки «Разрушить» / «Собрать заново» (клавиши Р и С). Когда всё спит — кадры не рисуются вовсе.
-    prefers-reduced-motion: цифры сразу на местах, без падения и тряски.
+    404 «Конструктор»: «404» на canvas из кирпичиков (выборка пикселей текста Onest 700, кладка 2×1 и 1×1 со сдвигом)
+    и своя 2D-физика без вращения. Все пути абсолютные, всё встроено (CSP). Когда всё спит — кадры не рисуются.
   -->
   <script>document.documentElement.className += ' js';</script>
-<style>
-  @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-latin-700.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-2199, U+2713; }
-  @font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-cyrillic-700.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
-  @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-latin-400.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
-  @font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-cyrillic-400.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
-  @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-latin-500.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
-  @font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-cyrillic-500.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+  <style>
+@font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-latin-700.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+2190-2199, U+2713; }
+@font-face { font-family: 'Onest'; font-weight: 700; font-display: swap; src: url('/fonts/onest-cyrillic-700.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-latin-400.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Golos Text'; font-weight: 400; font-display: swap; src: url('/fonts/golos-cyrillic-400.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-latin-500.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Golos Text'; font-weight: 500; font-display: swap; src: url('/fonts/golos-cyrillic-500.woff2') format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
 
-  :root {
-    --bg: #060b14;
-    --ink: #eef3ff;
-    --muted: #a3b3cc;
-    --brand: #1055cb;
-    --glow: #8fb4ff;
-    --cyan: #5fd4ff;
-    --fh: clamp(300px, min(56vh, 64vw), 660px);
-  }
-  @supports (height: 1svh) { :root { --fh: clamp(300px, min(56svh, 64vw), 660px); } }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; }
-  body {
-    min-height: 100vh;
-    background:
-      radial-gradient(1100px 560px at 72% -12%, rgba(16, 85, 203, 0.26), transparent 62%),
-      radial-gradient(800px 520px at -8% 108%, rgba(95, 212, 255, 0.08), transparent 60%),
-      var(--bg);
-    color: var(--ink);
-    font: 17px/1.55 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; }
-  .sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+:root {
+  --bg: #060b14;
+  --ink: #eef3ff;
+  --muted: #a3b3cc;
+  --brand: #1055cb;
+  --glow: #8fb4ff;
+  --cyan: #5fd4ff;
+  --fh: clamp(300px, min(56vh, 64vw), 660px);
+}
+@supports (height: 1svh) { :root { --fh: clamp(300px, min(56svh, 64vw), 660px); } }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(1100px 560px at 72% -12%, rgba(16, 85, 203, 0.26), transparent 62%),
+    radial-gradient(800px 520px at -8% 108%, rgba(95, 212, 255, 0.08), transparent 60%),
+    var(--bg);
+  color: var(--ink);
+  font: 17px/1.55 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+.sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
-  .page {
-    max-width: 1320px; margin: 0 auto;
-    padding: 16px max(16px, min(3vw, 40px), env(safe-area-inset-right)) 26px max(16px, min(3vw, 40px), env(safe-area-inset-left));
-  }
-  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 40px; }
-  .top img { display: block; height: 32px; width: auto; }
-  .top__phone { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px; white-space: nowrap; }
-  .top__phone:hover { color: var(--ink); }
+.page {
+  max-width: 1320px; margin: 0 auto;
+  padding: 16px max(16px, min(3vw, 40px), env(safe-area-inset-right)) 26px max(16px, min(3vw, 40px), env(safe-area-inset-left));
+}
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 40px; }
+.top img { display: block; height: 32px; width: auto; }
+.top__phone { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px; white-space: nowrap; }
+.top__phone:hover { color: var(--ink); }
 
-  /* ---------- поле с конструктором ---------- */
-  .field {
-    --cell: 22px; --ox: 0px; --stud: 5px; --floor: 30px;
-    --tw: min(calc(var(--fh) * 0.33), 19vw);
-    --tx: clamp(10px, 3.2%, 44px);
-    position: relative; margin-top: 14px; height: var(--fh);
-    border-radius: 28px; overflow: hidden; isolation: isolate;
-    background:
-      radial-gradient(ellipse 46% 62% at 60% 74%, rgba(16, 85, 203, 0.32), transparent 72%),
-      linear-gradient(180deg, #0f1c2c 0%, #0b1624 64%, #0a1320 100%);
-  }
-  /* стена — огромная пластина конструктора: кружки-пупырки, нарисованы один раз градиентами */
-  .field__wall {
-    position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background-image:
-      radial-gradient(circle at 50% 44%, rgba(175, 205, 255, 0.085) 0 25%, transparent 28%),
-      radial-gradient(circle at 56% 58%, rgba(0, 0, 0, 0.32) 0 26%, transparent 31%);
-    background-size: var(--cell) var(--cell);
-    background-position: var(--ox) 0;
-  }
-  .field__wall::after {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 75% 85% at 55% 62%, transparent 35%, rgba(6, 11, 20, 0.72) 100%);
-  }
-  .field::after {
-    content: ''; position: absolute; inset: 0; z-index: 8; border-radius: inherit; pointer-events: none;
-    box-shadow: inset 0 0 0 1px rgba(143, 180, 255, 0.16), inset 0 1px 0 rgba(200, 220, 255, 0.10);
-  }
-  .stage { position: absolute; inset: 0; z-index: 1; }
-  #bricks { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; display: block; touch-action: none; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+/* ---------- поле с конструктором ---------- */
+.field {
+  --cell: 22px; --ox: 0px; --stud: 5px; --floor: 30px;
+  --tw: min(calc(var(--fh) * 0.33), 19vw);
+  --tx: clamp(10px, 3.2%, 44px);
+  position: relative; margin-top: 14px; height: var(--fh);
+  border-radius: 28px; overflow: hidden; isolation: isolate;
+  background:
+    radial-gradient(ellipse 46% 62% at 60% 74%, rgba(16, 85, 203, 0.32), transparent 72%),
+    linear-gradient(180deg, #0f1c2c 0%, #0b1624 64%, #0a1320 100%);
+}
+/* стена — большая пластина конструктора (статичные градиенты) */
+.field__wall {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(circle at 50% 44%, rgba(175, 205, 255, 0.085) 0 25%, transparent 28%),
+    radial-gradient(circle at 56% 58%, rgba(0, 0, 0, 0.32) 0 26%, transparent 31%);
+  background-size: var(--cell) var(--cell);
+  background-position: var(--ox) 0;
+}
+.field__wall::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 75% 85% at 55% 62%, transparent 35%, rgba(6, 11, 20, 0.72) 100%);
+}
+.field::after {
+  content: ''; position: absolute; inset: 0; z-index: 8; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(143, 180, 255, 0.16), inset 0 1px 0 rgba(200, 220, 255, 0.10);
+}
+.stage { position: absolute; inset: 0; z-index: 1; }
+#bricks { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; display: block; touch-action: none; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
 
-  /* без JS — те же цифры обычным текстом в «кирпичную» полоску */
-  .fallback {
-    position: absolute; z-index: 2; left: calc(var(--tx) + var(--tw) + 2%); right: 6%; bottom: var(--floor);
-    text-align: center; font: 700 min(calc(var(--fh) * 0.6), 21vw)/0.74 'Onest', system-ui, sans-serif; letter-spacing: 0.04em;
-    background: repeating-linear-gradient(180deg, #1055cb 0 .12em, #071a3d 0 .13em, #ffcb6b 0 .25em, #2a1d05 0 .26em, #ff5a5a 0 .38em, #3a0d0d 0 .39em, #3ddc84 0 .51em, #06301a 0 .52em, #8fb4ff 0 .64em, #0d2142 0 .65em);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .js .fallback { display: none; }
+/* без JS — цифры текстом в «кирпичную» полоску */
+.fallback {
+  position: absolute; z-index: 2; left: calc(var(--tx) + var(--tw) + 2%); right: 6%; bottom: var(--floor);
+  text-align: center; font: 700 min(calc(var(--fh) * 0.6), 21vw)/0.74 'Onest', system-ui, sans-serif; letter-spacing: 0.04em;
+  background: repeating-linear-gradient(180deg, #1055cb 0 .12em, #071a3d 0 .13em, #ffcb6b 0 .25em, #2a1d05 0 .26em, #ff5a5a 0 .38em, #3a0d0d 0 .39em, #3ddc84 0 .51em, #06301a 0 .52em, #8fb4ff 0 .64em, #0d2142 0 .65em);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.js .fallback { display: none; }
 
-  /* пол — край базовой пластины: пупырки сверху (под кирпичами) и лицевая грань (над холстом) */
-  .studs {
-    position: absolute; z-index: 2; left: -20px; right: -20px; bottom: var(--floor); height: var(--stud);
-    background: repeating-linear-gradient(90deg, transparent 0 calc(var(--cell) * 0.21), #46659a calc(var(--cell) * 0.21), #2f4b78 calc(var(--cell) * 0.5), #1d3254 calc(var(--cell) * 0.79), transparent calc(var(--cell) * 0.79) var(--cell));
-    background-position: calc(var(--ox) + 20px) 0;
-  }
-  .floor {
-    position: absolute; z-index: 5; left: -20px; right: -20px; bottom: 0; height: var(--floor);
-    background: linear-gradient(180deg, #3b5788 0, #2a4168 2px, #1d3050 40%, #152540 100%);
-    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
-    display: flex; align-items: center; justify-content: flex-end; padding: 0 42px;
-  }
-  .hud {
-    display: none; font: 500 13px/1 'Golos Text', system-ui, sans-serif; color: #8ea3c4; letter-spacing: 0.01em;
-    font-variant-numeric: tabular-nums; white-space: nowrap; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-  }
-  .hud b { color: var(--ink); font-weight: 500; }
-  .js .hud { display: block; }
+/* пол: пупырки (под холстом) и лицевая грань (над холстом) */
+.studs {
+  position: absolute; z-index: 2; left: -20px; right: -20px; bottom: var(--floor); height: var(--stud);
+  background: repeating-linear-gradient(90deg, transparent 0 calc(var(--cell) * 0.21), #46659a calc(var(--cell) * 0.21), #2f4b78 calc(var(--cell) * 0.5), #1d3254 calc(var(--cell) * 0.79), transparent calc(var(--cell) * 0.79) var(--cell));
+  background-position: calc(var(--ox) + 20px) 0;
+}
+.floor {
+  position: absolute; z-index: 5; left: -20px; right: -20px; bottom: 0; height: var(--floor);
+  background: linear-gradient(180deg, #3b5788 0, #2a4168 2px, #1d3050 40%, #152540 100%);
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+  display: flex; align-items: center; justify-content: flex-end; padding: 0 42px;
+}
+.hud {
+  display: none; font: 500 13px/1 'Golos Text', system-ui, sans-serif; color: #8ea3c4; letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums; white-space: nowrap; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+}
+.hud b { color: var(--ink); font-weight: 500; }
+.js .hud { display: block; }
 
-  /* Тич стоит на полу слева и показывает на цифры; испуганный — выглядывает из-за края пластины */
-  .tich { position: absolute; z-index: 1; left: var(--tx); bottom: calc(var(--floor) + 1px); width: var(--tw); height: calc(var(--tw) * 1.9); pointer-events: none; }
-  .tich.hit { animation: hit 0.42s ease-out; }
-  @keyframes hit { 20% { transform: translateX(-5px) rotate(-2.5deg); } 45% { transform: translateX(4px) rotate(2deg); } 70% { transform: translateX(-2px) rotate(-1deg); } }
-  .tich__in { position: absolute; inset: 0; transform-origin: 40% 100%; animation: breathe 3.8s ease-in-out infinite; }
-  @keyframes breathe { 50% { transform: scale(1.012, 0.988); } }
-  .tich img, .peek img {
-    position: absolute; bottom: 0; display: block; height: auto;
-    transform: translate3d(0, calc(100% + var(--floor) + 14px), 0);
-    transition: transform 0.26s cubic-bezier(0.55, 0, 0.85, 0.35);
-  }
-  .tich__point { left: 0; width: 100%; }
-  .tich__thumb { left: -10%; width: 84%; }
-  .tich img.on { transform: translate3d(0, 0, 0); transition: transform 0.6s 0.16s cubic-bezier(0.3, 1.45, 0.55, 1); }
-  .peek { position: absolute; z-index: 4; left: calc(var(--tx) - var(--tw) * 0.05); bottom: 0; width: calc(var(--tw) * 0.84); height: calc(var(--tw) * 1.7); pointer-events: none; }
-  .peek img { left: 0; width: 100%; }
-  .peek img.on { transform: translate3d(0, calc(30% - var(--floor)), 0); transition: transform 0.55s 0.18s cubic-bezier(0.3, 1.5, 0.55, 1); }
-  .peek img.on.peek-shake { animation: peek 0.12s linear 6 0.7s; }
-  @keyframes peek { 25% { translate: -2px 0; } 75% { translate: 2px 0; } }
+/* Тич: стоит слева и показывает на цифры; испуганный выглядывает из-за края пола */
+.tich { position: absolute; z-index: 1; left: var(--tx); bottom: calc(var(--floor) + 1px); width: var(--tw); height: calc(var(--tw) * 1.9); pointer-events: none; }
+.tich.hit { animation: hit 0.42s ease-out; }
+@keyframes hit { 20% { transform: translateX(-5px) rotate(-2.5deg); } 45% { transform: translateX(4px) rotate(2deg); } 70% { transform: translateX(-2px) rotate(-1deg); } }
+.tich__in { position: absolute; inset: 0; transform-origin: 40% 100%; animation: breathe 3.8s ease-in-out infinite; }
+@keyframes breathe { 50% { transform: scale(1.012, 0.988); } }
+.tich img, .peek img {
+  position: absolute; bottom: 0; display: block; height: auto;
+  transform: translate3d(0, calc(100% + var(--floor) + 14px), 0);
+  transition: transform 0.26s cubic-bezier(0.55, 0, 0.85, 0.35);
+}
+.tich__point { left: 0; width: 100%; }
+.tich__thumb { left: -10%; width: 84%; }
+.tich img.on { transform: translate3d(0, 0, 0); transition: transform 0.6s 0.16s cubic-bezier(0.3, 1.45, 0.55, 1); }
+.peek { position: absolute; z-index: 4; left: calc(var(--tx) - var(--tw) * 0.05); bottom: 0; width: calc(var(--tw) * 0.84); height: calc(var(--tw) * 1.7); pointer-events: none; }
+.peek img { left: 0; width: 100%; }
+.peek img.on { transform: translate3d(0, calc(30% - var(--floor)), 0); transition: transform 0.55s 0.18s cubic-bezier(0.3, 1.5, 0.55, 1); }
+.peek img.on.peek-shake { animation: peek 0.12s linear 6 0.7s; }
+@keyframes peek { 25% { translate: -2px 0; } 75% { translate: 2px 0; } }
 
-  /* кнопки конструктора — сами как кирпичики: нажимаются вниз */
-  .ctrl { position: absolute; z-index: 7; right: 14px; top: 14px; display: none; gap: 8px; }
-  .js .ctrl { display: flex; }
-  .tbtn {
-    --edge: #8f1d22;
-    display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px 8px 12px; border: 0; border-radius: 10px; cursor: pointer;
-    font: 700 14px/1.1 'Onest', system-ui, sans-serif; color: #fff; background: #d93a3f;
-    box-shadow: 0 4px 0 var(--edge), 0 10px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.28);
-    transition: transform 0.1s ease, box-shadow 0.1s ease; -webkit-tap-highlight-color: transparent;
-  }
-  .tbtn svg { flex: 0 0 auto; }
-  .tbtn:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--edge), 0 12px 22px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.28); }
-  .tbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--edge), 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
-  .tbtn--build { --edge: #1d8a4e; background: #3ddc84; color: #04220f; }
-  .tbtn.pulse { animation: pulse 1.6s ease-in-out 2.2s infinite; }
-  @keyframes pulse { 0%, 100% { filter: none; } 50% { filter: brightness(1.18); } }
+/* кнопки-кирпичики: нажимаются вниз */
+.ctrl { position: absolute; z-index: 7; right: 14px; top: 14px; display: none; gap: 8px; }
+.js .ctrl { display: flex; }
+.tbtn {
+  --edge: #8f1d22;
+  display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px 8px 12px; border: 0; border-radius: 10px; cursor: pointer;
+  font: 700 14px/1.1 'Onest', system-ui, sans-serif; color: #fff; background: #d93a3f;
+  box-shadow: 0 4px 0 var(--edge), 0 10px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition: transform 0.1s ease, box-shadow 0.1s ease; -webkit-tap-highlight-color: transparent;
+}
+.tbtn svg { flex: 0 0 auto; }
+.tbtn:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--edge), 0 12px 22px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.28); }
+.tbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--edge), 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+.tbtn--build { --edge: #1d8a4e; background: #3ddc84; color: #04220f; }
+.tbtn.pulse { animation: pulse 1.6s ease-in-out 2.2s infinite; }
+@keyframes pulse { 0%, 100% { filter: none; } 50% { filter: brightness(1.18); } }
 
-  .hint { display: none; flex-wrap: wrap; gap: 4px 0; margin: 12px 2px 0; font-size: 13px; line-height: 1.5; color: #7389aa; }
-  .js .hint { display: flex; }
-  .hint span:not(:last-child)::after { content: '·'; margin: 0 10px; color: #3f5373; }
-  kbd {
-    display: inline-block; min-width: 20px; padding: 1px 5px 0; margin: 0 1px; border-radius: 5px; text-align: center;
-    font: 600 12px/18px 'Golos Text', system-ui, sans-serif; color: #c6d5ee; background: #15253c; box-shadow: 0 2px 0 #0a1424, inset 0 0 0 1px rgba(143, 180, 255, 0.2);
-  }
+.hint { display: none; flex-wrap: wrap; gap: 4px 0; margin: 12px 2px 0; font-size: 13px; line-height: 1.5; color: #7389aa; }
+.js .hint { display: flex; }
+.hint span:not(:last-child)::after { content: '·'; margin: 0 10px; color: #3f5373; }
+kbd {
+  display: inline-block; min-width: 20px; padding: 1px 5px 0; margin: 0 1px; border-radius: 5px; text-align: center;
+  font: 600 12px/18px 'Golos Text', system-ui, sans-serif; color: #c6d5ee; background: #15253c; box-shadow: 0 2px 0 #0a1424, inset 0 0 0 1px rgba(143, 180, 255, 0.2);
+}
 
-  /* ---------- текст и кнопки ---------- */
-  .info { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 22px 48px; align-items: end; margin-top: 22px; }
-  h1 {
-    margin: 0; font: 700 clamp(30px, 3.7vw, 54px)/1.06 'Onest', system-ui, sans-serif; letter-spacing: -0.025em;
-    text-wrap: balance;
-  }
-  .crumble { display: inline-block; white-space: nowrap; }
-  .crumble i { display: inline-block; font-style: normal; transition: transform 0.6s cubic-bezier(0.3, 1.4, 0.5, 1), color 0.4s; }
-  .crumble i:nth-child(7) { transform: translateY(0.02em) rotate(2deg); }
-  .crumble i:nth-child(8) { transform: translateY(0.05em) rotate(-5deg); }
-  .crumble i:nth-child(9) { transform: translateY(0.09em) rotate(7deg); }
-  .crumble i:nth-child(10) { transform: translateY(0.13em) rotate(-9deg); }
-  .crumble i:nth-child(11) { transform: translateY(0.2em) rotate(16deg); }
-  .wrecked .crumble i:nth-child(4) { transform: translateY(0.05em) rotate(-6deg); }
-  .wrecked .crumble i:nth-child(5) { transform: translateY(0.1em) rotate(8deg); }
-  .wrecked .crumble i:nth-child(6) { transform: translateY(0.15em) rotate(-11deg); }
-  .wrecked .crumble i:nth-child(7) { transform: translateY(0.2em) rotate(14deg); color: #ffcb6b; }
-  .wrecked .crumble i:nth-child(8) { transform: translateY(0.26em) rotate(-18deg); }
-  .wrecked .crumble i:nth-child(9) { transform: translateY(0.3em) rotate(24deg); color: #ff5a5a; }
-  .wrecked .crumble i:nth-child(10) { transform: translateY(0.34em) rotate(-30deg); }
-  .wrecked .crumble i:nth-child(11) { transform: translateY(0.38em) rotate(48deg); color: #3ddc84; }
-  .fixed .crumble i { transform: none !important; color: inherit; }
-  .lead { margin: 14px 0 0; max-width: 640px; color: var(--muted); font-size: clamp(16px, 1.35vw, 19px); text-wrap: pretty; }
+/* ---------- текст и кнопки ---------- */
+.info { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 22px 48px; align-items: end; margin-top: 22px; }
+h1 {
+  margin: 0; font: 700 clamp(30px, 3.7vw, 54px)/1.06 'Onest', system-ui, sans-serif; letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.crumble { display: inline-block; white-space: nowrap; }
+.crumble i { display: inline-block; font-style: normal; transition: transform 0.6s cubic-bezier(0.3, 1.4, 0.5, 1), color 0.4s; }
+.crumble i:nth-child(7) { transform: translateY(0.02em) rotate(2deg); }
+.crumble i:nth-child(8) { transform: translateY(0.05em) rotate(-5deg); }
+.crumble i:nth-child(9) { transform: translateY(0.09em) rotate(7deg); }
+.crumble i:nth-child(10) { transform: translateY(0.13em) rotate(-9deg); }
+.crumble i:nth-child(11) { transform: translateY(0.2em) rotate(16deg); }
+.wrecked .crumble i:nth-child(4) { transform: translateY(0.05em) rotate(-6deg); }
+.wrecked .crumble i:nth-child(5) { transform: translateY(0.1em) rotate(8deg); }
+.wrecked .crumble i:nth-child(6) { transform: translateY(0.15em) rotate(-11deg); }
+.wrecked .crumble i:nth-child(7) { transform: translateY(0.2em) rotate(14deg); color: #ffcb6b; }
+.wrecked .crumble i:nth-child(8) { transform: translateY(0.26em) rotate(-18deg); }
+.wrecked .crumble i:nth-child(9) { transform: translateY(0.3em) rotate(24deg); color: #ff5a5a; }
+.wrecked .crumble i:nth-child(10) { transform: translateY(0.34em) rotate(-30deg); }
+.wrecked .crumble i:nth-child(11) { transform: translateY(0.38em) rotate(48deg); color: #3ddc84; }
+.fixed .crumble i { transform: none !important; color: inherit; }
+.lead { margin: 14px 0 0; max-width: 640px; color: var(--muted); font-size: clamp(16px, 1.35vw, 19px); text-wrap: pretty; }
 
-  .actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 18px 14px; padding: 8px 0 6px; }
-  .btn {
-    --top: #2a6be0; --face: #1055cb; --edge: #0a3a8f;
-    position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    padding: 16px 26px 15px; border-radius: 14px; text-decoration: none; white-space: nowrap;
-    font: 700 17px/1.2 'Onest', system-ui, sans-serif; color: #fff;
-    background: linear-gradient(180deg, var(--top), var(--face) 55%);
-    box-shadow: 0 6px 0 var(--edge), 0 18px 34px -10px rgba(16, 85, 203, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-  }
-  /* две пупырки сверху — кнопка как кирпичик */
-  .btn::before, .btn::after {
-    content: ''; position: absolute; top: -7px; width: 26px; height: 8px; border-radius: 5px 5px 1px 1px;
-    background: linear-gradient(90deg, #6a9df5, var(--top) 40%, #1550c0);
-  }
-  .btn::before { left: 22px; }
-  .btn::after { left: 60px; }
-  .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 0 var(--edge), 0 22px 40px -10px rgba(16, 85, 203, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
-  .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--edge), 0 8px 18px -8px rgba(16, 85, 203, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25); }
-  .btn--ghost { --top: #1b2f4c; --face: #142540; --edge: #0a1526; box-shadow: 0 6px 0 var(--edge), inset 0 0 0 1px rgba(143, 180, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12); }
-  .btn--ghost::before, .btn--ghost::after { background: linear-gradient(90deg, #36507a, #1b2f4c 45%, #13233b); }
-  .btn--ghost:hover { box-shadow: 0 8px 0 var(--edge), inset 0 0 0 1px rgba(143, 180, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.14); }
-  .btn--ghost:active { box-shadow: 0 2px 0 var(--edge), inset 0 0 0 1px rgba(143, 180, 255, 0.3); }
-  .btn svg { flex: 0 0 auto; }
-  .btn:focus-visible, .tbtn:focus-visible, .links a:focus-visible, .top a:focus-visible { outline: 3px solid var(--cyan); outline-offset: 4px; }
+.actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 18px 14px; padding: 8px 0 6px; }
+.btn {
+  --top: #2a6be0; --face: #1055cb; --edge: #0a3a8f;
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 16px 26px 15px; border-radius: 14px; text-decoration: none; white-space: nowrap;
+  font: 700 17px/1.2 'Onest', system-ui, sans-serif; color: #fff;
+  background: linear-gradient(180deg, var(--top), var(--face) 55%);
+  box-shadow: 0 6px 0 var(--edge), 0 18px 34px -10px rgba(16, 85, 203, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+/* две пупырки сверху — кнопка как кирпичик */
+.btn::before, .btn::after {
+  content: ''; position: absolute; top: -7px; width: 26px; height: 8px; border-radius: 5px 5px 1px 1px;
+  background: linear-gradient(90deg, #6a9df5, var(--top) 40%, #1550c0);
+}
+.btn::before { left: 22px; }
+.btn::after { left: 60px; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 0 var(--edge), 0 22px 40px -10px rgba(16, 85, 203, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+.btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--edge), 0 8px 18px -8px rgba(16, 85, 203, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25); }
+.btn--ghost { --top: #1b2f4c; --face: #142540; --edge: #0a1526; box-shadow: 0 6px 0 var(--edge), inset 0 0 0 1px rgba(143, 180, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12); }
+.btn--ghost::before, .btn--ghost::after { background: linear-gradient(90deg, #36507a, #1b2f4c 45%, #13233b); }
+.btn--ghost:hover { box-shadow: 0 8px 0 var(--edge), inset 0 0 0 1px rgba(143, 180, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.14); }
+.btn--ghost:active { box-shadow: 0 2px 0 var(--edge), inset 0 0 0 1px rgba(143, 180, 255, 0.3); }
+.btn svg { flex: 0 0 auto; }
+.btn:focus-visible, .tbtn:focus-visible, .links a:focus-visible, .top a:focus-visible { outline: 3px solid var(--cyan); outline-offset: 4px; }
 
-  .links {
-    display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 22px; padding-top: 14px; font-size: 14px;
-    border-top: 1px solid rgba(143, 180, 255, 0.1);
-  }
-  .links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid rgba(163, 179, 204, 0.3); }
-  .links a:hover { color: var(--ink); border-color: var(--ink); }
+.links {
+  display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 22px; padding-top: 14px; font-size: 14px;
+  border-top: 1px solid rgba(143, 180, 255, 0.1);
+}
+.links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid rgba(163, 179, 204, 0.3); }
+.links a:hover { color: var(--ink); border-color: var(--ink); }
 
-  @media (max-width: 1000px) {
-    .info { grid-template-columns: 1fr; }
-    .actions { justify-content: flex-start; }
-  }
-  @media (max-width: 640px) {
-    .top__phone { display: none; }
-    .field { --floor: 24px; --tw: calc(var(--fh) * 0.26); --tx: 10px; border-radius: 22px; margin-top: 10px; }
-    .floor { padding: 0 30px; }
-    .hud { font-size: 11px; }
-    .ctrl { right: 10px; top: 10px; gap: 7px; }
-    .tbtn { font-size: 13px; padding: 8px 11px 7px 10px; gap: 6px; }
-    .info { margin-top: 20px; }
-    .actions { gap: 18px; }
-    .btn { width: 100%; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-  }
-</style>
+@media (max-width: 1000px) {
+  .info { grid-template-columns: 1fr; }
+  .actions { justify-content: flex-start; }
+}
+@media (max-width: 640px) {
+  .top__phone { display: none; }
+  .field { --floor: 24px; --tw: calc(var(--fh) * 0.26); --tx: 10px; border-radius: 22px; margin-top: 10px; }
+  .floor { padding: 0 30px; }
+  .hud { font-size: 11px; }
+  .ctrl { right: 10px; top: 10px; gap: 7px; }
+  .tbtn { font-size: 13px; padding: 8px 11px 7px 10px; gap: 6px; }
+  .info { margin-top: 20px; }
+  .actions { gap: 18px; }
+  .btn { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+  </style>
 </head>
 <body>
   <div class="page">
@@ -300,939 +296,939 @@
     </nav>
   </div>
 
-<script>
+  <script>
 (function () {
-  'use strict';
-  var root = document.documentElement;
-  function mq(q) { return !!(window.matchMedia && matchMedia(q).matches); }
-  function $(id) { return document.getElementById(id); }
-  var reduce = mq('(prefers-reduced-motion: reduce)');
-  var touch = mq('(hover: none)') || mq('(pointer: coarse)');
-  var field = $('field'), stage = $('stage'), cvs = $('bricks'), floorEl = $('floor'), tichEl = $('tich');
-  var ctx = cvs && cvs.getContext ? cvs.getContext('2d') : null;
-  if (!ctx) { root.className = root.className.replace(/\bjs\b/, ''); return; }
-  var hint = $('hint'), hudN = $('hud-n'), hudT = $('hud-t'), title = $('title'), status = $('status');
-  var btnBoom = $('b-boom'), btnBuild = $('b-build');
-  var imgPoint = tichEl.querySelector('.tich__point'), imgThumb = tichEl.querySelector('.tich__thumb');
-  var imgScared = document.querySelector('.tich__scared');
-  if (touch && hint) hint.textContent = 'Тяните кирпичик пальцем и\u00a0бросайте, тап по\u00a0пустому месту — удар.';
+'use strict';
+var root = document.documentElement;
+function mq(q) { return !!(window.matchMedia && matchMedia(q).matches); }
+function $(id) { return document.getElementById(id); }
+var reduce = mq('(prefers-reduced-motion: reduce)');
+var touch = mq('(hover: none)') || mq('(pointer: coarse)');
+var field = $('field'), stage = $('stage'), cvs = $('bricks'), floorEl = $('floor'), tichEl = $('tich');
+var ctx = cvs && cvs.getContext ? cvs.getContext('2d') : null;
+if (!ctx) { root.className = root.className.replace(/\bjs\b/, ''); return; }
+var hint = $('hint'), hudN = $('hud-n'), hudT = $('hud-t'), title = $('title'), status = $('status');
+var btnBoom = $('b-boom'), btnBuild = $('b-build');
+var imgPoint = tichEl.querySelector('.tich__point'), imgThumb = tichEl.querySelector('.tich__thumb');
+var imgScared = document.querySelector('.tich__scared');
+if (touch && hint) hint.textContent = 'Тяните кирпичик пальцем и\u00a0бросайте, тап по\u00a0пустому месту — удар.';
 
-  // на сенсорных экранах холст в 1,5× — кирпичи всё равно чёткие, а рисовать вдвое дешевле
-  var DPR = Math.min(window.devicePixelRatio || 1, touch ? 1.5 : 2);
-  var SNAP = 0, FREE = 1, DRAG = 2, FALL = 3, FLY = 4, HID = 5, WALL = 9;
-  // фирменные цвета кирпичиков и их доля в кладке
-  var COL = [['#1055cb', 25], ['#8fb4ff', 19], ['#eef3ff', 15], ['#ffcb6b', 15], ['#ff5a5a', 13], ['#3ddc84', 13]];
-  var W = 0, H = 0, FLOOR = 0, C = 20, HB = 24, STUD = 4, G = 2400, ROWS = 10, PAD = 2;
-  var POP = 280, REST = 0.24, REST_V = 110, MU = 0.3, MU_F = 0.55, VMAX = 2600, WAKE_V = 40;
-  var B = [], homes = [], order = [], sap = [], pa = [], pb = [];
-  var parts = [], SPR = [], WHITE = [], SHD = [], DUST = null, SPARK = null;
-  var glyph = { l: 0, w: 1, cx: 0, t: 0 }, tichBox = { l: 0, r: 0, t: 0 };
-  var clock = 0, raf = 0, lastT = 0, built = false;
-  var drag = null, dragId = -1, grabDx = 0, grabDy = 0, ptr = { x: 0, y: 0 }, samples = [], hover = null, magnet = false;
-  var shakeA = 0, shook = false, rumble = 0, mode = 'intro', snapped = 0, total = 0, shown = -1;
-  var tichState = 'point', tichTimer = 0, hitT = 0;
+// на сенсорных экранах холст не больше 1,5×
+var DPR = Math.min(window.devicePixelRatio || 1, touch ? 1.5 : 2);
+var SNAP = 0, FREE = 1, DRAG = 2, FALL = 3, FLY = 4, HID = 5, WALL = 9;
+// цвета кирпичиков и их доля
+var COL = [['#1055cb', 25], ['#8fb4ff', 19], ['#eef3ff', 15], ['#ffcb6b', 15], ['#ff5a5a', 13], ['#3ddc84', 13]];
+var W = 0, H = 0, FLOOR = 0, C = 20, HB = 24, STUD = 4, G = 2400, ROWS = 10, PAD = 2;
+var POP = 280, REST = 0.24, REST_V = 110, MU = 0.3, MU_F = 0.55, VMAX = 2600, WAKE_V = 40;
+var B = [], homes = [], order = [], sap = [], pa = [], pb = [];
+var parts = [], SPR = [], WHITE = [], SHD = [], DUST = null, SPARK = null;
+var glyph = { l: 0, w: 1, cx: 0, t: 0 }, tichBox = { l: 0, r: 0, t: 0 };
+var clock = 0, raf = 0, lastT = 0, built = false;
+var drag = null, dragId = -1, grabDx = 0, grabDy = 0, ptr = { x: 0, y: 0 }, samples = [], hover = null, magnet = false;
+var shakeA = 0, shook = false, rumble = 0, mode = 'intro', snapped = 0, total = 0, shown = -1;
+var tichState = 'point', tichTimer = 0, hitT = 0;
 
-  function rnd(a, b) { return a + Math.random() * (b - a); }
-  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
-  function hex(h) { return [parseInt(h.substr(1, 2), 16), parseInt(h.substr(3, 2), 16), parseInt(h.substr(5, 2), 16)]; }
-  function mix(h, t, k) {
-    var a = hex(h), b = hex(t);
-    return 'rgb(' + Math.round(a[0] + (b[0] - a[0]) * k) + ',' + Math.round(a[1] + (b[1] - a[1]) * k) + ',' + Math.round(a[2] + (b[2] - a[2]) * k) + ')';
-  }
-  function rr(g, x, y, w, h, r) {
-    g.beginPath();
-    g.moveTo(x + r, y);
-    g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
-    g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r);
-    g.closePath();
-  }
-  function canvas(w, h) { var c = document.createElement('canvas'); c.width = Math.max(1, Math.ceil(w)); c.height = Math.max(1, Math.ceil(h)); return c; }
+function rnd(a, b) { return a + Math.random() * (b - a); }
+function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+function hex(h) { return [parseInt(h.substr(1, 2), 16), parseInt(h.substr(3, 2), 16), parseInt(h.substr(5, 2), 16)]; }
+function mix(h, t, k) {
+  var a = hex(h), b = hex(t);
+  return 'rgb(' + Math.round(a[0] + (b[0] - a[0]) * k) + ',' + Math.round(a[1] + (b[1] - a[1]) * k) + ',' + Math.round(a[2] + (b[2] - a[2]) * k) + ')';
+}
+function rr(g, x, y, w, h, r) {
+  g.beginPath();
+  g.moveTo(x + r, y);
+  g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+  g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r);
+  g.closePath();
+}
+function canvas(w, h) { var c = document.createElement('canvas'); c.width = Math.max(1, Math.ceil(w)); c.height = Math.max(1, Math.ceil(h)); return c; }
 
-  /* ---------- спрайты: каждый кирпич рисуется заранее один раз (объём — градиентами), в кадре только drawImage ---------- */
-  function brickSprite(ci, n) {
-    var w = n * C, cv = canvas((w + PAD * 2) * DPR, (HB + STUD + PAD * 2) * DPR), g = cv.getContext('2d');
-    g.scale(DPR, DPR);
-    var sil = ci < 0, base = sil ? '#ffffff' : COL[ci][0], white = ci === 2;
-    function L(k) { return sil ? '#fff' : mix(base, '#ffffff', k); }
-    function D(k) { return sil ? '#fff' : mix(base, white ? '#5f7aa6' : '#061230', k); }
-    var x0 = PAD + 0.5, y0 = PAD + STUD, bw = w - 1, bh = HB - 0.5, r = Math.max(1.5, C * 0.09), sw = Math.max(4, C * 0.58);
-    for (var i = 0; i < n; i++) {
-      var sx = PAD + i * C + (C - sw) / 2, gs = g.createLinearGradient(sx, 0, sx + sw, 0);
-      gs.addColorStop(0, L(0.45)); gs.addColorStop(0.3, L(0.12)); gs.addColorStop(0.68, base); gs.addColorStop(1, D(0.34));
-      g.fillStyle = sil ? '#fff' : gs;
-      rr(g, sx, PAD, sw, STUD + r + 2, Math.min(sw * 0.22, 2.5));
-      g.fill();
-      if (!sil) {
-        g.lineWidth = 0.8; g.strokeStyle = 'rgba(3,9,22,0.4)'; g.stroke();
-        g.fillStyle = 'rgba(255,255,255,0.6)'; g.fillRect(sx + sw * 0.16, PAD + 0.7, sw * 0.4, Math.max(0.9, STUD * 0.2));
-      }
-    }
-    var gb = g.createLinearGradient(0, y0, 0, y0 + bh);
-    gb.addColorStop(0, L(0.3)); gb.addColorStop(0.13, L(0.07)); gb.addColorStop(0.58, base); gb.addColorStop(1, D(0.34));
-    g.fillStyle = sil ? '#fff' : gb;
-    rr(g, x0, y0, bw, bh, r); g.fill();
+/* ---------- спрайты: кирпич рисуется один раз, в кадре — только drawImage ---------- */
+function brickSprite(ci, n) {
+  var w = n * C, cv = canvas((w + PAD * 2) * DPR, (HB + STUD + PAD * 2) * DPR), g = cv.getContext('2d');
+  g.scale(DPR, DPR);
+  var sil = ci < 0, base = sil ? '#ffffff' : COL[ci][0], white = ci === 2;
+  function L(k) { return sil ? '#fff' : mix(base, '#ffffff', k); }
+  function D(k) { return sil ? '#fff' : mix(base, white ? '#5f7aa6' : '#061230', k); }
+  var x0 = PAD + 0.5, y0 = PAD + STUD, bw = w - 1, bh = HB - 0.5, r = Math.max(1.5, C * 0.09), sw = Math.max(4, C * 0.58);
+  for (var i = 0; i < n; i++) {
+    var sx = PAD + i * C + (C - sw) / 2, gs = g.createLinearGradient(sx, 0, sx + sw, 0);
+    gs.addColorStop(0, L(0.45)); gs.addColorStop(0.3, L(0.12)); gs.addColorStop(0.68, base); gs.addColorStop(1, D(0.34));
+    g.fillStyle = sil ? '#fff' : gs;
+    rr(g, sx, PAD, sw, STUD + r + 2, Math.min(sw * 0.22, 2.5));
+    g.fill();
     if (!sil) {
-      var gl = g.createLinearGradient(x0, y0, x0 + Math.min(bw, HB * 1.5), y0 + bh);
-      gl.addColorStop(0, 'rgba(255,255,255,0.22)'); gl.addColorStop(0.48, 'rgba(255,255,255,0)');
-      g.fillStyle = gl; rr(g, x0, y0, bw, bh, r); g.fill();
-      g.fillStyle = 'rgba(255,255,255,0.62)'; g.fillRect(x0 + r, y0 + 0.7, bw - r * 2, 1);
-      g.fillStyle = 'rgba(0,0,0,0.2)'; g.fillRect(x0 + r * 0.6, y0 + bh - 1.8, bw - r * 1.2, 1.3);
-      g.lineWidth = 0.9; g.strokeStyle = 'rgba(3,9,22,0.6)'; rr(g, x0, y0, bw, bh, r); g.stroke();
-    }
-    return cv;
-  }
-  // мягкая тень кирпича на стене (размытие — один раз при создании, не в кадре)
-  function shadowSprite(n) {
-    var w = n * C, h = HB + STUD * 0.4, b = Math.max(3, C * 0.3), cv = canvas((w + b * 4) * DPR, (h + b * 4) * DPR), g = cv.getContext('2d');
-    g.shadowColor = 'rgba(0,3,12,0.66)'; g.shadowBlur = b * DPR; g.shadowOffsetX = 5000;
-    g.fillStyle = '#000';
-    rr(g, b * 2 * DPR - 5000, b * 2 * DPR, w * DPR, h * DPR, C * 0.1 * DPR); g.fill();
-    cv.pad = b * 2;
-    return cv;
-  }
-  function glowSprite(stops) {
-    var cv = canvas(48, 48), g = cv.getContext('2d'), gr = g.createRadialGradient(24, 24, 0, 24, 24, 24);
-    for (var i = 0; i < stops.length; i++) gr.addColorStop(stops[i][0], stops[i][1]);
-    g.fillStyle = gr; g.fillRect(0, 0, 48, 48);
-    return cv;
-  }
-  function makeSprites() {
-    SPR = []; WHITE = []; SHD = [];
-    for (var ci = 0; ci < COL.length; ci++) SPR.push([null, brickSprite(ci, 1), brickSprite(ci, 2)]);
-    WHITE = [null, brickSprite(-1, 1), brickSprite(-1, 2)];
-    SHD = [null, shadowSprite(1), shadowSprite(2)];
-    if (!DUST) {
-      DUST = glowSprite([[0, 'rgba(205,220,245,0.85)'], [0.45, 'rgba(160,185,225,0.35)'], [1, 'rgba(160,185,225,0)']]);
-      SPARK = glowSprite([[0, 'rgba(255,255,255,1)'], [0.25, 'rgba(255,236,170,0.9)'], [1, 'rgba(255,203,107,0)']]);
+      g.lineWidth = 0.8; g.strokeStyle = 'rgba(3,9,22,0.4)'; g.stroke();
+      g.fillStyle = 'rgba(255,255,255,0.6)'; g.fillRect(sx + sw * 0.16, PAD + 0.7, sw * 0.4, Math.max(0.9, STUD * 0.2));
     }
   }
+  var gb = g.createLinearGradient(0, y0, 0, y0 + bh);
+  gb.addColorStop(0, L(0.3)); gb.addColorStop(0.13, L(0.07)); gb.addColorStop(0.58, base); gb.addColorStop(1, D(0.34));
+  g.fillStyle = sil ? '#fff' : gb;
+  rr(g, x0, y0, bw, bh, r); g.fill();
+  if (!sil) {
+    var gl = g.createLinearGradient(x0, y0, x0 + Math.min(bw, HB * 1.5), y0 + bh);
+    gl.addColorStop(0, 'rgba(255,255,255,0.22)'); gl.addColorStop(0.48, 'rgba(255,255,255,0)');
+    g.fillStyle = gl; rr(g, x0, y0, bw, bh, r); g.fill();
+    g.fillStyle = 'rgba(255,255,255,0.62)'; g.fillRect(x0 + r, y0 + 0.7, bw - r * 2, 1);
+    g.fillStyle = 'rgba(0,0,0,0.2)'; g.fillRect(x0 + r * 0.6, y0 + bh - 1.8, bw - r * 1.2, 1.3);
+    g.lineWidth = 0.9; g.strokeStyle = 'rgba(3,9,22,0.6)'; rr(g, x0, y0, bw, bh, r); g.stroke();
+  }
+  return cv;
+}
+// мягкая тень на стене (размытие — один раз)
+function shadowSprite(n) {
+  var w = n * C, h = HB + STUD * 0.4, b = Math.max(3, C * 0.3), cv = canvas((w + b * 4) * DPR, (h + b * 4) * DPR), g = cv.getContext('2d');
+  g.shadowColor = 'rgba(0,3,12,0.66)'; g.shadowBlur = b * DPR; g.shadowOffsetX = 5000;
+  g.fillStyle = '#000';
+  rr(g, b * 2 * DPR - 5000, b * 2 * DPR, w * DPR, h * DPR, C * 0.1 * DPR); g.fill();
+  cv.pad = b * 2;
+  return cv;
+}
+function glowSprite(stops) {
+  var cv = canvas(48, 48), g = cv.getContext('2d'), gr = g.createRadialGradient(24, 24, 0, 24, 24, 24);
+  for (var i = 0; i < stops.length; i++) gr.addColorStop(stops[i][0], stops[i][1]);
+  g.fillStyle = gr; g.fillRect(0, 0, 48, 48);
+  return cv;
+}
+function makeSprites() {
+  SPR = []; WHITE = []; SHD = [];
+  for (var ci = 0; ci < COL.length; ci++) SPR.push([null, brickSprite(ci, 1), brickSprite(ci, 2)]);
+  WHITE = [null, brickSprite(-1, 1), brickSprite(-1, 2)];
+  SHD = [null, shadowSprite(1), shadowSprite(2)];
+  if (!DUST) {
+    DUST = glowSprite([[0, 'rgba(205,220,245,0.85)'], [0.45, 'rgba(160,185,225,0.35)'], [1, 'rgba(160,185,225,0)']]);
+    SPARK = glowSprite([[0, 'rgba(255,255,255,1)'], [0.25, 'rgba(255,236,170,0.9)'], [1, 'rgba(255,203,107,0)']]);
+  }
+}
 
-  /* ---------- сетка кирпичей: «404» рисуется на невидимом холсте, закрашенные клетки становятся кирпичами ---------- */
-  function layoutGlyph(L, R, T, Bt, narrow) {
-    var bw = Math.max(80, R - L), bh = Math.max(50, Bt - T);
-    var m = canvas(4, 4).getContext('2d'), F0 = 200, chars = ['4', '0', '4'], info = [], asc = 0, des = 0, sumw = 0, i;
-    m.font = '700 ' + F0 + 'px Onest, system-ui, sans-serif';
+/* ---------- сетка: «404» на невидимом холсте, закрашенные клетки — кирпичи ---------- */
+function layoutGlyph(L, R, T, Bt, narrow) {
+  var bw = Math.max(80, R - L), bh = Math.max(50, Bt - T);
+  var m = canvas(4, 4).getContext('2d'), F0 = 200, chars = ['4', '0', '4'], info = [], asc = 0, des = 0, sumw = 0, i;
+  m.font = '700 ' + F0 + 'px Onest, system-ui, sans-serif';
+  for (i = 0; i < 3; i++) {
+    var mt = m.measureText(chars[i]), l = mt.actualBoundingBoxLeft, r = mt.actualBoundingBoxRight, a = mt.actualBoundingBoxAscent, d = mt.actualBoundingBoxDescent;
+    if (!(r > 0) || !(a > 0)) { l = 0; r = mt.width; a = F0 * 0.72; d = 0; }
+    info.push({ l: l, w: l + r }); asc = Math.max(asc, a); des = Math.max(des, d || 0); sumw += l + r;
+  }
+  var gh0 = asc + des, gap0 = gh0 * 0.1, gw0 = sumw + gap0 * 2;
+  // узкое поле — цифры чуть сужаются: выше и больше рядов
+  var sq = clamp((bw / bh) / (gw0 / gh0), narrow ? 0.76 : 0.9, 1);
+  for (i = 0; i < 3; i++) { info[i].l *= sq; info[i].w *= sq; }
+  gap0 *= sq; gw0 *= sq;
+  var s = Math.min(bw / gw0, bh / gh0), gw = gw0 * s, gh = gh0 * s;
+  var maxN = touch ? 118 : 150;
+  var c = Math.round(Math.sqrt((0.46 * gw * gh) / (1.2 * 1.7 * maxN)));
+  c = clamp(c, touch ? 9 : 12, 40);
+  var res;
+  for (var tries = 0; tries < 16; tries++) {
+    var hb = Math.round(c * 1.2), rows = Math.max(5, Math.min(Math.floor(bh / hb), Math.round(gh / hb)));
+    var sc = (rows * hb) / gh0, gwp = gw0 * sc;
+    while (gwp > bw && rows > 5) { rows--; sc = (rows * hb) / gh0; gwp = gw0 * sc; }
+    var cols = Math.ceil(gwp / c) + 1, cw = cols * c, chh = rows * hb, cv = canvas(cw, chh), g = cv.getContext('2d');
+    g.font = '700 ' + (F0 * sc).toFixed(2) + 'px Onest, system-ui, sans-serif';
+    g.fillStyle = '#000'; g.textBaseline = 'alphabetic';
+    var x = (cw - gwp) / 2;
     for (i = 0; i < 3; i++) {
-      var mt = m.measureText(chars[i]), l = mt.actualBoundingBoxLeft, r = mt.actualBoundingBoxRight, a = mt.actualBoundingBoxAscent, d = mt.actualBoundingBoxDescent;
-      if (!(r > 0) || !(a > 0)) { l = 0; r = mt.width; a = F0 * 0.72; d = 0; }
-      info.push({ l: l, w: l + r }); asc = Math.max(asc, a); des = Math.max(des, d || 0); sumw += l + r;
+      g.setTransform(sq, 0, 0, 1, x, 0);
+      g.fillText(chars[i], (info[i].l / sq) * sc, asc * sc);
+      x += (info[i].w + gap0) * sc;
     }
-    var gh0 = asc + des, gap0 = gh0 * 0.1, gw0 = sumw + gap0 * 2;
-    // если поле уже, чем пропорции цифр, они чуть сужаются по горизонтали — выше цифры, больше рядов кладки
-    var sq = clamp((bw / bh) / (gw0 / gh0), narrow ? 0.76 : 0.9, 1);
-    for (i = 0; i < 3; i++) { info[i].l *= sq; info[i].w *= sq; }
-    gap0 *= sq; gw0 *= sq;
-    var s = Math.min(bw / gw0, bh / gh0), gw = gw0 * s, gh = gh0 * s;
-    var maxN = touch ? 118 : 150;
-    var c = Math.round(Math.sqrt((0.46 * gw * gh) / (1.2 * 1.7 * maxN)));
-    c = clamp(c, touch ? 9 : 12, 40);
-    var res;
-    for (var tries = 0; tries < 16; tries++) {
-      var hb = Math.round(c * 1.2), rows = Math.max(5, Math.min(Math.floor(bh / hb), Math.round(gh / hb)));
-      var sc = (rows * hb) / gh0, gwp = gw0 * sc;
-      while (gwp > bw && rows > 5) { rows--; sc = (rows * hb) / gh0; gwp = gw0 * sc; }
-      var cols = Math.ceil(gwp / c) + 1, cw = cols * c, chh = rows * hb, cv = canvas(cw, chh), g = cv.getContext('2d');
-      g.font = '700 ' + (F0 * sc).toFixed(2) + 'px Onest, system-ui, sans-serif';
-      g.fillStyle = '#000'; g.textBaseline = 'alphabetic';
-      var x = (cw - gwp) / 2;
-      for (i = 0; i < 3; i++) {
-        g.setTransform(sq, 0, 0, 1, x, 0);
-        g.fillText(chars[i], (info[i].l / sq) * sc, asc * sc);
-        x += (info[i].w + gap0) * sc;
-      }
-      g.setTransform(1, 0, 0, 1, 0, 0);
-      var data = g.getImageData(0, 0, cw, chh).data, grid = [];
-      for (var rr2 = 0; rr2 < rows; rr2++) {
-        var row = [];
-        for (var cc = 0; cc < cols; cc++) {
-          var hits = 0;
-          for (var sy = 0; sy < 4; sy++) for (var sx = 0; sx < 4; sx++) {
-            var px = (cc * c + ((sx + 0.5) * c) / 4) | 0, py = (rr2 * hb + ((sy + 0.5) * hb) / 4) | 0;
-            if (data[(py * cw + px) * 4 + 3] > 127) hits++;
-          }
-          row.push(hits >= 7);
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    var data = g.getImageData(0, 0, cw, chh).data, grid = [];
+    for (var rr2 = 0; rr2 < rows; rr2++) {
+      var row = [];
+      for (var cc = 0; cc < cols; cc++) {
+        var hits = 0;
+        for (var sy = 0; sy < 4; sy++) for (var sx = 0; sx < 4; sx++) {
+          var px = (cc * c + ((sx + 0.5) * c) / 4) | 0, py = (rr2 * hb + ((sy + 0.5) * hb) / 4) | 0;
+          if (data[(py * cw + px) * 4 + 3] > 127) hits++;
         }
-        grid.push(row);
+        row.push(hits >= 7);
       }
-      var bricks = pack(grid, rows, cols);
-      res = { c: c, hb: hb, rows: rows, cols: cols, cw: cw, gwp: gwp, bricks: bricks };
-      if (bricks.length <= maxN || c >= 40) break;
-      c++;
+      grid.push(row);
     }
-    C = res.c; HB = res.hb; ROWS = res.rows; STUD = Math.max(2, Math.round(C * 0.22));
-    var ox = Math.round(L + (bw - res.cw) / 2), oy = Bt - ROWS * HB;
-    glyph = { l: ox + (res.cw - res.gwp) / 2, w: res.gwp, cx: ox + res.cw / 2, t: oy, ox: ox };
-    return { ox: ox, oy: oy, bricks: res.bricks };
+    var bricks = pack(grid, rows, cols);
+    res = { c: c, hb: hb, rows: rows, cols: cols, cw: cw, gwp: gwp, bricks: bricks };
+    if (bricks.length <= maxN || c >= 40) break;
+    c++;
   }
-  // кладка со сдвигом: в чётных рядах кирпичи 2×1 начинаются с чётной клетки, в нечётных — с нечётной
-  function pack(grid, rows, cols) {
-    var out = [];
-    for (var r = 0; r < rows; r++) {
-      var off = (rows - 1 - r) & 1;
-      for (var c = 0; c < cols;) {
-        if (!grid[r][c]) { c++; continue; }
-        var run = 0;
-        while (c + run < cols && grid[r][c + run]) run++;
-        if (run >= 2 && (((c + off) & 1) === 0 || run === 2)) { out.push({ r: r, c: c, n: 2 }); c += 2; }
-        else { out.push({ r: r, c: c, n: 1 }); c++; }
-      }
+  C = res.c; HB = res.hb; ROWS = res.rows; STUD = Math.max(2, Math.round(C * 0.22));
+  var ox = Math.round(L + (bw - res.cw) / 2), oy = Bt - ROWS * HB;
+  glyph = { l: ox + (res.cw - res.gwp) / 2, w: res.gwp, cx: ox + res.cw / 2, t: oy, ox: ox };
+  return { ox: ox, oy: oy, bricks: res.bricks };
+}
+// кладка со сдвигом: 2×1 в чётных рядах с чётной клетки, в нечётных — с нечётной
+function pack(grid, rows, cols) {
+  var out = [];
+  for (var r = 0; r < rows; r++) {
+    var off = (rows - 1 - r) & 1;
+    for (var c = 0; c < cols;) {
+      if (!grid[r][c]) { c++; continue; }
+      var run = 0;
+      while (c + run < cols && grid[r][c + run]) run++;
+      if (run >= 2 && (((c + off) & 1) === 0 || run === 2)) { out.push({ r: r, c: c, n: 2 }); c += 2; }
+      else { out.push({ r: r, c: c, n: 1 }); c++; }
     }
-    return out;
   }
-  function pickColor(avoid) {
-    var sum = 0, i;
-    for (i = 0; i < COL.length; i++) if (avoid.indexOf(i) < 0) sum += COL[i][1];
-    var t = Math.random() * sum;
-    for (i = 0; i < COL.length; i++) { if (avoid.indexOf(i) >= 0) continue; t -= COL[i][1]; if (t <= 0) return i; }
-    return 0;
+  return out;
+}
+function pickColor(avoid) {
+  var sum = 0, i;
+  for (i = 0; i < COL.length; i++) if (avoid.indexOf(i) < 0) sum += COL[i][1];
+  var t = Math.random() * sum;
+  for (i = 0; i < COL.length; i++) { if (avoid.indexOf(i) >= 0) continue; t -= COL[i][1]; if (t <= 0) return i; }
+  return 0;
+}
+
+function body(x, y, n, ci) {
+  return { x: x, y: y, px: x, py: y, w: n * C, h: HB, n: n, c: ci, vx: 0, vy: 0, st: SNAP, sl: false, calm: 0,
+    supL: 1e9, supR: -1e9, fl: 0, sq: 0, at: 0, act: 0, qvx: 0, qvy: 0, qd: 0, home: false, hx: x, hy: y, rb: 0,
+    t0: 0, dur: 0, x0: 0, y0: 0, cxp: 0, cyp: 0, bn: 0, nb: [], k: 0 };
+}
+
+function build(intro) {
+  var fr = field.getBoundingClientRect();
+  W = fr.width; H = fr.height;
+  FLOOR = H - (floorEl.offsetHeight || 30);
+  cvs.width = Math.round(W * DPR); cvs.height = Math.round(H * DPR);
+  G = 1900 + H;
+  var tr = tichEl.getBoundingClientRect(), tx = tr.left - fr.left, tw = tr.width, narrow = W < 560;
+  tichBox = { l: tx + tw * 0.06, r: tx + tw * 0.66, t: FLOOR - tw * 1.75 };
+  var L = tx + tw * (narrow ? 0.64 : 1) + (narrow ? 2 : W * 0.02);
+  var R = W - (narrow ? 8 : Math.max(26, W * 0.065));
+  var T = narrow ? 56 : Math.max(84, H * 0.19);
+  var lay = layoutGlyph(L, R, T, FLOOR, narrow);
+  makeSprites();
+  field.style.setProperty('--cell', C + 'px');
+  field.style.setProperty('--ox', (((lay.ox % C) + C) % C) + 'px');
+  field.style.setProperty('--stud', STUD + 'px');
+
+  B = []; homes = []; drag = null; hover = null; parts = [];
+  var own = [], i, j, k;
+  for (i = 0; i < ROWS; i++) own.push([]);
+  for (i = 0; i < lay.bricks.length; i++) {
+    var q = lay.bricks[i], b = body(lay.ox + q.c * C, lay.oy + q.r * HB, q.n, 0);
+    b.home = true; b.rb = ROWS - 1 - q.r; b.gr = q.r; b.gc = q.c;
+    for (k = 0; k < q.n; k++) own[q.r][q.c + k] = b;
+    homes.push(b); B.push(b);
   }
-
-  function body(x, y, n, ci) {
-    return { x: x, y: y, px: x, py: y, w: n * C, h: HB, n: n, c: ci, vx: 0, vy: 0, st: SNAP, sl: false, calm: 0,
-      supL: 1e9, supR: -1e9, fl: 0, sq: 0, at: 0, act: 0, qvx: 0, qvy: 0, qd: 0, home: false, hx: x, hy: y, rb: 0,
-      t0: 0, dur: 0, x0: 0, y0: 0, cxp: 0, cyp: 0, bn: 0, nb: [], k: 0 };
+  // цвета: не как сосед слева и кирпичи снизу
+  var byRow = homes.slice().sort(function (a, b2) { return b2.gr - a.gr || a.gc - b2.gc; });
+  for (i = 0; i < byRow.length; i++) {
+    var hb2 = byRow[i], avoid = [], left = own[hb2.gr][hb2.gc - 1];
+    if (left) avoid.push(left.c);
+    if (hb2.gr + 1 < ROWS) for (k = 0; k < hb2.n; k++) { var under = own[hb2.gr + 1][hb2.gc + k]; if (under && avoid.indexOf(under.c) < 0) avoid.push(under.c); }
+    hb2.c = pickColor(avoid);
   }
+  // соседи — для цепной реакции и связности
+  for (i = 0; i < homes.length; i++) for (j = i + 1; j < homes.length; j++) {
+    var A = homes[i], Bb = homes[j];
+    var sideTouch = Math.abs(A.y - Bb.y) < 0.5 && (Math.abs(A.x + A.w - Bb.x) < 0.5 || Math.abs(Bb.x + Bb.w - A.x) < 0.5);
+    var vTouch = (Math.abs(A.y + A.h - Bb.y) < 0.5 || Math.abs(Bb.y + Bb.h - A.y) < 0.5) && Math.min(A.x + A.w, Bb.x + Bb.w) - Math.max(A.x, Bb.x) > 0.5;
+    if (sideTouch || vTouch) { A.nb.push(Bb); Bb.nb.push(A); }
+  }
+  // опора — нижний ряд; кусочки, державшиеся с начала лишь на углах, тоже опора
+  for (i = 0; i < homes.length; i++) homes[i].root = homes[i].rb === 0;
+  reach();
+  for (i = 0; i < homes.length; i++) if (!homes[i].mk) homes[i].root = true;
+  total = homes.length;
+  hudT.textContent = total;
 
-  function build(intro) {
-    var fr = field.getBoundingClientRect();
-    W = fr.width; H = fr.height;
-    FLOOR = H - (floorEl.offsetHeight || 30);
-    cvs.width = Math.round(W * DPR); cvs.height = Math.round(H * DPR);
-    G = 1900 + H;
-    var tr = tichEl.getBoundingClientRect(), tx = tr.left - fr.left, tw = tr.width, narrow = W < 560;
-    tichBox = { l: tx + tw * 0.06, r: tx + tw * 0.66, t: FLOOR - tw * 1.75 };
-    var L = tx + tw * (narrow ? 0.64 : 1) + (narrow ? 2 : W * 0.02);
-    var R = W - (narrow ? 8 : Math.max(26, W * 0.065));
-    var T = narrow ? 56 : Math.max(84, H * 0.19);
-    var lay = layoutGlyph(L, R, T, FLOOR, narrow);
-    makeSprites();
-    field.style.setProperty('--cell', C + 'px');
-    field.style.setProperty('--ox', (((lay.ox % C) + C) % C) + 'px');
-    field.style.setProperty('--stud', STUD + 'px');
+  // лишние детальки: на последней «4», справа и у ног Тича
+  var spares = [], last = null;
+  for (i = 0; i < homes.length; i++) {
+    var hh = homes[i];
+    if (hh.x + hh.w / 2 > glyph.l + glyph.w * 0.72 && (!last || hh.y < last.y - 0.5 || (Math.abs(hh.y - last.y) < 0.5 && hh.x > last.x))) last = hh;
+  }
+  if (last) spares.push(body(last.x, last.y - HB, last.n, 3));
+  var gR = glyph.l + glyph.w;
+  if (W - gR > 2 * C + 18) {
+    var sx2 = Math.round(gR + (W - gR - 2 * C) / 2);
+    spares.push(body(sx2, FLOOR - HB, 2, 4));
+    spares.push(body(sx2 + C * 0.5, FLOOR - HB * 2, 1, 5));
+  }
+  var gapL = glyph.l - tichBox.r;
+  if (gapL > 2 * C + 14) spares.push(body(Math.round(tichBox.r + (gapL - 2 * C) / 2), FLOOR - HB, 2, 1));
+  for (i = 0; i < spares.length; i++) { spares[i].st = FREE; spares[i].sl = true; spares[i].soft = true; B.push(spares[i]); }
 
-    B = []; homes = []; drag = null; hover = null; parts = [];
-    var own = [], i, j, k;
-    for (i = 0; i < ROWS; i++) own.push([]);
-    for (i = 0; i < lay.bricks.length; i++) {
-      var q = lay.bricks[i], b = body(lay.ox + q.c * C, lay.oy + q.r * HB, q.n, 0);
-      b.home = true; b.rb = ROWS - 1 - q.r; b.gr = q.r; b.gc = q.c;
-      for (k = 0; k < q.n; k++) own[q.r][q.c + k] = b;
-      homes.push(b); B.push(b);
-    }
-    // цвета: снизу вверх, не повторяя соседа слева и кирпичи под собой
-    var byRow = homes.slice().sort(function (a, b2) { return b2.gr - a.gr || a.gc - b2.gc; });
-    for (i = 0; i < byRow.length; i++) {
-      var hb2 = byRow[i], avoid = [], left = own[hb2.gr][hb2.gc - 1];
-      if (left) avoid.push(left.c);
-      if (hb2.gr + 1 < ROWS) for (k = 0; k < hb2.n; k++) { var under = own[hb2.gr + 1][hb2.gc + k]; if (under && avoid.indexOf(under.c) < 0) avoid.push(under.c); }
-      hb2.c = pickColor(avoid);
-    }
-    // соседи для «цепной реакции» при выбивании
-    for (i = 0; i < homes.length; i++) for (j = i + 1; j < homes.length; j++) {
-      var A = homes[i], Bb = homes[j];
-      var sideTouch = Math.abs(A.y - Bb.y) < 0.5 && (Math.abs(A.x + A.w - Bb.x) < 0.5 || Math.abs(Bb.x + Bb.w - A.x) < 0.5);
-      var vTouch = (Math.abs(A.y + A.h - Bb.y) < 0.5 || Math.abs(Bb.y + Bb.h - A.y) < 0.5) && Math.min(A.x + A.w, Bb.x + Bb.w) - Math.max(A.x, Bb.x) > 0.5;
-      if (sideTouch || vTouch) { A.nb.push(Bb); Bb.nb.push(A); }
-    }
-    // опора: нижний ряд стоит на полу; кусочки, которые с самого начала держатся только на углах, тоже считаем опорой
-    for (i = 0; i < homes.length; i++) homes[i].root = homes[i].rb === 0;
-    reach();
-    for (i = 0; i < homes.length; i++) if (!homes[i].mk) homes[i].root = true;
-    total = homes.length;
-    hudT.textContent = total;
+  var walls = [
+    { st: WALL, floor: true, x: -1e5, y: FLOOR, w: 2e5 + W, h: 1e5, vx: 0, vy: 0 },
+    { st: WALL, x: -1e5, y: -1e5, w: 1e5, h: 3e5, vx: 0, vy: 0 },
+    { st: WALL, x: W, y: -1e5, w: 1e5, h: 3e5, vx: 0, vy: 0 }
+  ];
+  for (i = 0; i < walls.length; i++) { walls[i].px = walls[i].x; walls[i].py = walls[i].y; }
+  sap = walls.concat(B);
+  order = B.slice();
 
-    // лишние детальки: на верхушке последней «4», стопкой справа и у ног Тича
-    var spares = [], last = null;
+  clock = 0; connHold = 0; rumble = 0; shakeA = 0;
+  btnBuild.classList.remove('pulse');
+  if (intro) {
+    // вступление: падают по одному, волной снизу вверх и слева направо
+    var maxT = 0;
     for (i = 0; i < homes.length; i++) {
-      var hh = homes[i];
-      if (hh.x + hh.w / 2 > glyph.l + glyph.w * 0.72 && (!last || hh.y < last.y - 0.5 || (Math.abs(hh.y - last.y) < 0.5 && hh.x > last.x))) last = hh;
+      var f = homes[i];
+      f.st = FALL; f.bn = 0; f.vy = 0;
+      f.t0 = 0.3 + f.rb * (0.95 / ROWS) + ((f.x - glyph.l) / glyph.w) * 0.34 + Math.random() * 0.04;
+      f.y = -HB - STUD - Math.random() * HB * 2;
+      maxT = Math.max(maxT, f.t0);
     }
-    if (last) spares.push(body(last.x, last.y - HB, last.n, 3));
-    var gR = glyph.l + glyph.w;
-    if (W - gR > 2 * C + 18) {
-      var sx2 = Math.round(gR + (W - gR - 2 * C) / 2);
-      spares.push(body(sx2, FLOOR - HB, 2, 4));
-      spares.push(body(sx2 + C * 0.5, FLOOR - HB * 2, 1, 5));
+    for (i = 0; i < spares.length; i++) {
+      var sp = spares[i];
+      sp.st = HID; sp.sl = false; sp.ry = sp.y; sp.y = -HB * 2 - i * HB * 1.4;
+      sp.at = maxT + 0.75 + i * 0.16; sp.act = 4;
     }
-    var gapL = glyph.l - tichBox.r;
-    if (gapL > 2 * C + 14) spares.push(body(Math.round(tichBox.r + (gapL - 2 * C) / 2), FLOOR - HB, 2, 1));
-    for (i = 0; i < spares.length; i++) { spares[i].st = FREE; spares[i].sl = true; spares[i].soft = true; B.push(spares[i]); }
-
-    var walls = [
-      { st: WALL, floor: true, x: -1e5, y: FLOOR, w: 2e5 + W, h: 1e5, vx: 0, vy: 0 },
-      { st: WALL, x: -1e5, y: -1e5, w: 1e5, h: 3e5, vx: 0, vy: 0 },
-      { st: WALL, x: W, y: -1e5, w: 1e5, h: 3e5, vx: 0, vy: 0 }
-    ];
-    for (i = 0; i < walls.length; i++) { walls[i].px = walls[i].x; walls[i].py = walls[i].y; }
-    sap = walls.concat(B);
-    order = B.slice();
-
-    clock = 0; connHold = 0; rumble = 0; shakeA = 0;
-    btnBuild.classList.remove('pulse');
-    if (intro) {
-      // вступление: кирпичики падают сверху по одному — волной снизу вверх и слева направо
-      var maxT = 0;
-      for (i = 0; i < homes.length; i++) {
-        var f = homes[i];
-        f.st = FALL; f.bn = 0; f.vy = 0;
-        f.t0 = 0.3 + f.rb * (0.95 / ROWS) + ((f.x - glyph.l) / glyph.w) * 0.34 + Math.random() * 0.04;
-        f.y = -HB - STUD - Math.random() * HB * 2;
-        maxT = Math.max(maxT, f.t0);
-      }
-      for (i = 0; i < spares.length; i++) {
-        var sp = spares[i];
-        sp.st = HID; sp.sl = false; sp.ry = sp.y; sp.y = -HB * 2 - i * HB * 1.4;
-        sp.at = maxT + 0.75 + i * 0.16; sp.act = 4;
-      }
-      mode = 'intro';
-    } else {
-      mode = 'built';
-    }
-    setTich('point');
-    title.classList.remove('wrecked', 'fixed');
-    built = true;
-    shown = -1;
-    countSnapped();
-  }
-
-  /* ---------- физика ---------- */
-  function im(b) { return b.st === FREE ? (b.sl ? 0 : 1 / b.n) : b.st === DRAG ? 0.08 / b.n : 0; }
-  function dyn(b) { return (b.st === FREE && !b.sl) || b.st === DRAG; }
-  function solid(b) { return b.st !== FALL && b.st !== FLY && b.st !== HID && !(b === drag && magnet); }
-  function wake(b) { if (b.st === FREE && b.sl) { b.sl = false; b.calm = 0; b.px = b.x; b.py = b.y; } }
-  function wakeAround(b) {
-    for (var i = 0; i < B.length; i++) {
-      var o = B[i];
-      if (o !== b && o.st === FREE && o.sl && o.x < b.x + b.w + 2 && o.x + o.w > b.x - 2 && o.y < b.y + b.h + 2 && o.y + o.h > b.y - 2) wake(o);
-    }
-  }
-  function sup(b, l, r, o) {
-    if (b.st !== FREE) return;
-    if (l < b.supL) b.supL = l;
-    if (r > b.supR) b.supR = r;
-    if (o.st === FREE) b.supF = true; else b.supS = true;
-  }
-  // карта высот кучи (верх самого высокого кирпича в каждой полоске) — для «угла естественного откоса»
-  var HM = [], HMB = 10;
-  function heightmap() {
-    HMB = Math.max(4, C / 2);
-    var n = Math.ceil(W / HMB) + 2, i, k;
-    HM.length = n;
-    for (i = 0; i < n; i++) HM[i] = FLOOR;
-    for (i = 0; i < B.length; i++) {
-      var b = B[i];
-      if (b.st !== FREE && b.st !== SNAP) continue;
-      var i0 = Math.max(0, (b.x / HMB) | 0), i1 = Math.min(n - 1, ((b.x + b.w - 0.5) / HMB) | 0);
-      for (k = i0; k <= i1; k++) if (b.y < HM[k]) HM[k] = b.y;
-    }
-  }
-  function hmAt(x) { return x < 0 || x >= W ? -1e9 : HM[(x / HMB) | 0]; }
-
-  function buildPairs() {
-    pa.length = 0; pb.length = 0;
-    var i, j;
-    for (i = 1; i < sap.length; i++) {
-      var o = sap[i], x = o.x;
-      j = i - 1;
-      while (j >= 0 && sap[j].x > x) { sap[j + 1] = sap[j]; j--; }
-      sap[j + 1] = o;
-    }
-    for (i = 0; i < sap.length; i++) {
-      var A = sap[i];
-      if (!solid(A)) continue;
-      var ar = A.x + A.w + 1, ad = dyn(A);
-      for (j = i + 1; j < sap.length; j++) {
-        var Bb = sap[j];
-        if (Bb.x > ar) break;
-        if (!solid(Bb)) continue;
-        var bd = dyn(Bb);
-        if (!ad && !bd) continue;
-        if ((A.gt > clock && Bb.st !== WALL) || (Bb.gt > clock && A.st !== WALL)) continue;
-        if (Bb.y > A.y + A.h + 1 || A.y > Bb.y + Bb.h + 1) continue;
-        pa.push(A); pb.push(Bb);
-      }
-    }
-  }
-
-  function resolve(A, Bb, first) {
-    var ox = Math.min(A.x + A.w, Bb.x + Bb.w) - Math.max(A.x, Bb.x);
-    if (ox <= 0) return;
-    var oy = Math.min(A.y + A.h, Bb.y + Bb.h) - Math.max(A.y, Bb.y);
-    if (oy <= 0) return;
-    // защёлкнутый кирпич от сильного удара «отщёлкивается»
-    if (A.st === SNAP || Bb.st === SNAP) {
-      var s = A.st === SNAP ? A : Bb, d = s === A ? Bb : A;
-      if (dyn(d) && !d.soft) {
-        var dx = s.x + s.w / 2 - (d.x + d.w / 2), dy = s.y + s.h / 2 - (d.y + d.h / 2), dl = Math.hypot(dx, dy) || 1;
-        var ap = (d.vx * dx + d.vy * dy) / dl, above = dy > 0 && oy < ox;
-        var need = POP * (d.st === DRAG ? 1.8 : above ? 4.4 : 1) * (mode === 'assembling' ? 2.2 : 1);
-        if (ap > need) {
-          popOut(s, d.vx * 0.62 + rnd(-50, 50), d.vy * 0.62 - rnd(30, 110), 0);
-          if (d.st === FREE) { d.vx *= 0.55; d.vy *= 0.55; }
-          return;
-        }
-        // схваченный кирпич «поднят» над стеной: медленно проходит над защёлкнутыми, не ломая их
-        if (d.st === DRAG) return;
-      }
-    }
-    var pox = Math.min(A.px + A.w, Bb.px + Bb.w) - Math.max(A.px, Bb.px);
-    var poy = Math.min(A.py + A.h, Bb.py + Bb.h) - Math.max(A.py, Bb.py);
-    var vert = pox > 0.01 && poy <= 0.01 ? true : poy > 0.01 && pox <= 0.01 ? false : oy <= ox;
-    var nx = 0, ny = 0, pen;
-    if (vert) { ny = A.y + A.h / 2 < Bb.y + Bb.h / 2 ? -1 : 1; pen = oy; } else { nx = A.x + A.w / 2 < Bb.x + Bb.w / 2 ? -1 : 1; pen = ox; }
-    var vn = (A.vx - Bb.vx) * nx + (A.vy - Bb.vy) * ny;
-    if (-vn > WAKE_V) { if (A.sl && dyn(Bb)) wake(A); if (Bb.sl && dyn(A)) wake(Bb); }
-    var ia = im(A), ib = im(Bb), tot = ia + ib;
-    if (tot === 0) return;
-    var ka = ia / tot, kb = ib / tot;
-    A.x += nx * pen * ka; A.y += ny * pen * ka;
-    Bb.x -= nx * pen * kb; Bb.y -= ny * pen * kb;
-    if (vn < 0) {
-      var e = first && -vn > REST_V ? REST : 0, jn = (-(1 + e) * vn) / tot;
-      A.vx += jn * ia * nx; A.vy += jn * ia * ny;
-      Bb.vx -= jn * ib * nx; Bb.vy -= jn * ib * ny;
-      var tx = -ny, ty = nx, vt = (A.vx - Bb.vx) * tx + (A.vy - Bb.vy) * ty;
-      var jt = -vt / tot, mx = (A.floor || Bb.floor ? MU_F : MU) * jn;
-      jt = clamp(jt, -mx, mx);
-      A.vx += jt * ia * tx; A.vy += jt * ia * ty;
-      Bb.vx -= jt * ib * tx; Bb.vy -= jt * ib * ty;
-      if (first && vert && -vn > 160) {
-        // настоящий кирпич при ударе кувыркается; без вращения изображаем это случайным боковым отскоком
-        var top = ny < 0 ? A : Bb;
-        if (top.st === FREE) top.vx += rnd(-0.32, 0.32) * -vn;
-        if (-vn > 430) impact(top, -vn, top === A ? Bb : A);
-      }
-    }
-    if (vert) {
-      var l = Math.max(A.x, Bb.x), r = Math.min(A.x + A.w, Bb.x + Bb.w);
-      if (ny < 0) sup(A, Bb.floor ? A.x : l, Bb.floor ? A.x + A.w : r, Bb); else sup(Bb, A.floor ? Bb.x : l, A.floor ? Bb.x + Bb.w : r, A);
-    }
-  }
-
-  function substep(h) {
-    var i, b;
-    for (i = 0; i < B.length; i++) {
-      b = B[i];
-      if (b.st === FREE && !b.sl) {
-        b.vy += G * h;
-        var air = 1 - 0.25 * h;
-        b.vx *= air; b.vy *= air;
-        var sp = Math.hypot(b.vx, b.vy);
-        if (sp > VMAX) { b.vx *= VMAX / sp; b.vy *= VMAX / sp; }
-      } else if (b.st === DRAG) {
-        var tx = ptr.x - grabDx, ty = ptr.y - grabDy;
-        if (b.home) {
-          var dh = Math.hypot(tx - b.hx, ty - b.hy);
-          magnet = dh < (magnet ? 1.5 : 1) * Math.max(10, C * 0.6);
-          if (magnet) { tx = b.hx; ty = b.hy; }
-        }
-        tx = clamp(tx, 0, W - b.w); ty = clamp(ty, -H * 0.3, FLOOR - b.h);
-        if (magnet) { b.x += (tx - b.x) * 0.5; b.y += (ty - b.y) * 0.5; b.vx = b.vy = 0; }
-        else { b.vx = clamp((tx - b.x) * 24, -VMAX, VMAX); b.vy = clamp((ty - b.y) * 24, -VMAX, VMAX); }
-      }
-      if (dyn(b)) { b.px = b.x; b.py = b.y; if (!(b === drag && magnet)) { b.x += b.vx * h; b.y += b.vy * h; } }
-      b.supL = 1e9; b.supR = -1e9; b.supF = b.supS = false;
-    }
-    buildPairs();
-    for (var it = 0; it < 4; it++) {
-      if (it & 1) { for (i = pa.length - 1; i >= 0; i--) resolve(pa[i], pb[i], it === 0); }
-      else { for (i = 0; i < pa.length; i++) resolve(pa[i], pb[i], it === 0); }
-    }
-    // кирпич, чей центр свис с опоры, соскальзывает (так куча расползается, как настоящая)
-    for (i = 0; i < B.length; i++) {
-      b = B[i];
-      if (b.st !== FREE || b.sl) continue;
-      var has = b.supR > b.supL, tip = 0;
-      if (has) {
-        // стопка давит вниз общей скоростью, а опора её держит: скорость вниз — не больше реального сдвига за шаг
-        if (b.vy > 0) { var dv = (b.y - b.py) / h; if (dv < b.vy) b.vy = dv > 0 ? dv : 0; }
-        var off = b.x + b.w / 2 - (b.supL + b.supR) / 2, lim = Math.max(0, (b.supR - b.supL) / 2 - b.w * 0.15);
-        if (off < -lim - 0.3) tip = -1; else if (off > lim + 0.3) tip = 1;
-        if (tip) b.vx += tip * G * 0.85 * h;
-        else if (b.supF && !b.supS) {
-          // лежит на других кирпичах, а рядом обрыв выше полутора кирпичей — соскальзывает вниз по куче
-          var bot = b.y + b.h, dl = hmAt(b.x - 2) - bot, dr = hmAt(b.x + b.w + 2) - bot;
-          if (dl > HB * 1.5 || dr > HB * 1.5) { tip = dl > dr ? -1 : 1; b.vx += tip * G * 0.6 * h; }
-        }
-      }
-      // покой: лежит на опоре и за 0,3 с сдвинулся меньше чем на полпикселя (зажатый соседями «соскальзывающий» — чуть позже)
-      if (has && Math.abs(b.x - b.ax) < 0.5 && Math.abs(b.y - b.ay) < 0.5) {
-        b.calm += h;
-        if (b.calm > (tip ? 0.5 : 0.3)) { b.sl = true; b.soft = false; b.vx = b.vy = 0; b.calm = 0; }
-      } else { b.ax = b.x; b.ay = b.y; b.calm = 0; }
-    }
-  }
-
-  // какие защёлкнутые кирпичи связаны с полом через соседей (обход в ширину по графу кладки)
-  function reach() {
-    var q = [], i, b, k, o;
-    for (i = 0; i < homes.length; i++) { b = homes[i]; b.mk = b.root && b.st === SNAP; if (b.mk) q.push(b); }
-    while (q.length) {
-      b = q.pop();
-      for (k = 0; k < b.nb.length; k++) { o = b.nb[k]; if (!o.mk && o.st === SNAP) { o.mk = true; q.push(o); } }
-    }
-  }
-  // всё, что больше ни за что не держится, падает целым куском
-  var connDirty = false, connHold = 0;
-  function checkConn() {
-    connDirty = false;
-    reach();
-    for (var i = 0; i < homes.length; i++) { var b = homes[i]; if (b.st === SNAP && !b.mk) popOut(b, rnd(-18, 18), rnd(-24, 0), 8); }
-  }
-  function popOut(b, vx, vy, depth) {
-    if (b.st !== SNAP && b.st !== FALL && b.st !== FLY) return;
-    b.st = FREE; b.sl = false; b.calm = 0; b.at = 0; b.act = 0;
-    b.vx = vx; b.vy = vy; b.px = b.x; b.py = b.y;
-    b.gt = depth === 9 ? clock + 0.12 : 0;
-    b.fl = Math.max(b.fl, depth === 8 ? 0.25 : 0.5);
-    if (depth !== 8) spark(b.x + b.w / 2, b.y, 3, 160);
-    wakeAround(b);
-    connDirty = true;
-    if (depth < 2 && Math.hypot(vx, vy) * 0.5 > POP) {
-      for (var i = 0; i < b.nb.length; i++) {
-        var o = b.nb[i];
-        if (o.st === SNAP && !o.at) {
-          o.at = clock + 0.03 + depth * 0.03 + Math.random() * 0.04; o.act = 1;
-          o.qvx = vx * 0.5 + rnd(-70, 70); o.qvy = vy * 0.5 - rnd(0, 80); o.qd = depth + 1;
-        }
-      }
-    }
-  }
-  function snapHome(b) {
-    b.st = SNAP; b.x = b.px = b.hx; b.y = b.py = b.hy; b.vx = b.vy = 0; b.sl = false; b.at = 0; b.act = 0;
-    b.fl = 1; b.sq = 0.7;
-    spark(b.x + 1, b.y + b.h, 2, 120); spark(b.x + b.w - 1, b.y + b.h, 2, 120);
-    wakeAround(b);
-  }
-  function startFly(b) {
-    if (b.st === SNAP) return;
-    if (b === drag) { drag = null; magnet = false; }
-    wakeAround(b);
-    var dist = Math.hypot(b.hx - b.x, b.hy - b.y);
-    b.st = FLY; b.sl = false; b.t0 = clock; b.x0 = b.x; b.y0 = b.y;
-    b.dur = 0.42 + Math.min(0.36, dist / 1700);
-    b.cxp = (b.x + b.hx) / 2 + rnd(-2, 2) * C;
-    b.cyp = Math.max(-H * 0.3, Math.min(b.y, b.hy) - (50 + dist * 0.35));
-  }
-
-  /* ---------- эффекты: пыль, искры, волна удара, тряска ---------- */
-  function addPart(p) { if (parts.length < 260) parts.push(p); }
-  function spark(x, y, n, sp) {
-    if (reduce) n = Math.min(n, 1);
-    for (var i = 0; i < n; i++) {
-      var a = rnd(-Math.PI, 0), v = rnd(0.4, 1) * sp;
-      addPart({ k: 1, x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, dec: rnd(2.6, 3.6), s: rnd(5, 9) });
-    }
-  }
-  function puff(x, y, n, dir) {
-    for (var i = 0; i < n; i++) {
-      var sd = dir || (Math.random() < 0.5 ? -1 : 1);
-      addPart({ k: 0, x: x, y: y - rnd(0, 4), vx: sd * rnd(40, 170), vy: -rnd(8, 50), life: 1, dec: rnd(1.3, 2), s: rnd(0.6, 1) * C * 1.1 });
-    }
-  }
-  function impact(b, v, under) {
-    if (under && under.floor) {
-      var n = Math.min(4, 1 + ((v / 500) | 0));
-      puff(b.x + 2, FLOOR, n >> 1 || 1, -1); puff(b.x + b.w - 2, FLOOR, n >> 1 || 1, 1);
-      if (!reduce && mode === 'broken') shakeA = Math.min(9, shakeA + v / 1500);
-    }
-    b.sq = Math.max(b.sq, Math.min(1, v / 1400));
-  }
-  function punch(x, y) {
-    var R = Math.max(90, C * 4.8), F = 1200, hitAny = false;
-    addPart({ k: 2, x: x, y: y, r: 6, life: 1, dec: 2.6, R: R });
-    spark(x, y, 6, 260);
-    for (var i = 0; i < B.length; i++) {
-      var b = B[i];
-      if (b.st !== SNAP && b.st !== FREE) continue;
-      var dx = b.x + b.w / 2 - x, dy = b.y + b.h / 2 - y, d = Math.hypot(dx, dy) || 1;
-      if (d > R) continue;
-      var f = F * Math.pow(1 - d / R, 0.8), ux = dx / d, uy = dy / d - 0.45;
-      if (b.st === SNAP) { if (f > POP * 1.15) { popOut(b, ux * f, uy * f, 1); hitAny = true; } }
-      else { wake(b); b.vx += (ux * f) / Math.sqrt(b.n); b.vy += (uy * f) / Math.sqrt(b.n); hitAny = true; }
-    }
-    if (!reduce) shakeA = Math.min(9, shakeA + (hitAny ? 3 : 1.2));
-  }
-
-  /* ---------- кнопки: разрушить / собрать ---------- */
-  function destroy() {
-    if (!built) return;
-    var any = false, i, b;
-    for (i = 0; i < homes.length; i++) if (homes[i].st === SNAP) { any = true; break; }
-    rumble = reduce || !any ? 0 : 0.34;
-    connHold = clock + rumble + 0.6;
-    var t0 = clock + rumble, span = Math.max(1, FLOOR - glyph.t);
-    for (i = 0; i < B.length; i++) {
-      b = B[i];
-      if (b.home && (b.st === SNAP || b.st === FALL || b.st === FLY)) {
-        var dir = (b.x + b.w / 2 - glyph.cx) / (glyph.w / 2), hgt = clamp((FLOOR - b.y) / span, 0, 1);
-        b.at = t0 + (1 - hgt) * 0.08 + Math.random() * 0.16; b.act = 1; b.qd = 9;
-        b.qvx = dir * rnd(140, 480) + rnd(-260, 260);
-        b.qvy = -rnd(80, 420) * (0.3 + hgt);
-      } else if (b.st === FREE) {
-        wake(b); b.soft = false; b.vx += rnd(-200, 200); b.vy -= rnd(260, 560);
-      }
-    }
-    if (!reduce) shakeA = Math.min(10, shakeA + (any ? 5 : 3));
-    mode = 'broken';
-    setTich('scared');
-    title.classList.remove('fixed'); title.classList.add('wrecked');
-    btnBuild.classList.add('pulse');
-    say('Бум! Страница рассыпалась на кирпичики. Нажмите «Собрать заново»');
-    kick();
-  }
-  function assemble() {
-    if (!built) return;
-    if (drag) release();
-    var n = 0, i, b;
-    for (i = 0; i < homes.length; i++) {
-      b = homes[i];
-      if (b.st === SNAP || b.st === FLY) continue;
-      if (b.st === FALL) continue;
-      b.at = clock + 0.05 + b.rb * (0.75 / ROWS) + Math.random() * 0.14; b.act = 2; n++;
-    }
-    btnBuild.classList.remove('pulse');
-    title.classList.remove('wrecked');
-    if (!n && !homes.some(function (h) { return h.st !== SNAP; })) { complete(); }
-    else { mode = 'assembling'; setTich('thumb'); say('Собираем страницу обратно…'); }
-    kick();
-  }
-  function complete() {
+    mode = 'intro';
+  } else {
     mode = 'built';
-    for (var i = 0; i < homes.length; i++) {
-      var b = homes[i];
-      if (!b.at) { b.at = clock + 0.08 + ((b.x - glyph.l) / glyph.w) * 0.5 + b.rb * 0.012; b.act = 3; }
-    }
-    title.classList.remove('wrecked'); title.classList.add('fixed');
-    btnBuild.classList.remove('pulse');
-    setTich('thumb');
-    clearTimeout(tichTimer);
-    tichTimer = setTimeout(function () { if (mode === 'built') setTich('point'); }, 2300);
-    say('Готово! Все кирпичики на месте');
-    kick();
   }
-  // пока гость ничего не трогал, то один, то другой верхний кирпичик подпрыгивает и защёлкивается — «меня можно взять»
-  var touched = false;
-  function invite() {
-    if (reduce) return;
-    setTimeout(function () {
-      if (touched) return;
-      if (mode === 'built' && !document.hidden) {
-        var top = homes.filter(function (h) { return h.st === SNAP && !h.nb.some(function (o) { return Math.abs(o.y + o.h - h.y) < 0.5; }); });
-        var b = top[(Math.random() * top.length) | 0];
-        if (b) { b.hop = 1; kick(); }
-      }
-      invite();
-    }, 3800 + Math.random() * 1800);
-  }
-  function toggle() { if (mode !== 'assembling' && snapped >= total * 0.5) destroy(); else assemble(); }
-  function say(t) { status.textContent = t; }
+  setTich('point');
+  title.classList.remove('wrecked', 'fixed');
+  built = true;
+  shown = -1;
+  countSnapped();
+}
 
-  // Тич: point — показывает на цифры, scared — выглядывает из-за края, thumb — радуется сборке
-  function setTich(s) {
-    if (s === tichState) return;
-    tichState = s;
-    imgPoint.classList.toggle('on', s === 'point');
-    imgThumb.classList.toggle('on', s === 'thumb');
-    imgScared.classList.toggle('on', s === 'scared');
-    imgScared.classList.toggle('peek-shake', s === 'scared');
+/* ---------- физика ---------- */
+function im(b) { return b.st === FREE ? (b.sl ? 0 : 1 / b.n) : b.st === DRAG ? 0.08 / b.n : 0; }
+function dyn(b) { return (b.st === FREE && !b.sl) || b.st === DRAG; }
+function solid(b) { return b.st !== FALL && b.st !== FLY && b.st !== HID && !(b === drag && magnet); }
+function wake(b) { if (b.st === FREE && b.sl) { b.sl = false; b.calm = 0; b.px = b.x; b.py = b.y; } }
+function wakeAround(b) {
+  for (var i = 0; i < B.length; i++) {
+    var o = B[i];
+    if (o !== b && o.st === FREE && o.sl && o.x < b.x + b.w + 2 && o.x + o.w > b.x - 2 && o.y < b.y + b.h + 2 && o.y + o.h > b.y - 2) wake(o);
   }
-  function hitTich() {
-    if (tichState === 'scared' || clock - hitT < 0.7) return;
-    hitT = clock;
-    tichEl.classList.remove('hit');
-    void tichEl.offsetWidth;
-    tichEl.classList.add('hit');
+}
+function sup(b, l, r, o) {
+  if (b.st !== FREE) return;
+  if (l < b.supL) b.supL = l;
+  if (r > b.supR) b.supR = r;
+  if (o.st === FREE) b.supF = true; else b.supS = true;
+}
+// карта высот кучи — для «угла откоса»
+var HM = [], HMB = 10;
+function heightmap() {
+  HMB = Math.max(4, C / 2);
+  var n = Math.ceil(W / HMB) + 2, i, k;
+  HM.length = n;
+  for (i = 0; i < n; i++) HM[i] = FLOOR;
+  for (i = 0; i < B.length; i++) {
+    var b = B[i];
+    if (b.st !== FREE && b.st !== SNAP) continue;
+    var i0 = Math.max(0, (b.x / HMB) | 0), i1 = Math.min(n - 1, ((b.x + b.w - 0.5) / HMB) | 0);
+    for (k = i0; k <= i1; k++) if (b.y < HM[k]) HM[k] = b.y;
   }
+}
+function hmAt(x) { return x < 0 || x >= W ? -1e9 : HM[(x / HMB) | 0]; }
 
-  function countSnapped() {
-    var n = 0;
-    for (var i = 0; i < homes.length; i++) if (homes[i].st === SNAP) n++;
-    snapped = n;
-    if (mode === 'assembling') for (i = 0; i < homes.length; i++) { var hb = homes[i]; if (hb.st === FREE && !hb.at) { hb.at = clock + 0.12; hb.act = 2; } }
-    if (n !== shown) { shown = n; hudN.textContent = n; }
-    if (mode === 'intro' && n === total) {
-      mode = 'built';
-      for (i = 0; i < homes.length; i++) { homes[i].at = clock + 0.15 + ((homes[i].x - glyph.l) / glyph.w) * 0.5; homes[i].act = 3; }
-    } else if ((mode === 'assembling' || mode === 'broken') && n === total) complete();
-    else if (mode === 'built' && n < total * 0.4) {
-      mode = 'broken'; setTich('scared'); title.classList.remove('fixed'); title.classList.add('wrecked'); btnBuild.classList.add('pulse');
+function buildPairs() {
+  pa.length = 0; pb.length = 0;
+  var i, j;
+  for (i = 1; i < sap.length; i++) {
+    var o = sap[i], x = o.x;
+    j = i - 1;
+    while (j >= 0 && sap[j].x > x) { sap[j + 1] = sap[j]; j--; }
+    sap[j + 1] = o;
+  }
+  for (i = 0; i < sap.length; i++) {
+    var A = sap[i];
+    if (!solid(A)) continue;
+    var ar = A.x + A.w + 1, ad = dyn(A);
+    for (j = i + 1; j < sap.length; j++) {
+      var Bb = sap[j];
+      if (Bb.x > ar) break;
+      if (!solid(Bb)) continue;
+      var bd = dyn(Bb);
+      if (!ad && !bd) continue;
+      if ((A.gt > clock && Bb.st !== WALL) || (Bb.gt > clock && A.st !== WALL)) continue;
+      if (Bb.y > A.y + A.h + 1 || A.y > Bb.y + Bb.h + 1) continue;
+      pa.push(A); pb.push(Bb);
     }
   }
+}
 
-  /* ---------- шаг: расписание, анимации вступления и сборки, физика ---------- */
-  function step(dt) {
-    var busy = false, i, b, maxV = 0, anyDyn = false;
-    clock += dt;
-    if (rumble > 0) { rumble -= dt; busy = true; }
-    for (i = 0; i < B.length; i++) {
-      b = B[i];
-      if (b.at) {
-        if (clock >= b.at) {
-          var a = b.act; b.at = 0; b.act = 0;
-          if (a === 1) popOut(b, b.qvx, b.qvy, b.qd);
-          else if (a === 2) startFly(b);
-          else if (a === 3) { if (b.st === SNAP) b.fl = Math.max(b.fl, 0.55); }
-          else if (a === 4) { b.st = FREE; b.sl = false; b.vy = 0; b.px = b.x; b.py = b.y; }
-        }
-        busy = true;
+function resolve(A, Bb, first) {
+  var ox = Math.min(A.x + A.w, Bb.x + Bb.w) - Math.max(A.x, Bb.x);
+  if (ox <= 0) return;
+  var oy = Math.min(A.y + A.h, Bb.y + Bb.h) - Math.max(A.y, Bb.y);
+  if (oy <= 0) return;
+  // от сильного удара защёлкнутый кирпич отщёлкивается
+  if (A.st === SNAP || Bb.st === SNAP) {
+    var s = A.st === SNAP ? A : Bb, d = s === A ? Bb : A;
+    if (dyn(d) && !d.soft) {
+      var dx = s.x + s.w / 2 - (d.x + d.w / 2), dy = s.y + s.h / 2 - (d.y + d.h / 2), dl = Math.hypot(dx, dy) || 1;
+      var ap = (d.vx * dx + d.vy * dy) / dl, above = dy > 0 && oy < ox;
+      var need = POP * (d.st === DRAG ? 1.8 : above ? 4.4 : 1) * (mode === 'assembling' ? 2.2 : 1);
+      if (ap > need) {
+        popOut(s, d.vx * 0.62 + rnd(-50, 50), d.vy * 0.62 - rnd(30, 110), 0);
+        if (d.st === FREE) { d.vx *= 0.55; d.vy *= 0.55; }
+        return;
       }
-      if (b.st === FALL) {
-        busy = true;
-        if (clock < b.t0) continue;
-        b.vy += G * dt; b.y += b.vy * dt;
-        if (b.y >= b.hy) {
-          b.y = b.hy;
-          if (b.bn === 0) { b.vy = -b.vy * 0.2; b.bn = 1; b.sq = 0.9; puff(b.x + 2, b.y + b.h, 1, -1); puff(b.x + b.w - 2, b.y + b.h, 1, 1); }
-          else snapHome(b);
-        }
-      } else if (b.st === FLY) {
-        busy = true;
-        var t = (clock - b.t0) / b.dur;
-        if (t >= 1) snapHome(b);
-        else {
-          var p = t * (1.12 - 0.12 * t), u = 1 - p;
-          b.x = u * u * b.x0 + 2 * u * p * b.cxp + p * p * b.hx;
-          b.y = u * u * b.y0 + 2 * u * p * b.cyp + p * p * b.hy;
-        }
-      } else if (dyn(b)) {
-        anyDyn = true;
-        var v = Math.abs(b.vx) + Math.abs(b.vy);
-        if (v > maxV) maxV = v;
-        if (b.st === FREE && v > 700 && tichState !== 'scared' && b.x < tichBox.r && b.x + b.w > tichBox.l && b.y + b.h > tichBox.t) hitTich();
-      }
-      if (b.hop > 0) {
-        b.hop -= dt * 2.6; busy = true;
-        if (b.hop <= 0) { b.hop = 0; if (b.st === SNAP) { b.fl = 0.6; spark(b.x + b.w / 2, b.y + b.h, 2, 110); } }
-      }
-      if (b.fl > 0) { b.fl -= dt * 3.6; busy = true; }
-      if (b.sq > 0) { b.sq -= dt * 6; busy = true; }
+      // схваченный кирпич «поднят»: медленно проходит над стеной, не ломая её
+      if (d.st === DRAG) return;
     }
-    if (anyDyn) {
-      busy = true;
-      heightmap();
-      var n = clamp(Math.ceil((maxV * dt) / (0.4 * HB)), 2, 6), h = dt / n;
-      for (i = 0; i < n; i++) substep(h);
-    }
-    for (i = parts.length - 1; i >= 0; i--) {
-      var P = parts[i];
-      P.life -= P.dec * dt;
-      if (P.life <= 0) { parts.splice(i, 1); continue; }
-      if (P.k === 2) { P.r += (P.R * 1.6 - P.r) * Math.min(1, dt * 9); continue; }
-      P.x += P.vx * dt; P.y += P.vy * dt;
-      if (P.k === 1) P.vy += G * 0.5 * dt; else { P.vx *= 1 - 2.5 * dt; P.vy *= 1 - 2 * dt; }
-    }
-    if (parts.length) busy = true;
-    if (shakeA > 0.2 && !reduce) {
-      stage.style.transform = 'translate3d(' + rnd(-1, 1).toFixed(2) * shakeA + 'px,' + rnd(-1, 1).toFixed(2) * shakeA * 0.6 + 'px,0)';
-      shook = true; shakeA *= Math.exp(-dt * 7); busy = true;
-    } else if (shook) { stage.style.transform = ''; shook = false; shakeA = 0; }
-    if (connDirty && clock > connHold && mode !== 'intro' && mode !== 'assembling') checkConn();
-    countSnapped();
-    return busy || !!drag;
   }
+  var pox = Math.min(A.px + A.w, Bb.px + Bb.w) - Math.max(A.px, Bb.px);
+  var poy = Math.min(A.py + A.h, Bb.py + Bb.h) - Math.max(A.py, Bb.py);
+  var vert = pox > 0.01 && poy <= 0.01 ? true : poy > 0.01 && pox <= 0.01 ? false : oy <= ox;
+  var nx = 0, ny = 0, pen;
+  if (vert) { ny = A.y + A.h / 2 < Bb.y + Bb.h / 2 ? -1 : 1; pen = oy; } else { nx = A.x + A.w / 2 < Bb.x + Bb.w / 2 ? -1 : 1; pen = ox; }
+  var vn = (A.vx - Bb.vx) * nx + (A.vy - Bb.vy) * ny;
+  if (-vn > WAKE_V) { if (A.sl && dyn(Bb)) wake(A); if (Bb.sl && dyn(A)) wake(Bb); }
+  var ia = im(A), ib = im(Bb), tot = ia + ib;
+  if (tot === 0) return;
+  var ka = ia / tot, kb = ib / tot;
+  A.x += nx * pen * ka; A.y += ny * pen * ka;
+  Bb.x -= nx * pen * kb; Bb.y -= ny * pen * kb;
+  if (vn < 0) {
+    var e = first && -vn > REST_V ? REST : 0, jn = (-(1 + e) * vn) / tot;
+    A.vx += jn * ia * nx; A.vy += jn * ia * ny;
+    Bb.vx -= jn * ib * nx; Bb.vy -= jn * ib * ny;
+    var tx = -ny, ty = nx, vt = (A.vx - Bb.vx) * tx + (A.vy - Bb.vy) * ty;
+    var jt = -vt / tot, mx = (A.floor || Bb.floor ? MU_F : MU) * jn;
+    jt = clamp(jt, -mx, mx);
+    A.vx += jt * ia * tx; A.vy += jt * ia * ty;
+    Bb.vx -= jt * ib * tx; Bb.vy -= jt * ib * ty;
+    if (first && vert && -vn > 160) {
+      // вместо кувырка — случайный боковой отскок
+      var top = ny < 0 ? A : Bb;
+      if (top.st === FREE) top.vx += rnd(-0.32, 0.32) * -vn;
+      if (-vn > 430) impact(top, -vn, top === A ? Bb : A);
+    }
+  }
+  if (vert) {
+    var l = Math.max(A.x, Bb.x), r = Math.min(A.x + A.w, Bb.x + Bb.w);
+    if (ny < 0) sup(A, Bb.floor ? A.x : l, Bb.floor ? A.x + A.w : r, Bb); else sup(Bb, A.floor ? Bb.x : l, A.floor ? Bb.x + Bb.w : r, A);
+  }
+}
 
-  /* ---------- кадр ---------- */
-  function drawBrick(b, lift) {
-    var spr = SPR[b.c][b.n], dw = spr.width / DPR, dh = spr.height / DPR, x = b.x - PAD, y = b.y - STUD - PAD;
-    if (rumble > 0 && b.st === SNAP) { x += rnd(-1, 1) * C * 0.07; y += rnd(-1, 1) * C * 0.05; }
-    if (b === hover && !lift) y -= 2;
-    if (b.hop > 0 && b.st === SNAP) y -= Math.sin(b.hop * Math.PI) * C * 0.45;
-    if (b.sq > 0) { var q = b.sq * 0.13, nw = dw * (1 + q * 0.45), nh = dh * (1 - q); x -= (nw - dw) / 2; y += dh - nh; dw = nw; dh = nh; }
-    if (lift) { x -= dw * 0.035; y -= dh * 0.035; dw *= 1.07; dh *= 1.07; }
-    ctx.drawImage(spr, x, y, dw, dh);
-    var f = b.fl + (b === hover ? 0.16 : 0) + (lift ? 0.08 : 0);
-    if (f > 0) { ctx.globalAlpha = Math.min(1, f) * 0.72; ctx.drawImage(WHITE[b.n], x, y, dw, dh); ctx.globalAlpha = 1; }
+function substep(h) {
+  var i, b;
+  for (i = 0; i < B.length; i++) {
+    b = B[i];
+    if (b.st === FREE && !b.sl) {
+      b.vy += G * h;
+      var air = 1 - 0.25 * h;
+      b.vx *= air; b.vy *= air;
+      var sp = Math.hypot(b.vx, b.vy);
+      if (sp > VMAX) { b.vx *= VMAX / sp; b.vy *= VMAX / sp; }
+    } else if (b.st === DRAG) {
+      var tx = ptr.x - grabDx, ty = ptr.y - grabDy;
+      if (b.home) {
+        var dh = Math.hypot(tx - b.hx, ty - b.hy);
+        magnet = dh < (magnet ? 1.5 : 1) * Math.max(10, C * 0.6);
+        if (magnet) { tx = b.hx; ty = b.hy; }
+      }
+      tx = clamp(tx, 0, W - b.w); ty = clamp(ty, -H * 0.3, FLOOR - b.h);
+      if (magnet) { b.x += (tx - b.x) * 0.5; b.y += (ty - b.y) * 0.5; b.vx = b.vy = 0; }
+      else { b.vx = clamp((tx - b.x) * 24, -VMAX, VMAX); b.vy = clamp((ty - b.y) * 24, -VMAX, VMAX); }
+    }
+    if (dyn(b)) { b.px = b.x; b.py = b.y; if (!(b === drag && magnet)) { b.x += b.vx * h; b.y += b.vy * h; } }
+    b.supL = 1e9; b.supR = -1e9; b.supF = b.supS = false;
   }
-  function draw() {
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-    var i, j, b;
-    // порядок: нижние раньше (пупырки нижнего ряда прячутся под верхним), схваченный — поверх всех
-    for (i = 0; i < order.length; i++) { b = order[i]; b.k = b === drag ? 1e9 : -b.y; }
-    for (i = 1; i < order.length; i++) {
-      var o = order[i];
-      j = i - 1;
-      while (j >= 0 && order[j].k > o.k) { order[j + 1] = order[j]; j--; }
-      order[j + 1] = o;
-    }
-    var sox = C * 0.16, soy = C * 0.28;
-    for (i = 0; i < order.length; i++) {
-      b = order[i];
-      if (b.st === HID || b === drag || b.y > H || b.y + b.h < -STUD) continue;
-      var s = SHD[b.n];
-      ctx.drawImage(s, b.x + sox - s.pad, b.y - STUD * 0.4 + soy - s.pad, s.width / DPR, s.height / DPR);
-    }
-    if (drag && drag.home) {
-      // подсказка-«гнездо»: куда защёлкнуть схваченный кирпич
-      ctx.setLineDash([4, 3]);
-      ctx.lineWidth = 1.5;
-      ctx.fillStyle = magnet ? 'rgba(61,220,132,0.2)' : 'rgba(255,255,255,0.06)';
-      ctx.strokeStyle = magnet ? 'rgba(61,220,132,0.9)' : 'rgba(220,232,255,0.45)';
-      rr(ctx, drag.hx + 1, drag.hy + 1, drag.w - 2, drag.h - 2, 3);
-      ctx.fill(); ctx.stroke();
-      ctx.setLineDash([]);
-    }
-    for (i = 0; i < order.length; i++) {
-      b = order[i];
-      if (b.st === HID || b === drag || b.y > H || b.y + b.h < -STUD - 2) continue;
-      drawBrick(b, false);
-    }
-    if (drag) {
-      var sd = SHD[drag.n], lift = magnet ? 0.5 : 1;
-      ctx.globalAlpha = 0.85;
-      ctx.drawImage(sd, drag.x + C * 0.4 * lift - sd.pad, drag.y + C * 0.6 * lift - sd.pad, sd.width / DPR * 1.06, sd.height / DPR * 1.06);
-      ctx.globalAlpha = 1;
-      drawBrick(drag, true);
-    }
-    for (i = 0; i < parts.length; i++) {
-      var P = parts[i];
-      if (P.k === 0) {
-        var ds = P.s * (1.6 - P.life * 0.6);
-        ctx.globalAlpha = P.life * 0.42;
-        ctx.drawImage(DUST, P.x - ds / 2, P.y - ds / 2, ds, ds);
-      } else if (P.k === 1) {
-        ctx.globalAlpha = P.life;
-        ctx.drawImage(SPARK, P.x - P.s / 2, P.y - P.s / 2, P.s, P.s);
-      } else {
-        ctx.globalAlpha = P.life * 0.7;
-        ctx.strokeStyle = '#cfe0ff';
-        ctx.lineWidth = 1 + P.life * 3;
-        ctx.beginPath(); ctx.arc(P.x, P.y, P.r, 0, 6.2832); ctx.stroke();
+  buildPairs();
+  for (var it = 0; it < 4; it++) {
+    if (it & 1) { for (i = pa.length - 1; i >= 0; i--) resolve(pa[i], pb[i], it === 0); }
+    else { for (i = 0; i < pa.length; i++) resolve(pa[i], pb[i], it === 0); }
+  }
+  // центр свис с опоры — соскальзывает
+  for (i = 0; i < B.length; i++) {
+    b = B[i];
+    if (b.st !== FREE || b.sl) continue;
+    var has = b.supR > b.supL, tip = 0;
+    if (has) {
+      // на опоре скорость вниз — не больше реального сдвига (стопки быстро успокаиваются)
+      if (b.vy > 0) { var dv = (b.y - b.py) / h; if (dv < b.vy) b.vy = dv > 0 ? dv : 0; }
+      var off = b.x + b.w / 2 - (b.supL + b.supR) / 2, lim = Math.max(0, (b.supR - b.supL) / 2 - b.w * 0.15);
+      if (off < -lim - 0.3) tip = -1; else if (off > lim + 0.3) tip = 1;
+      if (tip) b.vx += tip * G * 0.85 * h;
+      else if (b.supF && !b.supS) {
+        // рядом обрыв выше 1,5 кирпича — съезжает по куче
+        var bot = b.y + b.h, dl = hmAt(b.x - 2) - bot, dr = hmAt(b.x + b.w + 2) - bot;
+        if (dl > HB * 1.5 || dr > HB * 1.5) { tip = dl > dr ? -1 : 1; b.vx += tip * G * 0.6 * h; }
       }
     }
-    ctx.globalAlpha = 1;
+    // покой: на опоре и почти не сдвинулся за 0,3 с — засыпает; ползёт медленнее 40 px/с дольше 1,2 с — тоже
+    b.slow = has && Math.abs(b.x - b.px) + Math.abs(b.y - b.py) < 40 * h ? (b.slow || 0) + h : 0;
+    if (has && Math.abs(b.x - b.ax) < 0.5 && Math.abs(b.y - b.ay) < 0.5) b.calm += h;
+    else { b.ax = b.x; b.ay = b.y; b.calm = 0; }
+    if (b.calm > (tip ? 0.5 : 0.3) || b.slow > 1.2) { b.sl = true; b.soft = false; b.vx = b.vy = 0; b.calm = b.slow = 0; }
   }
+}
 
-  // цикл крутится, только пока что-то движется; всё уснуло — кадры не рисуются, rAF выключается
-  function frame(now) {
-    var dt = Math.min(1 / 30, Math.max(0.001, (now - lastT) / 1000));
-    lastT = now;
-    var busy = step(dt);
-    draw();
-    raf = busy ? requestAnimationFrame(frame) : 0;
+// какие защёлкнутые кирпичи связаны с полом через соседей
+function reach() {
+  var q = [], i, b, k, o;
+  for (i = 0; i < homes.length; i++) { b = homes[i]; b.mk = b.root && b.st === SNAP; if (b.mk) q.push(b); }
+  while (q.length) {
+    b = q.pop();
+    for (k = 0; k < b.nb.length; k++) { o = b.nb[k]; if (!o.mk && o.st === SNAP) { o.mk = true; q.push(o); } }
   }
-  function kick() { if (!raf && built) { lastT = performance.now(); raf = requestAnimationFrame(frame); } }
-
-  /* ---------- мышь и касания ---------- */
-  function loc(e) { var r = field.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
-  function pick(x, y) {
-    var i, b, best = null, bd = 1e9, tol = touch ? 14 : 4;
-    for (i = order.length - 1; i >= 0; i--) {
-      b = order[i];
-      if (b.st === HID || b.y + b.h < 0) continue;
-      if (x >= b.x && x <= b.x + b.w && y >= b.y - STUD && y <= b.y + b.h) return b;
+}
+// всё, что больше ни за что не держится, падает целым куском
+var connDirty = false, connHold = 0;
+function checkConn() {
+  connDirty = false;
+  reach();
+  for (var i = 0; i < homes.length; i++) { var b = homes[i]; if (b.st === SNAP && !b.mk) popOut(b, rnd(-18, 18), rnd(-24, 0), 8); }
+}
+function popOut(b, vx, vy, depth) {
+  if (b.st !== SNAP && b.st !== FALL && b.st !== FLY) return;
+  b.st = FREE; b.sl = false; b.calm = 0; b.at = 0; b.act = 0;
+  b.vx = vx; b.vy = vy; b.px = b.x; b.py = b.y;
+  b.gt = depth === 9 ? clock + 0.12 : 0;
+  b.fl = Math.max(b.fl, depth === 8 ? 0.25 : 0.5);
+  if (depth !== 8) spark(b.x + b.w / 2, b.y, 3, 160);
+  wakeAround(b);
+  connDirty = true;
+  if (depth < 2 && Math.hypot(vx, vy) * 0.5 > POP) {
+    for (var i = 0; i < b.nb.length; i++) {
+      var o = b.nb[i];
+      if (o.st === SNAP && !o.at) {
+        o.at = clock + 0.03 + depth * 0.03 + Math.random() * 0.04; o.act = 1;
+        o.qvx = vx * 0.5 + rnd(-70, 70); o.qvy = vy * 0.5 - rnd(0, 80); o.qd = depth + 1;
+      }
     }
-    for (i = order.length - 1; i >= 0; i--) {
-      b = order[i];
-      if (b.st === HID || b.y + b.h < 0) continue;
-      var dx = Math.max(b.x - x, 0, x - b.x - b.w), dy = Math.max(b.y - STUD - y, 0, y - b.y - b.h), d = Math.hypot(dx, dy);
-      if (d < tol && d < bd) { bd = d; best = b; }
-    }
-    return best;
   }
-  function track(p) {
-    var t = performance.now();
-    samples.push({ t: t, x: p.x, y: p.y });
-    while (samples.length > 2 && t - samples[0].t > 90) samples.shift();
-  }
-  function throwVel() {
-    var t = performance.now(), n = samples.length;
-    if (n < 2 || t - samples[n - 1].t > 70) return { x: 0, y: 0 };
-    var a = samples[0], z = samples[n - 1], dt = Math.max(0.016, (z.t - a.t) / 1000);
-    return { x: clamp((z.x - a.x) / dt, -VMAX, VMAX), y: clamp((z.y - a.y) / dt, -VMAX, VMAX) };
-  }
-  function grab(b, p, id) {
-    if (b.st === SNAP) { b.fl = Math.max(b.fl, 0.6); spark(b.x + b.w / 2, b.y, 3, 150); connDirty = true; }
-    b.st = DRAG; b.sl = false; b.soft = false; b.at = 0; b.act = 0; b.vx = b.vy = 0; b.px = b.x; b.py = b.y;
-    drag = b; dragId = id; magnet = false; hover = null;
-    grabDx = p.x - b.x; grabDy = p.y - b.y;
-    ptr.x = p.x; ptr.y = p.y; samples = []; track(p);
-    wakeAround(b);
-    cvs.style.cursor = 'grabbing';
-  }
-  function release() {
-    var b = drag;
-    if (!b) return;
-    drag = null; dragId = -1;
-    if (b.home && magnet) snapHome(b);
-    else {
-      var v = throwVel();
-      b.st = FREE; b.sl = false; b.calm = 0; b.vx = v.x; b.vy = v.y; b.px = b.x; b.py = b.y;
-    }
-    magnet = false;
-    cvs.style.cursor = '';
-    kick();
-  }
-  cvs.addEventListener('pointerdown', function (e) {
-    if (!built || (e.button && e.button !== 0)) return;
-    touched = true;
-    var p = loc(e);
-    if (drag) { punch(p.x, p.y); kick(); return; }
-    var b = pick(p.x, p.y);
-    if (b) {
-      e.preventDefault();
-      try { cvs.setPointerCapture(e.pointerId); } catch (err) { /* без захвата тоже работает */ }
-      grab(b, p, e.pointerId);
-    } else punch(p.x, p.y);
-    kick();
-  });
-  cvs.addEventListener('pointermove', function (e) {
-    if (!built) return;
-    var p = loc(e);
-    if (drag) { if (e.pointerId === dragId) { ptr.x = p.x; ptr.y = p.y; track(p); } return; }
-    if (e.pointerType !== 'mouse') return;
-    var b = pick(p.x, p.y);
-    if (b !== hover) { hover = b; cvs.style.cursor = b ? 'grab' : ''; kick(); }
-  });
-  function up(e) { if (drag && e.pointerId === dragId) release(); }
-  cvs.addEventListener('pointerup', up);
-  cvs.addEventListener('pointercancel', up);
-  cvs.addEventListener('lostpointercapture', up);
-  cvs.addEventListener('pointerleave', function () { if (hover) { hover = null; cvs.style.cursor = ''; kick(); } });
+}
+function snapHome(b) {
+  b.st = SNAP; b.x = b.px = b.hx; b.y = b.py = b.hy; b.vx = b.vy = 0; b.sl = false; b.at = 0; b.act = 0;
+  b.fl = 1; b.sq = 0.7;
+  spark(b.x + 1, b.y + b.h, 2, 120); spark(b.x + b.w - 1, b.y + b.h, 2, 120);
+  wakeAround(b);
+}
+function startFly(b) {
+  if (b.st === SNAP) return;
+  if (b === drag) { drag = null; magnet = false; }
+  wakeAround(b);
+  var dist = Math.hypot(b.hx - b.x, b.hy - b.y);
+  b.st = FLY; b.sl = false; b.t0 = clock; b.x0 = b.x; b.y0 = b.y;
+  b.dur = 0.42 + Math.min(0.36, dist / 1700);
+  b.cxp = (b.x + b.hx) / 2 + rnd(-2, 2) * C;
+  b.cyp = Math.max(-H * 0.3, Math.min(b.y, b.hy) - (50 + dist * 0.35));
+}
 
-  btnBoom.addEventListener('click', function () { touched = true; destroy(); });
-  btnBuild.addEventListener('click', function () { touched = true; assemble(); });
-  document.addEventListener('keydown', function (e) {
-    if (e.ctrlKey || e.metaKey || e.altKey || !built) return;
-    var t = e.target, tag = t && t.tagName, code = e.code || '', key = (e.key || '').toLowerCase();
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-    if (code === 'Space' || key === ' ') { if (tag === 'A' || tag === 'BUTTON') return; e.preventDefault(); touched = true; toggle(); }
-    else if (code === 'KeyR' || key === 'р' || key === 'r') { touched = true; destroy(); } // Р в русской раскладке — на клавише H
-    else if (code === 'KeyC' || key === 'с' || key === 'c') { touched = true; assemble(); }
-  });
+/* ---------- эффекты: пыль, искры, волна удара, тряска ---------- */
+function addPart(p) { if (parts.length < 260) parts.push(p); }
+function spark(x, y, n, sp) {
+  if (reduce) n = Math.min(n, 1);
+  for (var i = 0; i < n; i++) {
+    var a = rnd(-Math.PI, 0), v = rnd(0.4, 1) * sp;
+    addPart({ k: 1, x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, dec: rnd(2.6, 3.6), s: rnd(5, 9) });
+  }
+}
+function puff(x, y, n, dir) {
+  for (var i = 0; i < n; i++) {
+    var sd = dir || (Math.random() < 0.5 ? -1 : 1);
+    addPart({ k: 0, x: x, y: y - rnd(0, 4), vx: sd * rnd(40, 170), vy: -rnd(8, 50), life: 1, dec: rnd(1.3, 2), s: rnd(0.6, 1) * C * 1.1 });
+  }
+}
+function impact(b, v, under) {
+  if (under && under.floor) {
+    var n = Math.min(4, 1 + ((v / 500) | 0));
+    puff(b.x + 2, FLOOR, n >> 1 || 1, -1); puff(b.x + b.w - 2, FLOOR, n >> 1 || 1, 1);
+    if (!reduce && mode === 'broken') shakeA = Math.min(9, shakeA + v / 1500);
+  }
+  b.sq = Math.max(b.sq, Math.min(1, v / 1400));
+}
+function punch(x, y) {
+  var R = Math.max(90, C * 4.8), F = 1200, hitAny = false;
+  addPart({ k: 2, x: x, y: y, r: 6, life: 1, dec: 2.6, R: R });
+  spark(x, y, 6, 260);
+  for (var i = 0; i < B.length; i++) {
+    var b = B[i];
+    if (b.st !== SNAP && b.st !== FREE) continue;
+    var dx = b.x + b.w / 2 - x, dy = b.y + b.h / 2 - y, d = Math.hypot(dx, dy) || 1;
+    if (d > R) continue;
+    var f = F * Math.pow(1 - d / R, 0.8), ux = dx / d, uy = dy / d - 0.45;
+    if (b.st === SNAP) { if (f > POP * 1.15) { popOut(b, ux * f, uy * f, 1); hitAny = true; } }
+    else { wake(b); b.vx += (ux * f) / Math.sqrt(b.n); b.vy += (uy * f) / Math.sqrt(b.n); hitAny = true; }
+  }
+  if (!reduce) shakeA = Math.min(9, shakeA + (hitAny ? 3 : 1.2));
+}
 
-  var rto = 0;
-  window.addEventListener('resize', function () {
-    clearTimeout(rto);
-    rto = setTimeout(function () {
-      var r = field.getBoundingClientRect();
-      if (Math.abs(r.width - W) < 1 && Math.abs(r.height - H) < 1) return;
-      build(false);
-      draw();
-    }, 180);
-  });
-
-  function init() {
-    build(!reduce);
-    if (reduce) {
-      // без движения: всё сразу на местах, лишние детальки лежат
-      for (var i = 0; i < B.length; i++) if (!B[i].home && B[i].st === HID) { B[i].y = B[i].ry; B[i].st = FREE; B[i].sl = true; B[i].at = 0; }
-      draw();
+/* ---------- кнопки: разрушить / собрать ---------- */
+function destroy() {
+  if (!built) return;
+  var any = false, i, b;
+  for (i = 0; i < homes.length; i++) if (homes[i].st === SNAP) { any = true; break; }
+  rumble = reduce || !any ? 0 : 0.34;
+  connHold = clock + rumble + 0.6;
+  var t0 = clock + rumble, span = Math.max(1, FLOOR - glyph.t);
+  for (i = 0; i < B.length; i++) {
+    b = B[i];
+    if (b.home && (b.st === SNAP || b.st === FALL || b.st === FLY)) {
+      var dir = (b.x + b.w / 2 - glyph.cx) / (glyph.w / 2), hgt = clamp((FLOOR - b.y) / span, 0, 1);
+      b.at = t0 + (1 - hgt) * 0.08 + Math.random() * 0.16; b.act = 1; b.qd = 9;
+      b.qvx = dir * rnd(140, 480) + rnd(-260, 260);
+      b.qvy = -rnd(80, 420) * (0.3 + hgt);
+    } else if (b.st === FREE) {
+      wake(b); b.soft = false; b.vx += rnd(-200, 200); b.vy -= rnd(260, 560);
     }
-    kick();
+  }
+  if (!reduce) shakeA = Math.min(10, shakeA + (any ? 5 : 3));
+  mode = 'broken';
+  setTich('scared');
+  title.classList.remove('fixed'); title.classList.add('wrecked');
+  btnBuild.classList.add('pulse');
+  say('Бум! Страница рассыпалась на кирпичики. Нажмите «Собрать заново»');
+  kick();
+}
+function assemble() {
+  if (!built) return;
+  if (drag) release();
+  var n = 0, i, b;
+  for (i = 0; i < homes.length; i++) {
+    b = homes[i];
+    if (b.st === SNAP || b.st === FLY) continue;
+    if (b.st === FALL) continue;
+    b.at = clock + 0.05 + b.rb * (0.75 / ROWS) + Math.random() * 0.14; b.act = 2; n++;
+  }
+  btnBuild.classList.remove('pulse');
+  title.classList.remove('wrecked');
+  if (!n && !homes.some(function (h) { return h.st !== SNAP; })) { complete(); }
+  else { mode = 'assembling'; setTich('thumb'); say('Собираем страницу обратно…'); }
+  kick();
+}
+function complete() {
+  mode = 'built';
+  for (var i = 0; i < homes.length; i++) {
+    var b = homes[i];
+    if (!b.at) { b.at = clock + 0.08 + ((b.x - glyph.l) / glyph.w) * 0.5 + b.rb * 0.012; b.act = 3; }
+  }
+  title.classList.remove('wrecked'); title.classList.add('fixed');
+  btnBuild.classList.remove('pulse');
+  setTich('thumb');
+  clearTimeout(tichTimer);
+  tichTimer = setTimeout(function () { if (mode === 'built') setTich('point'); }, 2300);
+  say('Готово! Все кирпичики на месте');
+  kick();
+}
+// пока ничего не трогали — верхний кирпичик иногда подпрыгивает: «меня можно взять»
+var touched = false;
+function invite() {
+  if (reduce) return;
+  setTimeout(function () {
+    if (touched) return;
+    if (mode === 'built' && !document.hidden) {
+      var top = homes.filter(function (h) { return h.st === SNAP && !h.nb.some(function (o) { return Math.abs(o.y + o.h - h.y) < 0.5; }); });
+      var b = top[(Math.random() * top.length) | 0];
+      if (b) { b.hop = 1; kick(); }
+    }
     invite();
+  }, 3800 + Math.random() * 1800);
+}
+function toggle() { if (mode !== 'assembling' && snapped >= total * 0.5) destroy(); else assemble(); }
+function say(t) { status.textContent = t; }
+
+// Тич: point / scared / thumb
+function setTich(s) {
+  if (s === tichState) return;
+  tichState = s;
+  imgPoint.classList.toggle('on', s === 'point');
+  imgThumb.classList.toggle('on', s === 'thumb');
+  imgScared.classList.toggle('on', s === 'scared');
+  imgScared.classList.toggle('peek-shake', s === 'scared');
+}
+function hitTich() {
+  if (tichState === 'scared' || clock - hitT < 0.7) return;
+  hitT = clock;
+  tichEl.classList.remove('hit');
+  void tichEl.offsetWidth;
+  tichEl.classList.add('hit');
+}
+
+function countSnapped() {
+  var n = 0;
+  for (var i = 0; i < homes.length; i++) if (homes[i].st === SNAP) n++;
+  snapped = n;
+  if (mode === 'assembling') for (i = 0; i < homes.length; i++) { var hb = homes[i]; if (hb.st === FREE && !hb.at) { hb.at = clock + 0.12; hb.act = 2; } }
+  if (n !== shown) { shown = n; hudN.textContent = n; }
+  if (mode === 'intro' && n === total) {
+    mode = 'built';
+    for (i = 0; i < homes.length; i++) { homes[i].at = clock + 0.15 + ((homes[i].x - glyph.l) / glyph.w) * 0.5; homes[i].act = 3; }
+  } else if ((mode === 'assembling' || mode === 'broken') && n === total) complete();
+  else if (mode === 'built' && n < total * 0.4) {
+    mode = 'broken'; setTich('scared'); title.classList.remove('fixed'); title.classList.add('wrecked'); btnBuild.classList.add('pulse');
   }
-  // ждём шрифт Onest, чтобы цифры собрались его начертанием (но не дольше 1,2 с)
-  var started = false;
-  function go() { if (!started) { started = true; init(); } }
-  if (document.fonts && document.fonts.load) {
-    Promise.race([
-      document.fonts.load('700 100px Onest', '404'),
-      new Promise(function (res) { setTimeout(res, 1200); })
-    ]).then(go, go);
-  } else go();
+}
+
+/* ---------- шаг: расписание, вступление и сборка, физика ---------- */
+function step(dt) {
+  var busy = false, i, b, maxV = 0, anyDyn = false;
+  clock += dt;
+  if (rumble > 0) { rumble -= dt; busy = true; }
+  for (i = 0; i < B.length; i++) {
+    b = B[i];
+    if (b.at) {
+      if (clock >= b.at) {
+        var a = b.act; b.at = 0; b.act = 0;
+        if (a === 1) popOut(b, b.qvx, b.qvy, b.qd);
+        else if (a === 2) startFly(b);
+        else if (a === 3) { if (b.st === SNAP) b.fl = Math.max(b.fl, 0.55); }
+        else if (a === 4) { b.st = FREE; b.sl = false; b.vy = 0; b.px = b.x; b.py = b.y; }
+      }
+      busy = true;
+    }
+    if (b.st === FALL) {
+      busy = true;
+      if (clock < b.t0) continue;
+      b.vy += G * dt; b.y += b.vy * dt;
+      if (b.y >= b.hy) {
+        b.y = b.hy;
+        if (b.bn === 0) { b.vy = -b.vy * 0.2; b.bn = 1; b.sq = 0.9; puff(b.x + 2, b.y + b.h, 1, -1); puff(b.x + b.w - 2, b.y + b.h, 1, 1); }
+        else snapHome(b);
+      }
+    } else if (b.st === FLY) {
+      busy = true;
+      var t = (clock - b.t0) / b.dur;
+      if (t >= 1) snapHome(b);
+      else {
+        var p = t * (1.12 - 0.12 * t), u = 1 - p;
+        b.x = u * u * b.x0 + 2 * u * p * b.cxp + p * p * b.hx;
+        b.y = u * u * b.y0 + 2 * u * p * b.cyp + p * p * b.hy;
+      }
+    } else if (dyn(b)) {
+      anyDyn = true;
+      var v = Math.abs(b.vx) + Math.abs(b.vy);
+      if (v > maxV) maxV = v;
+      if (b.st === FREE && v > 700 && tichState !== 'scared' && b.x < tichBox.r && b.x + b.w > tichBox.l && b.y + b.h > tichBox.t) hitTich();
+    }
+    if (b.hop > 0) {
+      b.hop -= dt * 2.6; busy = true;
+      if (b.hop <= 0) { b.hop = 0; if (b.st === SNAP) { b.fl = 0.6; spark(b.x + b.w / 2, b.y + b.h, 2, 110); } }
+    }
+    if (b.fl > 0) { b.fl -= dt * 3.6; busy = true; }
+    if (b.sq > 0) { b.sq -= dt * 6; busy = true; }
+  }
+  if (anyDyn) {
+    busy = true;
+    heightmap();
+    var n = clamp(Math.ceil((maxV * dt) / (0.4 * HB)), 2, 6), h = dt / n;
+    for (i = 0; i < n; i++) substep(h);
+  }
+  for (i = parts.length - 1; i >= 0; i--) {
+    var P = parts[i];
+    P.life -= P.dec * dt;
+    if (P.life <= 0) { parts.splice(i, 1); continue; }
+    if (P.k === 2) { P.r += (P.R * 1.6 - P.r) * Math.min(1, dt * 9); continue; }
+    P.x += P.vx * dt; P.y += P.vy * dt;
+    if (P.k === 1) P.vy += G * 0.5 * dt; else { P.vx *= 1 - 2.5 * dt; P.vy *= 1 - 2 * dt; }
+  }
+  if (parts.length) busy = true;
+  if (shakeA > 0.2 && !reduce) {
+    stage.style.transform = 'translate3d(' + rnd(-1, 1).toFixed(2) * shakeA + 'px,' + rnd(-1, 1).toFixed(2) * shakeA * 0.6 + 'px,0)';
+    shook = true; shakeA *= Math.exp(-dt * 7); busy = true;
+  } else if (shook) { stage.style.transform = ''; shook = false; shakeA = 0; }
+  if (connDirty && clock > connHold && mode !== 'intro' && mode !== 'assembling') checkConn();
+  countSnapped();
+  return busy || !!drag;
+}
+
+/* ---------- кадр ---------- */
+function drawBrick(b, lift) {
+  var spr = SPR[b.c][b.n], dw = spr.width / DPR, dh = spr.height / DPR, x = b.x - PAD, y = b.y - STUD - PAD;
+  if (rumble > 0 && b.st === SNAP) { x += rnd(-1, 1) * C * 0.07; y += rnd(-1, 1) * C * 0.05; }
+  if (b === hover && !lift) y -= 2;
+  if (b.hop > 0 && b.st === SNAP) y -= Math.sin(b.hop * Math.PI) * C * 0.45;
+  if (b.sq > 0) { var q = b.sq * 0.13, nw = dw * (1 + q * 0.45), nh = dh * (1 - q); x -= (nw - dw) / 2; y += dh - nh; dw = nw; dh = nh; }
+  if (lift) { x -= dw * 0.035; y -= dh * 0.035; dw *= 1.07; dh *= 1.07; }
+  ctx.drawImage(spr, x, y, dw, dh);
+  var f = b.fl + (b === hover ? 0.16 : 0) + (lift ? 0.08 : 0);
+  if (f > 0) { ctx.globalAlpha = Math.min(1, f) * 0.72; ctx.drawImage(WHITE[b.n], x, y, dw, dh); ctx.globalAlpha = 1; }
+}
+function draw() {
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  var i, j, b;
+  // нижние раньше (их пупырки прячутся под верхними), схваченный — поверх
+  for (i = 0; i < order.length; i++) { b = order[i]; b.k = b === drag ? 1e9 : -b.y; }
+  for (i = 1; i < order.length; i++) {
+    var o = order[i];
+    j = i - 1;
+    while (j >= 0 && order[j].k > o.k) { order[j + 1] = order[j]; j--; }
+    order[j + 1] = o;
+  }
+  var sox = C * 0.16, soy = C * 0.28;
+  for (i = 0; i < order.length; i++) {
+    b = order[i];
+    if (b.st === HID || b === drag || b.y > H || b.y + b.h < -STUD) continue;
+    var s = SHD[b.n];
+    ctx.drawImage(s, b.x + sox - s.pad, b.y - STUD * 0.4 + soy - s.pad, s.width / DPR, s.height / DPR);
+  }
+  if (drag && drag.home) {
+    // «гнездо»: куда защёлкнуть
+    ctx.setLineDash([4, 3]);
+    ctx.lineWidth = 1.5;
+    ctx.fillStyle = magnet ? 'rgba(61,220,132,0.2)' : 'rgba(255,255,255,0.06)';
+    ctx.strokeStyle = magnet ? 'rgba(61,220,132,0.9)' : 'rgba(220,232,255,0.45)';
+    rr(ctx, drag.hx + 1, drag.hy + 1, drag.w - 2, drag.h - 2, 3);
+    ctx.fill(); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  for (i = 0; i < order.length; i++) {
+    b = order[i];
+    if (b.st === HID || b === drag || b.y > H || b.y + b.h < -STUD - 2) continue;
+    drawBrick(b, false);
+  }
+  if (drag) {
+    var sd = SHD[drag.n], lift = magnet ? 0.5 : 1;
+    ctx.globalAlpha = 0.85;
+    ctx.drawImage(sd, drag.x + C * 0.4 * lift - sd.pad, drag.y + C * 0.6 * lift - sd.pad, sd.width / DPR * 1.06, sd.height / DPR * 1.06);
+    ctx.globalAlpha = 1;
+    drawBrick(drag, true);
+  }
+  for (i = 0; i < parts.length; i++) {
+    var P = parts[i];
+    if (P.k === 0) {
+      var ds = P.s * (1.6 - P.life * 0.6);
+      ctx.globalAlpha = P.life * 0.42;
+      ctx.drawImage(DUST, P.x - ds / 2, P.y - ds / 2, ds, ds);
+    } else if (P.k === 1) {
+      ctx.globalAlpha = P.life;
+      ctx.drawImage(SPARK, P.x - P.s / 2, P.y - P.s / 2, P.s, P.s);
+    } else {
+      ctx.globalAlpha = P.life * 0.7;
+      ctx.strokeStyle = '#cfe0ff';
+      ctx.lineWidth = 1 + P.life * 3;
+      ctx.beginPath(); ctx.arc(P.x, P.y, P.r, 0, 6.2832); ctx.stroke();
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+// цикл идёт, только пока что-то движется
+function frame(now) {
+  var dt = Math.min(1 / 30, Math.max(0.001, (now - lastT) / 1000));
+  lastT = now;
+  var busy = step(dt);
+  draw();
+  raf = busy ? requestAnimationFrame(frame) : 0;
+}
+function kick() { if (!raf && built) { lastT = performance.now(); raf = requestAnimationFrame(frame); } }
+
+/* ---------- мышь и касания ---------- */
+function loc(e) { var r = field.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+function pick(x, y) {
+  var i, b, best = null, bd = 1e9, tol = touch ? 14 : 4;
+  for (i = order.length - 1; i >= 0; i--) {
+    b = order[i];
+    if (b.st === HID || b.y + b.h < 0) continue;
+    if (x >= b.x && x <= b.x + b.w && y >= b.y - STUD && y <= b.y + b.h) return b;
+  }
+  for (i = order.length - 1; i >= 0; i--) {
+    b = order[i];
+    if (b.st === HID || b.y + b.h < 0) continue;
+    var dx = Math.max(b.x - x, 0, x - b.x - b.w), dy = Math.max(b.y - STUD - y, 0, y - b.y - b.h), d = Math.hypot(dx, dy);
+    if (d < tol && d < bd) { bd = d; best = b; }
+  }
+  return best;
+}
+function track(p) {
+  var t = performance.now();
+  samples.push({ t: t, x: p.x, y: p.y });
+  while (samples.length > 2 && t - samples[0].t > 90) samples.shift();
+}
+function throwVel() {
+  var t = performance.now(), n = samples.length;
+  if (n < 2 || t - samples[n - 1].t > 70) return { x: 0, y: 0 };
+  var a = samples[0], z = samples[n - 1], dt = Math.max(0.016, (z.t - a.t) / 1000);
+  return { x: clamp((z.x - a.x) / dt, -VMAX, VMAX), y: clamp((z.y - a.y) / dt, -VMAX, VMAX) };
+}
+function grab(b, p, id) {
+  if (b.st === SNAP) { b.fl = Math.max(b.fl, 0.6); spark(b.x + b.w / 2, b.y, 3, 150); connDirty = true; }
+  b.st = DRAG; b.sl = false; b.soft = false; b.at = 0; b.act = 0; b.vx = b.vy = 0; b.px = b.x; b.py = b.y;
+  drag = b; dragId = id; magnet = false; hover = null;
+  grabDx = p.x - b.x; grabDy = p.y - b.y;
+  ptr.x = p.x; ptr.y = p.y; samples = []; track(p);
+  wakeAround(b);
+  cvs.style.cursor = 'grabbing';
+}
+function release() {
+  var b = drag;
+  if (!b) return;
+  drag = null; dragId = -1;
+  if (b.home && magnet) snapHome(b);
+  else {
+    var v = throwVel();
+    b.st = FREE; b.sl = false; b.calm = 0; b.vx = v.x; b.vy = v.y; b.px = b.x; b.py = b.y;
+  }
+  magnet = false;
+  cvs.style.cursor = '';
+  kick();
+}
+cvs.addEventListener('pointerdown', function (e) {
+  if (!built || (e.button && e.button !== 0)) return;
+  touched = true;
+  var p = loc(e);
+  if (drag) { punch(p.x, p.y); kick(); return; }
+  var b = pick(p.x, p.y);
+  if (b) {
+    e.preventDefault();
+    try { cvs.setPointerCapture(e.pointerId); } catch (err) { /* без захвата тоже работает */ }
+    grab(b, p, e.pointerId);
+  } else punch(p.x, p.y);
+  kick();
+});
+cvs.addEventListener('pointermove', function (e) {
+  if (!built) return;
+  var p = loc(e);
+  if (drag) { if (e.pointerId === dragId) { ptr.x = p.x; ptr.y = p.y; track(p); } return; }
+  if (e.pointerType !== 'mouse') return;
+  var b = pick(p.x, p.y);
+  if (b !== hover) { hover = b; cvs.style.cursor = b ? 'grab' : ''; kick(); }
+});
+function up(e) { if (drag && e.pointerId === dragId) release(); }
+cvs.addEventListener('pointerup', up);
+cvs.addEventListener('pointercancel', up);
+cvs.addEventListener('lostpointercapture', up);
+cvs.addEventListener('pointerleave', function () { if (hover) { hover = null; cvs.style.cursor = ''; kick(); } });
+
+btnBoom.addEventListener('click', function () { touched = true; destroy(); });
+btnBuild.addEventListener('click', function () { touched = true; assemble(); });
+document.addEventListener('keydown', function (e) {
+  if (e.ctrlKey || e.metaKey || e.altKey || !built) return;
+  var t = e.target, tag = t && t.tagName, code = e.code || '', key = (e.key || '').toLowerCase();
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+  if (code === 'Space' || key === ' ') { if (tag === 'A' || tag === 'BUTTON') return; e.preventDefault(); touched = true; toggle(); }
+  else if (code === 'KeyR' || key === 'р' || key === 'r') { touched = true; destroy(); } // Р в русской раскладке — на клавише H
+  else if (code === 'KeyC' || key === 'с' || key === 'c') { touched = true; assemble(); }
+});
+
+var rto = 0;
+window.addEventListener('resize', function () {
+  clearTimeout(rto);
+  rto = setTimeout(function () {
+    var r = field.getBoundingClientRect();
+    if (Math.abs(r.width - W) < 1 && Math.abs(r.height - H) < 1) return;
+    build(false);
+    draw();
+  }, 180);
+});
+
+function init() {
+  build(!reduce);
+  if (reduce) {
+    // без движения: всё сразу на местах
+    for (var i = 0; i < B.length; i++) if (!B[i].home && B[i].st === HID) { B[i].y = B[i].ry; B[i].st = FREE; B[i].sl = true; B[i].at = 0; }
+    draw();
+  }
+  kick();
+  invite();
+}
+// ждём шрифт Onest (не дольше 1,2 с)
+var started = false;
+function go() { if (!started) { started = true; init(); } }
+if (document.fonts && document.fonts.load) {
+  Promise.race([
+    document.fonts.load('700 100px Onest', '404'),
+    new Promise(function (res) { setTimeout(res, 1200); })
+  ]).then(go, go);
+} else go();
 })();
-</script>
+  </script>
 </body>
 </html>

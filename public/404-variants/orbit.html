@@ -235,7 +235,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     x.imageSmoothingQuality = 'high'; x.drawImage(src, 0, 0, c.width, c.height);
     return (cache[k] = c);
   }
-  function drawSpr(c, s, x, y, h, r) { if (!s) return; var w = h * s.width / s.height; c.save(); c.translate(x, y); if (r) c.rotate(r); c.drawImage(s, -w / 2, -h / 2, w, h); c.restore(); }
+  function drawSpr(c, s, x, y, h, r, a) { if (!s) return; var w = h * s.width / s.height; c.save(); c.translate(x, y); if (r) c.rotate(r); if (a < 1) c.globalAlpha = a; c.drawImage(s, -w / 2, -h / 2, w, h); c.restore(); }
 
   // готовые спрайты: свечение частиц, камни, луна
   var COL = { cyan: '95,212,255', blue: '120,170,255', violet: '155,140,255', gold: '255,203,107', green: '70,255,122', red: '255,72,72', orange: '255,140,60', white: '255,255,255', pink: '255,120,190' }, GS = {};
@@ -495,6 +495,8 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     c.globalCompositeOperation = SO;
   }
   function isWon() { return state === 'won' || state === 'land'; }
+  // живой слой не гасим заливкой (дорого на больших экранах): у верхнего и нижнего края тают сами объекты
+  function edgeA(y) { y *= U; return clamp(min(y / 26, (FH - y) / (touch ? 40 : 64)), 0, 1); }
   function paintStatic() {
     var c = gB;
     c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, cvB.width, cvB.height); c.setTransform(DPR * U, 0, 0, DPR * U, 0, 0);
@@ -569,10 +571,11 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     if (pi.p < 0.14) return;
     if (key !== prev.key) { prev.key = key; p.length = 0; prev.code = shoot(L, pi.ang, pi.p, misses >= 3 ? 3.2 : landscape() ? 1.3 : 1.05, p); }
     n = p.length / 2; c.fillStyle = '#d6f4ff';
-    for (i = 0; i < n; i++) { c.globalAlpha = 0.95 - i / n * 0.75; circle(c, p[i * 2], p[i * 2 + 1], 5.5 - i / n * 3); c.fill(); }
-    c.globalAlpha = 1; c.lineWidth = 4; c.lineCap = 'round'; x = p[p.length - 2]; y = p[p.length - 1];
+    for (i = 0; i < n; i++) { c.globalAlpha = (0.95 - i / n * 0.75) * edgeA(p[i * 2 + 1]); circle(c, p[i * 2], p[i * 2 + 1], 5.5 - i / n * 3); c.fill(); }
+    c.globalAlpha = edgeA(p[p.length - 1]); c.lineWidth = 4; c.lineCap = 'round'; x = p[p.length - 2]; y = p[p.length - 1];
     if (prev.code === 1) { c.strokeStyle = '#ff6b5b'; path(c, [x - 9, y - 9, x + 9, y + 9]); c.stroke(); path(c, [x + 9, y - 9, x - 9, y + 9]); c.stroke(); }
     else if (prev.code === 2) { c.strokeStyle = '#46ff7a'; circle(c, x, y, 14); c.stroke(); path(c, [x - 6, y, x - 1, y + 5, x + 7, y - 5]); c.stroke(); }
+    c.globalAlpha = 1;
   }
   function drawPower(c) {
     var A = L.A, pi = pullInfo(), back = atan2(pull.y, pull.x), col, x, y, txt, w;
@@ -602,7 +605,7 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
       var ax = px + ux * 22, ay = py + uy * 22 + 44 * (1 - k), nx = d > 0.5 ? uy * 16 : 16, ny = d > 0.5 ? -ux * 16 : 0;
       band(c, [TL.x, TL.y, ax, ay], k);
       c.strokeStyle = '#163a6e'; c.lineWidth = 10; path(c, [ax - nx, ay - ny, ax + nx, ay + ny]); c.stroke();
-      drawSpr(c, spr('idea', H_PAD), px, py, H_PAD * sc, r);
+      drawSpr(c, spr('idea', H_PAD), px, py, H_PAD * sc, r, edgeA(py + H_PAD * 0.3));
       band(c, [ax, ay, TP.x, TP.y], k);
     } else {
       var tw = reduce ? 0 : sin(twang * 42) * M.exp(-twang * 6) * 26;
@@ -620,12 +623,12 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   function drawTrail(c) {
     var n = trail.length / 2, i, f;
     c.globalCompositeOperation = LI; c.lineCap = 'round';
-    for (i = 1; i < n; i++) { f = i / n; c.strokeStyle = rgba('95,212,255', f * f * 0.5); c.lineWidth = 2 + f * 14; c.beginPath(); c.moveTo(trail[i * 2 - 2], trail[i * 2 - 1]); c.lineTo(trail[i * 2], trail[i * 2 + 1]); c.stroke(); }
+    for (i = 1; i < n; i++) { f = i / n; c.strokeStyle = rgba('95,212,255', f * f * 0.5 * edgeA(trail[i * 2 + 1])); c.lineWidth = 2 + f * 14; c.beginPath(); c.moveTo(trail[i * 2 - 2], trail[i * 2 - 1]); c.lineTo(trail[i * 2], trail[i * 2 + 1]); c.stroke(); }
     c.globalCompositeOperation = SO;
   }
   function drawFlyer(c) {
     var T = L.tgt, k, a, h;
-    if (state === 'fly') { h = H_PAD + (H_FLY - H_PAD) * easeOut(stT / 0.2); drawSpr(c, spr('idea', h > H_FLY + 1 ? H_PAD : H_FLY), fl.x, fl.y, h, rot); }
+    if (state === 'fly') { h = H_PAD + (H_FLY - H_PAD) * easeOut(stT / 0.2); drawSpr(c, spr('idea', h > H_FLY + 1 ? H_PAD : H_FLY), fl.x, fl.y, h, rot, edgeA(fl.y)); }
     else if (state === 'land') {
       k = easeOut(stT / LAND_DUR); a = -PI / 2 - landFrom; a = landFrom + atan2(sin(a), cos(a)) * k; h = T.r + H_FLY * 0.42;
       drawSpr(c, spr('idea', H_FLY), T.x + cos(a) * h, T.y + sin(a) * h, H_FLY, a + PI / 2 + (1 - k) * sin(stT * 30) * 0.1);
@@ -636,12 +639,12 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
   }
   function drawFx(c) {
     c.globalCompositeOperation = LI;
-    parts.forEach(function (P) { var s = P.s * (0.4 + 0.6 * P.life); c.globalAlpha = min(1, P.life * 1.4); c.drawImage(P.spr, P.x - s / 2, P.y - s / 2, s, s); });
+    parts.forEach(function (P) { var s = P.s * (0.4 + 0.6 * P.life); c.globalAlpha = min(1, P.life * 1.4) * edgeA(P.y); c.drawImage(P.spr, P.x - s / 2, P.y - s / 2, s, s); });
     c.globalAlpha = 1;
     rockets.forEach(function (o) { if (o.t >= 0) c.drawImage(GS[o.col], o.x - 12, o.y - 12, 24, 24); });
     rings.forEach(function (o) { c.globalAlpha = o.life; c.strokeStyle = rgba(o.col, 1); c.lineWidth = 2 + o.w * o.life; circle(c, o.x, o.y, o.r); c.stroke(); });
     c.globalAlpha = 1; c.globalCompositeOperation = SO;
-    debris.forEach(function (o) { c.save(); c.translate(o.x, o.y); c.rotate(o.r); c.globalAlpha = min(1, o.life * 2); c.fillStyle = o.col; c.fillRect(-o.w / 2, -o.h / 2, o.w, o.h); c.restore(); });
+    debris.forEach(function (o) { c.save(); c.translate(o.x, o.y); c.rotate(o.r); c.globalAlpha = min(1, o.life * 2) * edgeA(o.y); c.fillStyle = o.col; c.fillRect(-o.w / 2, -o.h / 2, o.w, o.h); c.restore(); });
     words.forEach(function (o) {
       var t = o.t, s = reduce || t >= 0.18 ? 1 : easeBack(t / 0.18);
       c.save(); c.translate(o.x, o.y - t * 30); c.rotate(o.rot); c.scale(s, s); c.globalAlpha = clamp(t > 0.75 ? 1 - (t - 0.75) / 0.35 : 1, 0, 1);
@@ -666,7 +669,6 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     if (state === 'aim') drawPreview(c);
     drawTrail(c); drawPad(c); drawFlyer(c); drawFx(c); drawOffscreen(c);
     if (state === 'aim') drawPower(c);
-    if (state === 'aim' || state === 'fly' || parts.length || debris.length || words.length) fadeEdges(c, 'g'); // у краёв бывает только Тич и частицы
   }
 
   /* ---------- события игры ---------- */
@@ -798,8 +800,8 @@ h1 { margin: 0; max-width: 700px; font: 700 clamp(30px, 3.3vw, 52px)/1.06 var(--
     var dt = min(0.05, max(0, (now - lastT) / 1000)); lastT = now;
     if (!reduce) {
       decoT += dt;
-      // кадр дольше 26 мс — частиц меньше
-      if (cuts < 2 && dt > 0 && ++fN && (fSum += dt) && fN >= 90) { if (fSum / fN > 0.026) { cuts++; quality *= 0.6; twinkles.length = round(twinkles.length / 2); } fN = fSum = 0; }
+      // кадр дольше 22 мс — частиц меньше
+      if (cuts < 2 && dt > 0 && ++fN && (fSum += dt) && fN >= 90) { if (fSum / fN > 0.022) { cuts++; quality *= 0.6; twinkles.length = round(twinkles.length / 2); } fN = fSum = 0; }
     }
     update(dt); render();
     // reduced motion: кадры — только пока идёт действие
