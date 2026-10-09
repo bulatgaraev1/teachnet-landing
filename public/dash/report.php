@@ -13,17 +13,22 @@ if (realpath((string) ($_SERVER['SCRIPT_FILENAME'] ?? '')) === __FILE__) {
 
 /* ---------- справочник целей сайта ---------- */
 
-/** Идентификатор цели → понятное название. Это же — список целей, которые ждёт дашборд. */
+/** Идентификатор цели → понятное название. Это же — список целей, которые ждёт дашборд.
+ *  B и C — варианты главной для A/B-теста: B — /education, C — /education2 (docs/analytics-ab.md). */
 const GOAL_NAMES = [
     // заявка
     'lead_form' => 'Заявка отправлена',
-    // кнопки записи: главная
-    'hero_cta' => 'Кнопка в первом экране (главная)',
-    'nav_cta' => 'Кнопка «Пробный урок» в шапке (главная)',
-    'burger_cta' => 'Кнопка в мобильном меню (главная)',
+    // кнопки записи: главная и варианты B, C (те же идентификаторы)
+    'hero_cta' => 'Кнопка в первом экране (главная, B, C)',
+    'nav_cta' => 'Кнопка записи в шапке (главная, B, C)',
+    'burger_cta' => 'Кнопка в мобильном меню (главная, B, C)',
     'block4_signup' => 'Кнопка под программами (главная)',
-    'block12_cta' => 'Кнопка в финальном блоке (главная)',
-    'sticky_cta' => 'Плавающая кнопка внизу экрана (главная)',
+    'block12_cta' => 'Кнопка в финальном блоке (главная, B, C)',
+    'sticky_cta' => 'Плавающая кнопка внизу экрана (главная, B, C)',
+    // кнопки записи: только варианты B, C
+    'b_steps_signup' => 'Кнопка «Подобрать ступень» (B)',
+    'c_steps_signup' => 'Кнопка «Подобрать ступень» (C)',
+    'c_dare_signup' => 'Кнопка «Записаться и проверить» (C)',
     // кнопки записи: /electronics
     'cta_hero' => 'Кнопка в первом экране (электроника)',
     'cta_trial' => 'Кнопка в блоке «Пробный урок» (электроника)',
@@ -35,9 +40,9 @@ const GOAL_NAMES = [
     'msg_max' => 'MAX в окне записи (электроника)',
     'phone_click' => 'Клик по телефону',
     'contact_click' => 'Мессенджеры, почта и чат (подвал, финал)',
-    'faq_open' => 'Раскрыли вопрос (главная)',
+    'faq_open' => 'Раскрыли вопрос (главная, B)',
     'el_faq_open' => 'Раскрыли вопрос (электроника)',
-    'nav_phone' => 'Телефон в шапке и меню (главная)',
+    'nav_phone' => 'Телефон в шапке и меню (главная, B, C)',
     // переходы
     'programs_electronics' => 'Главная → «Подробнее о курсе» электроники',
     'footer_electronics' => 'Подвал → «Электроника»',
@@ -46,7 +51,7 @@ const GOAL_NAMES = [
     'cross_robotics' => 'Электроника → «Смотрите робототехнику»',
     'back_click' => 'Кнопка «Назад» (электроника)',
     'nav_programs' => 'Меню: «Программы» (главная)',
-    'nav_price' => 'Меню: «Цена» (главная)',
+    'nav_price' => 'Меню: «Цена» (главная, B, C)',
     'nav_press' => 'Меню: «О нас пишут» (главная)',
     'nav_faq' => 'Меню: «Вопросы» (главная)',
     'el_nav_program' => 'Меню: «Программа» (электроника)',
@@ -63,11 +68,11 @@ const GOAL_NAMES = [
     'press_click_tatarinform' => 'Публикация: Татар-информ (главная)',
     // глубина просмотра
     'scroll_hero' => 'Первый экран',
-    'scroll_trust' => 'Нас поддерживают',
+    'scroll_trust' => 'Строка логотипов («Нас поддерживают» / «Нас благодарят»)',
     'scroll_translator' => 'Инженерия — проще, чем звучит',
     'scroll_programs' => 'Путь ребёнка (программы)',
     'scroll_mission' => 'Здесь не уроки, здесь миссии',
-    'scroll_motivation' => 'Почему дети сами просятся',
+    'scroll_motivation' => 'Мотивация («Почему дети сами просятся» / «Почему ученикам интересно»)',
     'scroll_parents' => 'Вы будете знать, чем занят ребёнок',
     'scroll_team' => 'Преподаватель',
     'scroll_conversion' => 'Форма заявки',
@@ -78,6 +83,30 @@ const GOAL_NAMES = [
     'scroll_footer' => 'Подвал',
     'scroll_trial' => 'Пробный урок',
     'scroll_contacts' => 'Контакты',
+    // варианты главной: свои блоки, меню и галерея (B — /education, C — /education2)
+    'scroll_b_compare' => '«Знакомая картина?» (B)',
+    'scroll_b_steps' => 'Ступени обучения (B)',
+    'scroll_b_lesson' => 'Каждое занятие — миссия (B)',
+    'scroll_b_proof' => 'Проверьте сами (B)',
+    'scroll_b_gallery' => 'Галерея (B)',
+    'scroll_c_seen' => 'Что мы видели (C)',
+    'scroll_c_rules' => 'Шесть правил (C)',
+    'scroll_c_steps' => 'Ступени обучения (C)',
+    'scroll_c_noted' => 'Наше дело актуальное (C)',
+    'scroll_c_who' => 'Кто мы (C)',
+    'scroll_c_dare' => 'Проверьте нас (C)',
+    'scroll_c_gallery' => 'Галерея (C)',
+    'nav_compare' => 'Меню: «Чем мы отличаемся» (B)',
+    'nav_lesson' => 'Меню: «Как проходит урок» (B)',
+    'nav_b_steps' => 'Меню: «Ступени» (B)',
+    'nav_b_gallery' => 'Меню: «Галерея» (B)',
+    'nav_seen' => 'Меню: «Что мы видели» (C)',
+    'nav_rules' => 'Меню: «Наши правила» (C)',
+    'nav_steps' => 'Меню: «Ступени» (C)',
+    'nav_who' => 'Меню: «Кто мы» (C)',
+    'nav_gallery' => 'Меню: «Галерея» (C)',
+    'b_gallery_swipe' => 'Листали галерею (B)',
+    'c_gallery_swipe' => 'Листали галерею (C)',
     // глубина просмотра /electronics (свои идентификаторы, чтобы не смешиваться с главной)
     'scroll_el_hero' => 'Первый экран (электроника)',
     'scroll_el_result' => 'Результат по месяцам (электроника)',
@@ -123,7 +152,7 @@ const GOAL_NAMES = [
 /** Шаг воронки «Дошли до цены или формы» и «Нажали «Записаться»» — по всему сайту. */
 const REACH_GOALS = ['scroll_price', 'scroll_conversion', 'scroll_contacts'];
 const CTA_GOALS = ['hero_cta', 'nav_cta', 'burger_cta', 'sticky_cta', 'block4_signup', 'block12_cta',
-    'cta_hero', 'cta_trial', 'cta_price', 'cta_final', 'cta_menu'];
+    'cta_hero', 'cta_trial', 'cta_price', 'cta_final', 'cta_menu', 'b_steps_signup', 'c_steps_signup', 'c_dare_signup'];
 
 /** Кнопки записи и цели, по которым видно, что кнопка сломалась (тревога «нет срабатываний 7 дней»). */
 const WATCH_GOALS = ['lead_form', 'hero_cta', 'nav_cta', 'sticky_cta', 'cta_hero', 'cta_price'];
@@ -138,6 +167,12 @@ const DASH_PAGES = [
         'reach' => ['scroll_price', 'scroll_contacts'],
         'cta' => ['cta_hero', 'cta_trial', 'cta_price', 'cta_final', 'cta_menu']],
     'child' => ['label' => 'Мастер-классы', 'path' => '/child', 'sources' => ['child-masterclass'], 'reach' => [], 'cta' => []],
+    'education' => ['label' => 'Вариант B', 'path' => '/education', 'sources' => ['education'],
+        'reach' => ['scroll_price', 'scroll_conversion'],
+        'cta' => ['hero_cta', 'nav_cta', 'burger_cta', 'sticky_cta', 'b_steps_signup', 'block12_cta']],
+    'education2' => ['label' => 'Вариант C', 'path' => '/education2', 'sources' => ['education2'],
+        'reach' => ['scroll_price', 'scroll_conversion'],
+        'cta' => ['hero_cta', 'nav_cta', 'burger_cta', 'sticky_cta', 'c_steps_signup', 'c_dare_signup', 'block12_cta']],
 ];
 
 /** «Что люди делают на странице»: секции сверху вниз, кнопки по местам, способы связи, переходы. */
@@ -162,6 +197,28 @@ const DASH_BEHAVIOR = [
         'contact' => ['lead_form' => 'Форма', 'msg_telegram' => 'Telegram', 'msg_max' => 'MAX', 'phone_click' => 'Звонок',
             'contact_click' => 'Мессенджеры и почта в подвале'],
         'links' => ['el_nav_program', 'el_nav_price', 'el_nav_faq', 'el_nav_contacts', 'el_faq_open', 'cross_robotics', 'back_click', 'footer_electronics', 'footer_robotics', 'footer_tech', 'press_click', 'map_click', 'modal_close_empty'],
+    ],
+    // варианты главной для A/B-теста: блоки — по макетам (docs/analytics-ab.md)
+    'education' => [
+        'path' => '/education',
+        'depth' => ['scroll_hero', 'scroll_trust', 'scroll_b_compare', 'scroll_b_steps', 'scroll_b_lesson', 'scroll_b_proof',
+            'scroll_motivation', 'scroll_price', 'scroll_conversion', 'scroll_b_gallery', 'scroll_faq', 'scroll_final', 'scroll_footer'],
+        'cta' => ['hero_cta' => 'Первый экран', 'nav_cta' => 'Шапка', 'burger_cta' => 'Мобильное меню',
+            'b_steps_signup' => '«Ступени обучения»', 'sticky_cta' => 'Плавающая кнопка', 'block12_cta' => 'Финальный блок'],
+        'contact' => ['lead_form' => 'Форма', 'nav_phone' => 'Звонок из шапки и меню', 'phone_click' => 'Звонок из подвала',
+            'contact_click' => 'Мессенджеры и почта в подвале'],
+        'links' => ['nav_compare', 'nav_lesson', 'nav_b_steps', 'nav_price', 'nav_b_gallery', 'b_gallery_swipe', 'faq_open'],
+    ],
+    'education2' => [
+        'path' => '/education2',
+        'depth' => ['scroll_hero', 'scroll_c_seen', 'scroll_c_rules', 'scroll_c_steps', 'scroll_c_noted', 'scroll_c_who',
+            'scroll_c_dare', 'scroll_price', 'scroll_conversion', 'scroll_c_gallery', 'scroll_final', 'scroll_footer'],
+        'cta' => ['hero_cta' => 'Первый экран', 'nav_cta' => 'Шапка', 'burger_cta' => 'Мобильное меню',
+            'c_steps_signup' => '«Ступени обучения»', 'c_dare_signup' => '«Проверьте нас»', 'sticky_cta' => 'Плавающая кнопка',
+            'block12_cta' => 'Финальный блок'],
+        'contact' => ['lead_form' => 'Форма', 'nav_phone' => 'Звонок из шапки и меню', 'phone_click' => 'Звонок из подвала',
+            'contact_click' => 'Мессенджеры и почта в подвале'],
+        'links' => ['nav_seen', 'nav_rules', 'nav_steps', 'nav_who', 'nav_price', 'nav_gallery', 'c_gallery_swipe'],
     ],
 ];
 
