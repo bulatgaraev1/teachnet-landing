@@ -2,6 +2,7 @@
 import { tick } from './svg';
 import { formCard } from './form-card';
 import { LOGOS, logoSrc } from './logos';
+import { STEPS_TEXT, stepCards, galleryItems } from './shared';
 
 /** Якорь всех кнопок записи на странице — карточка формы (как в макете) */
 export const SIGNUP = '#msignup';
@@ -86,58 +87,20 @@ export function rulesC(): string {
   </section>`;
 }
 
-const STEPS = [
-  {
-    age: 'от 5 лет',
-    title: 'Робототехника на LEGO',
-    text: 'Первый собственный робот. Основы механики, электроники и программирования — через миссии и испытания.',
-    result: 'сам собирает и программирует роботов — от простых к сложным.',
-    meta: '60 минут · группа до 6 человек',
-  },
-  {
-    age: 'от 10 лет',
-    title: 'Электроника',
-    text: 'Реальные платы, датчики и моторы. Ребёнок сам рассчитывает схему, проверяет её прибором и пишет программу.',
-    result: 'проектирует, собирает и защищает собственные устройства.',
-    meta: '90 минут · группа до 6 человек',
-  },
-  {
-    age: 'от 14 лет',
-    title: 'Продвинутая электроника и робототехника',
-    text: 'Автоматика и робототехника: устройства, которые сами следят за обстановкой и принимают решения. Ребёнок проектирует их от схемы до программы.',
-    result: 'создаёт автономного робота или систему автоматики под реальную задачу.',
-    meta: '90 минут · группа до 6 человек',
-  },
-];
-
 export function stepsC(): string {
-  const cards = STEPS.map(
-    (st, i) => `<li class="ab-mstep">
-          <div class="ab-mstep__top">
-            <span class="ab-mstep__n">${i + 1}</span>
-            <span class="ab-mstep__age">${st.age}</span>
-          </div>
-          <span class="ab-mstep__title">${st.title}</span>
-          <span class="ab-mstep__text">${st.text}</span>
-          <div class="ab-mstep__foot">
-            <span class="ab-mstep__result"><b>Итоги модулей:</b> ${st.result}</span>
-            <span class="ab-mstep__meta">${st.meta}</span>
-          </div>
-        </li>`,
-  ).join('\n        ');
   return `<section class="ab-msec ab-msec--steps" id="steps" aria-labelledby="steps-h2" data-scroll-goal="scroll_c_steps">
     <div class="ab-wrap ab-stack-36">
       <div class="ab-head ab-head--14 ab-head--820">
-        <span class="ab-meyebrow">Ступени обучения</span>
-        <h2 class="ab-mh2" id="steps-h2">От первого робота до своего инженерного проекта</h2>
-        <p class="ab-mp">Своя программа под каждый возраст и понятная траектория роста: каждая ступень опирается на предыдущую — от первого робота до автоматики и собственных проектов.</p>
+        <span class="ab-meyebrow">${STEPS_TEXT.eyebrow}</span>
+        <h2 class="ab-mh2" id="steps-h2">${STEPS_TEXT.h2}</h2>
+        <p class="ab-mp">${STEPS_TEXT.lead}</p>
       </div>
       <ol class="ab-msteps">
-        ${cards}
+        ${stepCards()}
       </ol>
       <div class="ab-msteps__cta">
-        <a class="ab-btn ab-btn--md" href="${SIGNUP}" data-goal="c_steps_signup">Подобрать ступень на пробном уроке</a>
-        <span class="ab-msteps__note">С какой ступени начать — определим на первом занятии по возрасту и подготовке.</span>
+        <a class="ab-btn ab-btn--md" href="${SIGNUP}" data-goal="c_steps_signup">${STEPS_TEXT.cta}</a>
+        <span class="ab-msteps__note">${STEPS_TEXT.note}</span>
       </div>
     </div>
   </section>`;
@@ -213,21 +176,7 @@ export function priceC(): string {
   </section>`;
 }
 
-// Галерея «Как проходят наши занятия». Фото — в public/images/; чтобы добавить, допишите строку.
-// Первые два фото — без loading="lazy", остальные — с ним (указание владельца).
-const GALLERY = [
-  { src: '/images/hero.webp', alt: 'Дети собирают робота на занятии' },
-  { src: '/images/team-1.webp', alt: 'Преподаватель объясняет устройство механизма' },
-  { src: '/images/mission.webp', alt: 'Испытание робота на миссии' },
-  { src: '/images/team-2.webp', alt: 'Преподаватель с детьми на занятии' },
-  { src: '/images/passport.webp', alt: 'Паспорт инженера с печатями' },
-  { src: '/images/final-1.webp', alt: 'Дети на занятии TEACHNET' },
-];
-
 export function galleryC(): string {
-  const items = GALLERY.map(
-    (g, i) => `<li><img src="${g.src}" width="880" height="660"${i > 1 ? ' loading="lazy"' : ''} decoding="async" alt="${g.alt}" /></li>`,
-  ).join('\n      ');
   return `<section class="ab-mgallery" id="gallery" aria-labelledby="gallery-h2" data-scroll-goal="scroll_c_gallery">
     <div class="ab-mgallery__head">
       <div class="ab-head ab-head--14">
@@ -237,7 +186,7 @@ export function galleryC(): string {
       <span class="ab-mgallery__hint">Листайте вправо →</span>
     </div>
     <ul class="ab-mgallery__strip" aria-label="Фото с занятий" tabindex="0" data-swipe-goal="c_gallery_swipe">
-      ${items}
+      ${galleryItems()}
     </ul>
   </section>`;
 }
