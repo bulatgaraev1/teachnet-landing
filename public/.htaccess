@@ -48,6 +48,10 @@
     # (#4) Скрытые файлы и папки (.git, .env, .htaccess и т.п.), кроме .well-known
     RewriteRule (^|/)\.(?!well-known/) - [F,L]
 
+    # Папка файлов для скачивания (/files/): сами файлы открываются по прямой ссылке,
+    # а список содержимого папки не показываем
+    RewriteRule ^files/?$ - [F,L]
+
     # Чистые URL: /privacy → /privacy.html (если такой файл существует).
     # Реальные файлы и каталоги (assets, images, send.php и т.п.) не затрагиваются.
     RewriteCond %{REQUEST_FILENAME} !-f
