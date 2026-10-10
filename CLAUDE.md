@@ -42,3 +42,6 @@
 - `BingSiteAuth.xml` — подтверждение прав в Bing Webmaster Tools.
 - `b887174e966bb3311dbb16685f6fabe3.txt` — ключ IndexNow (его использует шаг IndexNow в деплое).
 - `robots.txt`, `sitemap.xml`, `llms.txt`, `404.html` — тоже отсюда; новые страницы добавлять в `sitemap.xml`.
+- `404.php` + `404-variants/` — страница «не найдено»: `.htaccess` (ErrorDocument 404/403) отдаёт `404.php`,
+  он показывает случайный из шести вариантов (`404.html` и пять из `404-variants/`, витрина — `/404-variants/`).
+  Варианты самодостаточные (без внешних ресурсов — CSP), ссылки в них только абсолютные.
