@@ -65,7 +65,12 @@ select.field{padding-right:28px}
 /* ---------- шапка и фильтры ---------- */
 .top{background:var(--card);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:var(--s3);min-height:64px;flex-wrap:wrap;padding-block:var(--s2)}
-.top h1{font-size:18px;margin-right:auto}
+.top h1{font-size:18px}
+/* вкладки: школа / значки и мастер-классы (/dash/?view=pcb) */
+.tabs{display:inline-flex;margin-right:auto;border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px;background:var(--card)}
+.tabs a{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 12px;border-radius:9px;color:var(--text);text-decoration:none;white-space:nowrap;font-size:14px}
+.tabs a:hover{background:var(--brand-wash)}
+.tabs a[aria-current="page"]{background:var(--brand);color:#fff}
 .top__stamp{font-size:13px;color:var(--soft);white-space:nowrap}
 .filters{position:sticky;top:0;z-index:20;background:rgba(245,248,252,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .filters .wrap{display:flex;align-items:center;gap:var(--s3);padding-block:10px;overflow-x:auto;scrollbar-width:thin}
@@ -83,6 +88,8 @@ select.field{padding-right:28px}
   .top .wrap{gap:var(--s2)}
   .top h1{font-size:16px}
   .top__stamp{order:5;width:100%}
+  .tabs{order:6;width:100%;margin-right:0}
+  .tabs a{flex:1}
 }
 
 /* ---------- блоки ---------- */
@@ -288,3 +295,16 @@ details.quality[open] > summary .chev{transform:rotate(90deg)}
 @media (max-width:719px){details.quality > summary h2{font-size:19px}}
 
 footer.foot{color:var(--soft);font-size:13px;padding-bottom:var(--s6)}
+
+/* ---------- вкладка «Значки и мастер-классы» ---------- */
+.st-proposal{background:#e3ecf6;color:#264873}
+.st-won{background:#dce8f4;color:#1b3659}
+.st-done{background:var(--good-bg);color:#1a6b40}
+.pcb-note{margin-bottom:var(--s3)}
+.pcb-sub{display:block;font-size:12px;color:var(--soft)}
+.pcb-more{background:none;border:0;padding:0;color:var(--action);cursor:pointer;font:inherit;font-size:13px;white-space:nowrap}
+.pcb-details{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px var(--s4);font-size:13px}
+.pcb-details div{overflow-wrap:anywhere}
+.pcb-details b{display:block;font-weight:500;color:var(--soft);font-size:12px}
+.pcb-details .wide{grid-column:1 / -1;white-space:pre-line}
+.contact-links a{margin-right:10px}
