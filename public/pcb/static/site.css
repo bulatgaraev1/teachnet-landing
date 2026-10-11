@@ -18,6 +18,9 @@
 .footer-legal{display:flex;flex-wrap:wrap;gap:4px 16px}
 .footer-legal-row{border-top:0;margin-top:0;padding-top:10px}
 
+/* Раздел «Стенд»: три шага — последний во всю ширину, без пустой клетки в сетке на две колонки */
+.stand-flow>.stand-step:last-child:nth-child(odd){grid-column:1/-1}
+
 /* Плашка cookie — как на остальном сайте: снизу слева, на телефоне во всю ширину */
 .cookie{position:fixed;left:24px;bottom:24px;z-index:60;max-width:420px;padding:18px 20px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px #0e1a2829;opacity:0;visibility:hidden;transform:translateY(16px);transition:opacity .3s,transform .3s,visibility .3s}
 .cookie.is-visible{opacity:1;visibility:visible;transform:none}
