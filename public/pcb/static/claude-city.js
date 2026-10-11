@@ -102,24 +102,33 @@
     hint.textContent = text || '';
     hint.className = 'city-hint' + (kind ? ' is-' + kind : '');
   }
-  function esc(s) { return s.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch])); }
-  function mark(name, q) {
+  // Список строим через DOM (без innerHTML): совпадение подсвечиваем элементом <mark>
+  function nameNode(name, q) {
+    const span = document.createElement('span'); span.className = 'city-name';
     const n = norm(name), i = q ? n.indexOf(q) : -1;
-    if (i < 0 || !q) return esc(name);
-    return esc(name.slice(0, i)) + '<mark>' + esc(name.slice(i, i + q.length)) + '</mark>' + esc(name.slice(i + q.length));
+    if (i < 0 || !q) { span.textContent = name; return span; }
+    const m = document.createElement('mark'); m.textContent = name.slice(i, i + q.length);
+    span.append(name.slice(0, i), m, name.slice(i + q.length));
+    return span;
   }
   function open(results, q) {
     items = results; active = results.length ? 0 : -1;
     if (!results.length) { close(); return; }
-    list.innerHTML = results.map((c, i) =>
-      `<li role="option" id="city-opt-${i}" class="city-opt${i === active ? ' is-active' : ''}" aria-selected="${i === active}" data-i="${i}">` +
-      `<span class="city-name">${mark(c.name, q)}</span><span class="city-region">${esc(c.region === FEDERAL ? 'город федерального значения' : c.region)}</span></li>`).join('');
+    list.replaceChildren(...results.map((c, i) => {
+      const li = document.createElement('li');
+      li.setAttribute('role', 'option'); li.id = 'city-opt-' + i; li.dataset.i = String(i);
+      li.className = 'city-opt' + (i === active ? ' is-active' : ''); li.setAttribute('aria-selected', String(i === active));
+      const reg = document.createElement('span'); reg.className = 'city-region';
+      reg.textContent = c.region === FEDERAL ? 'город федерального значения' : c.region;
+      li.append(nameNode(c.name, q), reg);
+      return li;
+    }));
     list.hidden = false;
     input.setAttribute('aria-expanded', 'true');
     input.setAttribute('aria-activedescendant', active >= 0 ? 'city-opt-' + active : '');
   }
   function close() {
-    list.hidden = true; list.innerHTML = ''; items = []; active = -1;
+    list.hidden = true; list.replaceChildren(); items = []; active = -1;
     input.setAttribute('aria-expanded', 'false');
     input.removeAttribute('aria-activedescendant');
   }
