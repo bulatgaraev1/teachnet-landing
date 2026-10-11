@@ -3,7 +3,7 @@
 Отдельное направление TEACHNET: выездные мастер-классы по пайке светящихся значков и значки с брендом компаний.
 Школьные страницы, `send.php` и дашборд `/dash` это направление **не трогает** — у него всё своё.
 ТЗ — **общее [`docs/pcb/tz-obshchee-2-lendinga.md`](pcb/tz-obshchee-2-lendinga.md)** (от 11.10.2026, заменяет `tz-claude-code.md` и `tz-pdf-1-1.md`);
-работа идёт этапами, по PR на этап. Записка для чата, который делает вёрстку, — [`docs/pcb/notes-for-design-chat.md`](pcb/notes-for-design-chat.md).
+работа идёт этапами, по PR на этап. Записка для чата Claude, который пишет ТЗ и делает вёрстку, — [`docs/pcb/notes-for-design-chat.md`](pcb/notes-for-design-chat.md).
 
 ## Адреса и файлы
 
