@@ -142,6 +142,22 @@ for (const city of ['казань', 'Казань', 'Хьюстон']) {
   else ok(r.city_fias_id === kazanFias, `«${city}» → тот же код ФИАС`, r.city_fias_id);
 }
 
+console.log('— калькуляторы (приёмка общего ТЗ) и независимые страницы');
+const est = async () => ((await p.locator('#estimate-value').textContent()) || '').replace(/\s/g, ' ');
+p = await open('/pcb/');
+ok((await est()) === '75 000 ₽', '100 значков M, ровный свет — 75 000 ₽', await est());
+await p.selectOption('#quantity', 'custom'); await p.fill('#custom-quantity', '2000');
+ok((await est()) === '≈ 815 000 ₽', '2000 значков M — ≈ 815 000 ₽', await est());
+await p.selectOption('#format', 'corporate'); await p.selectOption('#quantity', 'custom'); await p.fill('#custom-quantity', '250');
+ok((await est()) === '≈ 269 900 ₽' && /9 сеансов/.test(await p.textContent('#estimate-description')), 'мастер-класс на 250 — ≈ 269 900 ₽, 9 сеансов', await est());
+await p.selectOption('#format', 'stand');
+ok((await est()) === 'Индивидуальный расчёт', 'стенд — «Индивидуальный расчёт»', await est());
+ok(await p.locator('a[href^="/holiday"]').count() === 0, 'на «Компаниям» нет ссылок на «Праздники»');
+p = await open('/holiday/');
+await p.selectOption('#quantity', 'custom'); await p.fill('#custom-quantity', '12');
+ok((await est()) === '≈ 16 900 ₽', '12 детей — ≈ 16 900 ₽', await est());
+ok(await p.locator('a[href^="/pcb/"]:not([href^="/pcb/privacy"]):not([href^="/pcb/consent"])').count() === 0, 'на «Праздниках» нет ссылок на «Компаниям» (кроме документов)');
+
 console.log('— защита от спама (curl)');
 const RESP = join(TMP, 'resp.json');
 const curl = args => execSync(`curl -s -o ${RESP} -w "%{http_code}" ${args}`, { env: { ...process.env, NO_PROXY: '127.0.0.1,localhost' } }).toString();

@@ -18,7 +18,8 @@
   function quantityOptions() {
     const value = byId('format')?.value;
     const old = byId('quantity').value;
-    const options = value === 'corporate' ? [['20','20 участников'],['custom','Другое количество']] : value === 'stand' ? [['50','До 50 гостей'],['100','50–100 гостей'],['custom','Больше 100 гостей']] : [['100','100 значков'],['300','300 значков'],['custom','Другой тираж']];
+    const options = value === 'corporate' ? [['20','20 участников'],['30','30 участников'],['60','60 участников'],['custom','Другое количество']] : value === 'stand' ? [['50','До 50 гостей'],['100','50–100 гостей'],['custom','Больше 100 гостей']] : [['100','100 значков'],['300','300 значков'],['500','500 значков'],['1000','1000 значков'],['custom','Другой тираж']];
+    byId('custom-quantity').placeholder = value === 'corporate' ? 'Например, 250' : value === 'stand' ? 'Например, 400' : 'Например, 2000';
     byId('quantity').replaceChildren(...options.map(([value,label]) => new Option(label,value)));
     if(options.some(x => x[0] === old)) byId('quantity').value = old;
     byId('quantity-label').textContent = value === 'corporate' ? 'Количество участников' : value === 'stand' ? 'Ожидаемый поток гостей' : 'Тираж';
@@ -35,41 +36,60 @@
     let amount = null, description = '', label = '', detail = '';
     const city = byId('city').value.trim();
     const local = !city || city.toLowerCase() === 'казань';
+    const n = qty === 'custom' ? Math.round(Number(byId('custom-quantity').value) || 0) : Number(qty);
+    let approx = qty === 'custom';
     if (isBusiness) {
       const format = byId('format').value, design = byId('design').value;
-      label = format === 'merch' ? 'Готовый тираж значков' : format === 'stand' ? 'Зона пайки на стенде' : 'Корпоративный мастер-класс';
+      label = format === 'merch' ? 'Готовый тираж значков' : format === 'stand' ? 'Зона сборки на стенде' : 'Корпоративный мастер-класс';
       if(format === 'stand') {
         description = 'Посчитаем по часам работы зоны, потоку гостей и тиражу значков. Анкету гостей ведёт ваша команда — контакты сразу остаются у вас.';
-      } else if(qty !== 'custom' && design !== 'custom') {
-        if(format === 'merch') {
-          // Предварительная сетка цен: размер × тираж + надбавка за режим света (уточняется владельцем)
-          const RATES = {S:{100:550,300:450}, M:{100:600,300:500}, L:{100:800,300:650}};
-          const MODE_ADD = {static:{100:0,300:0}, blink:{100:100,300:80}, chase:{100:200,300:150}};
-          const MODE_LABEL = {blink:'мерцание', chase:'бегущий огонь'};
-          const units = Number(qty), size = byId('badge-size') ? byId('badge-size').value : 'M', mode = byId('light-mode') ? byId('light-mode').value : 'static';
-          const rate = RATES[size][units] + MODE_ADD[mode][units];
-          const prep = design === 'repeat' ? 0 : 15000;
-          amount = units * rate + prep;
-          detail = `${units} значков ${size}${mode !== 'static' ? ', '+MODE_LABEL[mode] : ''} × ${money(rate)}${prep ? ' + '+money(prep)+' подготовка дизайна' : ' · без повторной подготовки дизайна'}`;
+      } else if(design === 'custom') {
+        description = 'Новую форму или электронику посчитаем отдельно по макету.';
+      } else if(format === 'merch') {
+        // Предварительная сетка цен: размер × тираж + надбавка за режим света (уточняется владельцем)
+        const TIERS = [100, 300, 500, 1000];
+        const RATES = {S:[550,450,400,350], M:[600,500,450,400], L:[800,650,600,550]};
+        const MODE_ADD = {static:[0,0,0,0], blink:[100,80,70,60], chase:[200,150,130,120]};
+        const MODE_LABEL = {blink:'мерцание', chase:'бегущий огонь'};
+        const size = byId('badge-size') ? byId('badge-size').value : 'M', mode = byId('light-mode') ? byId('light-mode').value : 'static';
+        if(n >= 100 && n <= 5000) {
+          let t = 0; TIERS.forEach((v, i) => { if(n >= v) t = i; });
+          const rate = RATES[size][t] + MODE_ADD[mode][t], prep = design === 'repeat' ? 0 : 15000;
+          amount = n * rate + prep;
+          detail = `${n} значков ${size}${mode !== 'static' ? ', '+MODE_LABEL[mode] : ''} × ${money(rate)}${prep ? ' + '+money(prep)+' разработка платы под логотип' : ' · повтор без изменений'}`;
           description = detail + '. Доставка рассчитывается отдельно.';
-        } else {
-          amount = 24900 + (design === 'new' ? 15000 : 0);
-          detail = design === 'new' ? '24 900 ₽ программа + 15 000 ₽ простая адаптация бренда' : '24 900 ₽ программа с готовым дизайном TEACHNET';
-          description = detail + '. Один сеанс до 30 человек, 60–80 минут, один ведущий на пятерых.';
-        }
-      } else description = 'Подготовим индивидуальный расчёт по количеству, дизайну и условиям вашего заказа.';
+        } else description = n > 5000 ? 'Большой тираж посчитаем отдельно: цена за значок будет ниже.' : 'Тираж меньше 100 штук посчитаем отдельно.';
+      } else {
+        // Корпоративный мастер-класс: 24 900 ₽ за 20 участников, дальше примерно 1 000 ₽ за человека (предварительно)
+        if(n >= 1 && n <= 300) {
+          const program = Math.max(24900, Math.round((24900 + (n - 20) * 1000) / 1000) * 1000 - 100);
+          const sessions = Math.ceil(n / 30), brand = design === 'new' ? 15000 : 0;
+          amount = program + brand;
+          detail = `${money(program)} программа${brand ? ' + 15 000 ₽ разработка платы под логотип' : ' с готовым дизайном TEACHNET'}`;
+          description = detail + `. ${sessions === 1 ? 'Один сеанс' : sessions + ' ' + (sessions < 5 ? 'сеанса' : 'сеансов')} до 30 человек, по 60–80 минут, один ведущий на пятерых.`;
+        } else description = 'Большую группу посчитаем отдельно: сеансы можно развести по дням или запустить по кругу на событии.';
+      }
     } else {
       const program = byId('program').value;
       label = byId('program').selectedOptions[0].textContent;
-      if(program === 'pcb' && qty !== 'custom') {
-        amount = prices[qty];
-        const sessions = Math.ceil(Number(qty) / 30);
-        detail = `${qty} участников · ${sessions === 1 ? 'один сеанс 60–80 минут' : sessions+' сеанса подряд по 60–80 минут'}`;
+      if(program === 'pcb' && n >= 1 && n <= 120) {
+        // 10 — 14 900, 20 — 24 900, 40 — 39 900; между ними и дальше ориентир по участникам
+        const pts = [[10,14900],[20,24900],[40,39900]];
+        let v;
+        if(prices[n]) v = prices[n];
+        else if(n <= 10) v = 14900;
+        else if(n <= 20) v = 14900 + (n - 10) * 1000;
+        else if(n <= 40) v = 24900 + (n - 20) * 750;
+        else v = 39900 + (n - 40) * 950;
+        amount = prices[n] ? v : Math.round((v + 100) / 1000) * 1000 - 100;
+        approx = !prices[n];
+        const sessions = Math.ceil(n / 30);
+        detail = `${n} участников · ${sessions === 1 ? 'один сеанс 60–80 минут' : sessions+' сеанса подряд по 60–80 минут'}`;
         description = detail + '. Материалы, оборудование и работа ведущих включены.';
-      } else description = 'Подберём программу, длительность и стоимость по возрасту и составу группы.';
+      } else description = program === 'pcb' ? 'Большую группу посчитаем отдельно.' : 'Подберём программу, длительность и стоимость по возрасту и составу группы.';
     }
     if(!local && (!isBusiness || byId('format').value !== 'merch')) description += ' Поездка из Казани — отдельно.';
-    byId('estimate-value').textContent = amount === null ? 'Индивидуальный расчёт' : money(amount);
+    byId('estimate-value').textContent = amount === null ? 'Индивидуальный расчёт' : (approx ? '≈ ' : '') + money(amount);
     byId('estimate-value').classList.toggle('is-custom',amount === null);
     byId('estimate-description').textContent = description;
     byId('custom-quantity-field').hidden = qty !== 'custom';
@@ -260,6 +280,12 @@
     showBrief(res && res.status === 429
       ? 'С вашего адреса уже ушло несколько заявок подряд. Отправьте эту письмом или в Telegram — текст уже готов.'
       : 'Отправьте её письмом или в Telegram — текст уже готов.');
+  });
+  const tgBrief = byId('tg-brief');
+  tgBrief?.addEventListener('click', () => {
+    navigator.clipboard?.writeText(byId('brief-text').textContent).then(
+      () => { byId('copy-status').textContent = 'Текст скопирован. Вставьте его в чат TEACHNET и отправьте.'; },
+      () => { byId('copy-status').textContent = 'Скопируйте текст выше и отправьте его в чат TEACHNET.'; });
   });
   byId('copy-brief').addEventListener('click',async () => {
     try {

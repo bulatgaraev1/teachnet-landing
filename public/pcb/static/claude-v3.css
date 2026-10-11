@@ -254,3 +254,17 @@
 .size-price{margin-top:auto;padding-top:4px;font-size:13px;color:var(--muted)}
 .size-price b{font:650 22px/1 'Onest',sans-serif;color:var(--ink);letter-spacing:-.02em}
 .compact-offer .pricing-table td small{margin-top:4px}
+
+/* Примерка: подсказка размеров и «ещё настройки» */
+.tryon-hint{flex-basis:100%;font-size:11px;line-height:1.4;color:var(--muted);margin-top:2px}
+.tryon-more{border-top:1px solid var(--line)}
+.tryon-more>summary{list-style:none;cursor:pointer;padding:14px 0;font-size:10px;font-weight:650;letter-spacing:.13em;text-transform:uppercase;color:var(--brand);display:flex;justify-content:space-between;align-items:center}
+.tryon-more>summary::-webkit-details-marker{display:none}
+.tryon-more>summary:after{content:'+';font-size:18px;letter-spacing:0;color:var(--brand)}
+.tryon-more[open]>summary:after{content:'–'}
+.tryon-more>.tryon-row:first-of-type{border-top:0}
+/* Таблица цен: подпись размера */
+.compact-offer .pricing-table th small{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:2px}
+@media(max-width:600px){.compact-offer .pricing-table td strong{font-size:17px}.compact-offer .pricing-table th,.compact-offer .pricing-table td{padding:13px 8px}}
+/* Первый экран компаний: заголовок в 3 строки */
+.hero-business .hero-copy h1{font-size:clamp(38px,4.1vw,58px)!important;max-width:none}
