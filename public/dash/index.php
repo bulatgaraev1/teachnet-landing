@@ -130,7 +130,9 @@ if (!dash_logged_in()) {
 }
 
 $csrf = (string) $_SESSION['csrf'];
-page_head('TEACHNET · аналитика продаж', $csrf);
+// вкладка: школа (по умолчанию) или «Значки и мастер-классы» (/dash/?view=pcb) — тот же вход и адрес
+$view = dash_param($_GET, 'view') === 'pcb' ? 'pcb' : 'school';
+page_head($view === 'pcb' ? 'TEACHNET · значки и мастер-классы' : 'TEACHNET · аналитика продаж', $csrf);
 /** Каркас блока: заголовок-вопрос, строка «как читать», место под данные. */
 function block(string $id, string $title, string $how, string $tools = '', int $h = 180): void {
     ?>
@@ -151,6 +153,10 @@ function block(string $id, string $title, string $how, string $tools = '', int $
   <div class="wrap">
     <img src="/images/logo-dark.svg" width="104" height="33" alt="TEACHNET">
     <h1>Аналитика продаж</h1>
+    <nav class="tabs" aria-label="Направления">
+      <a href="./"<?= $view === 'school' ? ' aria-current="page"' : '' ?>>Школа</a>
+      <a href="./?view=pcb"<?= $view === 'pcb' ? ' aria-current="page"' : '' ?>>Значки и мастер-классы</a>
+    </nav>
     <span class="top__stamp" id="stamp" aria-live="polite">Загружаем данные…</span>
     <button class="btn btn--ghost btn--small" id="refresh" type="button" title="Заново получить данные из Метрики (не чаще раза в минуту)">Обновить</button>
     <form method="post" action="./" style="margin:0">
@@ -161,6 +167,43 @@ function block(string $id, string $title, string $how, string $tools = '', int $
   </div>
 </header>
 
+<?php if ($view === 'pcb'): ?>
+<div class="filters" role="region" aria-label="Фильтры: действуют на все блоки">
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="Период" id="f-period">
+      <button type="button" data-period="today">Сегодня</button>
+      <button type="button" data-period="7">7 дней</button>
+      <button type="button" data-period="30">30 дней</button>
+      <button type="button" data-period="90">90 дней</button>
+      <button type="button" data-period="custom" aria-controls="f-range">Свой период</button>
+    </div>
+    <div class="custom-range" id="f-range">
+      <label class="sr-only" for="f-from">С даты</label><input class="field" type="date" id="f-from">
+      <span class="muted">—</span>
+      <label class="sr-only" for="f-to">По дату</label><input class="field" type="date" id="f-to">
+      <button class="btn btn--small" type="button" id="f-apply">Показать</button>
+    </div>
+    <label class="switch"><input type="checkbox" id="f-compare" checked> Сравнить с прошлым периодом</label>
+  </div>
+</div>
+
+<main class="dash wrap" id="dash">
+<?php
+block('pcb_summary', 'Как идут заявки?', 'Заявки со страниц /holiday/ и /pcb/ за период: сколько, какие форматы, откуда и из каких городов. Стрелка — изменение к прошлому такому же периоду.', '', 220);
+block('pcb_leads', 'Что с заявками?', 'Рабочая таблица направления: отмечайте статус, сумму сделки и заметку. Телефон или Telegram — по клику на маску.', '', 360);
+block('pcb_metrika', 'Что говорит Метрика?', 'Визиты и цели счётчика направления: заявка, загрузка логотипа в примерку, скачивание картинки и «Обсудить этот значок».', '', 160);
+?>
+  <footer class="foot">Заявки — из базы сайта, сразу. Метрика направления обновляется раз в час, кнопка «Обновить» — не чаще раза в минуту. Время — московское.</footer>
+</main>
+<div class="tip" id="tip" role="status" hidden></div>
+<script src="<?= h(asset('charts.js')) ?>" defer></script>
+<script src="<?= h(asset('pcb.js')) ?>" defer></script>
+</body>
+</html>
+<?php
+    exit;
+endif;
+?>
 <div class="filters" role="region" aria-label="Фильтры: действуют на все блоки">
   <div class="wrap">
     <div class="seg" role="group" aria-label="Период" id="f-period">

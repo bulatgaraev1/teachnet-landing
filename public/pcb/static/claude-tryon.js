@@ -607,6 +607,17 @@
     }, 'image/png');
   });
 
+  // Для заявки: параметры примерки (форма, цвета, свет, текст и QR оборота) уходят с заявкой; сам файл логотипа — нет
+  let touched = false;
+  const controls = document.querySelector('.tryon-controls');
+  if (controls) ['input', 'change'].forEach(t => controls.addEventListener(t, () => { touched = true; }));
+  $('tryon-discuss').addEventListener('click', () => { touched = true; });
+  window.teachnetTryon = {
+    used: () => touched || state.user,
+    summary: () => ({ shape: state.shape, board: state.board, ink: state.ink, light: state.light, logo: state.user,
+      back_text: state.backText.trim(), qr: state.qr.trim(), text: summary(true) })
+  };
+
   updatePill();
   if (brand) brand.addEventListener('input', demo);
   demo();

@@ -5,6 +5,7 @@
  *   POST api.php?action=refresh | phone | lead_update | lead_add | spend_add | spend_update | spend_delete
  *        (заголовок X-CSRF-Token) — изменения
  * Метрика (счётчик из dash_config.php) + таблица leads (доступ из send_config.php).
+ * Вкладка «Значки и мастер-классы» (/dash/?view=pcb): блоки pcb_*, действия pcb_contact / pcb_update — см. pcb.php.
  */
 declare(strict_types=1);
 
@@ -17,6 +18,7 @@ ob_start();
 require __DIR__ . '/lib.php';
 require __DIR__ . '/report.php';
 require __DIR__ . '/crm.php';
+require __DIR__ . '/pcb.php';
 
 dash_headers();
 header('Content-Type: application/json; charset=utf-8');
@@ -61,6 +63,16 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         $ok = dash_clear_cache();
         out(200, ['ok' => $ok, 'message' => $ok ? 'Данные обновлены' : 'Обновлять можно не чаще раза в минуту']);
     }
+    if ($action === 'pcb_contact' || $action === 'pcb_update') {
+        try {
+            out(200, pcb_dash_action($action, $sendCfg, $sendError, $_POST));
+        } catch (DashError $e) {
+            out(422, ['error' => $e->getMessage()]);
+        } catch (Throwable $e) {
+            error_log('TeachNet dash: действие ' . $action . ' — ' . $e->getMessage());
+            out(500, ['error' => 'Не удалось сохранить. Подробности — в логе сервера.']);
+        }
+    }
     $handlers = ['phone' => 'crm_phone', 'lead_update' => 'crm_lead_update', 'lead_add' => 'crm_lead_add',
         'spend_add' => 'crm_spend_add', 'spend_update' => 'crm_spend_update', 'spend_delete' => 'crm_spend_delete'];
     if (!isset($handlers[$action])) {
@@ -88,6 +100,11 @@ session_write_close(); // дальше сессия не нужна — не б�
 $block = dash_param($_GET, 'block');
 $report = new DashReport($cfg, $sendCfg, $_GET, $sendError);
 try {
+    if (strpos($block, 'pcb_') === 0) {
+        $data = pcb_dash_block($block, $report, $cfg, $sendCfg, $sendError, $_GET);
+        $data['fetched_at'] = $data['fetched_at'] ?? null;
+        out(200, $data);
+    }
     switch ($block) {
         case 'insights':
             $data = $report->blockInsights();

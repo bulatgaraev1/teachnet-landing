@@ -141,7 +141,13 @@
     if (!v) { setChosen(null); showHint(''); return; }
     if (input.dataset.fias && byFias.get(input.dataset.fias)?.name === v) return;
     const q = norm(v), alias = ALIASES[q];
-    const exact = alias ? cities.filter(c => c.name === alias) : BOOST[q] ? [find(BOOST[q]), ...cities.filter(c => c.n === q)] : cities.filter(c => c.n === q);
+    let exact = alias ? cities.filter(c => c.name === alias) : BOOST[q] ? [find(BOOST[q]), ...cities.filter(c => c.n === q)] : cities.filter(c => c.n === q);
+    // латиница и английская раскладка: «Kazan», «rfpfym» → тот же город, если совпадение однозначное
+    // (у транслита нет мягкого знака: «kazan» → «казан», поэтому пробуем и с ним)
+    if (!exact.length && /[a-z]/i.test(v)) {
+      const t = norm(translit(v)), keys = new Set([t, t + 'ь', norm(layout(v))]);
+      exact = cities.filter(c => keys.has(c.n));
+    }
     if (exact.length === 1) { setChosen(exact[0]); input.dispatchEvent(new Event('input', { bubbles: true })); return; }
     setChosen(null);
     if (exact.length > 1) { input.dataset.free = '1'; showHint('Городов с таким названием несколько, выберите регион из списка.', 'warn'); return; }
