@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 700" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Дизайн светящихся значков из печатных плат</title>
+  <desc id="desc">Иллюстрация трёх значков: тёмно-синего робота с двумя светодиодами, синей молнии и круглого фирменного значка.</desc>
+  <defs>
+    <linearGradient id="green" x1="172" y1="161" x2="519" y2="540" gradientUnits="userSpaceOnUse"><stop stop-color="#316397"/><stop offset=".48" stop-color="#183B67"/><stop offset="1" stop-color="#0E1A28"/></linearGradient>
+    <linearGradient id="gold" x1="125" y1="198" x2="532" y2="478" gradientUnits="userSpaceOnUse"><stop stop-color="#f2d792"/><stop offset=".5" stop-color="#af873f"/><stop offset="1" stop-color="#dcc488"/></linearGradient>
+    <linearGradient id="orange" x1="557" y1="359" x2="709" y2="590" gradientUnits="userSpaceOnUse"><stop stop-color="#377EE9"/><stop offset=".48" stop-color="#1055CB"/><stop offset="1" stop-color="#153C80"/></linearGradient>
+    <linearGradient id="purple" x1="565" y1="97" x2="729" y2="278" gradientUnits="userSpaceOnUse"><stop stop-color="#F5F8FC"/><stop offset="1" stop-color="#A7BADA"/></linearGradient>
+    <radialGradient id="light"><stop stop-color="#fffef0" stop-opacity=".98"/><stop offset=".25" stop-color="#ffe690" stop-opacity=".55"/><stop offset="1" stop-color="#ffe781" stop-opacity="0"/></radialGradient>
+    <linearGradient id="metal"><stop stop-color="#F5F8FC"/><stop offset=".3" stop-color="#8896A6"/><stop offset=".55" stop-color="#E6EEF8"/><stop offset="1" stop-color="#7F8D9B"/></linearGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="210%"><feDropShadow dx="5" dy="30" stdDeviation="22" flood-color="#18222F" flood-opacity=".2"/><feDropShadow dx="2" dy="5" stdDeviation="2" flood-color="#18222F" flood-opacity=".24"/></filter>
+    <filter id="softShadow" x="-40%" y="-40%" width="180%" height="190%"><feDropShadow dx="3" dy="18" stdDeviation="14" flood-color="#18222F" flood-opacity=".17"/></filter>
+    <filter id="ledGlow" x="-250%" y="-250%" width="600%" height="600%"><feGaussianBlur stdDeviation="8"/></filter>
+    <g id="resistor"><rect x="-21" y="-9" width="42" height="18" rx="3" fill="#0E1A28" fill-opacity=".7"/><rect x="-18" y="-8" width="36" height="14" rx="2" fill="url(#metal)"/><rect x="-10" y="-8" width="20" height="14" rx="1" fill="#18222F"/><text x="0" y="2" text-anchor="middle" fill="#e1ded0" font-family="Arial,sans-serif" font-size="6">221</text></g>
+    <g id="capacitor"><rect x="-14" y="-7" width="28" height="14" rx="2" fill="url(#metal)"/><rect x="-8" y="-7" width="16" height="14" fill="#bd9876"/><path d="M-7-6H6" stroke="#e5c5a5" stroke-width="2"/></g>
+    <g id="hole"><circle r="8" fill="url(#gold)"/><circle r="4.7" fill="#0E1A28"/><path d="M-3 2A4 4 0 0 0 4-1" stroke="#6A83A1" stroke-width="1.5"/></g>
+    <g id="led"><rect x="-18" y="-15" width="36" height="30" rx="3" fill="#0E1A28"/><path d="M-22-6H22V6H-22Z" fill="url(#metal)"/><rect x="-15" y="-14" width="30" height="25" rx="3" fill="#d9c675"/><rect x="-12" y="-12" width="24" height="21" rx="2" fill="#fff4ad"/><rect x="-7" y="-7" width="14" height="12" rx="1" fill="#fffef2"/><rect x="-12" y="-12" width="24" height="21" fill="#ffe587" filter="url(#ledGlow)"/></g>
+  </defs>
+  <!-- The separate pale-blue badge carries a fictional sample mark. -->
+  <g transform="rotate(14 658 188)" filter="url(#softShadow)">
+    <circle cx="658" cy="191" r="108" fill="#6E86A9"/>
+    <circle cx="658" cy="184" r="108" fill="url(#purple)" stroke="#F5F8FC" stroke-width="2"/>
+    <circle cx="658" cy="184" r="95" stroke="#6E86A9" stroke-width="1.3"/>
+    <g stroke="#316397" stroke-width="2" stroke-linecap="round"><path d="M577 174H602V152H616M735 174H714V152H700M581 213H606V236H626M734 213H709V236H690"/><circle cx="617" cy="152" r="3"/><circle cx="699" cy="152" r="3"/><circle cx="626" cy="236" r="3"/><circle cx="690" cy="236" r="3"/></g>
+    <circle cx="658" cy="109" r="5" fill="#eadcb8"/><circle cx="658" cy="109" r="2.5" fill="#6E86A9"/>
+    <text x="658" y="178" text-anchor="middle" fill="#18222F" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="800" letter-spacing=".5">СОБРАЛ</text>
+    <text x="658" y="207" text-anchor="middle" fill="#18222F" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="800" letter-spacing=".5">САМ</text>
+    <g transform="translate(658 254) scale(.63)"><use href="#led"/></g>
+  </g>
+  <!-- Main robot: board edge, gold pads, routed traces and visible SMD parts. -->
+  <g transform="rotate(-12 333 355)" filter="url(#shadow)">
+    <path d="M317 152H357V195H457Q490 195 490 228V255H518Q535 255 535 272V382Q535 399 518 399H490V457Q490 490 457 490H217Q184 490 184 457V399H156Q139 399 139 382V272Q139 255 156 255H184V228Q184 195 217 195H317Z" transform="translate(0 9)" fill="#0E1A28" stroke="#ac935b" stroke-width="2"/>
+    <path d="M317 152H357V195H457Q490 195 490 228V255H518Q535 255 535 272V382Q535 399 518 399H490V457Q490 490 457 490H217Q184 490 184 457V399H156Q139 399 139 382V272Q139 255 156 255H184V228Q184 195 217 195H317Z" fill="url(#green)" stroke="#6A83A1" stroke-width="2"/>
+    <path d="M326 162H348V206H454Q479 206 479 231V267H517Q524 267 524 276V379Q524 388 515 388H479V454Q479 479 454 479H220Q195 479 195 454V388H158Q150 388 150 379V276Q150 267 158 267H195V231Q195 206 220 206H326Z" stroke="#7997BC" stroke-opacity=".42" stroke-width="1.3"/>
+    <g stroke="url(#gold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M337 166V237H302L280 259V281M280 317V338L252 366H222V432H263"/>
+      <path d="M337 238H373L402 267V281M402 317V338L430 366H451V432H412"/>
+      <path d="M166 286H211L239 314V351L218 372V460H282V432"/>
+      <path d="M508 285H462L445 302V346L462 364V460H394V432"/>
+      <path d="M162 367H179L206 340V242H254M512 367H500L468 335V242H421"/>
+      <path d="M280 366V352H304L320 368V390M402 366V352H372L356 368V390"/>
+      <path d="M298 456H320V427M378 456H356V427M337 421V462"/>
+    </g>
+    <g fill="#c3a56e"><circle cx="254" cy="242" r="3.3"/><circle cx="421" cy="242" r="3.3"/><circle cx="337" cy="462" r="3.3"/><circle cx="298" cy="456" r="3.3"/><circle cx="378" cy="456" r="3.3"/></g>
+    <g opacity=".65" stroke="#B9CBE2" stroke-width="1.5"><path d="M250 278V267H309V278M371 278V267H429V278M249 326V334H309V326M371 326V334H429V326"/><path d="M256 354H306V378H256ZM377 354H427V378H377Z"/><path d="M310 383H365V432H310Z"/></g>
+    <g fill="#B9CBE2" font-family="Arial,Helvetica,sans-serif" font-size="8" letter-spacing="1"><text x="278" y="260">D1</text><text x="400" y="260">D2</text><text x="258" y="390">R1</text><text x="405" y="390">R2</text><text x="307" y="449">Q1</text><text x="227" y="227">01 / LIGHT BOT</text><text x="420" y="470">3V</text></g>
+    <use href="#hole" x="220" y="252"/><use href="#hole" x="453" y="252"/><use href="#hole" x="220" y="451"/><use href="#hole" x="452" y="451"/>
+    <circle cx="280" cy="300" r="64" fill="url(#light)"/>
+    <circle cx="402" cy="300" r="64" fill="url(#light)"/>
+    <use href="#led" x="280" y="300"/><use href="#led" x="402" y="300"/>
+    <use href="#resistor" x="280" y="366"/><use href="#resistor" x="402" y="366"/>
+    <g transform="translate(337 408)"><path d="M-14-15V-25M14-15V-25M0 15V27" stroke="url(#metal)" stroke-width="9"/><rect x="-22" y="-18" width="44" height="34" rx="3" fill="#0E1A28"/><path d="M-19-15H19V-9H-19Z" fill="#2A3F58"/><text x="0" y="4" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" fill="#9BAFC8" font-size="7">J3Y</text></g>
+    <g transform="translate(166 328) rotate(90)"><use href="#capacitor"/></g><g transform="translate(508 328) rotate(90)"><use href="#capacitor"/></g>
+    <path d="M286 416V431H306M368 431H389V416" stroke="#E6EEF8" stroke-width="5" stroke-linecap="square"/>
+    <circle cx="337" cy="164" r="5" fill="#E6EEF8"/>
+  </g>
+  <!-- A second, sculpted lightning-shaped PCB pin. -->
+  <g transform="rotate(17 626 471)" filter="url(#softShadow)">
+    <path d="M613 325H711L665 422H728L571 603L599 486H544Z" transform="translate(0 7)" fill="#153C80" stroke="#A7BADA" stroke-width="1.5"/>
+    <path d="M613 325H711L665 422H728L571 603L599 486H544Z" fill="url(#orange)" stroke="#85AFF2" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M621 338H691L644 434H700L598 550L615 472H565Z" stroke="#A7C7F5" stroke-opacity=".6" stroke-width="1.5"/>
+    <g stroke="#D9A441" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M649 345V375L626 399V429M621 453L606 470V493M636 457H675L648 488H626L610 509"/><path d="M617 365L597 417V451H575M670 364L648 403V422H672"/></g>
+    <circle cx="649" cy="345" r="4" fill="#E4C984"/><circle cx="649" cy="345" r="2" fill="#163663"/>
+    <g transform="translate(622 443) scale(.85)"><use href="#led"/></g>
+    <g transform="translate(650 488) rotate(-48) scale(.7)"><use href="#resistor"/></g>
+    <text x="609" y="388" fill="#E6EEF8" font-family="Arial,Helvetica,sans-serif" font-size="8" font-weight="700" transform="rotate(-66 609 388)">SPARK / 02</text>
+    <circle cx="588" cy="563" r="4" fill="#E4C984"/><circle cx="588" cy="563" r="2" fill="#163663"/>
+  </g>
+</svg>

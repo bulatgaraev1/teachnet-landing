@@ -1,0 +1,234 @@
+/* Дополнения Claude к версии 02-hybrid. Общие styles.css и business-v2.css не менялись. */
+
+/* Пять станций вместо четырёх шагов */
+.steps.steps-5{grid-template-columns:repeat(5,1fr);gap:26px}
+.step-tag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--tint);color:var(--brand);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;vertical-align:1px}
+.step-repair{border-top-color:var(--gold)}
+.step-repair .step-number{color:#9a6b12}
+
+/* Безопасность */
+.safety-band .copy .lead{font-size:18px}
+.safety-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.safety-item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 22px 20px}
+.safety-item svg{display:block;width:26px;height:26px;margin-bottom:14px;color:var(--blue)}
+.safety-item h3{font-size:18px;margin-bottom:6px}
+.safety-item p{font-size:13px;color:var(--muted);line-height:1.6}
+.safety-note{margin-top:16px;font-size:13px;color:var(--muted)}
+.safety-note strong{color:var(--ink);font-weight:600}
+
+/* Галерея */
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:210px;grid-auto-flow:dense;gap:14px}
+.gallery-item{position:relative;margin:0;border-radius:20px;overflow:hidden;background:var(--tint)}
+.gallery-item.is-wide{grid-column:span 2}
+.gallery-item.is-tall{grid-row:span 2}
+.gallery-item img{width:100%;height:100%;object-fit:cover}
+.gallery-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1.5px dashed #b8c8dc;border-radius:20px;color:var(--muted);background:repeating-linear-gradient(135deg,#e9f0f9 0 14px,#e3ebf6 14px 28px)}
+.gallery-ph svg{width:30px;height:30px;color:var(--brand)}
+.gallery-ph span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--brand)}
+.gallery-item figcaption{position:absolute;left:14px;right:14px;bottom:14px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.92);font-size:13px;line-height:1.4;color:var(--ink)}
+.gallery-foot{margin-top:16px;font-size:12px;color:var(--muted)}
+
+/* Площадки лета */
+.experience-inner.has-3{grid-template-columns:1.4fr repeat(3,.6fr)}
+.venues{margin-top:30px;padding-top:24px;border-top:1px solid #31639724;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.venues-title{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);margin-right:8px}
+.venue{display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:13px;font-weight:500}
+.venues-note{width:100%;font-size:12px;color:var(--muted);margin-top:4px}
+
+/* Компании: блоки по отделам */
+.teams-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.team-card{display:flex;flex-direction:column;gap:12px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:26px 24px 24px}
+.team-card .eyebrow{margin-bottom:0}
+.team-card h3{font-size:21px;line-height:1.2}
+.team-card>p{font-size:14px;color:var(--muted);line-height:1.6}
+.team-card ul{margin:2px 0 0;padding-left:18px;font-size:13px;color:var(--ink);line-height:1.55;flex-grow:1}
+.team-card li+li{margin-top:6px}
+.team-card .text-link{margin-top:6px;align-self:flex-start}
+.team-card.is-featured{background:var(--night);border-color:var(--night);color:#fff}
+.team-card.is-featured .eyebrow{color:var(--soft)}
+.team-card.is-featured>p{color:#bac9dc}
+.team-card.is-featured ul{color:#e6eef8}
+.team-card.is-featured .text-link{color:#fff}
+
+/* Компании: зона пайки на стенде */
+.stand-section{background:var(--night);color:#fff}
+.stand-section .eyebrow{color:var(--soft)}
+.stand-section h2{color:#fff}
+.stand-section .lead{color:#d2deec;font-size:18px;margin-top:22px;max-width:560px}
+.stand-section .copy>p:not(.eyebrow){color:#bac9dc}
+.stand-flow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stand-step{background:#152538;border:1px solid #2b3d55;border-radius:18px;padding:20px}
+.stand-step b{display:block;font:600 12px/1 var(--font);letter-spacing:.1em;color:var(--gold);margin-bottom:12px}
+.stand-step h3{font-size:18px;color:#fff;margin-bottom:6px}
+.stand-step p{font-size:13px;color:#bac9dc;line-height:1.6}
+.stand-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.stand-meta .tag{background:transparent;border-color:#3a4c63;color:#e6eef8}
+.stand-section .actions{margin-top:28px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.stand-section .stand-price{font-size:13px;color:#bac9dc}
+.stand-section .stand-price strong{color:#fff;font-weight:600}
+
+/* Компании: витрина форм */
+.forms-section{background:var(--night);color:#fff}
+.forms-section .eyebrow{color:var(--soft)}
+.forms-section h2{color:#fff}
+.forms-section h2 span{color:var(--soft)}
+.forms-section .section-head>p{color:#bac9dc}
+.forms-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:250px;grid-auto-flow:dense;gap:14px}
+.form-tile{position:relative;margin:0;min-width:0;border-radius:22px;overflow:hidden;background:radial-gradient(120% 90% at 50% 35%,#1d3350 0,#132438 55%,#0f1d2e 100%);border:1px solid #23364f}
+.form-tile.is-wide{grid-column:span 2}
+.form-tile.is-tall{grid-row:span 2}
+.form-tile img{position:absolute;top:14px;left:14px;width:calc(100% - 28px);height:calc(100% - 86px);object-fit:contain;transition:transform .5s ease}
+.form-tile:hover img{transform:scale(1.03)}
+.form-tile figcaption{position:absolute;left:20px;right:20px;bottom:18px;display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.form-tile figcaption span{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.form-tile figcaption strong{font:600 16px/1.25 'Onest',sans-serif;color:#fff}
+.form-tile.is-photo{background:repeating-linear-gradient(135deg,#132438 0 14px,#16293f 14px 28px);border-style:dashed;border-color:#34496a}
+.form-ph{position:absolute;inset:0 0 72px;display:flex;align-items:center;justify-content:center;color:var(--soft)}
+.form-ph svg{width:32px;height:32px}
+.forms-options{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;margin-top:26px;background:#2b3d55;border-top:1px solid #2b3d55;border-bottom:1px solid #2b3d55}
+.forms-options>div{background:var(--night);padding:18px 18px 18px 20px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.forms-options>div:first-child{padding-left:0}
+.forms-options b{font:600 14px/1.3 'Onest',sans-serif;color:#fff}
+.forms-options span{font-size:13px;color:#bac9dc;line-height:1.45}
+.forms-note{margin-top:16px;font-size:12px;color:#8fa3bd}
+@media(prefers-reduced-motion:reduce){.form-tile img{transition:none}.form-tile:hover img{transform:none}}
+@media(max-width:1100px){
+  .forms-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:240px}
+  .forms-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .forms-options>div{padding:16px 16px 16px 18px}
+  .forms-options>div:nth-child(odd){padding-left:0}
+  .forms-options>div:last-child:nth-child(odd){grid-column:1/-1}
+}
+@media(max-width:600px){
+  .forms-grid{grid-auto-rows:180px;gap:10px}
+  .form-tile{border-radius:18px}
+  .form-tile img{top:10px;left:10px;width:calc(100% - 20px);height:calc(100% - 74px)}
+  .form-tile figcaption{left:14px;right:14px;bottom:14px;gap:3px}
+  .form-tile figcaption span{font-size:9px;letter-spacing:.12em}
+  .form-tile figcaption strong{font-size:14px}
+  .form-ph{bottom:60px}
+  .forms-options>div{padding:14px 12px 14px 14px}
+  .forms-options>div:nth-child(odd){padding-left:0}
+}
+
+@media(max-width:1100px){
+  .steps.steps-5{grid-template-columns:repeat(3,1fr)}
+  .teams-grid{grid-template-columns:repeat(2,1fr)}
+  .experience-inner.has-3{grid-template-columns:1fr repeat(3,.55fr)}
+}
+@media(max-width:800px){
+  .steps.steps-5{grid-template-columns:repeat(2,1fr)}
+  .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px}
+  .safety-grid{grid-template-columns:1fr 1fr}
+  .stand-flow{grid-template-columns:1fr}
+  .experience-inner.has-3{grid-template-columns:1fr 1fr 1fr}
+  .experience-inner.has-3 .experience-copy{grid-column:1/-1}
+}
+@media(max-width:600px){
+  .steps.steps-5{grid-template-columns:1fr 1fr;gap:26px 20px}
+  .safety-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .safety-item{padding:16px 14px}
+  .safety-item svg{margin-bottom:10px}
+  .safety-item h3{font-size:16px}
+  .safety-item p{font-size:12px}
+  .teams-grid{grid-template-columns:1fr}
+  .gallery{grid-auto-rows:150px;gap:10px}
+  .gallery-item figcaption{left:8px;right:8px;bottom:8px;font-size:11px;padding:7px 9px}
+  .experience-inner.has-3{grid-template-columns:1fr 1fr}
+  .experience-inner.has-3 .stat strong{font-size:48px}
+  .venue{font-size:12px;min-height:32px}
+}
+
+/* Компании: ссылка из витрины на примерку */
+.forms-foot{display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap;margin-top:16px}
+.forms-foot .forms-note{margin-top:0}
+.forms-try{display:inline-flex;gap:10px;font-size:14px;font-weight:600;color:#fff;border-bottom:1px solid #ffffff55;padding-bottom:3px;white-space:nowrap}
+.forms-try:hover{border-color:#fff}
+
+/* Компании: примерка логотипа */
+.tryon-section{background:#fff;border-bottom:1px solid var(--line)}
+.tryon-layout{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);grid-template-areas:"stage head" "stage controls";column-gap:64px;align-items:start}
+.tryon-head{grid-area:head}
+.tryon-head h2 span{color:var(--brand)}
+.tryon-lead{margin-top:18px;max-width:440px;color:var(--muted);font-size:15px}
+.tryon-stage{grid-area:stage;position:sticky;top:100px;aspect-ratio:1/1;border-radius:28px;overflow:hidden;background:#0f1d2e;box-shadow:0 30px 60px -30px #0e1a2866}
+.tryon-stage canvas{display:block;width:100%;height:100%;outline:none}
+.tryon-stage canvas:focus-visible{box-shadow:inset 0 0 0 3px var(--gold)}
+.tryon-stage.is-editable canvas{cursor:grab;touch-action:none}
+.tryon-stage.is-dragging canvas{cursor:grabbing}
+.tryon-pill{position:absolute;left:18px;bottom:18px;margin:0;padding:7px 13px;border-radius:999px;background:#0e1a28b3;border:1px solid #2b3d55;color:#e6eef8;font-size:12px;line-height:1.4;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);pointer-events:none}
+.tryon-drop{position:absolute;inset:14px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--gold);border-radius:20px;background:#0e1a28c7;color:#fff;font:600 18px/1.3 'Onest',sans-serif;pointer-events:none}
+.tryon-controls{grid-area:controls;margin-top:30px}
+.tryon-upload{display:flex;align-items:center;gap:16px;padding:18px 20px;border:1.5px dashed #b8c8dc;border-radius:18px;background:var(--paper);cursor:pointer;transition:border-color .18s,background .18s}
+.tryon-upload:hover,.tryon-upload.is-over{border-color:var(--blue);background:var(--tint)}
+.tryon-controls:has(#tryon-file:focus-visible) .tryon-upload{outline:3px solid var(--gold);outline-offset:4px}
+.tryon-upload svg{flex:none;width:30px;height:30px;color:var(--blue)}
+.tryon-upload b{display:block;font:600 16px/1.3 'Onest',sans-serif;color:var(--ink)}
+.tryon-upload small{display:block;margin-top:3px;font-size:12px;line-height:1.5;color:var(--muted)}
+.tryon-sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.tryon-status{min-height:20px;margin:10px 0 6px;font-size:12px;line-height:1.5;color:var(--brand)}
+.tryon-status.is-error{color:#B42318}
+.tryon-row{display:grid;grid-template-columns:92px minmax(0,1fr);align-items:center;gap:14px;padding:13px 0;border-top:1px solid var(--line)}
+.tryon-label{font-size:10px;font-weight:650;letter-spacing:.13em;text-transform:uppercase;color:var(--brand)}
+.tryon-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.chip span{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 14px;border:1px solid #D7E1EE;border-radius:999px;background:#fff;font-size:13px;font-weight:550;cursor:pointer;transition:background .15s,border-color .15s,color .15s;user-select:none}
+.chip span:hover{border-color:#a9bdd6}
+.chip i{width:13px;height:13px;border-radius:50%;box-shadow:inset 0 0 0 1px #0e1a2826;flex:none}
+.chip input:checked+span{background:var(--night);border-color:var(--night);color:#fff}
+.chip input:checked+span i{box-shadow:inset 0 0 0 1px #ffffff40}
+.chip input:focus-visible+span{outline:3px solid var(--gold);outline-offset:3px}
+.chip input:disabled+span{opacity:.38;cursor:not-allowed}
+.tryon-size{display:flex;align-items:center;gap:14px}
+.tryon-size input{flex:1;min-width:0;accent-color:var(--blue);height:28px}
+.tryon-center{flex:none;border:0;background:none;padding:2px 0;font-size:13px;font-weight:550;color:var(--blue);text-decoration:underline;text-decoration-color:#1055cb4d;text-underline-offset:4px}
+.tryon-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.tryon-safe{display:flex;gap:12px;align-items:flex-start;margin-top:22px;font-size:12px;line-height:1.6;color:var(--muted);max-width:480px}
+.tryon-safe svg{flex:none;width:18px;height:18px;margin-top:1px;color:var(--brand)}
+.tryon-safe strong{color:var(--ink);font-weight:600}
+@media(max-width:1000px){
+  .tryon-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:36px}
+  .tryon-row{grid-template-columns:1fr;gap:9px;padding:12px 0}
+}
+@media(max-width:800px){
+  .tryon-layout{grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "stage" "controls"}
+  .tryon-stage{position:relative;top:auto;margin-top:26px;max-width:560px;width:100%;justify-self:center;border-radius:22px}
+  .forms-foot{flex-direction:column;align-items:flex-start;gap:14px}
+}
+@media(max-width:600px){
+  .tryon-lead{font-size:14px}
+  .tryon-pill{left:12px;bottom:12px;font-size:11px;padding:6px 11px}
+  .tryon-row{grid-template-columns:1fr;gap:9px;padding:12px 0}
+  .tryon-actions .button{flex:1 1 100%}
+  .chip span{min-height:36px;padding:0 12px}
+}
+
+/* Примерка: лицо и оборот */
+.tryon-side{position:absolute;left:18px;top:18px;display:flex;padding:4px;border-radius:999px;background:#0e1a28b3;border:1px solid #2b3d55;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.tryon-side button{min-height:36px;padding:0 16px;border:0;border-radius:999px;background:transparent;color:#bac9dc;font-size:13px;font-weight:600}
+.tryon-side button[aria-pressed="true"]{background:#fff;color:var(--night)}
+.tryon-side button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.tryon-stage.is-back canvas{cursor:default}
+.tryon-back{display:grid;gap:10px}
+.tryon-field{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:550;color:var(--ink)}
+.tryon-field input{width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid #D7E1EE;border-radius:10px;background:#fff;color:var(--ink);font-size:14px;font-weight:400}
+.tryon-field input::placeholder{color:#7a8a9e}
+.tryon-qr-note{min-height:0;font-size:12px;line-height:1.5;color:#9a6b12}
+.tryon-qr-note:empty{display:none}
+@media(max-width:600px){.tryon-side{left:12px;top:12px}.tryon-side button{min-height:34px;padding:0 14px;font-size:12px}}
+.nw{white-space:nowrap}
+
+/* Поле «Город» с подсказками */
+.city-field>label{display:block}
+.city-combo{position:relative}
+.city-list{position:absolute;z-index:40;left:0;top:calc(100% + 6px);min-width:100%;width:max-content;max-width:min(380px,calc(100vw - 48px));max-height:300px;overflow:auto;margin:0;padding:6px;list-style:none;background:#fff;border:1px solid #D7E1EE;border-radius:12px;box-shadow:0 18px 40px -18px #0e1a2859}
+.city-opt{display:flex;flex-direction:column;gap:1px;padding:9px 11px;border-radius:8px;cursor:pointer;line-height:1.3}
+.city-opt.is-active,.city-opt:hover{background:var(--tint)}
+.city-name{font-size:14px;font-weight:550;color:var(--ink)}
+.city-name mark{background:none;color:var(--blue);font-weight:650;padding:0}
+.city-region{font-size:12px;font-weight:400;color:var(--muted)}
+.city-hint{min-height:0;font-size:11px;font-weight:400;line-height:1.45;color:var(--muted)}
+.city-hint:empty{display:none}
+.city-hint.is-ok:before{content:'✓ ';color:#1f8a4c;font-weight:700}
+.city-hint.is-warn{color:#9a6b12}
