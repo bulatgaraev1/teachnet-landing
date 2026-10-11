@@ -265,7 +265,7 @@ if ($page === 'pcb') {
         $pick = static fn (string $k, array $allowed) => in_array($t[$k] ?? null, $allowed, true) ? $t[$k] : null;
         $clean = array_filter([
             'shape'     => $pick('shape', ['round', 'rect', 'badge']),
-            'board'     => $pick('board', ['blue', 'black', 'white']),
+            'board'     => $pick('board', ['blue', 'black', 'white', 'green', 'purple']),
             'ink'       => $pick('ink', ['white', 'black', 'gold']),
             'cls'       => $pick('cls', ['S', 'M', 'L']),
             'light'     => $pick('light', ['cold', 'red', 'yellow', 'green', 'blue', 'off']),
