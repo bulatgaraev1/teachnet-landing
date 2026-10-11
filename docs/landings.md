@@ -32,6 +32,7 @@ Vite их не собирает, а только копирует в `dist/`; Ta
 
 - адреса: `index.html` → `/holiday/`, `business-v2.html` → `/pcb/`, «Основной сайт TEACHNET» → `/`; пути к файлам абсолютные;
 - canonical на teachnet.ru, `og:*`, `twitter:card`;
+- фавикон — общий для всего сайта (`/favicon.svg`, `/favicon-32.png`, `/apple-touch-icon.png`), свой фавикон архива убран;
 - почта `hello@teachnet.ru` → `pcb@teachnet.ru` (ссылки, подвал, письмо с текстом заявки в `app.js`);
 - шрифты со своего сервера, `@import` Google Fonts и `preconnect` убраны;
 - 12 атрибутов `style="background:…"` в примерке → классы `sw-*` в `site.css` (нужно для строгого CSP);
