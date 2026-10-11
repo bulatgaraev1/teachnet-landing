@@ -37,9 +37,9 @@
   const SHAPES = { round: 'круглая плата', rect: 'прямоугольная плата', badge: 'бейдж' };
   /* Комплектации по размеру (ориентировочно, проверить разводкой): диоды под режим и место на обороте */
   const CLASSES = {
-    S: { label: 'S, до 40 мм', leds: { static: 6, blink: 6, chase: 8 }, qr: false },
-    M: { label: 'M, 40–60 мм', leds: { static: 8, blink: 8, chase: 12 }, qr: true },
-    L: { label: 'L, бейдж и крупный контур', leds: { static: 12, blink: 12, chase: 16 }, qr: true }
+    S: { label: 'S, 40 мм', leds: { static: 6, blink: 6, chase: 8 }, qr: false },
+    M: { label: 'M, 60 мм', leds: { static: 8, blink: 8, chase: 12 }, qr: true },
+    L: { label: 'L, 85 мм', leds: { static: 12, blink: 12, chase: 16 }, qr: true }
   };
   const SHAPE_CLASSES = { round: ['S', 'M'], rect: ['M', 'L'], badge: ['L'] };
   const SCALE = { round: { S: .76, M: 1 }, rect: { M: .84, L: 1 }, badge: { L: 1 } };
@@ -494,7 +494,7 @@
     setSide('front');
     say(state.mask.fill > 0.9
       ? 'Похоже на фото или логотип на плашке. Чище всего выходит PNG с прозрачным фоном.'
-      : 'Логотип на значке. Его можно двигать и менять размер.', false);
+      : 'Логотип на значке: на плате он ляжет одним цветом. Его можно двигать и менять размер.', false);
     schedule();
     return true;
   }
@@ -666,8 +666,8 @@
   /* ---------- значок в натуральную величину (PDF 1:1) ---------- */
   // Габариты плат для печати, мм — ориентировочные, владелец уточнит. Менять только здесь.
   const PRINT_SIZES = {
-    round: { S: { d: 38 }, M: { d: 50 } },
-    rect: { M: { w: 60, h: 35 }, L: { w: 80, h: 50 } },
+    round: { S: { d: 40 }, M: { d: 60 } },
+    rect: { M: { w: 60, h: 35 }, L: { w: 85, h: 50 } },
     badge: { L: { w: 55, h: 85, slot: { w: 14, h: 3 } } }  // slot — прорезь под ланъярд
   };
   const PX_PER_MM = 300 / 25.4;   // 300 точек на дюйм
@@ -808,6 +808,8 @@
   });
 
   syncClass();
+  const more = document.querySelector('.tryon-more');
+  if (more && matchMedia('(max-width: 800px)').matches) more.open = false;
   // Для заявки: параметры примерки (форма, размер, цвета, цвет и режим света, текст и QR оборота) уходят с заявкой; сам файл логотипа — нет
   let touched = false;
   const controls = document.querySelector('.tryon-controls');
