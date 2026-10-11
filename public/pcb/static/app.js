@@ -25,7 +25,12 @@
     const opts = value === 'corporate' || value === 'stand' ? [['new','С нашим брендом'],['standard','Дизайн TEACHNET'],['custom','Новая форма или электроника']] : [['new','Новый брендированный значок'],['repeat','Повтор согласованного дизайна'],['custom','Новая форма или электроника']];
     byId('design').replaceChildren(...opts.map(([v,label]) => new Option(label,v)));
   }
+  function toggleBadgeFields() {
+    const merch = !isBusiness || byId('format').value === 'merch';
+    ['badge-size','light-mode'].forEach(id => { const el = byId(id); if(el) el.closest('.field').hidden = !merch; });
+  }
   function calculate() {
+    if(isBusiness) toggleBadgeFields();
     const qty = byId('quantity').value;
     let amount = null, description = '', label = '', detail = '';
     const city = byId('city').value.trim();
@@ -37,10 +42,15 @@
         description = 'Посчитаем по часам работы зоны, потоку гостей и тиражу значков. Анкету гостей ведёт ваша команда — контакты сразу остаются у вас.';
       } else if(qty !== 'custom' && design !== 'custom') {
         if(format === 'merch') {
-          const units = Number(qty), rate = units === 100 ? 600 : 500;
+          // Предварительная сетка цен: размер × тираж + надбавка за режим света (уточняется владельцем)
+          const RATES = {S:{100:550,300:450}, M:{100:600,300:500}, L:{100:800,300:650}};
+          const MODE_ADD = {static:{100:0,300:0}, blink:{100:100,300:80}, chase:{100:200,300:150}};
+          const MODE_LABEL = {blink:'мерцание', chase:'бегущий огонь'};
+          const units = Number(qty), size = byId('badge-size') ? byId('badge-size').value : 'M', mode = byId('light-mode') ? byId('light-mode').value : 'static';
+          const rate = RATES[size][units] + MODE_ADD[mode][units];
           const prep = design === 'repeat' ? 0 : 15000;
           amount = units * rate + prep;
-          detail = `${units} значков × ${money(rate)}${prep ? ' + '+money(prep)+' подготовка дизайна' : ' · без повторной подготовки дизайна'}`;
+          detail = `${units} значков ${size}${mode !== 'static' ? ', '+MODE_LABEL[mode] : ''} × ${money(rate)}${prep ? ' + '+money(prep)+' подготовка дизайна' : ' · без повторной подготовки дизайна'}`;
           description = detail + '. Доставка рассчитывается отдельно.';
         } else {
           amount = 24900 + (design === 'new' ? 15000 : 0);
@@ -100,6 +110,8 @@
       const company = byId('company').value.trim();
       if(company) lines.push(`Компания: ${company}.`);
       lines.push(`Оформление: ${byId('design').selectedOptions[0].textContent}.`);
+      if(byId('badge-size') && byId('format').value === 'merch') lines.push(`Размер: ${byId('badge-size').selectedOptions[0].textContent}.`);
+      if(byId('light-mode') && byId('format').value === 'merch') lines.push(`Свет: ${byId('light-mode').selectedOptions[0].textContent}.`);
       if(byId('design').value !== 'standard' && brandInput?.value.trim()) lines.push(`Название для значка: ${brandInput.value.trim()}.`);
     } else if(byId('age').value.trim()) lines.push(`Возраст участников: ${byId('age').value.trim()}.`);
     if(latest.amount !== null) lines.push(`Ориентир на сайте: ${money(latest.amount)}.`,latest.description);

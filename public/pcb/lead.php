@@ -204,6 +204,18 @@ if ($page === 'pcb' && isset(PCB_DESIGNS[$format])) {
         $errors['design'] = 'Выберите оформление из списка.';
     }
 }
+// размер и режим свечения — только у тиража; у других форматов полей на странице нет
+$sizeClass = $lightMode = null;
+if ($page === 'pcb' && $format === 'merch') {
+    $sizeClass = field('badge-size') !== '' ? field('badge-size') : 'M';
+    $lightMode = field('light-mode') !== '' ? field('light-mode') : 'static';
+    if (!isset(PCB_SIZES[$sizeClass])) {
+        $errors['badge-size'] = 'Выберите размер из списка.';
+    }
+    if (!isset(PCB_LIGHT_MODES[$lightMode])) {
+        $errors['light-mode'] = 'Выберите, как светится значок.';
+    }
+}
 $name = pcb_clean(field('name'), 80);
 if (mb_strlen($name) < 2) {
     $errors['name'] = 'Напишите, как к вам обращаться.';
@@ -255,7 +267,10 @@ if ($page === 'pcb') {
             'shape'     => $pick('shape', ['round', 'rect', 'badge']),
             'board'     => $pick('board', ['blue', 'black', 'white']),
             'ink'       => $pick('ink', ['white', 'black', 'gold']),
+            'cls'       => $pick('cls', ['S', 'M', 'L']),
             'light'     => $pick('light', ['cold', 'red', 'yellow', 'green', 'blue', 'off']),
+            'mode'      => $pick('mode', ['static', 'blink', 'chase']),
+            'leds'      => is_int($t['leds'] ?? null) && $t['leds'] > 0 && $t['leds'] <= 64 ? $t['leds'] : null,
             'logo'      => !empty($t['logo']),
             'back_text' => is_string($t['back_text'] ?? null) ? pcb_clean($t['back_text'], 60) : '',
             'qr'        => is_string($t['qr'] ?? null) ? pcb_clean($t['qr'], 160) : '',
@@ -276,6 +291,8 @@ $lead = [
     'quantity'          => $quantity,
     'quantity_custom'   => $quantityCustom,
     'design'            => $design,
+    'size_class'        => $sizeClass,
+    'light_mode'        => $lightMode,
     'age'               => $page === 'holiday' ? (pcb_clean(field('age'), 100) ?: null) : null,
     'company'           => $page === 'pcb' ? (pcb_clean(field('company'), 100) ?: null) : null,
     'badge_text'        => $page === 'pcb' ? (pcb_clean(field('brand'), 24) ?: null) : null,

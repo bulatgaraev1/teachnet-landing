@@ -16,7 +16,7 @@
   const pill = $('tryon-pill'), drop = $('tryon-drop'), sizeInput = $('tryon-size');
   const upload = document.querySelector('.tryon-upload');
 
-  const state = { shape: 'round', board: 'blue', ink: 'white', light: 'cold', size: 70, ox: 0, oy: 0, mask: null, user: false, side: 'front', backText: '', qr: '' };
+  const state = { shape: 'round', board: 'blue', ink: 'white', light: 'cold', mode: 'static', cls: 'M', size: 70, ox: 0, oy: 0, mask: null, user: false, side: 'front', backText: '', qr: '' };
 
   const BOARDS = {
     blue:  { stops: ['#3B82EE', '#1055CB', '#173F86'], edge: '#0B2C6B', trace: '#4F8CF0', silk: 'rgba(255,255,255,.32)', label: 'синий' },
@@ -33,6 +33,15 @@
     off:    { label: 'выключен' }
   };
   const SHAPES = { round: 'круглая плата', rect: 'прямоугольная плата', badge: 'бейдж' };
+  /* Комплектации по размеру (ориентировочно, проверить разводкой): диоды под режим и место на обороте */
+  const CLASSES = {
+    S: { label: 'S, до 40 мм', leds: { static: 6, blink: 6, chase: 8 }, qr: false },
+    M: { label: 'M, 40–60 мм', leds: { static: 8, blink: 8, chase: 12 }, qr: true },
+    L: { label: 'L, бейдж и крупный контур', leds: { static: 12, blink: 12, chase: 16 }, qr: true }
+  };
+  const SHAPE_CLASSES = { round: ['S', 'M'], rect: ['M', 'L'], badge: ['L'] };
+  const SCALE = { round: { S: .76, M: 1 }, rect: { M: .84, L: 1 }, badge: { L: 1 } };
+  const ledCount = () => CLASSES[state.cls].leds[state.mode];
 
   /* ---------- геометрия ---------- */
   function geo(shape) {
@@ -44,6 +53,7 @@
       ring: { type: 'rr', x: 302, y: 262, w: 396, h: 546, r: 22 }, area: { type: 'rr', x: 338, y: 298, w: 324, h: 474, r: 10 }, step: 92 };
   }
   function backLayout(shape) {
+    if (!CLASSES[state.cls].qr) return { bat: { x: 500, y: 345, r: 128 }, text: { x: 500, y: 600, w: 430, h: 150, fs: 50 }, qr: null };
     if (shape === 'round') return { bat: { x: 500, y: 290, r: 82 }, text: { x: 500, y: 452, w: 440, h: 84, fs: 44 }, qr: { x: 500, y: 640, s: 190 } };
     if (shape === 'rect') return { bat: { x: 302, y: 490, r: 98 }, text: { x: 640, y: 602, w: 340, h: 74, fs: 40 }, qr: { x: 640, y: 438, s: 184 } };
     return { bat: { x: 500, y: 764, r: 64 }, text: { x: 500, y: 322, w: 380, h: 112, fs: 42 }, qr: { x: 500, y: 546, s: 216 } };
@@ -64,8 +74,9 @@
   function ringPoints(g) {
     const rg = g.ring, pts = [];
     if (rg.type === 'circle') {
-      for (let i = 0; i < g.leds; i++) {
-        const a = -Math.PI / 2 + (i + 0.5) * 2 * Math.PI / g.leds;
+      const nl = ledCount();
+      for (let i = 0; i < nl; i++) {
+        const a = -Math.PI / 2 + (i + 0.5) * 2 * Math.PI / nl;
         pts.push({ x: rg.cx + rg.r * Math.cos(a), y: rg.cy + rg.r * Math.sin(a), a: a + Math.PI / 2 });
       }
       return pts;
@@ -73,7 +84,7 @@
     const { x, y, w, h, r } = rg, sw = w - 2 * r, sh = h - 2 * r, arc = Math.PI * r / 2;
     const segs = [['l', x + r, y, 1, 0, sw], ['a', x + w - r, y + r, -Math.PI / 2, arc], ['l', x + w, y + r, 0, 1, sh], ['a', x + w - r, y + h - r, 0, arc],
                   ['l', x + w - r, y + h, -1, 0, sw], ['a', x + r, y + h - r, Math.PI / 2, arc], ['l', x, y + h - r, 0, -1, sh], ['a', x + r, y + r, Math.PI, arc]];
-    const L = 2 * sw + 2 * sh + 4 * arc, n = Math.max(4, Math.round(L / g.step));
+    const L = 2 * sw + 2 * sh + 4 * arc, n = ledCount();
     for (let i = 0; i < n; i++) {
       let d = (i + 0.5) * L / n;
       for (const s of segs) {
@@ -118,18 +129,34 @@
     const w = fit.w * k, h = fit.h * k;
     return { x: c.x + state.ox - w / 2, y: c.y + state.oy - h / 2, w, h };
   }
-  function led(p) {
-    const L = LIGHTS[state.light], on = state.light !== 'off';
+  /* Режимы света: ровный, мерцание (мультивибратор: две группы по очереди), бегущий огонь */
+  const MODES = { static: 'ровный', blink: 'мерцание', chase: 'бегущий огонь' };
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let clock = 0;
+  function level(i, n) {
+    if (state.mode === 'blink') {
+      const ph = (clock / 1300) % 1, a = Math.min(1, Math.max(0, (Math.abs(ph - 0.5) * 2 - 0.42) / 0.16));
+      return i % 2 ? a : 1 - a;
+    }
+    if (state.mode === 'chase') {
+      const head = (clock / 110) % n, d = (head - i + n) % n;
+      return d < 1 ? 1 : d < 2 ? .55 : d < 3 ? .25 : 0;
+    }
+    return 1;
+  }
+  function led(p, i, arr) {
+    const L = LIGHTS[state.light], b = state.light === 'off' ? 0 : level(i, arr.length), on = b > .08;
     if (on) {
       const gr = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 48);
-      gr.addColorStop(0, `rgba(${L.glow},.95)`); gr.addColorStop(.32, `rgba(${L.glow},.45)`); gr.addColorStop(1, `rgba(${L.glow},0)`);
+      gr.addColorStop(0, `rgba(${L.glow},${.95 * b})`); gr.addColorStop(.32, `rgba(${L.glow},${.45 * b})`); gr.addColorStop(1, `rgba(${L.glow},0)`);
       ctx.save(); ctx.globalCompositeOperation = 'screen';
       ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(p.x, p.y, 48, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     }
     ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
-    ctx.fillStyle = on ? L.body : '#DCE3EC'; ctx.strokeStyle = on ? L.edge : '#94A3B8'; ctx.lineWidth = 1.5;
+    const lit = b > .45;
+    ctx.fillStyle = lit ? L.body : '#DCE3EC'; ctx.strokeStyle = lit ? L.edge : '#94A3B8'; ctx.lineWidth = 1.5;
     let r = roundRect(-14, -9, 28, 18, 4); ctx.fill(r); ctx.stroke(r);
-    ctx.fillStyle = on ? '#FFFFFF' : '#F2F5F9'; r = roundRect(-6, -4.5, 12, 9, 2); ctx.fill(r);
+    ctx.fillStyle = lit ? '#FFFFFF' : '#F2F5F9'; r = roundRect(-6, -4.5, 12, 9, 2); ctx.fill(r);
     ctx.restore();
   }
   function inkStyle(x0, y0, x1, y1) {
@@ -211,7 +238,8 @@
     ctx.fillStyle = inkStyle(T.x - T.w / 2, T.y - T.h / 2, T.x + T.w / 2, T.y + T.h / 2);
     fit.lines.forEach((l, i) => ctx.fillText(l, T.x, T.y + (i - (fit.lines.length - 1) / 2) * lh));
     ctx.restore();
-    // QR-код
+    // QR-код (на маленькой плате места под него нет)
+    if (!L.qr) return;
     const Q = L.qr, x0 = Q.x - Q.s / 2, y0 = Q.y - Q.s / 2, q = state.qr.trim() ? qrFor(state.qr.trim()) : null;
     if (!q) {
       ctx.save(); ctx.setLineDash([10, 9]); ctx.lineWidth = 2.5; ctx.strokeStyle = silk;
@@ -238,6 +266,8 @@
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
 
+    const sc = (SCALE[state.shape] || {})[state.cls] || 1;
+    ctx.save(); ctx.translate(500, 490); ctx.scale(sc, sc); ctx.translate(-500, -490);
     const face = shapePath(g);
     if (g.hole) rrPath(face, g.hole.x, g.hole.y, g.hole.w, g.hole.h, g.hole.r);
     ctx.save(); ctx.translate(0, 20); ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 60; ctx.shadowOffsetY = 34;
@@ -260,6 +290,7 @@
     }
     ringPoints(g).forEach(led);
     }
+    ctx.restore();
     ctx.font = '600 20px "Golos Text", Arial, sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
     ctx.fillStyle = 'rgba(167,186,218,.55)'; ctx.fillText('TEACHNET · примерка', W - 36, H - 34);
     if (label) {
@@ -268,8 +299,13 @@
     }
     if (ctx === mainCtx) canvas.setAttribute('aria-label', (side === 'back' ? 'Оборот значка: ' : 'Примерка: ') + summary(false));
   }
-  let raf = 0;
-  function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw(); }); }
+  let raf = 0, visible = true;
+  const animating = () => state.mode !== 'static' && state.light !== 'off' && state.side === 'front' && visible && !reduceMotion;
+  function tick(t) { raf = 0; clock = t; draw(); if (animating()) raf = requestAnimationFrame(tick); }
+  function schedule() { if (!raf) raf = requestAnimationFrame(tick); }
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) schedule(); }).observe(canvas);
+  // без анимации (настройка «уменьшить движение»): показываем характерный кадр
+  if (reduceMotion) clock = 650;
 
   /* ---------- маска логотипа ---------- */
   const lum = (d, j) => (0.2126 * d[j] + 0.7152 * d[j + 1] + 0.0722 * d[j + 2]) / 255;
@@ -490,6 +526,7 @@
     const q = state.qr.trim() ? qrFor(state.qr.trim()) : null;
     const a = INK_L[state.ink], b = BOARD_L[state.board], ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
     const notes = [];
+    if (state.qr.trim() && !CLASSES[state.cls].qr) notes.push('На размере S QR-код не помещается: оборот занят батарейкой. Выберите размер M или L.');
     if (q && q.getModuleCount() > 41) notes.push('Длинная ссылка: на маленькой плате QR-код выйдет мелким. Лучше короткая ссылка.');
     if (q && ratio < 3) notes.push('В этом сочетании цветов QR-код малоконтрастный и может считываться хуже. Надёжнее белый на синей или чёрной плате, чёрный на белой.');
     qrNote.textContent = notes.join(' ');
@@ -516,6 +553,14 @@
     sizeInput.value = state.size;
     schedule();
   }
+  function syncClass() {
+    const allowed = SHAPE_CLASSES[state.shape];
+    document.querySelectorAll('input[name="tryon-cls"]').forEach(inp => { inp.disabled = !allowed.includes(inp.value); });
+    if (!allowed.includes(state.cls)) {
+      state.cls = allowed[allowed.length - 1];
+      document.querySelector(`input[name="tryon-cls"][value="${state.cls}"]`).checked = true;
+    }
+  }
   function syncInk() {
     // одноцветный логотип не должен сливаться с платой
     document.querySelectorAll('input[name="tryon-ink"]').forEach(inp => {
@@ -531,8 +576,9 @@
     state[key] = inp.value;
     if (key === 'board') syncInk();
     if (key === 'board' || key === 'ink') updateQrNote();
-    if (key === 'shape') clampOffset();
-    if (key === 'light' && state.side === 'back') setSide('front');
+    if (key === 'shape') { syncClass(); clampOffset(); }
+    if (key === 'cls' || key === 'shape') updateQrNote();
+    if ((key === 'light' || key === 'mode') && state.side === 'back') setSide('front');
     schedule();
   }));
   sizeInput.addEventListener('input', () => { if (state.side === 'back') setSide('front'); setSize(+sizeInput.value); });
@@ -550,7 +596,7 @@
   canvas.addEventListener('pointermove', e => {
     if (!pointers.has(e.pointerId)) return;
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    const k = W / canvas.getBoundingClientRect().width;
+    const k = W / canvas.getBoundingClientRect().width / ((SCALE[state.shape] || {})[state.cls] || 1);
     if (pinch && pointers.size >= 2) { const [a, b] = [...pointers.values()]; setSize(pinch.size * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d); }
     else if (drag) { state.ox = drag.ox + (e.clientX - drag.x) * k; state.oy = drag.oy + (e.clientY - drag.y) * k; clampOffset(); schedule(); }
   });
@@ -571,10 +617,10 @@
   });
 
   function summary(withFile) {
-    let s = `${SHAPES[state.shape]}, цвет платы ${BOARDS[state.board].label}, логотип ${INKS[state.ink]}, свет ${LIGHTS[state.light].label}`;
+    let s = `${SHAPES[state.shape]} (${CLASSES[state.cls].label}), цвет платы ${BOARDS[state.board].label}, логотип ${INKS[state.ink]}, свет ${LIGHTS[state.light].label}, режим ${MODES[state.mode]}, ${ledCount()} светодиодов`;
     if (withFile) {
       if (state.backText.trim()) s += `, на обороте текст «${state.backText.trim()}»`;
-      if (state.qr.trim()) s += `, QR-код: ${state.qr.trim()}`;
+      if (state.qr.trim()) s += CLASSES[state.cls].qr ? `, QR-код: ${state.qr.trim()}` : `, QR-код нужен (на размере S не помещается)`;
     }
     return s + (withFile && state.user ? '. Картинку примерки приложу.' : '.');
   }
@@ -584,6 +630,8 @@
       const rest = c.value.split('\n').filter(l => l.trim() && !l.startsWith('Примерка на сайте:'));
       c.value = [line, ...rest].join('\n').slice(0, 1200);
     }
+    const lm = $('light-mode'); if (lm) lm.value = state.mode;
+    const bs = $('badge-size'); if (bs) bs.value = state.cls;
     const det = document.querySelector('.brief-details'); if (det) det.open = true;
     const form = $('request-form'); if (form) form.dispatchEvent(new Event('input', { bubbles: true }));
   });
@@ -606,14 +654,15 @@
     }, 'image/png');
   });
 
-  // Для заявки: параметры примерки (форма, цвета, свет, текст и QR оборота) уходят с заявкой; сам файл логотипа — нет
+  syncClass();
+  // Для заявки: параметры примерки (форма, размер, цвета, цвет и режим света, текст и QR оборота) уходят с заявкой; сам файл логотипа — нет
   let touched = false;
   const controls = document.querySelector('.tryon-controls');
   if (controls) ['input', 'change'].forEach(t => controls.addEventListener(t, () => { touched = true; }));
   $('tryon-discuss').addEventListener('click', () => { touched = true; });
   window.teachnetTryon = {
     used: () => touched || state.user,
-    summary: () => ({ shape: state.shape, board: state.board, ink: state.ink, light: state.light, logo: state.user,
+    summary: () => ({ shape: state.shape, cls: state.cls, board: state.board, ink: state.ink, light: state.light, mode: state.mode, leds: ledCount(), logo: state.user,
       back_text: state.backText.trim(), qr: state.qr.trim(), text: summary(true) })
   };
 
