@@ -1,0 +1,54 @@
+/* Compact alternative. Shared pages and styles remain unchanged. */
+.compact-business .section{padding-block:65px}
+.compact-business .hero-business{padding-block:40px 45px}
+.compact-business .hero-grid{min-height:475px}
+.compact-business .hero-description{max-width:490px}
+.compact-business .compact-offer .section-head{margin-bottom:27px}
+.compact-business .compact-offer .section-head h2{font-size:43px}
+.compact-business .compact-offer .section-head>p{max-width:430px}
+.compact-business .pricing-table{margin-top:0}
+.compact-business .pricing-table caption{font-size:12px;color:var(--muted);padding-block:14px}
+.compact-business .pricing-table td,.compact-business .pricing-table th{padding-block:18px}
+.compact-price-note{font-size:12px;color:var(--muted);margin-top:17px;line-height:1.7}
+.compact-price-note strong{color:var(--ink);font-weight:600}
+.offer-bottom{display:flex;align-items:center;gap:28px;margin-top:22px}
+.offer-bottom p{font-size:12px;color:var(--muted);max-width:370px}
+.compact-corporate .split{grid-template-columns:1.1fr .9fr;gap:75px}
+.compact-corporate-copy .lead{font-size:17px;max-width:540px;margin-top:24px}
+.compact-corporate-copy .tags{margin-top:23px}
+.compact-usecases{font-size:14px;color:var(--muted);max-width:440px;margin-top:23px}
+.compact-corporate-price{padding:28px 32px}
+.compact-corporate-price h3{font-size:24px;max-width:330px;margin:0}
+.compact-corporate-price .eyebrow{margin-bottom:17px}
+.compact-corporate-price .price-value{font-size:42px;margin:16px 0 10px}
+.compact-corporate-price>p:not(.eyebrow):not(.price-value){font-size:13px;line-height:1.65}
+.session-note{border-top:1px solid var(--line);padding-top:18px;margin:21px 0;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.session-note strong{font-weight:550}.session-note span{color:var(--muted)}
+.compact-proof{background:var(--tint);padding-block:24px}
+.compact-proof-inner{display:flex;align-items:center;justify-content:space-between;gap:30px}
+.proof-title{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--brand);font-weight:600}
+.compact-proof-inner>strong{font:650 38px/1.2 'Onest',sans-serif;letter-spacing:-.04em;color:var(--brand);white-space:nowrap}
+.compact-proof-inner>strong>span{font:400 12px/1.5 var(--font);letter-spacing:0;color:var(--muted);display:block;margin-top:4px}
+.compact-proof-inner>p{font-size:11px;line-height:1.65;color:var(--muted);max-width:240px}
+.compact-business .request-layout{gap:70px}
+.compact-business .request-card{padding:27px}
+.compact-business .request-card>p{margin-bottom:18px}
+.compact-business .field-grid{gap:15px 16px}
+.compact-business .field{gap:6px}
+.compact-business .field select,.compact-business .field input{min-height:43px;padding-block:9px}
+.brief-details{margin-top:18px;border-top:1px solid #d7e1ee;border-bottom:0}
+.brief-details summary{font-size:12px;padding:15px 0 0;color:var(--brand);font-weight:500}
+.brief-details summary:after{font-size:20px}
+.brief-details[open] .field-grid{padding-top:19px}
+.compact-business .estimate-block{margin-top:18px;padding-top:18px}
+.compact-business .estimate-description{min-height:0}
+.compact-business .estimate-value{font-size:38px}
+.compact-business .estimate-value.is-custom{font-size:29px}
+.compact-business .submit-button{margin-top:20px}
+.compact-business .compact-faq{background:var(--paper)}
+.compact-business .faq-layout{grid-template-columns:.78fr 1fr}
+.compact-business .site-footer{padding-top:34px}
+@media(max-width:1000px){.compact-corporate .split{gap:40px}.compact-business .request-layout{gap:40px}.compact-proof-inner{gap:25px}.compact-corporate-price{padding:27px}.compact-business .hero-grid{min-height:480px}}
+@media(max-width:800px){.compact-business .section{padding-block:52px}.compact-business .hero-grid{min-height:420px}.compact-business .compact-offer .section-head h2{font-size:36px}.compact-proof-inner{gap:20px;flex-wrap:wrap}.proof-title{width:100%}.compact-proof-inner>strong{font-size:35px}.compact-corporate .split{gap:28px}.compact-corporate-copy .lead{font-size:15px}.compact-corporate-price{padding:24px}.compact-corporate-price .price-value{font-size:35px}.compact-business .request-layout{gap:30px}}
+@media(max-width:600px){.compact-business .section{padding-block:45px}.compact-business .hero-business{padding-block:32px 30px}.compact-business .hero-grid{min-height:0;gap:14px}.compact-business .hero-description{font-size:16px}.compact-business .hero-meta{margin-top:18px}.compact-business .hero-actions{margin-top:23px}.compact-business .compact-offer .section-head{margin-bottom:23px}.compact-business .compact-offer .section-head h2{font-size:35px}.compact-business .pricing-table th,.compact-business .pricing-table td{padding:15px 11px}.compact-business .pricing-table td strong{font-size:22px}.compact-business .pricing-table tbody td:last-child{white-space:nowrap}.compact-business .pricing-table caption{font-size:11px;padding:12px}.compact-price-note{font-size:11px;margin-top:15px}.offer-bottom{display:block;margin-top:20px}.offer-bottom .button{min-height:48px;font-size:13px}.offer-bottom p{font-size:11px;margin-top:13px}.compact-corporate .split{grid-template-columns:1fr;gap:26px}.compact-corporate-copy .lead{font-size:16px;margin-top:20px}.compact-usecases{font-size:13px;margin-top:18px}.compact-corporate-copy .tags{margin-top:18px}.compact-corporate-price{padding:25px}.compact-corporate-price .price-value{font-size:40px}.compact-corporate-price .button{min-height:48px;font-size:13px}.compact-proof{padding-block:23px}.compact-proof-inner{display:grid;grid-template-columns:1fr 1fr;gap:17px 25px}.proof-title{grid-column:1/-1;font-size:9px}.compact-proof-inner>p{grid-column:1/-1;max-width:none;font-size:10px}.compact-proof-inner>p>br{display:none}.compact-proof-inner>strong{font-size:36px}.compact-proof-inner>strong>span{font-size:11px;margin-top:3px}.compact-business .request-card{padding:24px 21px}.compact-business .request-copy h2{font-size:35px}.compact-business .request-layout{gap:27px}.compact-business .faq-layout{grid-template-columns:1fr;gap:22px}.compact-business .faq-list summary{padding-block:19px;font-size:13px}.compact-business .faq-list details p{font-size:12px}.compact-business .hero-visual .badge-stage{max-width:350px}.compact-business .brand-demo .small-note{font-size:9px}}
+@media(max-width:360px){.compact-business .pricing-table th,.compact-business .pricing-table td{padding-inline:8px;font-size:11px}.compact-business .pricing-table td strong{font-size:19px}.compact-business .hero-actions .button{font-size:11px;padding-inline:13px}}

@@ -1,5 +1,9 @@
 /* TeachNet — точка входа стилей. Tailwind v4 + дизайн-токены + база + компоненты. */
 @import 'tailwindcss';
+/* Лендинги /holiday/ и /pcb/ — самостоятельные страницы со своими стилями: Tailwind их не сканирует,
+   иначе слова из их файлов попадают в общий CSS сайта лишними классами */
+@source not '../../public/pcb';
+@source not '../../public/holiday';
 @import './tokens.css';
 @import './base.css';
 @import './components.css';
