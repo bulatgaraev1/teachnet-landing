@@ -87,6 +87,8 @@ TEACHNET (Казань) продаёт новое направление:
 | `format` | text | праздники: `program`; компании: `merch` / `corporate` / `stand` |
 | `quantity`, `quantity_custom` | text, integer | |
 | `design`, `age`, `company` | text | что есть на странице |
+| `size_class` | text | `S` / `M` / `L` (поле «Размер») |
+| `light_mode` | text | `static` / `blink` / `chase` (поле «Как светится») |
 | `contact_name` | text not null | |
 | `contact_phone`, `contact_telegram`, `contact_email` | text | хотя бы одно из первых двух |
 | `city_name`, `city_region`, `city_fias_id` | text | `city_fias_id` — ключ города для аналитики |
@@ -94,7 +96,7 @@ TEACHNET (Казань) продаёт новое направление:
 | `event_date` | text | ISO-дата |
 | `comment` | text | до 1200 символов |
 | `estimate_amount`, `estimate_label` | integer, text | что показал калькулятор |
-| `tryon` | text (JSON) | форма, плата, логотип, свет, текст и QR оборота |
+| `tryon` | text (JSON) | форма, плата, логотип, цвет и режим света, текст и QR оборота |
 | `tryon_image` | text | путь к файлу, если приложили |
 | `consent_pd`, `consent_version`, `consent_at` | integer, text, integer | факт, версия текста и время согласия |
 | `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `referrer` | text | |

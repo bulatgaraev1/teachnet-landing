@@ -199,7 +199,7 @@
     j.rows.forEach(function (r) {
       var tr = el('tr');
       var cDate = el('td'); cDate.appendChild(el('div', '', r.date)); cDate.appendChild(el('span', 'pcb-sub', r.page_label)); tr.appendChild(cDate);
-      var cWhat = el('td'); cWhat.appendChild(el('div', '', r.format)); cWhat.appendChild(el('span', 'pcb-sub', r.quantity + (r.design ? ' · ' + r.design : ''))); tr.appendChild(cWhat);
+      var cWhat = el('td'); cWhat.appendChild(el('div', '', r.format)); cWhat.appendChild(el('span', 'pcb-sub', [r.quantity, r.design, r.badge].filter(Boolean).join(' · '))); tr.appendChild(cWhat);
       var cCity = el('td'); cCity.appendChild(el('div', '', r.city || '—')); if (r.event_date) cCity.appendChild(el('span', 'pcb-sub', 'дата ' + r.event_date)); tr.appendChild(cCity);
       var cName = el('td'); cName.appendChild(el('div', '', r.name)); if (r.company) cName.appendChild(el('span', 'pcb-sub', r.company)); tr.appendChild(cName);
       var cCont = el('td'); cCont.appendChild(contactBtn(r)); tr.appendChild(cCont);
@@ -220,7 +220,7 @@
       var ct = el('div', 'lcard__top'); ct.appendChild(el('span', '', r.date)); ct.appendChild(el('span', '', r.page_label)); c.appendChild(ct);
       c.appendChild(el('div', 'lcard__name', r.name + (r.company ? ' · ' + r.company : '')));
       var pr = el('div'); pr.appendChild(contactBtn(r)); c.appendChild(pr);
-      c.appendChild(el('div', 'lcard__meta', [r.format, r.quantity, r.city, r.event_date && 'дата ' + r.event_date, r.estimate === null ? 'расчёт' : rub(r.estimate)].filter(Boolean).join(' · ')));
+      c.appendChild(el('div', 'lcard__meta', [r.format, r.quantity, r.badge, r.city, r.event_date && 'дата ' + r.event_date, r.estimate === null ? 'расчёт' : rub(r.estimate)].filter(Boolean).join(' · ')));
       var box = el('div', 'editor-box'); box.hidden = true;
       var row2 = el('div', 'lcard__row');
       row2.appendChild(statusControl(r, o, function (st) { openEditor(box, box, r, o, st); }));

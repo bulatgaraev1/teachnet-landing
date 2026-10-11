@@ -46,6 +46,10 @@ const PCB_DESIGNS = [
     'stand'     => ['new' => 'С нашим брендом', 'standard' => 'Дизайн TEACHNET', 'custom' => 'Новая форма или электроника'],
 ];
 
+/** Размер и режим свечения значка — только для готового тиража (поля «Размер» и «Как светится» в калькуляторе). */
+const PCB_SIZES = ['S' => 'S · до 40 мм', 'M' => 'M · 40–60 мм', 'L' => 'L · бейдж или крупный контур'];
+const PCB_LIGHT_MODES = ['static' => 'Ровный свет', 'blink' => 'Мерцание', 'chase' => 'Бегущий огонь'];
+
 /** Статусы заявки во вкладке дашборда (заказ мастер-класса или тиража, не учёба). */
 const PCB_STATUSES = [
     'new'       => 'Новая',
@@ -69,6 +73,8 @@ CREATE TABLE IF NOT EXISTS pcb_leads (
   quantity          VARCHAR(16) NOT NULL DEFAULT '',
   quantity_custom   INT UNSIGNED NULL,
   design            VARCHAR(16) NULL,
+  size_class        VARCHAR(2) NULL COMMENT 'S | M | L — только для тиража',
+  light_mode        VARCHAR(8) NULL COMMENT 'static | blink | chase — только для тиража',
   age               VARCHAR(100) NULL,
   company           VARCHAR(100) NULL,
   badge_text        VARCHAR(24) NULL COMMENT 'название на значке из первого экрана /pcb/',
@@ -126,12 +132,25 @@ function pcb_db(array $cfg): PDO {
     return $pdo;
 }
 
+/** Столбцы, добавленные после первого запуска: таблица, созданная раньше, получает их сама. */
+const PCB_ADDED_COLUMNS = [
+    'size_class' => "VARCHAR(2) NULL COMMENT 'S | M | L — только для тиража' AFTER design",
+    'light_mode' => "VARCHAR(8) NULL COMMENT 'static | blink | chase — только для тиража' AFTER size_class",
+];
+
 function pcb_ensure_table(PDO $pdo): void {
     static $done = false;
-    if (!$done) {
-        $pdo->exec(PCB_TABLE_SQL);
-        $done = true;
+    if ($done) {
+        return;
     }
+    $pdo->exec(PCB_TABLE_SQL);
+    $have = array_map('strtolower', $pdo->query('SHOW COLUMNS FROM pcb_leads')->fetchAll(PDO::FETCH_COLUMN));
+    foreach (PCB_ADDED_COLUMNS as $col => $def) {
+        if (!in_array($col, $have, true)) {
+            $pdo->exec('ALTER TABLE pcb_leads ADD COLUMN ' . $col . ' ' . $def); // имена и типы — только из кода
+        }
+    }
+    $done = true;
 }
 
 function pcb_now(): string {
@@ -271,6 +290,12 @@ function pcb_notify_text(array $lead, bool $withContacts): string {
     $lines = [$title, '', 'Страница: ' . (PCB_PAGES[$lead['page']] ?? $lead['page']), 'Формат: ' . pcb_format_label($lead), 'Количество: ' . pcb_quantity_label($lead)];
     if (!empty($lead['design'])) {
         $lines[] = 'Оформление: ' . (PCB_DESIGNS[$lead['format']][$lead['design']] ?? $lead['design']);
+    }
+    if (!empty($lead['size_class'])) {
+        $lines[] = 'Размер: ' . (PCB_SIZES[$lead['size_class']] ?? $lead['size_class']);
+    }
+    if (!empty($lead['light_mode'])) {
+        $lines[] = 'Свет: ' . (PCB_LIGHT_MODES[$lead['light_mode']] ?? $lead['light_mode']);
     }
     if (!empty($lead['age'])) {
         $lines[] = 'Возраст участников: ' . $lead['age'];

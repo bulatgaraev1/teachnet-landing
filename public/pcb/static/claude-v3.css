@@ -232,3 +232,25 @@
 .city-hint:empty{display:none}
 .city-hint.is-ok:before{content:'✓ ';color:#1f8a4c;font-weight:700}
 .city-hint.is-warn{color:#9a6b12}
+
+/* Компании: три размера */
+.sizes-section{background:var(--paper)}
+.sizes-section h2 span{color:var(--brand)}
+.sizes-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.size-card{display:flex;flex-direction:column;gap:14px;padding:26px 24px 22px;background:#fff;border:1px solid var(--line);border-radius:22px}
+.size-card.is-main{border-color:var(--night);box-shadow:0 24px 50px -32px #0e1a2880}
+.size-top{display:flex;align-items:baseline;gap:12px}
+.size-mark{font:700 44px/1 'Onest',sans-serif;letter-spacing:-.04em;color:var(--ink)}
+.size-top span{font-size:13px;font-weight:600;color:var(--brand)}
+.size-card>p{font-size:14px;color:var(--muted);line-height:1.5}
+.size-leds{margin:0;border-top:1px solid var(--line)}
+.size-leds>div{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+.size-leds dt{font-size:13px;color:var(--ink)}
+.size-leds dd{margin:0;font:650 18px/1 'Onest',sans-serif;color:var(--ink)}
+.size-leds dd:after{content:' диодов';font:400 12px var(--font);color:var(--muted)}
+.size-back{font-size:13px;font-weight:550;color:var(--ink)}
+.sizes-note{margin-top:16px;font-size:12px;color:var(--muted);max-width:760px}
+@media(max-width:900px){.sizes-grid{grid-template-columns:1fr}.size-card{padding:22px 20px 18px}}
+.size-price{margin-top:auto;padding-top:4px;font-size:13px;color:var(--muted)}
+.size-price b{font:650 22px/1 'Onest',sans-serif;color:var(--ink);letter-spacing:-.02em}
+.compact-offer .pricing-table td small{margin-top:4px}

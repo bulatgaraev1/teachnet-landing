@@ -160,6 +160,7 @@ function pcb_dash_table(PDO $pdo, DashReport $report, array $q): array {
             'page' => $r['page'], 'page_label' => PCB_PAGES[$r['page']] ?? $r['page'],
             'format' => pcb_format_label($r), 'quantity' => pcb_quantity_label($r),
             'design' => $r['design'] ? (PCB_DESIGNS[$r['format']][$r['design']] ?? $r['design']) : '',
+            'badge' => implode(', ', array_filter([PCB_SIZES[$r['size_class'] ?? ''] ?? '', PCB_LIGHT_MODES[$r['light_mode'] ?? ''] ?? ''])),
             'city' => pcb_city_label($r),
             'event_date' => $r['event_date'] ? date('d.m.Y', (int) strtotime((string) $r['event_date'])) : '',
             'name' => (string) $r['contact_name'], 'contact' => pcb_dash_mask($r),
