@@ -38,7 +38,8 @@
 .field-error{display:block;color:#B42318;font-size:11px;font-weight:500;line-height:1.5}
 .field.is-invalid input,.field.is-invalid select,.field.is-invalid textarea{border-color:#D92D20}
 .form-error{margin-top:14px;font-size:12px;line-height:1.55;color:#B42318}
-.hp{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
+/* ловушка для ботов: скрыта атрибутом hidden в самой разметке (не зависит от этого файла), здесь — на всякий случай */
+.hp{display:none!important}
 .submit-button.is-sending{opacity:.7;cursor:progress}
 .request-sent{border-top:1px solid #ccd8e8;margin-top:6px;padding-top:24px}
 .request-sent h3{font-size:23px;margin-bottom:8px}
