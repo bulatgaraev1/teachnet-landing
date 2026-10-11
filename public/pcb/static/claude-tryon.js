@@ -16,7 +16,7 @@
   const pill = $('tryon-pill'), drop = $('tryon-drop'), sizeInput = $('tryon-size');
   const upload = document.querySelector('.tryon-upload');
 
-  const state = { shape: 'round', board: 'blue', ink: 'white', light: 'warm', size: 70, ox: 0, oy: 0, mask: null, user: false, side: 'front', backText: '', qr: '' };
+  const state = { shape: 'round', board: 'blue', ink: 'white', light: 'cold', size: 70, ox: 0, oy: 0, mask: null, user: false, side: 'front', backText: '', qr: '' };
 
   const BOARDS = {
     blue:  { stops: ['#3B82EE', '#1055CB', '#173F86'], edge: '#0B2C6B', trace: '#4F8CF0', silk: 'rgba(255,255,255,.32)', label: 'синий' },
@@ -25,7 +25,6 @@
   };
   const INKS = { white: 'белым', black: 'чёрным', gold: 'золотом' };
   const LIGHTS = {
-    warm:   { glow: '255,214,140', body: '#FFF3C4', edge: '#E2C27A', label: 'тёплый белый' },
     cold:   { glow: '214,232,255', body: '#F7FBFF', edge: '#B9CFEA', label: 'холодный белый' },
     red:    { glow: '255,70,70',   body: '#FF9A90', edge: '#C8443C', label: 'красный' },
     yellow: { glow: '255,206,40',  body: '#FFE58A', edge: '#D2A52A', label: 'жёлтый' },

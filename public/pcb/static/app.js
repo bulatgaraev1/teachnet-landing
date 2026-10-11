@@ -34,7 +34,7 @@
       const format = byId('format').value, design = byId('design').value;
       label = format === 'merch' ? 'Готовый тираж значков' : format === 'stand' ? 'Зона пайки на стенде' : 'Корпоративный мастер-класс';
       if(format === 'stand') {
-        description = 'Посчитаем по часам работы зоны, потоку гостей и тиражу значков. Контакты гостей соберём анкетой с согласием на обработку данных.';
+        description = 'Посчитаем по часам работы зоны, потоку гостей и тиражу значков. Анкету гостей ведёт ваша команда — контакты сразу остаются у вас.';
       } else if(qty !== 'custom' && design !== 'custom') {
         if(format === 'merch') {
           const units = Number(qty), rate = units === 100 ? 600 : 500;

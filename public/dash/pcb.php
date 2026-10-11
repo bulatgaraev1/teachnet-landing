@@ -174,7 +174,7 @@ function pcb_dash_table(PDO $pdo, DashReport $report, array $q): array {
             'status' => (string) $r['status'], 'deal_amount' => $r['deal_amount'] !== null ? (int) $r['deal_amount'] : null,
             'note' => (string) ($r['note'] ?? ''),
             'notified' => $r['notified_at'] !== null,
-            'consent' => $r['consent_version'] . ', ' . ($report->dt((string) $r['consent_at'])?->format('d.m.Y H:i') ?? ''),
+            'consent' => $r['consent_version'] . ', ' . (($c = $report->dt((string) $r['consent_at'])) ? $c->format('d.m.Y H:i') : ''),
         ];
     }
     return $report->meta() + [
