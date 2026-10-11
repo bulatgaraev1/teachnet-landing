@@ -255,7 +255,7 @@ if ($page === 'pcb') {
             'shape'     => $pick('shape', ['round', 'rect', 'badge']),
             'board'     => $pick('board', ['blue', 'black', 'white']),
             'ink'       => $pick('ink', ['white', 'black', 'gold']),
-            'light'     => $pick('light', ['warm', 'cold', 'red', 'yellow', 'green', 'blue', 'off']),
+            'light'     => $pick('light', ['cold', 'red', 'yellow', 'green', 'blue', 'off']),
             'logo'      => !empty($t['logo']),
             'back_text' => is_string($t['back_text'] ?? null) ? pcb_clean($t['back_text'], 60) : '',
             'qr'        => is_string($t['qr'] ?? null) ? pcb_clean($t['qr'], 160) : '',

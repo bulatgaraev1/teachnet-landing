@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { basename } from 'node:path';
+import { basename, join, resolve } from 'node:path';
 import { renderPage } from './src/page';
 import { renderLegalPage } from './src/legal';
 import { renderChildPage } from './src/child';
@@ -73,6 +74,28 @@ function abStyle(): string {
   return `<style>${css}</style>`;
 }
 
+// Лендинги /holiday/ и /pcb/ — статические файлы из public/, Vite их не хеширует. Хостинг отдаёт стили и скрипты
+// со своим кешем, и браузер может держать старую версию после деплоя (было: новая страница + старый app.js — форма
+// не отправляла заявку). Поэтому после сборки к ссылкам на /pcb/static/*.js|css|svg|png в их HTML дописывается
+// ?v=<хеш содержимого>: изменился файл — изменилась ссылка. Шрифты не трогаем: адрес в preload должен совпадать
+// с адресом в fonts.css, а сами шрифты не меняются.
+function pcbAssetVersions(outDir: string): void {
+  const pages = ['holiday', 'pcb'].flatMap((dir) => {
+    const d = join(outDir, dir);
+    return existsSync(d) ? readdirSync(d).filter((f) => f.endsWith('.html')).map((f) => join(d, f)) : [];
+  });
+  for (const page of pages) {
+    const html = readFileSync(page, 'utf8');
+    const out = html.replace(/(\s(?:src|href)=")(\/pcb\/static\/[^"?#]+\.(?:js|css|svg|png))"/g, (full, attr: string, url: string) => {
+      const file = join(outDir, url);
+      if (!existsSync(file)) return full;
+      const v = createHash('sha1').update(readFileSync(file)).digest('hex').slice(0, 10);
+      return `${attr}${url}?v=${v}"`;
+    });
+    if (out !== html) writeFileSync(page, out);
+  }
+}
+
 // Точки входа: главная (index.html) + отдельные юридические страницы.
 // Каждая — реальный статичный HTML, доступный по своему URL.
 const pageInput = (name: string) => fileURLToPath(new URL(`./${name}.html`, import.meta.url));
@@ -81,6 +104,19 @@ export default defineConfig({
   base,
   plugins: [
     tailwindcss(),
+    (() => {
+      let outDir = 'dist';
+      return {
+        name: 'teachnet:pcb-asset-versions',
+        apply: 'build' as const,
+        configResolved(config: { root: string; build: { outDir: string } }) {
+          outDir = resolve(config.root, config.build.outDir);
+        },
+        closeBundle() {
+          pcbAssetVersions(outDir);
+        },
+      };
+    })(),
     {
       name: 'teachnet:render-page',
       transformIndexHtml: {
