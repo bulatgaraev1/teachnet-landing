@@ -22,12 +22,12 @@
     blue:  { stops: ['#3B82EE', '#1055CB', '#173F86'], edge: '#0B2C6B', trace: '#4F8CF0', silk: 'rgba(255,255,255,.32)', label: 'синий' },
     black: { stops: ['#3A4654', '#1A222D', '#0A1017'], edge: '#020406', trace: '#3D4A5C', silk: 'rgba(255,255,255,.22)', label: 'чёрный' },
     white: { stops: ['#FFFFFF', '#E9EFF7', '#C0CEE2'], edge: '#7D93B3', trace: '#C6D2E3', silk: 'rgba(80,104,140,.42)', label: 'белый' },
-    green: { stops: ['#2FA866', '#16794A', '#0D4F30'], edge: '#06331F', trace: '#3AB878', silk: 'rgba(255,255,255,.3)', label: 'зелёный' },
-    purple: { stops: ['#8E5BD8', '#5B2E9E', '#3A1A6B'], edge: '#220E43', trace: '#9A6BE0', silk: 'rgba(255,255,255,.3)', label: 'фиолетовый' }
+    green: { stops: ['#3FA86A', '#1E7A45', '#11552F'], edge: '#0B3A20', trace: '#4DBA7A', silk: 'rgba(255,255,255,.32)', label: 'зелёный' },
+    purple: { stops: ['#8A5BD6', '#5B2FA8', '#3A1D73'], edge: '#24104A', trace: '#9C74E0', silk: 'rgba(255,255,255,.32)', label: 'фиолетовый' }
   };
   const INKS = { white: 'белым', black: 'чёрным', gold: 'золотом' };
   const LIGHTS = {
-    cold:   { glow: '214,232,255', body: '#F7FBFF', edge: '#B9CFEA', label: 'холодный белый' },
+    cold:   { glow: '214,232,255', body: '#F7FBFF', edge: '#B9CFEA', label: 'белый' },
     red:    { glow: '255,70,70',   body: '#FF9A90', edge: '#C8443C', label: 'красный' },
     yellow: { glow: '255,206,40',  body: '#FFE58A', edge: '#D2A52A', label: 'жёлтый' },
     green:  { glow: '60,232,120',  body: '#AEF5C6', edge: '#3FAE68', label: 'зелёный' },
@@ -494,7 +494,7 @@
     setSide('front');
     say(state.mask.fill > 0.9
       ? 'Похоже на фото или логотип на плашке. Чище всего выходит PNG с прозрачным фоном.'
-      : 'Логотип на значке: на плате он ляжет одним цветом. Его можно двигать и менять размер.', false);
+      : 'Логотип на значке. На плате он ляжет одним цветом. Двигайте и меняйте размер.', false);
     schedule();
     return true;
   }
@@ -529,15 +529,15 @@
   sideButtons.forEach(btn => btn.addEventListener('click', () => setSide(btn.dataset.tryonSide)));
   const backText = $('tryon-back-text'), qrInput = $('tryon-qr'), qrNote = $('tryon-qr-note');
   // примерная яркость краски и платы, чтобы предупредить о неконтрастном QR-коде
-  const INK_L = { white: 0.95, black: 0.012, gold: 0.30 }, BOARD_L = { blue: 0.10, black: 0.015, white: 0.86, green: 0.13, purple: 0.06 };
+  const INK_L = { white: 0.95, black: 0.012, gold: 0.30 }, BOARD_L = { blue: 0.10, black: 0.015, white: 0.86, green: 0.15, purple: 0.07 };
   function updateQrNote() {
     if (!qrNote) return;
     const q = state.qr.trim() ? qrFor(state.qr.trim()) : null;
     const a = INK_L[state.ink], b = BOARD_L[state.board], ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
     const notes = [];
     if (state.qr.trim() && !CLASSES[state.cls].qr) notes.push('На размере S QR-код не помещается: оборот занят батарейкой. Выберите размер M или L.');
-    if (q && (q.getModuleCount() > 41 || qrModuleMm(q) < 0.4)) notes.push('Длинная ссылка: на маленькой плате QR-код выйдет мелким. Лучше короткая ссылка.');
-    if (q && ratio < 3) notes.push('В этом сочетании цветов QR-код малоконтрастный и может считываться хуже. Надёжнее белый на синей или чёрной плате, чёрный на белой.');
+    if (q && (q.getModuleCount() > 41 || qrModuleMm(q) < 0.4)) notes.push('Длинная ссылка: на маленькой плате QR-код выйдет мелким. Лучше короткая.');
+    if (q && ratio < 3) notes.push('QR-код малоконтрастный и может плохо считываться. Надёжнее белый на синей или чёрной плате, чёрный на белой.');
     qrNote.textContent = notes.join(' ');
   }
   if (backText) {
