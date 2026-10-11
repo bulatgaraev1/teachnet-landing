@@ -21,7 +21,9 @@
   const BOARDS = {
     blue:  { stops: ['#3B82EE', '#1055CB', '#173F86'], edge: '#0B2C6B', trace: '#4F8CF0', silk: 'rgba(255,255,255,.32)', label: 'синий' },
     black: { stops: ['#3A4654', '#1A222D', '#0A1017'], edge: '#020406', trace: '#3D4A5C', silk: 'rgba(255,255,255,.22)', label: 'чёрный' },
-    white: { stops: ['#FFFFFF', '#E9EFF7', '#C0CEE2'], edge: '#7D93B3', trace: '#C6D2E3', silk: 'rgba(80,104,140,.42)', label: 'белый' }
+    white: { stops: ['#FFFFFF', '#E9EFF7', '#C0CEE2'], edge: '#7D93B3', trace: '#C6D2E3', silk: 'rgba(80,104,140,.42)', label: 'белый' },
+    green: { stops: ['#2FA866', '#16794A', '#0D4F30'], edge: '#06331F', trace: '#3AB878', silk: 'rgba(255,255,255,.3)', label: 'зелёный' },
+    purple: { stops: ['#8E5BD8', '#5B2E9E', '#3A1A6B'], edge: '#220E43', trace: '#9A6BE0', silk: 'rgba(255,255,255,.3)', label: 'фиолетовый' }
   };
   const INKS = { white: 'белым', black: 'чёрным', gold: 'золотом' };
   const LIGHTS = {
@@ -42,6 +44,7 @@
   const SHAPE_CLASSES = { round: ['S', 'M'], rect: ['M', 'L'], badge: ['L'] };
   const SCALE = { round: { S: .76, M: 1 }, rect: { M: .84, L: 1 }, badge: { L: 1 } };
   const ledCount = () => CLASSES[state.cls].leds[state.mode];
+  let print = null;   // во время отрисовки для PDF: { g, fx, fy, … } из printGeo()
 
   /* ---------- геометрия ---------- */
   function geo(shape) {
@@ -145,7 +148,8 @@
     return 1;
   }
   function led(p, i, arr) {
-    const L = LIGHTS[state.light], b = state.light === 'off' ? 0 : level(i, arr.length), on = b > .08;
+    // для печати — все диоды «включены», но без ореола: на бумаге свечение выглядит грязно
+    const L = LIGHTS[state.light], b = state.light === 'off' ? 0 : print ? 1 : level(i, arr.length), on = b > .08 && !print;
     if (on) {
       const gr = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 48);
       gr.addColorStop(0, `rgba(${L.glow},${.95 * b})`); gr.addColorStop(.32, `rgba(${L.glow},${.45 * b})`); gr.addColorStop(1, `rgba(${L.glow},0)`);
@@ -218,7 +222,7 @@
     return q;
   }
   function drawBack(g, b) {
-    const L = backLayout(state.shape), silk = state.board === 'white' ? 'rgba(80,104,140,.55)' : 'rgba(255,255,255,.4)';
+    const L = print ? stretchLayout(backLayout(state.shape), print.fx, print.fy) : backLayout(state.shape), silk = state.board === 'white' ? 'rgba(80,104,140,.55)' : 'rgba(255,255,255,.4)';
     // зона батарейки и крепления
     ctx.save();
     ctx.setLineDash([10, 9]); ctx.lineWidth = 2.5; ctx.strokeStyle = silk;
@@ -260,18 +264,22 @@
   }
   function draw() { render(mainCtx, state.side); }
   function paint(side, label) {
-    const g = geo(state.shape), b = BOARDS[state.board];
-    const bg = ctx.createRadialGradient(500, 420, 40, 500, 500, 740);
-    bg.addColorStop(0, '#203a5b'); bg.addColorStop(.55, '#132438'); bg.addColorStop(1, '#0a1522');
+    const g = print ? print.g : geo(state.shape), b = BOARDS[state.board];
     ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    if (!print) {
+      const bg = ctx.createRadialGradient(500, 420, 40, 500, 500, 740);
+      bg.addColorStop(0, '#203a5b'); bg.addColorStop(.55, '#132438'); bg.addColorStop(1, '#0a1522');
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    }
 
-    const sc = (SCALE[state.shape] || {})[state.cls] || 1;
+    const sc = print ? 1 : (SCALE[state.shape] || {})[state.cls] || 1;
     ctx.save(); ctx.translate(500, 490); ctx.scale(sc, sc); ctx.translate(-500, -490);
     const face = shapePath(g);
     if (g.hole) rrPath(face, g.hole.x, g.hole.y, g.hole.w, g.hole.h, g.hole.r);
-    ctx.save(); ctx.translate(0, 20); ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 60; ctx.shadowOffsetY = 34;
-    ctx.fillStyle = b.edge; ctx.fill(face, 'evenodd'); ctx.restore();
+    if (!print) {
+      ctx.save(); ctx.translate(0, 20); ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 60; ctx.shadowOffsetY = 34;
+      ctx.fillStyle = b.edge; ctx.fill(face, 'evenodd'); ctx.restore();
+    }
     const fg = ctx.createLinearGradient(160, 140, 840, 860);
     b.stops.forEach((c, i) => fg.addColorStop(i / (b.stops.length - 1), c));
     ctx.fillStyle = fg; ctx.fill(face, 'evenodd');
@@ -291,6 +299,7 @@
     ringPoints(g).forEach(led);
     }
     ctx.restore();
+    if (print) return;
     ctx.font = '600 20px "Golos Text", Arial, sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
     ctx.fillStyle = 'rgba(167,186,218,.55)'; ctx.fillText('TEACHNET · примерка', W - 36, H - 34);
     if (label) {
@@ -520,14 +529,14 @@
   sideButtons.forEach(btn => btn.addEventListener('click', () => setSide(btn.dataset.tryonSide)));
   const backText = $('tryon-back-text'), qrInput = $('tryon-qr'), qrNote = $('tryon-qr-note');
   // примерная яркость краски и платы, чтобы предупредить о неконтрастном QR-коде
-  const INK_L = { white: 0.95, black: 0.012, gold: 0.30 }, BOARD_L = { blue: 0.10, black: 0.015, white: 0.86 };
+  const INK_L = { white: 0.95, black: 0.012, gold: 0.30 }, BOARD_L = { blue: 0.10, black: 0.015, white: 0.86, green: 0.13, purple: 0.06 };
   function updateQrNote() {
     if (!qrNote) return;
     const q = state.qr.trim() ? qrFor(state.qr.trim()) : null;
     const a = INK_L[state.ink], b = BOARD_L[state.board], ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
     const notes = [];
     if (state.qr.trim() && !CLASSES[state.cls].qr) notes.push('На размере S QR-код не помещается: оборот занят батарейкой. Выберите размер M или L.');
-    if (q && q.getModuleCount() > 41) notes.push('Длинная ссылка: на маленькой плате QR-код выйдет мелким. Лучше короткая ссылка.');
+    if (q && (q.getModuleCount() > 41 || qrModuleMm(q) < 0.4)) notes.push('Длинная ссылка: на маленькой плате QR-код выйдет мелким. Лучше короткая ссылка.');
     if (q && ratio < 3) notes.push('В этом сочетании цветов QR-код малоконтрастный и может считываться хуже. Надёжнее белый на синей или чёрной плате, чёрный на белой.');
     qrNote.textContent = notes.join(' ');
   }
@@ -652,6 +661,150 @@
       document.body.appendChild(a); a.click();
       setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
     }, 'image/png');
+  });
+
+  /* ---------- значок в натуральную величину (PDF 1:1) ---------- */
+  // Габариты плат для печати, мм — ориентировочные, владелец уточнит. Менять только здесь.
+  const PRINT_SIZES = {
+    round: { S: { d: 38 }, M: { d: 50 } },
+    rect: { M: { w: 60, h: 35 }, L: { w: 80, h: 50 } },
+    badge: { L: { w: 55, h: 85, slot: { w: 14, h: 3 } } }  // slot — прорезь под ланъярд
+  };
+  const PX_PER_MM = 300 / 25.4;   // 300 точек на дюйм
+  const INK_NAMES = { white: 'белая', black: 'чёрная', gold: 'золото' };
+  // Геометрия платы под габарит из PRINT_SIZES. Пропорции прямоугольника и бейджа на экране могут чуть отличаться:
+  // плата растягивается по одной оси (отступы колец и зон остаются прежними), логотип, текст и QR — без искажений.
+  function printGeo(shape, cls) {
+    const g = JSON.parse(JSON.stringify(geo(shape))), ps = PRINT_SIZES[shape][cls];
+    if (g.type === 'circle') return { g, fx: 1, fy: 1, mmPerU: ps.d / (2 * g.r), box: { x: g.cx - g.r, y: g.cy - g.r, w: 2 * g.r, h: 2 * g.r }, wmm: ps.d, hmm: ps.d, dims: `Ø ${ps.d} мм` };
+    const A = ps.w / ps.h;
+    let fx = 1, fy = 1;
+    if (shape === 'rect') { const nh = g.w / A, d = (nh - g.h) / 2; fy = nh / g.h; [g, g.ring, g.area].forEach(a => { a.y -= d; a.h += 2 * d; }); }
+    else { const nw = g.h * A, d = (nw - g.w) / 2; fx = nw / g.w; [g, g.ring, g.area].forEach(a => { a.x -= d; a.w += 2 * d; }); }
+    const mmPerU = ps.w / g.w;
+    if (g.hole && ps.slot) {
+      const cx = g.hole.x + g.hole.w / 2;
+      g.hole.w = ps.slot.w / mmPerU; g.hole.h = ps.slot.h / mmPerU; g.hole.x = cx - g.hole.w / 2; g.hole.r = g.hole.h / 2;
+    }
+    return { g, fx, fy, mmPerU, box: { x: g.x, y: g.y, w: g.w, h: g.h }, wmm: ps.w, hmm: ps.h, dims: `${ps.w} × ${ps.h} мм` };
+  }
+  // раскладка оборота для растянутой платы: позиции сдвигаются вместе с осью, размеры QR и батарейки — прежние
+  function stretchLayout(L, fx, fy) {
+    const px = v => 500 + (v - 500) * fx, py = v => 490 + (v - 490) * fy;
+    const out = { bat: { ...L.bat, x: px(L.bat.x), y: py(L.bat.y) }, text: { ...L.text, x: px(L.text.x), y: py(L.text.y), w: L.text.w * Math.min(1, fx) }, qr: null };
+    if (L.qr) out.qr = { ...L.qr, x: px(L.qr.x), y: py(L.qr.y) };
+    return out;
+  }
+  // сторона модуля QR на напечатанной плате, мм (на M нужен хотя бы 0,4 мм)
+  function qrModuleMm(q) {
+    const L = backLayout(state.shape);
+    return L.qr ? L.qr.s * printGeo(state.shape, state.cls).mmPerU / q.getModuleCount() : Infinity;
+  }
+  // Только плата, прозрачный фон, 300 dpi для реального габарита
+  function boardCanvas(side, pg) {
+    const c = document.createElement('canvas');
+    c.width = Math.round(pg.wmm * PX_PER_MM); c.height = Math.round(pg.hmm * PX_PER_MM);
+    const x = c.getContext('2d'), k = c.width / pg.box.w;
+    x.setTransform(k, 0, 0, k, -pg.box.x * k, -pg.box.y * k);
+    print = pg;
+    try { render(x, side); } finally { print = null; }
+    return c;
+  }
+  // jsPDF и шрифт — файлами с нашего сайта; подгружаются заранее, когда примерка рядом, чтобы в момент нажатия запросов не было
+  let pdfLibs = null;
+  const loadScript = src => new Promise((res, rej) => {
+    const el = document.createElement('script'); el.src = src; el.onload = res; el.onerror = () => rej(new Error(src)); document.head.appendChild(el);
+  });
+  function pdfReady() {
+    return pdfLibs || (pdfLibs = Promise.all([
+      window.jspdf ? 0 : loadScript('/pcb/static/vendor-jspdf-4.2.1.min.js'),
+      window.TEACHNET_PDF_FONTS ? 0 : loadScript('/pcb/static/pdf-fonts-1.js')
+    ]).catch(e => { pdfLibs = null; throw e; }));
+  }
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); pdfReady().catch(() => {}); } }, { rootMargin: '600px' });
+    io.observe(stage);
+  }
+  function makePdf() {
+    const { jsPDF } = window.jspdf, F = window.TEACHNET_PDF_FONTS;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait', compress: true });
+    doc.addFileToVFS('GolosText-Regular.ttf', F.regular); doc.addFont('GolosText-Regular.ttf', 'Golos', 'normal');
+    doc.addFileToVFS('GolosText-SemiBold.ttf', F.semibold); doc.addFont('GolosText-SemiBold.ttf', 'Golos', 'bold');
+    doc.setProperties({ title: 'Ваш значок в натуральную величину — TEACHNET', creator: 'teachnet.ru' });
+    const pg = printGeo(state.shape, state.cls), ink = [24, 34, 47], muted = [90, 107, 128];
+    const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+    // заголовок и параметры
+    doc.setTextColor(...ink); doc.setFont('Golos', 'bold'); doc.setFontSize(18);
+    doc.text('Ваш значок в натуральную величину', 15, 22);
+    doc.setFont('Golos', 'normal'); doc.setFontSize(10); doc.setTextColor(...muted);
+    const params = `${cap(SHAPES[state.shape])}, размер ${state.cls} (${pg.dims}) · цвет платы ${BOARDS[state.board].label} · краска ${INK_NAMES[state.ink]} · свет ${LIGHTS[state.light].label}, ${MODES[state.mode]} · ${ledCount()} светодиодов`;
+    doc.text(doc.splitTextToSize(params, 180), 15, 30);
+    // лицо и оборот 1:1, под каждой — габарит, по контуру — пунктир реза
+    const top = 52, cols = [57.5, 152.5];
+    [['front', 'Лицо'], ['back', 'Оборот']].forEach(([side, name], i) => {
+      const x = cols[i] - pg.wmm / 2, y = top;
+      doc.setFont('Golos', 'bold'); doc.setFontSize(11); doc.setTextColor(...ink);
+      doc.text(name, cols[i], y - 6, { align: 'center' });
+      doc.addImage(boardCanvas(side, pg).toDataURL('image/png'), 'PNG', x, y, pg.wmm, pg.hmm, side, 'FAST');
+      doc.setDrawColor(...muted); doc.setLineWidth(0.2); doc.setLineDashPattern([1.2, 1], 0);
+      const g = pg.g, k = pg.mmPerU;
+      if (g.type === 'circle') doc.circle(cols[i], y + pg.hmm / 2, pg.wmm / 2, 'S');
+      else {
+        doc.roundedRect(x, y, pg.wmm, pg.hmm, g.r * k, g.r * k, 'S');
+        if (g.hole) doc.roundedRect(x + (g.hole.x - g.x) * k, y + (g.hole.y - g.y) * k, g.hole.w * k, g.hole.h * k, g.hole.r * k, g.hole.r * k, 'S');
+      }
+      doc.setLineDashPattern([], 0);
+      doc.setFont('Golos', 'normal'); doc.setFontSize(10); doc.setTextColor(...muted);
+      doc.text(pg.dims, cols[i], y + pg.hmm + 6, { align: 'center' });
+    });
+    doc.setFontSize(8.5);
+    doc.text('Пунктир — линия реза. Вырежьте значок и приложите к одежде или рюкзаку.', 105, top + 100, { align: 'center' });
+    // проверка масштаба: отрезок 50 мм и контур банковской карты 85,6 × 54 мм — векторами
+    const ry = 182, rx = 20;
+    doc.setDrawColor(...ink); doc.setLineWidth(0.25);
+    doc.line(rx, ry, rx + 50, ry);
+    for (let mm = 0; mm <= 50; mm++) doc.line(rx + mm, ry, rx + mm, ry - (mm % 10 === 0 ? 4 : mm % 5 === 0 ? 2.6 : 1.4));
+    doc.setFont('Golos', 'normal'); doc.setFontSize(8); doc.setTextColor(...ink);
+    doc.text('0', rx, ry + 4, { align: 'center' }); doc.text('50 мм', rx + 50, ry + 4, { align: 'center' });
+    doc.setFontSize(9); doc.setTextColor(...muted);
+    doc.text(doc.splitTextToSize('Отрезок ровно 50 мм — проверьте линейкой.', 60), rx, ry + 11);
+    const cx = 104.4, cy = 158;
+    doc.setDrawColor(...ink); doc.setLineWidth(0.25);
+    doc.roundedRect(cx, cy, 85.6, 54, 3.18, 3.18, 'S');
+    doc.setFont('Golos', 'bold'); doc.setFontSize(10); doc.setTextColor(...ink);
+    doc.text('Приложите карту:', cx + 42.8, cy + 24, { align: 'center' });
+    doc.setFont('Golos', 'normal');
+    doc.text('совпало — масштаб верный', cx + 42.8, cy + 30, { align: 'center' });
+    doc.setFontSize(8); doc.setTextColor(...muted);
+    doc.text('банковская карта 85,6 × 54 мм', cx + 42.8, cy + 50, { align: 'center' });
+    // как печатать
+    doc.setFontSize(9); doc.setTextColor(...ink);
+    doc.text(doc.splitTextToSize('Печатайте в масштабе 100% (в настройках печати — «Фактический размер», без «Подогнать под страницу»).', 180), 15, 236);
+    // подвал
+    doc.setDrawColor(215, 225, 238); doc.setLineWidth(0.2); doc.line(15, 277, 195, 277);
+    doc.setFontSize(8.5); doc.setTextColor(...muted);
+    doc.text('TEACHNET · +7 993 415-14-34 · Telegram @teachnet_school', 15, 283);
+    doc.text('Концепт. Точный макет пришлём после заявки.', 195, 283, { align: 'right' });
+    return doc.output('blob');
+  }
+  const pdfBtn = $('tryon-pdf');
+  if (pdfBtn) pdfBtn.addEventListener('click', async () => {
+    if (pdfBtn.disabled) return;
+    const label = pdfBtn.textContent;
+    pdfBtn.disabled = true; pdfBtn.textContent = 'Готовим PDF…';
+    try {
+      await pdfReady();
+      await new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));   // дать кнопке перерисоваться
+      const blob = makePdf();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'teachnet-znachok-1-1.pdf';
+      document.body.appendChild(a); a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+    } catch (e) {
+      say('Не получилось подготовить PDF. Обновите страницу и попробуйте ещё раз.', true);
+    } finally {
+      pdfBtn.disabled = false; pdfBtn.textContent = label;
+    }
   });
 
   syncClass();
