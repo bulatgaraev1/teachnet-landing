@@ -145,7 +145,10 @@ for (const city of ['казань', 'Казань', 'Хьюстон']) {
 console.log('— калькуляторы (приёмка общего ТЗ) и независимые страницы');
 const est = async () => ((await p.locator('#estimate-value').textContent()) || '').replace(/\s/g, ' ');
 p = await open('/pcb/');
-ok((await est()) === '75 000 ₽', '100 значков M, ровный свет — 75 000 ₽', await est());
+ok((await est()) === '80 000 ₽', '100 значков M, ровный свет — 80 000 ₽', await est());
+await p.selectOption('#light-mode', 'chase');
+ok((await est()) === 'Индивидуальный расчёт' && /Бегущий огонь посчитаем отдельно/.test(await p.textContent('#estimate-description')), 'бегущий огонь — «Индивидуальный расчёт»', await est());
+await p.selectOption('#light-mode', 'static');
 await p.selectOption('#quantity', 'custom'); await p.fill('#custom-quantity', '2000');
 ok((await est()) === '≈ 815 000 ₽', '2000 значков M — ≈ 815 000 ₽', await est());
 await p.selectOption('#format', 'corporate'); await p.selectOption('#quantity', 'custom'); await p.fill('#custom-quantity', '250');

@@ -46,13 +46,15 @@
       } else if(design === 'custom') {
         description = 'Новую форму или электронику посчитаем отдельно по макету.';
       } else if(format === 'merch') {
-        // Предварительная сетка цен: размер × тираж + надбавка за режим света (уточняется владельцем)
+        // Сетка цен: размер × тираж + надбавка за мерцание; бегущий огонь — по запросу
         const TIERS = [100, 300, 500, 1000];
-        const RATES = {S:[550,450,400,350], M:[600,500,450,400], L:[800,650,600,550]};
-        const MODE_ADD = {static:[0,0,0,0], blink:[100,80,70,60], chase:[200,150,130,120]};
+        const RATES = {S:[600,450,400,370], M:[650,500,450,400], L:[850,650,600,550]};
+        const MODE_ADD = {static:[0,0,0,0], blink:[100,80,70,60]};
         const MODE_LABEL = {blink:'мерцание', chase:'бегущий огонь'};
         const size = byId('badge-size') ? byId('badge-size').value : 'M', mode = byId('light-mode') ? byId('light-mode').value : 'static';
-        if(n >= 100 && n <= 5000) {
+        if(mode === 'chase') {
+          description = 'Бегущий огонь посчитаем отдельно: схема зависит от формы и числа светодиодов.';
+        } else if(n >= 100 && n <= 5000) {
           let t = 0; TIERS.forEach((v, i) => { if(n >= v) t = i; });
           const rate = RATES[size][t] + MODE_ADD[mode][t], prep = design === 'repeat' ? 0 : 15000;
           amount = n * rate + prep;
