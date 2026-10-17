@@ -67,7 +67,7 @@
 .field select:hover,.field input:hover,.field textarea:hover{border-color:#A9BBD2}
 .field select:focus,.field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px #1055CB26}
 
-/* Лента настоящих фото под витриной форм: одна строка, сама прокручивается, на наведении стоит */
+/* Лента настоящих фото под витриной форм: одна строка, сама прокручивается; листается тачпадом, мышкой и пальцем */
 .forms-section{padding-bottom:40px}
 .photo-strip{padding-block:0 80px;background:var(--paper);overflow:hidden}
 .photo-strip-viewport{overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
@@ -75,10 +75,10 @@
 .photo-strip-track{display:flex;width:max-content;margin:0;padding:0 0 0 max(24px,calc((100vw - 1180px) / 2));list-style:none}
 .photo-strip-track li{flex:none;height:300px;margin-right:16px}
 .photo-strip-track img{display:block;height:100%;width:auto;border-radius:14px;border:1px solid var(--line);background:var(--tint)}
-.photo-strip-track.is-moving{padding-left:0;animation:photo-strip linear infinite}
-.photo-strip-viewport:has(.is-moving){overflow:hidden}
-.photo-strip-viewport:hover .is-moving{animation-play-state:paused}
-@keyframes photo-strip{to{transform:translateX(-50%)}}
+.photo-strip-track.is-moving{padding-left:0}
+.photo-strip-viewport.is-draggable{cursor:grab;-webkit-user-select:none;user-select:none}
+.photo-strip-viewport.is-dragging{cursor:grabbing}
+.photo-strip-track img{-webkit-user-drag:none}
 @media(max-width:600px){.photo-strip{padding-bottom:48px}.photo-strip-track li{height:210px;margin-right:12px}}
 /* Пока в ленте меньше двух фото — её не показываем */
 .photo-strip:not(:has(li+li)){display:none}
