@@ -56,3 +56,13 @@
 .hero-photo{margin:0}
 .hero-photo img{display:block;width:100%;height:auto;border-radius:18px;border:1px solid var(--line)}
 .hero-photo figcaption{margin-top:12px;font-size:12px;color:var(--muted);text-align:center}
+
+/* Форма заявки: белая карточка, поля выше и просторнее, своя стрелка у списков */
+.request-card{background:#fff}
+.field{gap:9px;font-size:13px}
+.field select,.field input,.field textarea,
+.compact-business .field select,.compact-business .field input{min-height:54px;padding:14px 16px;font-size:16px;border:1px solid #CBD7E6;border-radius:12px;transition:border-color .15s,box-shadow .15s}
+.field textarea{min-height:96px}
+.field select{-webkit-appearance:none;appearance:none;padding-right:46px;background:#fff url(chevron.svg) no-repeat right 18px center/12px 8px;cursor:pointer}
+.field select:hover,.field input:hover,.field textarea:hover{border-color:#A9BBD2}
+.field select:focus,.field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px #1055CB26}
