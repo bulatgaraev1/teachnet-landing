@@ -1,0 +1,58 @@
+/* /pcb/: решение владельца (17.10.2026) — без чередования тёмных и светлых секций, все блоки на одном светлом фоне;
+   на первом экране настоящее фото вместо концепта. Блоки, порядок и тексты — как в архиве.
+   Подключается последним, после site.css; при переносе новой версии архива этот файл не трогать. */
+
+/* Один фон у всех секций, между ними тонкая линия */
+.section,.section-tint,.hero-business,.forms-section,.stand-section,.tryon-section,.request-section,.compact-faq{background:var(--paper)}
+.section{border-top:1px solid var(--line)}
+
+/* Первый экран — светлый */
+.hero-business{color:var(--ink)}
+.hero-business h1 span{color:var(--blue)}
+.hero-business .eyebrow{color:var(--brand)}
+.hero-business .lead,.hero-business .hero-note{color:var(--muted)}
+.hero-business .hero-note strong{color:var(--ink)}
+.hero-business .tag{color:var(--ink);border-color:#C7D6E8}
+.hero-business .text-link{color:var(--blue);border-color:#9DB6D8}
+.hero-business .caption{color:var(--muted)}
+.hero-business .button-secondary{color:var(--ink);border-color:#C7D6E8}
+
+/* «Как выглядят значки» — светлая секция; сами плитки остаются тёмными, как витрина */
+.forms-section{color:var(--ink)}
+.forms-section .eyebrow{color:var(--brand)}
+.forms-section h2{color:var(--ink)}
+.forms-section h2 span{color:var(--brand)}
+.forms-section .section-head>p{color:var(--muted)}
+.forms-options{background:var(--line);border-color:var(--line)}
+.forms-options>div{background:var(--paper)}
+.forms-options b{color:var(--ink)}
+.forms-options span{color:var(--muted)}
+.forms-note{color:var(--muted)}
+.forms-section .text-link{color:var(--blue)}
+
+/* Стенд — светлая секция, шаги белыми карточками */
+.stand-section{color:var(--ink)}
+.stand-section .eyebrow{color:var(--brand)}
+.stand-section h2{color:var(--ink)}
+.stand-section .lead{color:var(--ink)}
+.stand-section .copy>p:not(.eyebrow){color:var(--muted)}
+.stand-step{background:#fff;border-color:var(--line)}
+.stand-step b{color:var(--brand)}
+.stand-step h3{color:var(--ink)}
+.stand-step p{color:var(--muted)}
+.stand-meta .tag{border-color:#C7D6E8;color:var(--ink)}
+.stand-section .stand-price{color:var(--muted)}
+.stand-section .stand-price strong{color:var(--ink)}
+
+/* Тексты первого экрана, которые были светлыми под тёмный фон */
+.hero-description{color:var(--muted)}
+.hero-meta{color:var(--muted)}
+/* Ссылка под витриной форм */
+.forms-try{color:var(--blue)}
+/* Полоса «Опыт» — без своего фона, отделена линиями */
+.compact-proof{background:var(--paper);border-top:1px solid var(--line)}
+
+/* Настоящее фото на первом экране */
+.hero-photo{margin:0}
+.hero-photo img{display:block;width:100%;height:auto;border-radius:18px;border:1px solid var(--line)}
+.hero-photo figcaption{margin-top:12px;font-size:12px;color:var(--muted);text-align:center}

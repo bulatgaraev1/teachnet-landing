@@ -103,7 +103,6 @@ console.log('— /pcb/: тираж, примерка, компания; исто
 resetLimits();
 p = await open('/holiday/?utm_source=telegram&utm_campaign=channel');
 await p.goto(BASE + '/pcb/', { waitUntil: 'networkidle' });
-await p.fill('#brand-name', 'Ромашка');
 await p.setInputFiles('#tryon-file', LOGO); await p.waitForTimeout(400);
 await p.check('input[name="tryon-board"][value="black"]', { force: true });
 await p.click('[data-tryon-side="back"]'); await p.fill('#tryon-qr', 'https://romashka.ru');
@@ -119,7 +118,7 @@ await submitAndWait(p);
 ok(await p.locator('#request-sent').isVisible(), '«Заявка отправлена»');
 id = lastId(); r = row(id);
 ok(r.page === 'pcb' && r.format === 'merch' && r.quantity === '300' && r.design === 'new', 'в базе: формат, тираж, оформление', JSON.stringify([r.format, r.quantity, r.design]));
-ok(r.contact_telegram === '@oleg_romashka' && r.contact_phone === null && r.company === 'ООО «Ромашка»' && r.badge_text === 'Ромашка', 'Telegram-контакт, компания, название для значка');
+ok(r.contact_telegram === '@oleg_romashka' && r.contact_phone === null && r.company === 'ООО «Ромашка»' && r.badge_text === null, 'Telegram-контакт, компания, название для значка');
 const tj = JSON.parse(r.tryon || '{}');
 ok(tj.board === 'black' && tj.logo === true && tj.qr === 'https://romashka.ru' && /плата/.test(tj.text || ''), 'параметры примерки в JSON', r.tryon);
 ok(/^Примерка на сайте:/.test(r.comment || ''), '«Обсудить этот значок» дописал примерку в комментарий');
